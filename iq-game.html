@@ -8,71 +8,52 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
-
-  .nav {
-    display: flex; align-items: center; padding: 0 24px; height: 64px;
-    border-bottom: 1px solid #e8eaed; position: sticky; top: 0; background: #fff; z-index: 10;
-  }
+  .nav { display: flex; align-items: center; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
   .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
   .nav-logo span { color: #1a73e8; }
-
   .hero { padding: 56px 24px 40px; max-width: 720px; margin: 0 auto; }
   .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
   .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 36px; font-weight: 400; color: #202124; line-height: 1.25; margin-bottom: 12px; }
   .hero p { font-size: 16px; color: #5f6368; line-height: 1.6; max-width: 560px; }
-
   .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
-
   .field { margin-bottom: 20px; }
   .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
   .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; color: #202124; outline: none; transition: border-color 0.15s; }
   .field input:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.12); }
-
-  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; min-width: 160px; }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; min-width: 160px; }
   .btn-primary:hover { background: #1765cc; }
   .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
-
-  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; line-height: 1.5; }
-  .success { background: #e6f4ea; color: #137333; display: block !important; }
-  .error { background: #fce8e6; color: #c5221f; display: block !important; }
-
-  /* Game area */
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; }
+  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
   #gameArea { display: none; }
   .progress-bar-wrap { background: #f1f3f4; border-radius: 100px; height: 4px; margin-bottom: 32px; }
   .progress-bar { background: #1a73e8; height: 4px; border-radius: 100px; transition: width 0.3s; }
-
-  .question-card { margin-bottom: 28px; padding: 24px; border: 1px solid #e8eaed; border-radius: 8px; }
-  .q-label { font-size: 12px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-  .q-text { font-family: 'Google Sans', Arial, sans-serif; font-size: 17px; color: #202124; margin-bottom: 18px; line-height: 1.5; }
-  .options { display: flex; flex-direction: column; gap: 10px; }
-  .opt-btn {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 16px; border: 1.5px solid #dadce0; border-radius: 4px;
-    background: #fff; color: #202124; cursor: pointer; font-size: 15px;
-    font-family: 'Roboto', Arial, sans-serif; text-align: left; transition: border-color 0.15s, background 0.15s;
-  }
+  .notice { background: #e8f0fe; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a73e8; display: flex; gap: 10px; margin-bottom: 28px; line-height: 1.5; }
+  .notice span { font-size: 18px; flex-shrink: 0; }
+  .q-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 22px 24px; margin-bottom: 16px; }
+  .q-label { font-size: 12px; font-weight: 500; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+  .q-text { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; color: #202124; margin-bottom: 16px; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1.5px solid #dadce0; border-radius: 4px; background: #fff; color: #202124; cursor: pointer; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; text-align: left; transition: border-color 0.15s, background 0.15s; }
   .opt-btn:hover { border-color: #1a73e8; background: #f8f9ff; }
   .opt-btn.selected { border-color: #1a73e8; background: #e8f0fe; color: #1a73e8; font-weight: 500; }
-  .opt-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #dadce0; flex-shrink: 0; transition: border-color 0.15s, background 0.15s; }
+  .opt-circle { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #dadce0; flex-shrink: 0; }
   .opt-btn.selected .opt-circle { border-color: #1a73e8; background: #1a73e8; }
-
-  .submit-row { margin-top: 8px; display: flex; align-items: center; gap: 16px; }
+  .submit-row { margin-top: 32px; display: flex; align-items: center; gap: 20px; }
   .answered-count { font-size: 13px; color: #5f6368; }
-
-  .info-banner { background: #e8f0fe; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a73e8; margin-bottom: 28px; display: flex; gap: 10px; align-items: flex-start; }
-  .info-banner span { font-size: 18px; }
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <a class="nav-logo" href="#">Yashasvi <span>Global Education</span></a>
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
 </nav>
 
 <div class="hero">
-  <div class="hero-label">Step 2 of 3 — IQ Profiling</div>
+  <div class="hero-label">Step 2 — IQ Profiling</div>
   <h1>Intelligence profiling</h1>
-  <p>This is not a test. Your answers help us personalise your AI teacher and learning path. There are no right or wrong answers that affect your admission.</p>
+  <p>This is not a test — there are no right or wrong answers. It helps us understand how you think so we can personalise your learning journey.</p>
 </div>
 
 <div class="wrap">
@@ -87,17 +68,17 @@
   </div>
 
   <div id="gameArea">
-    <div class="info-banner">
+    <div class="notice">
       <span>ℹ️</span>
-      <div>Select the answer that feels most natural. Your response time is also recorded — take your time, but don't overthink.</div>
+      <div>Select the answer that feels most natural. Your response time is also recorded. Take your time — don't overthink.</div>
     </div>
 
     <div class="progress-bar-wrap">
-      <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+      <div class="progress-bar" id="progressBar" style="width:0%"></div>
     </div>
 
-    <div class="question-card">
-      <div class="q-label">Question 1 of 4 — Number Series</div>
+    <div class="q-card">
+      <div class="q-label">Question 1 of 5 — Number Series</div>
       <div class="q-text">What comes next? &nbsp; 2 → 4 → 8 → 16 → ?</div>
       <div class="options" data-q="0">
         <button class="opt-btn" data-val="20"><span class="opt-circle"></span>20</button>
@@ -107,8 +88,8 @@
       </div>
     </div>
 
-    <div class="question-card">
-      <div class="q-label">Question 2 of 4 — Odd One Out</div>
+    <div class="q-card">
+      <div class="q-label">Question 2 of 5 — Odd One Out</div>
       <div class="q-text">Which one does not belong?</div>
       <div class="options" data-q="1">
         <button class="opt-btn" data-val="Apple"><span class="opt-circle"></span>Apple</button>
@@ -118,8 +99,8 @@
       </div>
     </div>
 
-    <div class="question-card">
-      <div class="q-label">Question 3 of 4 — Logical Reasoning</div>
+    <div class="q-card">
+      <div class="q-label">Question 3 of 5 — Logical Reasoning</div>
       <div class="q-text">All cats are dogs. All dogs are birds. Are all cats birds?</div>
       <div class="options" data-q="2">
         <button class="opt-btn" data-val="Yes"><span class="opt-circle"></span>Yes</button>
@@ -128,8 +109,8 @@
       </div>
     </div>
 
-    <div class="question-card">
-      <div class="q-label">Question 4 of 4 — Pattern Recognition</div>
+    <div class="q-card">
+      <div class="q-label">Question 4 of 5 — Pattern Recognition</div>
       <div class="q-text">Complete the pattern: &nbsp; A → C → E → G → ?</div>
       <div class="options" data-q="3">
         <button class="opt-btn" data-val="H"><span class="opt-circle"></span>H</button>
@@ -139,9 +120,20 @@
       </div>
     </div>
 
+    <div class="q-card">
+      <div class="q-label">Question 5 of 5 — Interest Check</div>
+      <div class="q-text">If you had to learn one new skill today, what would it be?</div>
+      <div class="options" data-q="4">
+        <button class="opt-btn" data-val="coding"><span class="opt-circle"></span>Coding / Technology</button>
+        <button class="opt-btn" data-val="business"><span class="opt-circle"></span>Starting a Business</button>
+        <button class="opt-btn" data-val="design"><span class="opt-circle"></span>Design / Creativity</button>
+        <button class="opt-btn" data-val="finance"><span class="opt-circle"></span>Finance / Investment</button>
+      </div>
+    </div>
+
     <div class="submit-row">
       <button class="btn-primary" id="submitGameBtn">Submit profiling</button>
-      <span class="answered-count" id="answeredCount">0 of 4 answered</span>
+      <span class="answered-count" id="answeredCount">0 of 5 answered</span>
     </div>
     <div id="message"></div>
   </div>
@@ -149,105 +141,116 @@
 </div>
 
 <script>
-  const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
-  const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
-  const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
 
-  let studentEmail = "";
-  let gameStartTime = null;
-  const answers = {};
-  let questionStartTime = null;
+// Auto-fill email from URL
+const urlParams = new URLSearchParams(window.location.search);
+const emailFromUrl = urlParams.get('email');
+if (emailFromUrl) document.getElementById('studentEmail').value = emailFromUrl;
 
-  function updateProgress() {
-    const count = Object.keys(answers).length;
-    document.getElementById('progressBar').style.width = (count / 4 * 100) + '%';
-    document.getElementById('answeredCount').textContent = count + ' of 4 answered';
+let studentEmail = "";
+let gameStartTime = null;
+const answers = {};
+let questionStartTime = null;
+
+function updateProgress() {
+  const count = Object.keys(answers).length;
+  document.getElementById('progressBar').style.width = (count / 5 * 100) + '%';
+  document.getElementById('answeredCount').textContent = count + ' of 5 answered';
+}
+
+document.getElementById('startBtn').addEventListener('click', async () => {
+  studentEmail = document.getElementById('studentEmail').value.trim().toLowerCase();
+  if (!studentEmail) { showMsg('error', 'Please enter your email address.'); return; }
+
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true; btn.textContent = 'Checking…';
+
+  try {
+    const res = await fetch(BASE + "/students?select=id,iq_game_completed&student_email=ilike." + encodeURIComponent(studentEmail), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      showMsg('error', 'No application found. Please submit the admission form first.');
+      btn.disabled = false; btn.textContent = 'Begin profiling'; return;
+    }
+
+    if (data[0].iq_game_completed) {
+      showMsg('success', 'You have already completed the IQ profiling. Proceeding to course selection…');
+      setTimeout(() => { window.location.href = '/course-select.html?email=' + encodeURIComponent(studentEmail); }, 2000);
+      return;
+    }
+
+    document.getElementById('emailStep').style.display = 'none';
+    document.getElementById('gameArea').style.display = 'block';
+    document.getElementById('message').style.display = 'none';
+    gameStartTime = Date.now();
+    questionStartTime = Date.now();
+
+  } catch (err) {
+    showMsg('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Begin profiling';
+  }
+});
+
+document.querySelectorAll('.options').forEach(group => {
+  group.addEventListener('click', e => {
+    const btn = e.target.closest('.opt-btn');
+    if (!btn) return;
+    const qIndex = group.getAttribute('data-q');
+    const value = btn.getAttribute('data-val');
+    const timeTaken = Date.now() - questionStartTime;
+    group.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    answers[qIndex] = { value, time_ms: timeTaken };
+    questionStartTime = Date.now();
+    updateProgress();
+  });
+});
+
+document.getElementById('submitGameBtn').addEventListener('click', async () => {
+  if (Object.keys(answers).length < 5) {
+    showMsg('error', 'Please answer all 5 questions before submitting.'); return;
   }
 
-  document.getElementById('startBtn').addEventListener('click', async () => {
-    studentEmail = document.getElementById('studentEmail').value.trim().toLowerCase();
-    if (!studentEmail) { showMessage('error', 'Please enter your email address.'); return; }
+  const btn = document.getElementById('submitGameBtn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
 
-    const btn = document.getElementById('startBtn');
-    btn.disabled = true; btn.textContent = "Checking…";
+  const gameData = { answers, total_time_ms: Date.now() - gameStartTime, submitted_at: new Date().toISOString() };
 
-    try {
-      const res = await fetch(
-        BASE + "/students?select=id,iq_game_completed&student_email=ilike." + encodeURIComponent(studentEmail),
-        { method: "GET", headers: HEADERS }
-      );
-      const data = await res.json();
-
-      if (!Array.isArray(data) || data.length === 0) {
-        showMessage('error', 'No application found for this email. Please submit the admission form first.');
-        btn.disabled = false; btn.textContent = "Begin profiling"; return;
-      }
-      if (data[0].iq_game_completed) {
-        showMessage('success', 'You have already completed the profiling. Proceed to exam scheduling.');
-        btn.disabled = false; btn.textContent = "Begin profiling"; return;
-      }
-
-      document.getElementById('emailStep').style.display = 'none';
-      document.getElementById('gameArea').style.display = 'block';
-      document.getElementById('message').style.display = 'none';
-      gameStartTime = Date.now();
-      questionStartTime = Date.now();
-
-    } catch (err) {
-      showMessage('error', 'Error: ' + err.message);
-      btn.disabled = false; btn.textContent = "Begin profiling";
-    }
-  });
-
-  document.querySelectorAll('.options').forEach(group => {
-    group.addEventListener('click', e => {
-      const btn = e.target.closest('.opt-btn');
-      if (!btn) return;
-      const qIndex = group.getAttribute('data-q');
-      const value = btn.getAttribute('data-val');
-      const timeTaken = Date.now() - questionStartTime;
-      group.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      answers[qIndex] = { value, time_ms: timeTaken };
-      questionStartTime = Date.now();
-      updateProgress();
+  try {
+    const res = await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(studentEmail), {
+      method: "PATCH",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({ iq_game_completed: true, iq_game_data: gameData })
     });
-  });
+    const data = await res.json();
 
-  document.getElementById('submitGameBtn').addEventListener('click', async () => {
-    if (Object.keys(answers).length < 4) {
-      showMessage('error', 'Please answer all 4 questions before submitting.'); return;
+    if (!Array.isArray(data) || data.length === 0) {
+      showMsg('error', 'Update failed. Please try again.');
+      btn.disabled = false; btn.textContent = 'Submit profiling'; return;
     }
-    const gameData = { answers, total_time_ms: Date.now() - gameStartTime, submitted_at: new Date().toISOString() };
-    const btn = document.getElementById('submitGameBtn');
-    btn.disabled = true; btn.textContent = "Submitting…";
 
-    try {
-      const res = await fetch(
-        BASE + "/students?student_email=ilike." + encodeURIComponent(studentEmail),
-        { method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" }, body: JSON.stringify({ iq_game_completed: true, iq_game_data: gameData }) }
-      );
-      const data = await res.json();
-      if (!Array.isArray(data) || data.length === 0) {
-        showMessage('error', 'Update failed. Please try again.');
-        btn.disabled = false; btn.textContent = "Submit profiling"; return;
-      }
-      document.getElementById('gameArea').innerHTML = `
-        <div style="text-align:center; padding: 40px 0;">
-          <div style="font-size:48px; margin-bottom:16px;">✅</div>
-          <h2 style="font-family:'Google Sans',Arial,sans-serif; font-size:24px; font-weight:400; color:#202124; margin-bottom:8px;">Profiling complete</h2>
-          <p style="color:#5f6368; font-size:15px;">Your learning profile has been saved. Next step: check your exam schedule.</p>
-        </div>`;
-    } catch (err) {
-      showMessage('error', 'Error: ' + err.message);
-      btn.disabled = false; btn.textContent = "Submit profiling";
-    }
-  });
+    document.getElementById('gameArea').innerHTML = `
+      <div style="text-align:center; padding:40px 0;">
+        <div style="font-size:48px; margin-bottom:16px;">✅</div>
+        <h2 style="font-family:'Google Sans',Arial,sans-serif; font-size:24px; font-weight:400; color:#202124; margin-bottom:8px;">Profiling complete!</h2>
+        <p style="color:#5f6368; font-size:15px; margin-bottom:24px;">Next step: Our AI will help you choose the right course.</p>
+        <a href="/course-select.html?email=${encodeURIComponent(studentEmail)}" style="display:inline-block; background:#1a73e8; color:#fff; text-decoration:none; border-radius:4px; padding:12px 28px; font-size:15px; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">Choose my course →</a>
+      </div>`;
 
-  function showMessage(type, text) {
-    const m = document.getElementById('message');
-    m.className = type; m.textContent = text; m.style.display = 'block';
+  } catch (err) {
+    showMsg('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Submit profiling';
   }
+});
+
+function showMsg(type, text) {
+  const m = document.getElementById('message');
+  m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+}
 </script>
 </body>
 </html>

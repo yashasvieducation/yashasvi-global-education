@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Choose Your Course</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; display: flex; flex-direction: column; }
+  .nav { display: flex; align-items: center; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+  .nav-step { font-size: 13px; color: #5f6368; margin-left: auto; }
+
+  /* Email step */
+  #emailStep { max-width: 480px; margin: 80px auto; padding: 0 24px; }
+  #emailStep h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+  #emailStep p { font-size: 15px; color: #5f6368; margin-bottom: 24px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; outline: none; }
+  .field input:focus { border-color: #1a73e8; }
+  #emailMsg { margin-top: 12px; padding: 12px; border-radius: 4px; font-size: 14px; display: none; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+
+  /* Chat UI */
+  #chatArea { display: none; flex: 1; flex-direction: column; max-width: 760px; margin: 0 auto; width: 100%; padding: 0 24px; }
+  .chat-intro { padding: 32px 0 20px; }
+  .chat-intro h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 24px; font-weight: 400; margin-bottom: 8px; }
+  .chat-intro p { font-size: 14px; color: #5f6368; }
+  .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding: 8px 0 20px; min-height: 300px; max-height: 450px; }
+  .chat-msg { max-width: 80%; }
+  .chat-msg.ai { align-self: flex-start; }
+  .chat-msg.user { align-self: flex-end; }
+  .chat-bubble { padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+  .chat-msg.ai .chat-bubble { background: #f1f3f4; color: #202124; border-radius: 12px 12px 12px 2px; }
+  .chat-msg.user .chat-bubble { background: #1a73e8; color: #fff; border-radius: 12px 12px 2px 12px; }
+  .chat-name { font-size: 11px; color: #80868b; margin-bottom: 4px; }
+  .chat-msg.user .chat-name { text-align: right; }
+  .typing { font-size: 12px; color: #5f6368; display: none; padding: 4px 0; }
+  .chat-input-wrap { border-top: 1px solid #e8eaed; padding: 16px 0; display: flex; gap: 10px; }
+  .chat-input { flex: 1; padding: 10px 16px; border: 1px solid #dadce0; border-radius: 24px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; outline: none; resize: none; }
+  .chat-input:focus { border-color: #1a73e8; }
+  .chat-send { background: #1a73e8; color: #fff; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; flex-shrink: 0; align-self: flex-end; }
+  .chat-send:disabled { background: #dadce0; cursor: not-allowed; }
+
+  /* Course cards */
+  .course-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  @media (max-width: 560px) { .course-cards { grid-template-columns: 1fr; } }
+  .course-card { border: 1.5px solid #dadce0; border-radius: 8px; padding: 16px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+  .course-card:hover { border-color: #1a73e8; background: #f8f9ff; }
+  .course-card.selected { border-color: #1a73e8; background: #e8f0fe; }
+  .course-card .c-icon { font-size: 24px; margin-bottom: 6px; }
+  .course-card .c-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .course-card .c-desc { font-size: 12px; color: #5f6368; line-height: 1.4; }
+  .course-card .c-badge { display: inline-block; background: #e6f4ea; color: #137333; border-radius: 100px; padding: 2px 8px; font-size: 11px; margin-top: 6px; }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .btn-primary:hover { background: #1765cc; }
+  .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
+  <span class="nav-step">Step 3 — Course Selection</span>
+</nav>
+
+<!-- Email Step -->
+<div id="emailStep">
+  <h2>Choose your course</h2>
+  <p>Enter your email to continue to AI-powered course selection.</p>
+  <div class="field">
+    <label>Student email</label>
+    <input type="email" id="loginEmail" placeholder="you@example.com">
+  </div>
+  <button class="btn-primary" id="loginBtn" style="margin-top:16px; width:100%; padding:12px;">Continue →</button>
+  <div id="emailMsg"></div>
+</div>
+
+<!-- Chat Area -->
+<div id="chatArea">
+  <div class="chat-intro">
+    <h2>🤖 Let's find your perfect course</h2>
+    <p>Our AI will ask you a few questions and suggest the best course for you.</p>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="typing" id="typing">AI is thinking…</div>
+  <div id="courseCardsWrap"></div>
+  <div class="chat-input-wrap">
+    <textarea class="chat-input" id="chatInput" placeholder="Type your answer…" rows="1"></textarea>
+    <button class="chat-send" id="sendBtn" onclick="sendMsg()">➤</button>
+  </div>
+</div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
+
+const COURSES = [
+  { id: "entrepreneurship", icon: "🚀", name: "Entrepreneurship & Business Design", desc: "Start and grow your own business from scratch.", badge: "Open" },
+  { id: "blockchain", icon: "⛓️", name: "Blockchain & Decentralized Systems", desc: "Web3, crypto, DeFi and decentralized platforms.", badge: "Open" },
+  { id: "coding", icon: "💻", name: "Computer Science & AI", desc: "Programming, machine learning and AI applications.", badge: "Open" },
+  { id: "design", icon: "🎨", name: "Design & Creative Tech", desc: "UI/UX, branding and digital product design.", badge: "Open" },
+  { id: "8th", icon: "📚", name: "8th Standard Courses", desc: "Foundation courses for Class 8 students.", badge: "Free" },
+  { id: "10th", icon: "📗", name: "10th Standard Courses", desc: "Board prep + skill development for Class 10.", badge: "Free" },
+  { id: "12th", icon: "📘", name: "12th Standard Courses", desc: "Career guidance + subject mastery for Class 12.", badge: "Free" }
+];
+
+let studentEmail = "", studentName = "", conversationHistory = [], selectedCourse = null, courseShown = false;
+
+// Auto-fill from URL
+const urlParams = new URLSearchParams(window.location.search);
+const emailFromUrl = urlParams.get('email');
+if (emailFromUrl) document.getElementById('loginEmail').value = emailFromUrl;
+
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  if (!email) { showEmailMsg('Please enter your email.'); return; }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Loading…';
+  try {
+    const res = await fetch(BASE + "/students?select=student_name,iq_game_completed,selected_course&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showEmailMsg('No application found. Please complete the admission form first.');
+      btn.disabled = false; btn.textContent = 'Continue →'; return;
+    }
+    if (!data[0].iq_game_completed) {
+      showEmailMsg('Please complete the IQ profiling first.');
+      btn.disabled = false; btn.textContent = 'Continue →'; return;
+    }
+    studentEmail = email;
+    studentName = data[0].student_name;
+    if (data[0].selected_course) {
+      window.location.href = '/exam-scheduling.html?email=' + encodeURIComponent(email);
+      return;
+    }
+    document.getElementById('emailStep').style.display = 'none';
+    document.getElementById('chatArea').style.display = 'flex';
+    startConversation();
+  } catch (err) {
+    showEmailMsg('Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Continue →';
+  }
+});
+
+async function startConversation() {
+  await aiSay(`Hi ${studentName}! 👋 I'm here to help you find the perfect course. Tell me — what do you want to do in the future? It could be starting a business, getting a job, learning a skill, or anything else on your mind.`);
+}
+
+document.getElementById('chatInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+});
+
+async function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  addBubble('user', text, studentName);
+  conversationHistory.push({ role: 'user', content: text });
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('typing').style.display = 'block';
+
+  try {
+    const systemPrompt = `You are a friendly course advisor at Yashasvi Global Education. Your job is to understand what the student wants to learn and suggest the best course from our available options.
+
+Available courses:
+1. Entrepreneurship & Business Design — for students who want to start a business
+2. Blockchain & Decentralized Systems — for students interested in crypto, Web3, DeFi
+3. Computer Science & AI — for students who want to learn coding, AI, technology
+4. Design & Creative Tech — for students interested in UI/UX, branding, design
+5. 8th Standard Courses (FREE) — for Class 8 students (foundation + skills)
+6. 10th Standard Courses (FREE) — for Class 10 students (board prep + skills)
+7. 12th Standard Courses (FREE) — for Class 12 students (career guidance + subjects)
+
+Ask 2-3 short, friendly questions to understand the student's interest and current education level. After understanding, suggest ONE best course clearly. Keep messages SHORT — max 3 sentences. Be warm and encouraging.
+
+When you are ready to suggest a course, end your message with exactly: "SUGGEST_COURSES" on a new line. Only say this when you are confident about the recommendation after at least 2 exchanges.`;
+
+    const res = await fetch(EDGE, {
+      method: "POST",
+      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: conversationHistory.slice(-8), systemPrompt })
+    });
+    const data = await res.json();
+    let reply = data.reply || "Tell me more about what you'd like to learn!";
+
+    if (reply.includes('SUGGEST_COURSES')) {
+      reply = reply.replace('SUGGEST_COURSES', '').trim();
+      await aiSay(reply);
+      showCourseCards();
+    } else {
+      conversationHistory.push({ role: 'assistant', content: reply });
+      await aiSay(reply);
+    }
+  } catch (e) {
+    await aiSay("Sorry, I had a connection issue. Could you tell me again what you'd like to learn?");
+  }
+
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('typing').style.display = 'none';
+}
+
+function showCourseCards() {
+  if (courseShown) return;
+  courseShown = true;
+  const wrap = document.getElementById('courseCardsWrap');
+  wrap.innerHTML = `
+    <div style="font-size:14px; color:#5f6368; margin-bottom:12px;">Select your course:</div>
+    <div class="course-cards">
+      ${COURSES.map(c => `
+        <div class="course-card" onclick="selectCourse('${c.id}', this)" id="card-${c.id}">
+          <div class="c-icon">${c.icon}</div>
+          <div class="c-name">${c.name}</div>
+          <div class="c-desc">${c.desc}</div>
+          <span class="c-badge">${c.badge}</span>
+        </div>`).join('')}
+    </div>
+    <button class="btn-primary" id="confirmCourseBtn" onclick="confirmCourse()" style="margin-top:16px;" disabled>Confirm & Schedule Exam →</button>`;
+}
+
+function selectCourse(id, el) {
+  document.querySelectorAll('.course-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedCourse = COURSES.find(c => c.id === id);
+  document.getElementById('confirmCourseBtn').disabled = false;
+}
+
+async function confirmCourse() {
+  if (!selectedCourse) return;
+  const btn = document.getElementById('confirmCourseBtn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(studentEmail), {
+      method: "PATCH",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({ selected_course: selectedCourse.name, track: selectedCourse.name })
+    });
+    await aiSay(`Great choice! 🎉 You've selected **${selectedCourse.name}**. Now let's schedule your entrance exam. You'll choose the difficulty level there.`);
+    setTimeout(() => {
+      window.location.href = '/exam-scheduling.html?email=' + encodeURIComponent(studentEmail);
+    }, 2500);
+  } catch (e) {
+    btn.disabled = false; btn.textContent = 'Confirm & Schedule Exam →';
+  }
+}
+
+function aiSay(text) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      addBubble('ai', text, 'AI Advisor');
+      resolve();
+    }, 300);
+  });
+}
+
+function addBubble(role, text, name) {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg ' + role;
+  div.innerHTML = `<div class="chat-name">${name}</div><div class="chat-bubble">${text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>')}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  document.getElementById('typing').style.display = 'none';
+}
+
+function showEmailMsg(text) {
+  const m = document.getElementById('emailMsg');
+  m.className = 'msg-error'; m.textContent = text; m.style.display = 'block';
+}
+</script>
+</body>
+</html>

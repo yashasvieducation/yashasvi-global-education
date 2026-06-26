@@ -3,435 +3,208 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yashasvi Global Education — Admission</title>
+<title>Yashasvi Global Education — Apply</title>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Roboto', Arial, sans-serif;
-    background: #fff;
-    color: #202124;
-    min-height: 100vh;
-  }
-
-  /* Top nav */
-  .nav {
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
-    height: 64px;
-    border-bottom: 1px solid #e8eaed;
-    position: sticky;
-    top: 0;
-    background: #fff;
-    z-index: 10;
-  }
-  .nav-logo {
-    font-family: 'Google Sans', Arial, sans-serif;
-    font-size: 18px;
-    font-weight: 500;
-    color: #202124;
-    text-decoration: none;
-    letter-spacing: -0.2px;
-  }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
   .nav-logo span { color: #1a73e8; }
-
-  /* Hero */
-  .hero {
-    padding: 56px 24px 40px;
-    max-width: 720px;
-    margin: 0 auto;
-  }
-  .hero-label {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #1a73e8;
-    margin-bottom: 12px;
-  }
-  .hero h1 {
-    font-family: 'Google Sans', Arial, sans-serif;
-    font-size: 36px;
-    font-weight: 400;
-    color: #202124;
-    line-height: 1.25;
-    margin-bottom: 12px;
-  }
-  .hero p {
-    font-size: 16px;
-    color: #5f6368;
-    line-height: 1.6;
-    max-width: 560px;
-  }
-
-  /* Form */
-  .form-wrap {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 24px 80px;
-  }
-
-  .form-section {
-    margin-bottom: 40px;
-  }
-  .form-section-title {
-    font-family: 'Google Sans', Arial, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #1a73e8;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #e8eaed;
-  }
-
-  .field {
-    margin-bottom: 20px;
-  }
-  .field label {
-    display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: #5f6368;
-    margin-bottom: 6px;
-    letter-spacing: 0.1px;
-  }
-  .field input,
-  .field select,
-  .field textarea {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #dadce0;
-    border-radius: 4px;
-    font-size: 15px;
-    font-family: 'Roboto', Arial, sans-serif;
-    color: #202124;
-    background: #fff;
-    outline: none;
-    transition: border-color 0.15s;
-    appearance: none;
-  }
-  .field input:focus,
-  .field select:focus,
-  .field textarea:focus {
-    border-color: #1a73e8;
-    box-shadow: 0 0 0 2px rgba(26,115,232,0.12);
-  }
-  .field textarea { resize: vertical; min-height: 88px; }
-
-  .field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
+  .hero { padding: 56px 24px 40px; max-width: 720px; margin: 0 auto; }
+  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 36px; font-weight: 400; color: #202124; line-height: 1.25; margin-bottom: 12px; }
+  .hero p { font-size: 16px; color: #5f6368; line-height: 1.6; max-width: 560px; }
+  .form-wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
+  .section-title { color: #1a73e8; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-family: Arial, sans-serif; margin: 24px 0 4px; border-bottom: 1px solid #f0e6d3; padding-bottom: 6px; }
+  .field { margin-bottom: 20px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input, .field select, .field textarea { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; color: #202124; background: #fff; outline: none; transition: border-color 0.15s; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.12); }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
-
-  .select-wrap { position: relative; }
-  .select-wrap::after {
-    content: '';
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0; height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid #5f6368;
-    pointer-events: none;
-  }
-
-  /* Department cards */
-  .dept-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  @media (max-width: 520px) { .dept-grid { grid-template-columns: 1fr; } }
-
-  .dept-card {
-    border: 1.5px solid #dadce0;
-    border-radius: 8px;
-    padding: 16px;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-    position: relative;
-    user-select: none;
-  }
-  .dept-card:hover { border-color: #1a73e8; background: #f8f9ff; }
-  .dept-card.selected { border-color: #1a73e8; background: #e8f0fe; }
-  .dept-card.disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-  .dept-icon { font-size: 22px; margin-bottom: 6px; }
-  .dept-name {
-    font-family: 'Google Sans', Arial, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #202124;
-    margin-bottom: 2px;
-  }
-  .dept-tag {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 500;
-    padding: 2px 8px;
-    border-radius: 100px;
-    letter-spacing: 0.5px;
-  }
-  .dept-tag.pilot { background: #e6f4ea; color: #137333; }
-  .dept-tag.soon { background: #f1f3f4; color: #80868b; }
-  input[type="radio"].dept-radio { display: none; }
-
-  /* Submit */
-  .submit-wrap { margin-top: 32px; }
-  .btn-submit {
-    background: #1a73e8;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 12px 28px;
-    font-size: 15px;
-    font-family: 'Google Sans', Arial, sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.15s, box-shadow 0.15s;
-    min-width: 160px;
-  }
-  .btn-submit:hover { background: #1765cc; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-  .btn-submit:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; box-shadow: none; }
-
-  #message {
-    margin-top: 16px;
-    padding: 12px 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    display: none;
-    line-height: 1.5;
-  }
-  .success { background: #e6f4ea; color: #137333; display: block !important; }
-  .error { background: #fce8e6; color: #c5221f; display: block !important; }
-
   .required { color: #c5221f; margin-left: 2px; }
   .field-hint { font-size: 12px; color: #80868b; margin-top: 4px; }
+  .btn-submit { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; min-width: 160px; margin-top: 8px; }
+  .btn-submit:hover { background: #1765cc; }
+  .btn-submit:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; line-height: 1.5; }
+  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+  .notice { background: #e8f0fe; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a73e8; display: flex; gap: 10px; margin-bottom: 24px; line-height: 1.5; }
+  .notice span { font-size: 18px; flex-shrink: 0; }
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <a class="nav-logo" href="#">Yashasvi <span>Global Education</span></a>
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
 </nav>
 
 <div class="hero">
-  <div class="hero-label">Decentralised University</div>
+  <div class="hero-label">Step 1 — Application</div>
   <h1>Apply for admission</h1>
-  <p>Start your journey with a personalised AI teacher. Choose your department, complete the IQ profiling, and earn a globally recognised certification.</p>
+  <p>Fill in your basic details to get started. After this, you'll complete a quick IQ profiling game, then our AI will help you choose the right course.</p>
 </div>
 
 <div class="form-wrap">
 
-  <div class="form-section">
-    <div class="form-section-title">Student details</div>
-    <div class="field-row">
-      <div class="field">
-        <label>Full name <span class="required">*</span></label>
-        <input type="text" id="studentName" placeholder="Your full name" autocomplete="name">
-      </div>
-      <div class="field">
-        <label>Student email <span class="required">*</span></label>
-        <input type="email" id="studentEmail" placeholder="you@example.com" autocomplete="email">
-      </div>
+  <div class="notice">
+    <span>ℹ️</span>
+    <div>Application is <strong>completely free</strong>. You only pay after you decide to enroll. No credit card needed.</div>
+  </div>
+
+  <div class="section-title">Student Details</div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Full name <span class="required">*</span></label>
+      <input type="text" id="studentName" placeholder="Your full name" autocomplete="name">
     </div>
-    <div class="field-row">
-      <div class="field">
-        <label>Country <span class="required">*</span></label>
-        <div class="select-wrap">
-          <select id="country">
-            <option value="">Select country</option>
-            <option value="India">🇮🇳 India</option>
-            <option value="United States">🇺🇸 United States</option>
-            <option value="United Kingdom">🇬🇧 United Kingdom</option>
-            <option value="Canada">🇨🇦 Canada</option>
-            <option value="Australia">🇦🇺 Australia</option>
-            <option value="Germany">🇩🇪 Germany</option>
-            <option value="France">🇫🇷 France</option>
-            <option value="Japan">🇯🇵 Japan</option>
-            <option value="Singapore">🇸🇬 Singapore</option>
-            <option value="UAE">🇦🇪 UAE</option>
-            <option value="Saudi Arabia">🇸🇦 Saudi Arabia</option>
-            <option value="Bangladesh">🇧🇩 Bangladesh</option>
-            <option value="Pakistan">🇵🇰 Pakistan</option>
-            <option value="Nepal">🇳🇵 Nepal</option>
-            <option value="Sri Lanka">🇱🇰 Sri Lanka</option>
-            <option value="South Africa">🇿🇦 South Africa</option>
-            <option value="Nigeria">🇳🇬 Nigeria</option>
-            <option value="Kenya">🇰🇪 Kenya</option>
-            <option value="Brazil">🇧🇷 Brazil</option>
-            <option value="Mexico">🇲🇽 Mexico</option>
-            <option value="Other">🌍 Other</option>
-          </select>
-        </div>
-      </div>
-      <div class="field">
-        <label>Full address <span class="required">*</span></label>
-        <input type="text" id="address" placeholder="City, State, PIN / ZIP">
-      </div>
+    <div class="field">
+      <label>Date of birth <span class="required">*</span></label>
+      <input type="date" id="dob">
     </div>
   </div>
 
-  <div class="form-section">
-    <div class="form-section-title">Parent / Guardian</div>
-    <div class="field" style="max-width: 360px;">
+  <div class="field-row">
+    <div class="field">
+      <label>Student email <span class="required">*</span></label>
+      <input type="email" id="studentEmail" placeholder="you@example.com">
+    </div>
+    <div class="field">
+      <label>Phone number <span class="required">*</span></label>
+      <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX">
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Country <span class="required">*</span></label>
+      <select id="country">
+        <option value="">Select country</option>
+        <option value="India">🇮🇳 India</option>
+        <option value="United States">🇺🇸 United States</option>
+        <option value="United Kingdom">🇬🇧 United Kingdom</option>
+        <option value="Canada">🇨🇦 Canada</option>
+        <option value="Australia">🇦🇺 Australia</option>
+        <option value="UAE">🇦🇪 UAE</option>
+        <option value="Singapore">🇸🇬 Singapore</option>
+        <option value="Germany">🇩🇪 Germany</option>
+        <option value="Bangladesh">🇧🇩 Bangladesh</option>
+        <option value="Nepal">🇳🇵 Nepal</option>
+        <option value="Other">🌍 Other</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Current education level <span class="required">*</span></label>
+      <select id="eduLevel">
+        <option value="">Select level</option>
+        <option value="8th Standard">8th Standard</option>
+        <option value="10th Standard">10th Standard</option>
+        <option value="12th Standard">12th Standard</option>
+        <option value="Graduate">Graduate</option>
+        <option value="Post Graduate">Post Graduate</option>
+        <option value="Working Professional">Working Professional</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Full address <span class="required">*</span></label>
+    <input type="text" id="address" placeholder="City, State, PIN / ZIP">
+  </div>
+
+  <div class="section-title">Parent / Guardian Details</div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Guardian name <span class="required">*</span></label>
+      <input type="text" id="parentName" placeholder="Parent or guardian name">
+    </div>
+    <div class="field">
       <label>Guardian email <span class="required">*</span></label>
-      <input type="email" id="parentEmail" placeholder="parent@example.com" autocomplete="email">
-      <div class="field-hint">A verification link will be sent here. Admission is confirmed only after guardian approval.</div>
+      <input type="email" id="parentEmail" placeholder="parent@example.com">
+      <div class="field-hint">Monthly progress reports will be sent here.</div>
     </div>
   </div>
 
-  <div class="form-section">
-    <div class="form-section-title">Choose your department</div>
-    <div class="dept-grid" id="deptGrid">
-
-      <label class="dept-card" id="card-entrepreneurship">
-        <input type="radio" name="dept" class="dept-radio" value="Entrepreneurship & Business Design">
-        <div class="dept-icon">🚀</div>
-        <div class="dept-name">Entrepreneurship & Business Design</div>
-        <span class="dept-tag pilot">Open — Pilot</span>
-      </label>
-
-      <label class="dept-card" id="card-blockchain">
-        <input type="radio" name="dept" class="dept-radio" value="Blockchain & Decentralized Systems">
-        <div class="dept-icon">⛓️</div>
-        <div class="dept-name">Blockchain & Decentralized Systems</div>
-        <span class="dept-tag pilot">Open — Pilot</span>
-      </label>
-
-      <div class="dept-card disabled">
-        <div class="dept-icon">🤖</div>
-        <div class="dept-name">Computer Science & AI</div>
-        <span class="dept-tag soon">Coming soon</span>
-      </div>
-
-      <div class="dept-card disabled">
-        <div class="dept-icon">📐</div>
-        <div class="dept-name">Mathematics & Logic</div>
-        <span class="dept-tag soon">Coming soon</span>
-      </div>
-
-      <div class="dept-card disabled">
-        <div class="dept-icon">🔬</div>
-        <div class="dept-name">Pure Sciences</div>
-        <span class="dept-tag soon">Coming soon</span>
-      </div>
-
-      <div class="dept-card disabled">
-        <div class="dept-icon">📖</div>
-        <div class="dept-name">Humanities & Communication</div>
-        <span class="dept-tag soon">Coming soon</span>
-      </div>
-
-      <div class="dept-card disabled">
-        <div class="dept-icon">🎨</div>
-        <div class="dept-name">Design & Creative Tech</div>
-        <span class="dept-tag soon">Coming soon</span>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="submit-wrap">
-    <button class="btn-submit" id="submitBtn">Submit application</button>
-    <div id="message"></div>
-  </div>
+  <button class="btn-submit" id="submitBtn">Submit application →</button>
+  <div id="message"></div>
 
 </div>
 
 <script>
-  const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
-  const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
-  const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
 
-  // Department card selection
-  document.querySelectorAll('.dept-card:not(.disabled)').forEach(card => {
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.dept-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-    });
-  });
+document.getElementById('submitBtn').addEventListener('click', async () => {
+  const studentName = document.getElementById('studentName').value.trim();
+  const dob = document.getElementById('dob').value;
+  const studentEmail = document.getElementById('studentEmail').value.trim().toLowerCase();
+  const phone = document.getElementById('phone').value.trim();
+  const country = document.getElementById('country').value;
+  const eduLevel = document.getElementById('eduLevel').value;
+  const address = document.getElementById('address').value.trim();
+  const parentName = document.getElementById('parentName').value.trim();
+  const parentEmail = document.getElementById('parentEmail').value.trim().toLowerCase();
 
-  document.getElementById('submitBtn').addEventListener('click', async () => {
-    const studentName = document.getElementById('studentName').value.trim();
-    const studentEmail = document.getElementById('studentEmail').value.trim().toLowerCase();
-    const country = document.getElementById('country').value;
-    const address = document.getElementById('address').value.trim();
-    const parentEmail = document.getElementById('parentEmail').value.trim().toLowerCase();
-    const deptRadio = document.querySelector('input[name="dept"]:checked');
-    const track = deptRadio ? deptRadio.value : '';
-
-    if (!studentName || !studentEmail || !country || !address || !parentEmail || !track) {
-      showMessage('error', 'Please fill in all required fields and select a department.');
-      return;
-    }
-
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = "Submitting…";
-
-    try {
-      const checkRes = await fetch(
-        BASE + "/students?select=id&student_email=ilike." + encodeURIComponent(studentEmail),
-        { method: "GET", headers: HEADERS }
-      );
-      const existing = await checkRes.json();
-
-      if (Array.isArray(existing) && existing.length > 0) {
-        showMessage('error', 'This email is already registered. Please use a different email address.');
-        btn.disabled = false; btn.textContent = "Submit application";
-        return;
-      }
-
-      const res = await fetch(BASE + "/students", {
-        method: "POST",
-        headers: { ...HEADERS, "Prefer": "return=representation" },
-        body: JSON.stringify({
-          student_name: studentName,
-          student_email: studentEmail,
-          parent_email: parentEmail,
-          country,
-          address,
-          track,
-          verification_status: "pending",
-          admission_status: "form_submitted"
-        })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        showMessage('error', 'Something went wrong. Please try again.');
-        btn.disabled = false; btn.textContent = "Submit application";
-        return;
-      }
-
-      showMessage('success', 'Application submitted. Your next step is to complete the IQ Profiling Game.');
-      btn.textContent = "Submitted";
-
-    } catch (err) {
-      showMessage('error', 'Network error: ' + err.message);
-      btn.disabled = false; btn.textContent = "Submit application";
-    }
-  });
-
-  function showMessage(type, text) {
-    const m = document.getElementById('message');
-    m.className = type;
-    m.textContent = text;
-    m.style.display = 'block';
+  if (!studentName || !dob || !studentEmail || !phone || !country || !eduLevel || !address || !parentName || !parentEmail) {
+    showMsg('error', 'Please fill in all required fields.'); return;
   }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+
+  try {
+    // Check duplicate
+    const chk = await fetch(BASE + "/students?select=id&student_email=ilike." + encodeURIComponent(studentEmail), { method: "GET", headers: HEADERS });
+    const existing = await chk.json();
+    if (Array.isArray(existing) && existing.length > 0) {
+      showMsg('error', 'This email is already registered. Please use a different email.');
+      btn.disabled = false; btn.textContent = 'Submit application →'; return;
+    }
+
+    const res = await fetch(BASE + "/students", {
+      method: "POST",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({
+        student_name: studentName,
+        student_email: studentEmail,
+        parent_email: parentEmail,
+        country, address,
+        track: 'pending',
+        verification_status: 'pending',
+        admission_status: 'form_submitted'
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      showMsg('error', 'Error: ' + (err.message || 'Something went wrong.'));
+      btn.disabled = false; btn.textContent = 'Submit application →'; return;
+    }
+
+    showMsg('success', '✅ Application submitted! Next step: Complete the IQ Profiling Game.');
+    btn.textContent = 'Submitted ✓';
+
+    setTimeout(() => {
+      window.location.href = '/iq-game.html?email=' + encodeURIComponent(studentEmail);
+    }, 2000);
+
+  } catch (err) {
+    showMsg('error', 'Network error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Submit application →';
+  }
+});
+
+function showMsg(type, text) {
+  const m = document.getElementById('message');
+  m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+}
 </script>
 </body>
 </html>
