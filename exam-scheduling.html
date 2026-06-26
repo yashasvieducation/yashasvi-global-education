@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Exam Schedule</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
+
+  .nav { display: flex; align-items: center; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; position: sticky; top: 0; background: #fff; z-index: 10; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+
+  .hero { padding: 56px 24px 40px; max-width: 720px; margin: 0 auto; }
+  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 36px; font-weight: 400; color: #202124; line-height: 1.25; margin-bottom: 12px; }
+  .hero p { font-size: 16px; color: #5f6368; line-height: 1.6; max-width: 560px; }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
+
+  .field { margin-bottom: 20px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; color: #202124; outline: none; transition: border-color 0.15s; }
+  .field input:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.12); }
+
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; min-width: 160px; }
+  .btn-primary:hover { background: #1765cc; }
+  .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
+
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; line-height: 1.5; }
+  .success { background: #e6f4ea; color: #137333; display: block !important; }
+  .error { background: #fce8e6; color: #c5221f; display: block !important; }
+
+  /* Exam card */
+  #scheduleCard { display: none; margin-top: 8px; }
+  .exam-header { margin-bottom: 28px; }
+  .exam-header h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 400; color: #202124; margin-bottom: 6px; }
+  .exam-header p { font-size: 14px; color: #5f6368; }
+
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  @media (max-width: 520px) { .detail-grid { grid-template-columns: 1fr; } }
+
+  .detail-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 18px 20px; }
+  .detail-item .d-label { font-size: 12px; font-weight: 500; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .detail-item .d-value { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; color: #202124; font-weight: 500; }
+  .detail-item .d-sub { font-size: 13px; color: #5f6368; margin-top: 2px; }
+
+  .notice { background: #e8f0fe; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a73e8; display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; }
+  .notice span { font-size: 18px; flex-shrink: 0; }
+
+  .track-badge { display: inline-flex; align-items: center; gap: 6px; background: #f1f3f4; border-radius: 100px; padding: 4px 12px; font-size: 13px; color: #202124; font-weight: 500; margin-bottom: 24px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="#">Yashasvi <span>Global Education</span></a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Step 3 of 3 — Exam Schedule</div>
+  <h1>Your exam schedule</h1>
+  <p>All entrance exams begin at 7:00 AM IST. Once scheduled, your date is confirmed automatically.</p>
+</div>
+
+<div class="wrap">
+
+  <div id="checkStep">
+    <div class="field">
+      <label>Student email address</label>
+      <input type="email" id="studentEmail" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <button class="btn-primary" id="checkBtn">View my schedule</button>
+    <div id="message"></div>
+  </div>
+
+  <div id="scheduleCard">
+    <div class="track-badge" id="trackBadge">📚 Department</div>
+    <div class="exam-header">
+      <h2>Entrance exam scheduled</h2>
+      <p>Your seat is confirmed. Be ready at 7:00 AM on the date below.</p>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-item">
+        <div class="d-label">Exam date</div>
+        <div class="d-value" id="examDate">—</div>
+        <div class="d-sub" id="examDay">—</div>
+      </div>
+      <div class="detail-item">
+        <div class="d-label">Start time</div>
+        <div class="d-value">7:00 AM</div>
+        <div class="d-sub">Indian Standard Time (IST)</div>
+      </div>
+      <div class="detail-item">
+        <div class="d-label">Duration</div>
+        <div class="d-value">60 minutes</div>
+        <div class="d-sub">Cannot be paused once started</div>
+      </div>
+      <div class="detail-item">
+        <div class="d-label">Format</div>
+        <div class="d-value">MCQ + Subjective</div>
+        <div class="d-sub">AI graded · 70% to pass</div>
+      </div>
+    </div>
+
+    <div class="notice">
+      <span>ℹ️</span>
+      <div>The exam link will appear automatically on this page at 7:00 AM on your exam date. Keep this page bookmarked and do not share your email with others.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+  const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+  const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+
+  function getNextExamDate() {
+    const now = new Date();
+    const next = new Date(now);
+    next.setDate(now.getDate() + 1);
+    return next.toISOString().split('T')[0];
+  }
+
+  function formatDate(dateStr) {
+    const d = new Date(dateStr + 'T07:00:00+05:30');
+    return {
+      date: d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+      day: d.toLocaleDateString('en-IN', { weekday: 'long' })
+    };
+  }
+
+  document.getElementById('checkBtn').addEventListener('click', async () => {
+    const email = document.getElementById('studentEmail').value.trim().toLowerCase();
+    if (!email) { showMessage('error', 'Please enter your email address.'); return; }
+
+    const btn = document.getElementById('checkBtn');
+    btn.disabled = true; btn.textContent = "Loading…";
+
+    try {
+      const res = await fetch(
+        BASE + "/students?select=id,iq_game_completed,exam_date,track&student_email=ilike." + encodeURIComponent(email),
+        { method: "GET", headers: HEADERS }
+      );
+      const data = await res.json();
+
+      if (!Array.isArray(data) || data.length === 0) {
+        showMessage('error', 'No application found for this email. Please complete the admission form first.');
+        btn.disabled = false; btn.textContent = "View my schedule"; return;
+      }
+
+      const student = data[0];
+      if (!student.iq_game_completed) {
+        showMessage('error', 'Please complete the IQ profiling before viewing your exam schedule.');
+        btn.disabled = false; btn.textContent = "View my schedule"; return;
+      }
+
+      let examDate = student.exam_date;
+      if (!examDate) {
+        examDate = getNextExamDate();
+        await fetch(
+          BASE + "/students?student_email=ilike." + encodeURIComponent(email),
+          { method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" }, body: JSON.stringify({ exam_date: examDate }) }
+        );
+      }
+
+      const formatted = formatDate(examDate);
+      document.getElementById('examDate').textContent = formatted.date;
+      document.getElementById('examDay').textContent = formatted.day;
+
+      const deptIcons = {
+        'Entrepreneurship & Business Design': '🚀',
+        'Blockchain & Decentralized Systems': '⛓️',
+        'Computer Science & AI': '🤖',
+      };
+      const icon = deptIcons[student.track] || '📚';
+      document.getElementById('trackBadge').textContent = icon + ' ' + (student.track || 'General');
+
+      document.getElementById('checkStep').style.display = 'none';
+      document.getElementById('scheduleCard').style.display = 'block';
+      document.getElementById('message').style.display = 'none';
+
+    } catch (err) {
+      showMessage('error', 'Error: ' + err.message);
+      btn.disabled = false; btn.textContent = "View my schedule";
+    }
+  });
+
+  function showMessage(type, text) {
+    const m = document.getElementById('message');
+    m.className = type; m.textContent = text; m.style.display = 'block';
+  }
+</script>
+</body>
+</html>

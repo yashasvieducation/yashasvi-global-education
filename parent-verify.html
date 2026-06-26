@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Parent Verification</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; position: sticky; top: 0; background: #fff; z-index: 10; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+  .hero { padding: 56px 24px 40px; max-width: 720px; margin: 0 auto; }
+  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 36px; font-weight: 400; color: #202124; line-height: 1.25; margin-bottom: 12px; }
+  .hero p { font-size: 16px; color: #5f6368; line-height: 1.6; max-width: 560px; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
+  .field { margin-bottom: 20px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; color: #202124; outline: none; transition: border-color 0.15s; }
+  .field input:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.12); }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; min-width: 160px; }
+  .btn-primary:hover { background: #1765cc; }
+  .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; line-height: 1.5; }
+  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+  .msg-info { background: #e8f0fe; color: #1a73e8; display: block !important; }
+  .student-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; margin-bottom: 24px; display: none; }
+  .student-card h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 20px; font-weight: 400; margin-bottom: 16px; }
+  .detail-row { display: flex; gap: 8px; margin-bottom: 10px; font-size: 14px; }
+  .detail-row .key { color: #5f6368; min-width: 140px; }
+  .detail-row .val { color: #202124; font-weight: 500; }
+  .notice { background: #e8f0fe; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a73e8; display: flex; gap: 10px; line-height: 1.5; margin-bottom: 20px; }
+  .notice span { font-size: 18px; flex-shrink: 0; }
+  .confirmed-card { border: 1px solid #34a853; border-radius: 8px; padding: 32px; text-align: center; display: none; }
+  .confirmed-card .icon { font-size: 48px; margin-bottom: 12px; }
+  .confirmed-card h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 24px; font-weight: 400; color: #137333; margin-bottom: 8px; }
+  .confirmed-card p { font-size: 15px; color: #5f6368; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="#">Yashasvi <span>Global Education</span></a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Step 6 — Parent Verification</div>
+  <h1>Guardian approval</h1>
+  <p>Your child has passed the entrance exam. Please review their application details and approve their admission to Yashasvi Global Education.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- Step 1: Send verification email -->
+  <div id="sendStep">
+    <div class="notice">
+      <span>ℹ️</span>
+      <div>Enter the student's email address. We will send a verification link to the guardian email registered during admission.</div>
+    </div>
+    <div class="field">
+      <label>Student email address</label>
+      <input type="email" id="studentEmail" placeholder="student@example.com">
+    </div>
+    <button class="btn-primary" id="sendBtn">Send verification email</button>
+    <div id="message"></div>
+  </div>
+
+  <!-- Step 2: Verify token (parent clicks link, token in URL) -->
+  <div id="verifyStep" style="display:none;">
+    <div class="student-card" id="studentCard">
+      <h2>Student application details</h2>
+      <div class="detail-row"><span class="key">Student name</span><span class="val" id="sName">—</span></div>
+      <div class="detail-row"><span class="key">Student email</span><span class="val" id="sEmail">—</span></div>
+      <div class="detail-row"><span class="key">Department</span><span class="val" id="sDept">—</span></div>
+      <div class="detail-row"><span class="key">Country</span><span class="val" id="sCountry">—</span></div>
+      <div class="detail-row"><span class="key">Exam score</span><span class="val" id="sScore">—</span></div>
+      <div class="detail-row"><span class="key">Admission fee</span><span class="val">1,000 HON</span></div>
+    </div>
+    <div class="notice">
+      <span>ℹ️</span>
+      <div>By approving, you confirm that you are the parent or guardian of this student and consent to their enrollment at Yashasvi Global Education.</div>
+    </div>
+    <button class="btn-primary" id="approveBtn">Approve admission</button>
+    <div id="verifyMessage" style="margin-top:16px; padding:12px 16px; border-radius:4px; font-size:14px; display:none;"></div>
+  </div>
+
+  <!-- Confirmed -->
+  <div class="confirmed-card" id="confirmedCard">
+    <div class="icon">🎓</div>
+    <h2>Admission approved</h2>
+    <p>You have successfully approved your child's admission.<br>They can now begin their syllabus on Yashasvi Global Education.</p>
+  </div>
+
+</div>
+
+<script>
+  const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+  const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+  const HEADERS = { "apikey": ANON_KEY, "Authorization": "Bearer " + ANON_KEY, "Content-Type": "application/json" };
+  const RESEND_KEY = "re_Jm8jbeFV_NZC4VkDZN5fuhbxWFJQTgfcn";
+
+  // Check if token in URL (parent clicked verification link)
+  const urlParams = new URLSearchParams(window.location.search);
+  const tokenInUrl = urlParams.get('token');
+
+  if (tokenInUrl) {
+    document.getElementById('sendStep').style.display = 'none';
+    loadStudentByToken(tokenInUrl);
+  }
+
+  async function loadStudentByToken(token) {
+    try {
+      const res = await fetch(
+        BASE + "/students?select=id,student_name,student_email,parent_email,track,country,exam_score,verification_status,admission_status&verification_token=eq." + token,
+        { method: "GET", headers: HEADERS }
+      );
+      const data = await res.json();
+
+      if (!Array.isArray(data) || data.length === 0) {
+        document.getElementById('verifyStep').style.display = 'block';
+        showVerifyMessage('error', 'Invalid or expired verification link. Please contact support.');
+        return;
+      }
+
+      const s = data[0];
+
+      if (s.verification_status === 'verified') {
+        document.getElementById('confirmedCard').style.display = 'block';
+        return;
+      }
+
+      if (s.admission_status !== 'exam_passed') {
+        document.getElementById('verifyStep').style.display = 'block';
+        showVerifyMessage('error', 'This student has not passed the entrance exam yet.');
+        return;
+      }
+
+      document.getElementById('sName').textContent = s.student_name;
+      document.getElementById('sEmail').textContent = s.student_email;
+      document.getElementById('sDept').textContent = s.track;
+      document.getElementById('sCountry').textContent = s.country;
+      document.getElementById('sScore').textContent = s.exam_score + '%';
+      document.getElementById('studentCard').style.display = 'block';
+      document.getElementById('verifyStep').style.display = 'block';
+
+      document.getElementById('approveBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('approveBtn');
+        btn.disabled = true; btn.textContent = 'Approving…';
+
+        try {
+          const upRes = await fetch(
+            BASE + "/students?verification_token=eq." + token,
+            {
+              method: "PATCH",
+              headers: { ...HEADERS, "Prefer": "return=representation" },
+              body: JSON.stringify({ verification_status: 'verified', admission_status: 'admitted', fee_paid: true })
+            }
+          );
+          const upData = await upRes.json();
+          if (!Array.isArray(upData) || upData.length === 0) {
+            showVerifyMessage('error', 'Something went wrong. Please try again.');
+            btn.disabled = false; btn.textContent = 'Approve admission'; return;
+          }
+          document.getElementById('verifyStep').style.display = 'none';
+          document.getElementById('confirmedCard').style.display = 'block';
+        } catch (err) {
+          showVerifyMessage('error', 'Error: ' + err.message);
+          btn.disabled = false; btn.textContent = 'Approve admission';
+        }
+      });
+
+    } catch (err) {
+      document.getElementById('verifyStep').style.display = 'block';
+      showVerifyMessage('error', 'Error: ' + err.message);
+    }
+  }
+
+  // Send verification email
+  document.getElementById('sendBtn').addEventListener('click', async () => {
+    const email = document.getElementById('studentEmail').value.trim().toLowerCase();
+    if (!email) { showMessage('error', 'Please enter the student email address.'); return; }
+
+    const btn = document.getElementById('sendBtn');
+    btn.disabled = true; btn.textContent = 'Checking…';
+
+    try {
+      const res = await fetch(
+        BASE + "/students?select=id,student_name,parent_email,verification_token,exam_score,admission_status&student_email=ilike." + encodeURIComponent(email),
+        { method: "GET", headers: HEADERS }
+      );
+      const data = await res.json();
+
+      if (!Array.isArray(data) || data.length === 0) {
+        showMessage('error', 'No application found for this email.');
+        btn.disabled = false; btn.textContent = 'Send verification email'; return;
+      }
+
+      const s = data[0];
+
+      if (s.admission_status !== 'exam_passed') {
+        showMessage('error', 'This student has not passed the entrance exam yet. Please take the exam first.');
+        btn.disabled = false; btn.textContent = 'Send verification email'; return;
+      }
+
+      if (s.admission_status === 'admitted') {
+        showMessage('success', 'This student is already admitted. No further action needed.');
+        btn.disabled = false; btn.textContent = 'Send verification email'; return;
+      }
+
+      btn.textContent = 'Sending email…';
+
+      // Build verification URL
+      const verifyUrl = window.location.href.split('?')[0] + '?token=' + s.verification_token;
+
+      // Send email via Resend
+      const emailRes = await fetch('https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/send-verification-email', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + ANON_KEY,
+          'apikey': ANON_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          to: s.parent_email,
+          studentName: s.student_name,
+          examScore: s.exam_score,
+          verifyUrl: verifyUrl,
+          parentEmail: s.parent_email
+        })
+      });
+
+      const emailData = await emailRes.json();
+
+      if (!emailRes.ok) {
+        showMessage('error', 'Email send failed: ' + (emailData.message || JSON.stringify(emailData)));
+        btn.disabled = false; btn.textContent = 'Send verification email'; return;
+      }
+
+      showMessage('success', '✅ Verification email sent to guardian (' + s.parent_email + '). Ask them to check their inbox and click the approval link.');
+      btn.textContent = 'Email sent ✓';
+
+    } catch (err) {
+      showMessage('error', 'Error: ' + err.message);
+      btn.disabled = false; btn.textContent = 'Send verification email';
+    }
+  });
+
+  function showMessage(type, text) {
+    const m = document.getElementById('message');
+    m.className = type; m.textContent = text; m.style.display = 'block';
+  }
+  function showVerifyMessage(type, text) {
+    const m = document.getElementById('verifyMessage');
+    m.className = type; m.textContent = text; m.style.display = 'block';
+  }
+</script>
+</body>
+</html>

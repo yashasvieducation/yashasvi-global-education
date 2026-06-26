@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Decentralised University</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+  .nav-link { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 8px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; }
+  .hero { padding: 80px 24px 60px; max-width: 760px; margin: 0 auto; text-align: center; }
+  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 16px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 48px; font-weight: 400; color: #202124; line-height: 1.2; margin-bottom: 16px; }
+  .hero p { font-size: 18px; color: #5f6368; line-height: 1.6; max-width: 560px; margin: 0 auto 32px; }
+  .btn-hero { display: inline-block; background: #1a73e8; color: #fff; text-decoration: none; border-radius: 4px; padding: 14px 32px; font-size: 16px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; }
+  .btn-hero:hover { background: #1765cc; }
+  .steps { max-width: 760px; margin: 0 auto; padding: 40px 24px 80px; }
+  .steps h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #202124; margin-bottom: 32px; text-align: center; }
+  .step-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 600px) { .step-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 32px; } }
+  .step-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; text-decoration: none; color: #202124; transition: box-shadow 0.15s, border-color 0.15s; display: block; }
+  .step-card:hover { border-color: #1a73e8; box-shadow: 0 2px 8px rgba(26,115,232,0.12); }
+  .step-num { font-size: 12px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .step-icon { font-size: 28px; margin-bottom: 10px; }
+  .step-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 6px; }
+  .step-desc { font-size: 13px; color: #5f6368; line-height: 1.5; }
+  .divider { border: none; border-top: 1px solid #e8eaed; margin: 0 24px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
+  <a class="nav-link" href="/admission-form.html">Apply now</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Decentralised University</div>
+  <h1>Learn. Build. Lead.</h1>
+  <p>A globally accessible, AI-powered education platform where every student gets a personal teacher and a real path to entrepreneurship.</p>
+  <a class="btn-hero" href="/admission-form.html">Start your application</a>
+</div>
+
+<hr class="divider">
+
+<div class="steps">
+  <h2>Your journey to admission</h2>
+  <div class="step-grid">
+    <a class="step-card" href="/admission-form.html">
+      <div class="step-num">Step 1</div>
+      <div class="step-icon">📋</div>
+      <div class="step-title">Apply</div>
+      <div class="step-desc">Fill in your details and choose your department.</div>
+    </a>
+    <a class="step-card" href="/iq-game.html">
+      <div class="step-num">Step 2</div>
+      <div class="step-icon">🧠</div>
+      <div class="step-title">IQ Profiling</div>
+      <div class="step-desc">Complete a short profiling game so we can personalise your learning.</div>
+    </a>
+    <a class="step-card" href="/exam-scheduling.html">
+      <div class="step-num">Step 3</div>
+      <div class="step-icon">📅</div>
+      <div class="step-title">Exam Schedule</div>
+      <div class="step-desc">Check your entrance exam date and time (7:00 AM IST).</div>
+    </a>
+    <a class="step-card" href="/exam.html">
+      <div class="step-num">Step 4</div>
+      <div class="step-icon">✏️</div>
+      <div class="step-title">Entrance Exam</div>
+      <div class="step-desc">MCQ + Subjective exam, AI graded. Score 70% to qualify.</div>
+    </a>
+    <a class="step-card" href="/parent-verify.html">
+      <div class="step-num">Step 5</div>
+      <div class="step-icon">✅</div>
+      <div class="step-title">Guardian Approval</div>
+      <div class="step-desc">Your guardian approves your enrollment via email.</div>
+    </a>
+    <div class="step-card" style="opacity:0.5; cursor:default;">
+      <div class="step-num">Step 6</div>
+      <div class="step-icon">🎓</div>
+      <div class="step-title">Begin Learning</div>
+      <div class="step-desc">Start your syllabus with your personal AI teacher.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
