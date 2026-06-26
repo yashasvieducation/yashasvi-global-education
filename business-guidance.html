@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Business Guidance</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+  .nav-user { font-size: 13px; color: #5f6368; }
+
+  /* Layout */
+  .layout { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 64px); }
+  @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
+
+  /* Sidebar */
+  .sidebar { background: #fff; border-right: 1px solid #e8eaed; padding: 20px 0; }
+  .sidebar-section { padding: 0 12px; margin-bottom: 8px; }
+  .sidebar-label { font-size: 11px; font-weight: 500; color: #5f6368; text-transform: uppercase; letter-spacing: 1px; padding: 0 8px; margin-bottom: 6px; }
+  .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 14px; color: #202124; transition: background 0.15s; margin-bottom: 2px; }
+  .sidebar-item:hover { background: #f1f3f4; }
+  .sidebar-item.active { background: #e8f0fe; color: #1a73e8; font-weight: 500; }
+  .sidebar-item .s-icon { font-size: 18px; }
+
+  /* Main */
+  .main { display: flex; flex-direction: column; height: calc(100vh - 64px); }
+
+  /* Tool panels */
+  .tool-panel { display: none; flex: 1; flex-direction: column; }
+  .tool-panel.active { display: flex; }
+
+  /* Chat (AI Mentor) */
+  .chat-header { padding: 20px 24px 16px; border-bottom: 1px solid #e8eaed; background: #fff; }
+  .chat-header h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 20px; font-weight: 400; margin-bottom: 4px; }
+  .chat-header p { font-size: 13px; color: #5f6368; }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; background: #f8f9fa; }
+  .chat-msg { max-width: 75%; }
+  .chat-msg.user { align-self: flex-end; }
+  .chat-msg.ai { align-self: flex-start; }
+  .chat-bubble { padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+  .chat-msg.user .chat-bubble { background: #1a73e8; color: #fff; border-radius: 12px 12px 2px 12px; }
+  .chat-msg.ai .chat-bubble { background: #fff; color: #202124; border-radius: 12px 12px 12px 2px; border: 1px solid #e8eaed; }
+  .chat-name { font-size: 11px; color: #80868b; margin-bottom: 4px; }
+  .chat-msg.user .chat-name { text-align: right; }
+  .typing-indicator { font-size: 12px; color: #5f6368; padding: 4px 24px; display: none; background: #f8f9fa; }
+  .chat-input-wrap { padding: 16px 24px; border-top: 1px solid #e8eaed; background: #fff; display: flex; gap: 10px; }
+  .chat-input { flex: 1; padding: 10px 16px; border: 1px solid #dadce0; border-radius: 24px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; outline: none; resize: none; max-height: 120px; }
+  .chat-input:focus { border-color: #1a73e8; }
+  .chat-send { background: #1a73e8; color: #fff; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; align-self: flex-end; }
+  .chat-send:disabled { background: #dadce0; cursor: not-allowed; }
+
+  /* Business Plan Generator */
+  .tool-content { flex: 1; overflow-y: auto; padding: 24px; }
+  .tool-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 24px; font-weight: 400; margin-bottom: 8px; }
+  .tool-desc { font-size: 14px; color: #5f6368; margin-bottom: 24px; line-height: 1.6; }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input, .field textarea, .field select { width: 100%; padding: 10px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; outline: none; background: #fff; }
+  .field input:focus, .field textarea:focus { border-color: #1a73e8; }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .field select { appearance: none; cursor: pointer; }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 10px 24px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .btn-primary:hover { background: #1765cc; }
+  .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
+  .result-box { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; margin-top: 20px; font-size: 14px; line-height: 1.8; white-space: pre-wrap; display: none; }
+  .result-box h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 12px; color: #1a73e8; }
+
+  /* Market Research */
+  .market-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+  @media (max-width: 560px) { .market-cards { grid-template-columns: 1fr; } }
+  .market-card { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 16px; }
+  .market-card .mc-label { font-size: 11px; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .market-card .mc-value { font-size: 14px; color: #202124; line-height: 1.6; }
+
+  /* Email step */
+  #emailStep { max-width: 480px; margin: 80px auto; padding: 0 24px; }
+  #emailStep h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+  #emailStep p { font-size: 15px; color: #5f6368; margin-bottom: 24px; }
+  #emailMsg { margin-top: 12px; padding: 12px; border-radius: 4px; font-size: 14px; display: none; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+  .msg-info { background: #e8f0fe; color: #1a73e8; display: block !important; }
+  .quick-prompts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .quick-btn { background: #f1f3f4; border: none; border-radius: 100px; padding: 6px 14px; font-size: 13px; cursor: pointer; color: #202124; transition: background 0.15s; }
+  .quick-btn:hover { background: #e8f0fe; color: #1a73e8; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
+  <span class="nav-user" id="navUser"></span>
+</nav>
+
+<!-- Email Step -->
+<div id="emailStep">
+  <h2>Business Guidance</h2>
+  <p>Access your lifetime business mentor, plan generator, and market research tools. Available to all certified graduates.</p>
+  <div class="field">
+    <label>Student email address</label>
+    <input type="email" id="loginEmail" placeholder="you@example.com">
+  </div>
+  <button class="btn-primary" id="loginBtn" style="width:100%; padding:12px;">Access platform</button>
+  <div id="emailMsg"></div>
+</div>
+
+<!-- Main Platform -->
+<div class="layout" id="platform" style="display:none;">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Tools</div>
+      <div class="sidebar-item active" onclick="switchTool('mentor')" id="tab-mentor">
+        <span class="s-icon">🤖</span> AI Business Mentor
+      </div>
+      <div class="sidebar-item" onclick="switchTool('plan')" id="tab-plan">
+        <span class="s-icon">📋</span> Business Plan Generator
+      </div>
+      <div class="sidebar-item" onclick="switchTool('market')" id="tab-market">
+        <span class="s-icon">📊</span> Market Research
+      </div>
+      <div class="sidebar-item" onclick="switchTool('pitch')" id="tab-pitch">
+        <span class="s-icon">🎯</span> Pitch Script Generator
+      </div>
+    </div>
+  </div>
+
+  <!-- Tools -->
+  <div class="main">
+
+    <!-- AI Mentor Chat -->
+    <div class="tool-panel active" id="tool-mentor">
+      <div class="chat-header">
+        <h2>🤖 AI Business Mentor</h2>
+        <p>Ask anything about starting, running, or growing your business. Lifetime access.</p>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg ai">
+          <div class="chat-name">AI Mentor</div>
+          <div class="chat-bubble">Welcome! I'm your personal business mentor. You've completed your course — now let's build your business. What are you working on? Ask me anything about entrepreneurship, funding, marketing, legal setup, or any business challenge you're facing. 🚀</div>
+        </div>
+      </div>
+      <div class="typing-indicator" id="typingIndicator">AI Mentor is thinking...</div>
+      <div class="chat-input-wrap">
+        <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+          <div class="quick-prompts">
+            <button class="quick-btn" onclick="quickSend('How do I register my business in India?')">How to register business?</button>
+            <button class="quick-btn" onclick="quickSend('How do I get my first 10 customers?')">First 10 customers</button>
+            <button class="quick-btn" onclick="quickSend('What is the best way to raise funding for a startup?')">Raise funding</button>
+            <button class="quick-btn" onclick="quickSend('How do I calculate break-even point?')">Break-even point</button>
+          </div>
+          <textarea class="chat-input" id="chatInput" placeholder="Ask your business mentor anything…" rows="1"></textarea>
+        </div>
+        <button class="chat-send" id="sendBtn" onclick="sendMentorMsg()">➤</button>
+      </div>
+    </div>
+
+    <!-- Business Plan Generator -->
+    <div class="tool-panel" id="tool-plan">
+      <div class="tool-content">
+        <div class="tool-title">📋 Business Plan Generator</div>
+        <div class="tool-desc">Tell us about your business idea and AI will generate a complete, professional business plan you can use for funding, partnerships, or personal clarity.</div>
+
+        <div class="field">
+          <label>Business idea (one line)</label>
+          <input type="text" id="planIdea" placeholder="e.g. A mobile app that connects local farmers with city consumers">
+        </div>
+        <div class="field">
+          <label>Industry / Sector</label>
+          <select id="planIndustry">
+            <option value="Food & Agriculture">🌾 Food & Agriculture</option>
+            <option value="Technology & Software">💻 Technology & Software</option>
+            <option value="Retail & E-commerce">🛒 Retail & E-commerce</option>
+            <option value="Education">📚 Education</option>
+            <option value="Healthcare">🏥 Healthcare</option>
+            <option value="Finance & Fintech">💰 Finance & Fintech</option>
+            <option value="Manufacturing">⚙️ Manufacturing</option>
+            <option value="Services">🤝 Services</option>
+            <option value="Other">🚀 Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Target location / market</label>
+          <input type="text" id="planLocation" placeholder="e.g. Pune, Maharashtra / Pan India / Global">
+        </div>
+        <div class="field">
+          <label>Starting budget</label>
+          <input type="text" id="planBudget" placeholder="e.g. ₹10,000 / ₹1 Lakh / ₹5 Lakh">
+        </div>
+        <div class="field">
+          <label>Target customers</label>
+          <textarea id="planCustomers" placeholder="Who will buy from you? Describe them briefly." rows="2"></textarea>
+        </div>
+
+        <button class="btn-primary" id="generatePlanBtn" onclick="generatePlan()">Generate business plan</button>
+
+        <div class="result-box" id="planResult">
+          <h3>📋 Your Business Plan</h3>
+          <div id="planContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Market Research -->
+    <div class="tool-panel" id="tool-market">
+      <div class="tool-content">
+        <div class="tool-title">📊 Market Research Tool</div>
+        <div class="tool-desc">Get AI-powered market insights for your business idea — competitors, target customers, pricing trends, and market opportunities.</div>
+
+        <div class="field">
+          <label>What is your business / product?</label>
+          <input type="text" id="marketBusiness" placeholder="e.g. Online tutoring platform for Class 10 students in Maharashtra">
+        </div>
+        <div class="field">
+          <label>Target location</label>
+          <input type="text" id="marketLocation" placeholder="e.g. Maharashtra / India / Tier 2 cities">
+        </div>
+
+        <button class="btn-primary" id="marketBtn" onclick="doMarketResearch()">Research market</button>
+
+        <div id="marketResult" style="display:none; margin-top:20px;"></div>
+      </div>
+    </div>
+
+    <!-- Pitch Script Generator -->
+    <div class="tool-panel" id="tool-pitch">
+      <div class="tool-content">
+        <div class="tool-title">🎯 Pitch Script Generator</div>
+        <div class="tool-desc">Generate a compelling 60-second elevator pitch for your business — perfect for investors, partners, or customers.</div>
+
+        <div class="field">
+          <label>Business name</label>
+          <input type="text" id="pitchName" placeholder="e.g. FreshBox">
+        </div>
+        <div class="field">
+          <label>What problem do you solve?</label>
+          <textarea id="pitchProblem" placeholder="e.g. People in cities can't easily access fresh, affordable organic vegetables." rows="2"></textarea>
+        </div>
+        <div class="field">
+          <label>Your solution</label>
+          <textarea id="pitchSolution" placeholder="e.g. We deliver a weekly box of fresh organic vegetables sourced directly from farmers within 50km of the city." rows="2"></textarea>
+        </div>
+        <div class="field">
+          <label>Pitch audience</label>
+          <select id="pitchAudience">
+            <option value="investor">💰 Investor / Funder</option>
+            <option value="customer">🛒 Potential Customer</option>
+            <option value="partner">🤝 Business Partner</option>
+            <option value="bank">🏦 Bank / Loan Officer</option>
+          </select>
+        </div>
+
+        <button class="btn-primary" id="pitchBtn" onclick="generatePitch()">Generate pitch</button>
+
+        <div class="result-box" id="pitchResult">
+          <h3>🎯 Your Elevator Pitch</h3>
+          <div id="pitchContent"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
+
+let studentEmail = "", studentName = "";
+let mentorHistory = [];
+
+// Login
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  if (!email) { showEmailMsg('error', 'Please enter your email.'); return; }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Checking…';
+  try {
+    const res = await fetch(BASE + "/students?select=student_name,admission_status,certificate_id&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showEmailMsg('error', 'No account found for this email.');
+      btn.disabled = false; btn.textContent = 'Access platform'; return;
+    }
+    const s = data[0];
+    if (!['internship_passed','certified'].includes(s.admission_status)) {
+      showEmailMsg('error', 'Business Guidance is available only to certified graduates. Please complete all course steps first.');
+      btn.disabled = false; btn.textContent = 'Access platform'; return;
+    }
+    studentEmail = email;
+    studentName = s.student_name;
+    document.getElementById('emailStep').style.display = 'none';
+    document.getElementById('platform').style.display = 'grid';
+    document.getElementById('navUser').textContent = studentName;
+  } catch (err) {
+    showEmailMsg('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Access platform';
+  }
+});
+
+// Switch tools
+function switchTool(name) {
+  document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('tool-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// AI call helper
+async function callAI(messages, systemPrompt) {
+  const res = await fetch(EDGE, {
+    method: "POST",
+    headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({ messages, systemPrompt })
+  });
+  const data = await res.json();
+  return data.reply || "Sorry, I could not generate a response.";
+}
+
+// AI Mentor Chat
+document.getElementById('chatInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMentorMsg(); }
+});
+
+function quickSend(text) {
+  document.getElementById('chatInput').value = text;
+  sendMentorMsg();
+}
+
+async function sendMentorMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  addBubble('user', text, studentName);
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('typingIndicator').style.display = 'block';
+  mentorHistory.push({ role: 'user', content: text });
+  try {
+    const reply = await callAI(mentorHistory.slice(-10), `You are an expert business mentor for ${studentName}, a certified graduate of Yashasvi Global Education's Entrepreneurship & Business Design program. Give practical, actionable advice for Indian entrepreneurs. Use Indian examples, mention INR amounts, and reference Indian laws/regulations when relevant. Be encouraging but honest. Keep responses concise and structured.`);
+    mentorHistory.push({ role: 'assistant', content: reply });
+    addBubble('ai', reply, 'AI Mentor');
+    // Save
+    await fetch(BASE + "/business_guidance", { method: "POST", headers: HEADERS, body: JSON.stringify({ student_email: studentEmail, session_type: 'mentor', user_message: text, ai_response: reply }) });
+  } catch (e) {
+    addBubble('ai', 'Sorry, I had trouble connecting. Please try again.', 'AI Mentor');
+  }
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('typingIndicator').style.display = 'none';
+}
+
+function addBubble(role, text, name) {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg ' + role;
+  div.innerHTML = `<div class="chat-name">${name}</div><div class="chat-bubble">${text.replace(/\n/g, '<br>')}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Business Plan Generator
+async function generatePlan() {
+  const idea = document.getElementById('planIdea').value.trim();
+  const industry = document.getElementById('planIndustry').value;
+  const location = document.getElementById('planLocation').value.trim();
+  const budget = document.getElementById('planBudget').value.trim();
+  const customers = document.getElementById('planCustomers').value.trim();
+  if (!idea || !location || !budget) { alert('Please fill all fields.'); return; }
+  const btn = document.getElementById('generatePlanBtn');
+  btn.disabled = true; btn.textContent = 'Generating…';
+  try {
+    const prompt = `Create a detailed business plan for: "${idea}" in the ${industry} sector.
+Location: ${location} | Budget: ${budget} | Target customers: ${customers}
+
+Write a professional business plan with these sections:
+1. Executive Summary
+2. Problem & Solution
+3. Target Market
+4. Revenue Model & Pricing
+5. Marketing Strategy
+6. Operations Plan
+7. Financial Projections (6 months)
+8. Risk Analysis
+9. Next Steps
+
+Use Indian context, INR amounts, and practical advice for an Indian entrepreneur.`;
+    const reply = await callAI([{ role: 'user', content: prompt }], 'You are an expert business plan writer for Indian entrepreneurs. Write detailed, practical, and realistic business plans.');
+    document.getElementById('planContent').innerHTML = reply.replace(/\n/g, '<br>');
+    document.getElementById('planResult').style.display = 'block';
+    await fetch(BASE + "/business_guidance", { method: "POST", headers: HEADERS, body: JSON.stringify({ student_email: studentEmail, session_type: 'business_plan', user_message: idea, ai_response: reply }) });
+  } catch (e) { alert('Error generating plan. Please try again.'); }
+  btn.disabled = false; btn.textContent = 'Generate business plan';
+}
+
+// Market Research
+async function doMarketResearch() {
+  const business = document.getElementById('marketBusiness').value.trim();
+  const location = document.getElementById('marketLocation').value.trim();
+  if (!business || !location) { alert('Please fill all fields.'); return; }
+  const btn = document.getElementById('marketBtn');
+  btn.disabled = true; btn.textContent = 'Researching…';
+  try {
+    const prompt = `Do a comprehensive market research analysis for: "${business}" in ${location}.
+
+Provide analysis in this JSON format only:
+{"market_size": "...", "target_segment": "...", "top_competitors": ["...", "...", "..."], "pricing_range": "...", "growth_trend": "...", "key_opportunity": "...", "main_challenge": "...", "recommended_entry_strategy": "..."}`;
+    const reply = await callAI([{ role: 'user', content: prompt }], 'You are a market research analyst specializing in Indian markets. Always respond in valid JSON only.');
+    let parsed = {};
+    try { parsed = JSON.parse(reply.replace(/```json|```/g, '').trim()); } catch(e) { parsed = { key_opportunity: reply }; }
+    document.getElementById('marketResult').innerHTML = `
+      <div class="market-cards">
+        <div class="market-card"><div class="mc-label">Market Size</div><div class="mc-value">${parsed.market_size || '—'}</div></div>
+        <div class="market-card"><div class="mc-label">Target Segment</div><div class="mc-value">${parsed.target_segment || '—'}</div></div>
+        <div class="market-card"><div class="mc-label">Top Competitors</div><div class="mc-value">${(parsed.top_competitors || []).join(', ') || '—'}</div></div>
+        <div class="market-card"><div class="mc-label">Pricing Range</div><div class="mc-value">${parsed.pricing_range || '—'}</div></div>
+        <div class="market-card"><div class="mc-label">Growth Trend</div><div class="mc-value">${parsed.growth_trend || '—'}</div></div>
+        <div class="market-card"><div class="mc-label">Key Opportunity</div><div class="mc-value">${parsed.key_opportunity || '—'}</div></div>
+        <div class="market-card"><div class="mc-label">Main Challenge</div><div class="mc-value">${parsed.main_challenge || '—'}</div></div>
+        <div class="market-card"><div class="mc-label">Entry Strategy</div><div class="mc-value">${parsed.recommended_entry_strategy || '—'}</div></div>
+      </div>`;
+    document.getElementById('marketResult').style.display = 'block';
+    await fetch(BASE + "/business_guidance", { method: "POST", headers: HEADERS, body: JSON.stringify({ student_email: studentEmail, session_type: 'market_research', user_message: business, ai_response: reply }) });
+  } catch (e) { alert('Error. Please try again.'); }
+  btn.disabled = false; btn.textContent = 'Research market';
+}
+
+// Pitch Generator
+async function generatePitch() {
+  const name = document.getElementById('pitchName').value.trim();
+  const problem = document.getElementById('pitchProblem').value.trim();
+  const solution = document.getElementById('pitchSolution').value.trim();
+  const audience = document.getElementById('pitchAudience').value;
+  if (!name || !problem || !solution) { alert('Please fill all fields.'); return; }
+  const btn = document.getElementById('pitchBtn');
+  btn.disabled = true; btn.textContent = 'Generating…';
+  try {
+    const prompt = `Write a compelling 60-second elevator pitch for "${name}" targeted at a ${audience}.
+Problem: ${problem}
+Solution: ${solution}
+
+Make it passionate, clear, and memorable. Include a strong hook, the problem, the solution, the market opportunity, and a clear call to action. Use Indian context where relevant.`;
+    const reply = await callAI([{ role: 'user', content: prompt }], 'You are an expert pitch coach who has helped hundreds of Indian startups raise funding. Write compelling, authentic pitches.');
+    document.getElementById('pitchContent').innerHTML = reply.replace(/\n/g, '<br>');
+    document.getElementById('pitchResult').style.display = 'block';
+    await fetch(BASE + "/business_guidance", { method: "POST", headers: HEADERS, body: JSON.stringify({ student_email: studentEmail, session_type: 'pitch', user_message: name + ': ' + problem, ai_response: reply }) });
+  } catch (e) { alert('Error generating pitch. Please try again.'); }
+  btn.disabled = false; btn.textContent = 'Generate pitch';
+}
+
+function showEmailMsg(type, text) {
+  const m = document.getElementById('emailMsg');
+  m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+}
+</script>
+</body>
+</html>
