@@ -589,23 +589,21 @@ async function sendMessage() {
 Be encouraging, clear, and practical. Use simple English. Give real-world Indian examples when possible. Keep your answers concise (2-4 paragraphs max). If the student asks something unrelated to entrepreneurship or education, gently redirect them back to the topic.`;
 
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
+    const res = await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "anthropic-version": "2023-06-01",
-        "anthropic-dangerous-direct-browser-calls": "true"
+        "apikey": KEY,
+        "Authorization": "Bearer " + KEY
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: chatHistory.slice(-10)
+        messages: chatHistory.slice(-10),
+        systemPrompt: systemPrompt
       })
     });
 
     const data = await res.json();
-    const reply = data.content?.[0]?.text || "Sorry, I couldn't process that. Please try again.";
+    const reply = data.reply || "Sorry, I couldn't process that. Please try again.";
     chatHistory.push({ role: 'assistant', content: reply });
     addChatBubble('ai', reply, 'AI Teacher');
 
