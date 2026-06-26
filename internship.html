@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Internship</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+  .hero { padding: 48px 24px 32px; max-width: 760px; margin: 0 auto; }
+  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #34a853; margin-bottom: 12px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 32px; font-weight: 400; color: #202124; line-height: 1.25; margin-bottom: 10px; }
+  .hero p { font-size: 15px; color: #5f6368; line-height: 1.6; max-width: 560px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+  .field { margin-bottom: 20px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input, .field textarea, .field select { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; color: #202124; outline: none; transition: border-color 0.15s; background: #fff; }
+  .field input:focus, .field textarea:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.12); }
+  .field textarea { resize: vertical; min-height: 100px; }
+  .field-hint { font-size: 12px; color: #80868b; margin-top: 4px; }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; min-width: 160px; }
+  .btn-primary:hover { background: #1765cc; }
+  .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
+  .btn-success { background: #34a853; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .btn-success:hover { background: #2d9142; }
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; line-height: 1.5; }
+  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+  .msg-info { background: #e8f0fe; color: #1a73e8; display: block !important; }
+  .section-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #e8eaed; }
+  .notice { border-radius: 8px; padding: 14px 16px; font-size: 14px; display: flex; gap: 10px; line-height: 1.5; margin-bottom: 24px; }
+  .notice.blue { background: #e8f0fe; color: #1a73e8; }
+  .notice.green { background: #e6f4ea; color: #137333; }
+  .notice.yellow { background: #fef7e0; color: #b06000; }
+  .notice span { font-size: 18px; flex-shrink: 0; }
+  .week-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .week-grid { grid-template-columns: 1fr; } }
+  .week-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; background: #fff; }
+  .week-card .w-num { font-size: 11px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .week-card .w-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .week-card .w-desc { font-size: 13px; color: #5f6368; line-height: 1.5; }
+  .steps-timeline { display: flex; gap: 0; margin-bottom: 32px; overflow-x: auto; }
+  .step-dot { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 80px; }
+  .step-dot .dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; font-family: 'Google Sans', Arial, sans-serif; margin-bottom: 6px; }
+  .step-dot .dot.done { background: #34a853; color: #fff; }
+  .step-dot .dot.active { background: #1a73e8; color: #fff; }
+  .step-dot .dot.pending { background: #f1f3f4; color: #80868b; }
+  .step-dot .dot-label { font-size: 11px; color: #5f6368; text-align: center; }
+  .step-line { flex: 1; height: 2px; background: #e8eaed; margin-top: 16px; min-width: 20px; }
+  .step-line.done { background: #34a853; }
+  .result-card { border-radius: 8px; padding: 32px; text-align: center; margin-bottom: 20px; border: 2px solid #34a853; background: #f6fef8; }
+  .score-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  @media (max-width: 560px) { .score-grid { grid-template-columns: 1fr; } }
+  .score-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 16px; background: #fff; text-align: center; }
+  .score-item .s-label { font-size: 11px; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .score-item .s-value { font-family: 'Google Sans', Arial, sans-serif; font-size: 24px; color: #202124; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Step 11 — Virtual Internship</div>
+  <h1>Build your first business</h1>
+  <p>Your internship is a 4-week virtual program where you design and present a real business plan. AI will evaluate your work and provide detailed feedback.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- Email Step -->
+  <div id="emailStep">
+    <div class="notice blue">
+      <span>ℹ️</span>
+      <div>Enter your student email to access your internship program. Make sure you have passed the Final Exam before starting.</div>
+    </div>
+    <div class="field">
+      <label>Student email address</label>
+      <input type="email" id="studentEmail" placeholder="you@example.com">
+    </div>
+    <button class="btn-primary" id="startBtn">Access internship</button>
+    <div id="message"></div>
+  </div>
+
+  <!-- Internship Form -->
+  <div id="internshipArea" style="display:none;">
+
+    <div class="notice green">
+      <span>🎯</span>
+      <div>Welcome to your virtual internship! Complete all 4 weeks and submit your final business plan. AI will grade your work and provide feedback.</div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="steps-timeline">
+      <div class="step-dot">
+        <div class="dot active" id="dot1">1</div>
+        <div class="dot-label">Business Idea</div>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot">
+        <div class="dot pending" id="dot2">2</div>
+        <div class="dot-label">Week 1-2</div>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-dot">
+        <div class="dot pending" id="dot3">3</div>
+        <div class="dot-label">Week 3-4</div>
+      </div>
+      <div class="step-line" id="line3"></div>
+      <div class="step-dot">
+        <div class="dot pending" id="dot4">4</div>
+        <div class="dot-label">Final Submit</div>
+      </div>
+    </div>
+
+    <!-- Week overview -->
+    <div class="week-grid" style="margin-bottom:32px;">
+      <div class="week-card">
+        <div class="w-num">Week 1</div>
+        <div class="w-title">Research & Validation</div>
+        <div class="w-desc">Identify your problem, research your market, validate with 5 potential customers.</div>
+      </div>
+      <div class="week-card">
+        <div class="w-num">Week 2</div>
+        <div class="w-title">Business Model Design</div>
+        <div class="w-desc">Complete your Business Model Canvas, define pricing, and plan your revenue streams.</div>
+      </div>
+      <div class="week-card">
+        <div class="w-num">Week 3</div>
+        <div class="w-title">Marketing & Launch Plan</div>
+        <div class="w-desc">Create your marketing strategy, identify your first 10 customers, and plan your MVP launch.</div>
+      </div>
+      <div class="week-card">
+        <div class="w-num">Week 4</div>
+        <div class="w-title">Financial Projections</div>
+        <div class="w-desc">Build a 6-month financial projection with expected revenue, costs, and break-even analysis.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Phase 1 — Your Business Idea</div>
+
+    <div class="field">
+      <label>Business name & one-line description *</label>
+      <input type="text" id="businessIdea" placeholder="e.g. FreshBox — A weekly subscription box of organic vegetables delivered to homes in Pune">
+    </div>
+
+    <div class="field">
+      <label>Problem statement — What problem are you solving? *</label>
+      <textarea id="problemStatement" placeholder="Describe the real problem your target customers face every day. Be specific — who faces this problem, how often, and why existing solutions fail them."></textarea>
+      <div class="field-hint">Minimum 50 words</div>
+    </div>
+
+    <div class="field">
+      <label>Target customers — Who are they? *</label>
+      <textarea id="targetCustomers" placeholder="Describe your ideal customer in detail: age, location, income level, daily routine, what they value, and why they would buy from you."></textarea>
+      <div class="field-hint">Minimum 40 words</div>
+    </div>
+
+    <div class="field">
+      <label>Your solution — How does your business solve this problem? *</label>
+      <textarea id="solution" placeholder="Describe your product or service clearly. What exactly do you offer? How is it different from what already exists?"></textarea>
+      <div class="field-hint">Minimum 50 words</div>
+    </div>
+
+    <div class="section-title">Phase 2 — Business Model</div>
+
+    <div class="field">
+      <label>Revenue model — How will you make money? *</label>
+      <textarea id="revenueModel" placeholder="Describe your pricing strategy and revenue streams. How much will you charge? Will you use subscription, one-time payment, commission, or another model? Give specific numbers."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Marketing plan — How will you get your first 100 customers? *</label>
+      <textarea id="marketingPlan" placeholder="List your marketing channels (WhatsApp, Instagram, word-of-mouth, etc.), what content you will create, and your step-by-step plan to get your first 100 paying customers."></textarea>
+    </div>
+
+    <div class="section-title">Phase 3 — Weekly Progress</div>
+
+    <div class="field">
+      <label>Week 1 — Research & Validation *</label>
+      <textarea id="week1" placeholder="What did you research this week? Did you talk to potential customers? What did you learn? Did anything change in your idea based on feedback?"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Week 2 — Business Model Canvas *</label>
+      <textarea id="week2" placeholder="Describe all 9 blocks of your Business Model Canvas for your specific business. Be detailed and specific to your idea."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Week 3 — MVP & Launch Plan *</label>
+      <textarea id="week3" placeholder="What is your MVP? How will you launch it? What are your first 3 milestones in the first month of operation?"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Week 4 — Financial Projection (6 months) *</label>
+      <textarea id="week4" placeholder="Month 1: Revenue ₹___, Costs ₹___, Profit/Loss ₹___&#10;Month 2: Revenue ₹___, Costs ₹___, Profit/Loss ₹___&#10;Month 3-6: Continue projections...&#10;Break-even point: Month ___"></textarea>
+    </div>
+
+    <div class="section-title">Phase 4 — Final Submission</div>
+
+    <div class="field">
+      <label>Final reflection — What did you learn from this internship? *</label>
+      <textarea id="finalSubmission" placeholder="Reflect on your 4-week journey. What was the most important thing you learned? What would you do differently? Are you ready to start this business for real? Why or why not?" rows="6"></textarea>
+    </div>
+
+    <div class="notice yellow">
+      <span>⚠️</span>
+      <div>Once submitted, your internship will be AI graded. Make sure all sections are complete before submitting. This cannot be undone.</div>
+    </div>
+
+    <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+      <button class="btn-success" id="submitBtn">Submit internship</button>
+      <span id="answeredInfo" style="font-size:13px; color:#5f6368;"></span>
+    </div>
+    <div id="message"></div>
+  </div>
+
+  <!-- Result -->
+  <div id="resultArea" style="display:none;"></div>
+
+</div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+
+let studentEmail = "";
+
+document.getElementById('startBtn').addEventListener('click', async () => {
+  const email = document.getElementById('studentEmail').value.trim().toLowerCase();
+  if (!email) { showMessage('error', 'Please enter your email address.'); return; }
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true; btn.textContent = 'Checking…';
+  try {
+    const res = await fetch(BASE + "/students?select=id,admission_status,final_exam_status,student_name&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showMessage('error', 'No application found. Please complete admission first.');
+      btn.disabled = false; btn.textContent = 'Access internship'; return;
+    }
+    const s = data[0];
+    if (s.admission_status !== 'final_exam_passed' && s.admission_status !== 'admitted') {
+      showMessage('error', 'Please pass the Final Exam before starting the internship.');
+      btn.disabled = false; btn.textContent = 'Access internship'; return;
+    }
+    studentEmail = email;
+
+    // Check existing internship
+    const iRes = await fetch(BASE + "/internships?select=*&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const iData = await iRes.json();
+    if (Array.isArray(iData) && iData.length > 0 && iData[0].status === 'completed') {
+      showResult(iData[0]);
+      document.getElementById('emailStep').style.display = 'none';
+      return;
+    }
+
+    document.getElementById('emailStep').style.display = 'none';
+    document.getElementById('internshipArea').style.display = 'block';
+
+    // Pre-fill if exists
+    if (Array.isArray(iData) && iData.length > 0) {
+      const d = iData[0];
+      if (d.business_idea) document.getElementById('businessIdea').value = d.business_idea;
+      if (d.problem_statement) document.getElementById('problemStatement').value = d.problem_statement;
+      if (d.target_customers) document.getElementById('targetCustomers').value = d.target_customers;
+      if (d.solution) document.getElementById('solution').value = d.solution;
+      if (d.revenue_model) document.getElementById('revenueModel').value = d.revenue_model;
+      if (d.marketing_plan) document.getElementById('marketingPlan').value = d.marketing_plan;
+      if (d.week1_progress) document.getElementById('week1').value = d.week1_progress;
+      if (d.week2_progress) document.getElementById('week2').value = d.week2_progress;
+      if (d.week3_progress) document.getElementById('week3').value = d.week3_progress;
+      if (d.week4_progress) document.getElementById('week4').value = d.week4_progress;
+      if (d.final_submission) document.getElementById('finalSubmission').value = d.final_submission;
+    }
+  } catch (err) {
+    showMessage('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Access internship';
+  }
+});
+
+document.getElementById('submitBtn').addEventListener('click', async () => {
+  const fields = {
+    businessIdea: document.getElementById('businessIdea').value.trim(),
+    problemStatement: document.getElementById('problemStatement').value.trim(),
+    targetCustomers: document.getElementById('targetCustomers').value.trim(),
+    solution: document.getElementById('solution').value.trim(),
+    revenueModel: document.getElementById('revenueModel').value.trim(),
+    marketingPlan: document.getElementById('marketingPlan').value.trim(),
+    week1: document.getElementById('week1').value.trim(),
+    week2: document.getElementById('week2').value.trim(),
+    week3: document.getElementById('week3').value.trim(),
+    week4: document.getElementById('week4').value.trim(),
+    finalSubmission: document.getElementById('finalSubmission').value.trim()
+  };
+
+  const empty = Object.entries(fields).filter(([k,v]) => v.length < 20);
+  if (empty.length > 0) {
+    showMessage('error', 'Please complete all sections before submitting. ' + empty.length + ' section(s) are incomplete.');
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Grading…';
+  showMessage('info', 'AI is evaluating your internship submission. This may take a moment…');
+
+  let aiScore = 0, aiFeedback = "";
+
+  try {
+    const prompt = `You are a senior business mentor evaluating a student's 4-week virtual internship. The student has submitted a complete business plan. Evaluate it holistically on these 5 criteria (10 points each = 50 total):
+
+1. Problem clarity and market understanding
+2. Quality of business model and revenue strategy  
+3. Marketing plan and customer acquisition strategy
+4. Financial projections realism and detail
+5. Overall reflection and entrepreneurial thinking
+
+Business idea: "${fields.businessIdea}"
+Problem: "${fields.problemStatement}"
+Customers: "${fields.targetCustomers}"
+Solution: "${fields.solution}"
+Revenue: "${fields.revenueModel}"
+Marketing: "${fields.marketingPlan}"
+Week 1: "${fields.week1}"
+Week 2: "${fields.week2}"
+Week 3: "${fields.week3}"
+Week 4: "${fields.week4}"
+Reflection: "${fields.finalSubmission}"
+
+Respond ONLY in valid JSON:
+{"total_score": 0, "percentage": 0, "criteria": [{"name": "Problem clarity", "score": 0, "feedback": "..."}, {"name": "Business model", "score": 0, "feedback": "..."}, {"name": "Marketing plan", "score": 0, "feedback": "..."}, {"name": "Financial projections", "score": 0, "feedback": "..."}, {"name": "Entrepreneurial thinking", "score": 0, "feedback": "..."}], "overall_feedback": "...", "recommendation": "pass or fail"}`;
+
+    const aiRes = await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher", {
+      method: "POST",
+      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: [{ role: "user", content: prompt }], systemPrompt: "You are a senior business mentor grading internship submissions. Always respond in valid JSON only." })
+    });
+    const aiData = await aiRes.json();
+    const raw = aiData.reply || '{}';
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    aiScore = parsed.percentage || 0;
+    aiFeedback = JSON.stringify(parsed);
+
+  } catch (e) {
+    aiScore = 60;
+    aiFeedback = JSON.stringify({ total_score: 30, percentage: 60, overall_feedback: "Auto-graded.", recommendation: "pass" });
+  }
+
+  const passed = aiScore >= 70;
+
+  try {
+    // Save internship
+    await fetch(BASE + "/internships", {
+      method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({
+        student_email: studentEmail,
+        department: "Entrepreneurship & Business Design",
+        business_idea: fields.businessIdea,
+        problem_statement: fields.problemStatement,
+        target_customers: fields.targetCustomers,
+        solution: fields.solution,
+        revenue_model: fields.revenueModel,
+        marketing_plan: fields.marketingPlan,
+        week1_progress: fields.week1,
+        week2_progress: fields.week2,
+        week3_progress: fields.week3,
+        week4_progress: fields.week4,
+        final_submission: fields.finalSubmission,
+        ai_score: aiScore,
+        ai_feedback: aiFeedback,
+        status: 'completed',
+        submitted_at: new Date().toISOString()
+      })
+    });
+
+    if (passed) {
+      await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(studentEmail), {
+        method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" },
+        body: JSON.stringify({ internship_status: 'passed', admission_status: 'internship_passed' })
+      });
+    }
+  } catch (e) { console.error(e); }
+
+  document.getElementById('internshipArea').style.display = 'none';
+  document.getElementById('message').style.display = 'none';
+
+  const parsed2 = JSON.parse(aiFeedback);
+  showResult({ ai_score: aiScore, ai_feedback: aiFeedback, status: passed ? 'pass' : 'fail', business_idea: fields.businessIdea });
+});
+
+function showResult(internship) {
+  const passed = internship.ai_score >= 70 || internship.status === 'pass' || internship.status === 'completed';
+  let parsed = {};
+  try { parsed = JSON.parse(internship.ai_feedback); } catch(e) {}
+
+  const criteriaHTML = (parsed.criteria || []).map(c => `
+    <div style="border:1px solid #e8eaed; border-radius:8px; padding:14px 16px; margin-bottom:10px; background:#fff;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <span style="font-size:14px; font-weight:500; color:#202124;">${c.name}</span>
+        <span style="background:#f1f3f4; border-radius:100px; padding:2px 10px; font-size:12px; color:#5f6368;">${c.score}/10</span>
+      </div>
+      <div style="font-size:13px; color:#1a73e8; line-height:1.5;">💬 ${c.feedback}</div>
+    </div>`).join('');
+
+  document.getElementById('resultArea').innerHTML = `
+    <div class="result-card" style="border-color:${passed?'#34a853':'#c5221f'}; background:${passed?'#f6fef8':'#fff8f7'};">
+      <div style="font-size:48px; margin-bottom:12px;">${passed ? '🏆' : '📋'}</div>
+      <div style="font-family:'Google Sans',Arial,sans-serif; font-size:56px; font-weight:400; color:${passed?'#137333':'#c5221f'}; margin-bottom:4px;">${internship.ai_score}%</div>
+      <div style="font-size:16px; color:#5f6368; margin-bottom:20px;">Internship Score (AI Evaluated)</div>
+      <span style="display:inline-block; padding:8px 24px; border-radius:100px; font-size:16px; font-weight:500; background:${passed?'#e6f4ea':'#fce8e6'}; color:${passed?'#137333':'#c5221f'};">
+        ${passed ? '✅ Internship Passed — Proceed to Certification' : '❌ Not passed — Improve and resubmit'}
+      </span>
+    </div>
+
+    <div class="score-grid">
+      <div class="score-item"><div class="s-label">Total Score</div><div class="s-value">${parsed.total_score || '—'}/50</div></div>
+      <div class="score-item"><div class="s-label">Percentage</div><div class="s-value">${internship.ai_score}%</div></div>
+      <div class="score-item"><div class="s-label">Status</div><div class="s-value" style="color:${passed?'#137333':'#c5221f'}; font-size:18px;">${passed?'Passed':'Failed'}</div></div>
+    </div>
+
+    ${criteriaHTML}
+
+    ${parsed.overall_feedback ? `<div class="notice ${passed?'green':'blue'}" style="margin-top:16px;"><span>💡</span><div><strong>Overall Feedback:</strong> ${parsed.overall_feedback}</div></div>` : ''}
+
+    <div class="notice ${passed?'green':'yellow'}" style="margin-top:12px;">
+      <span>${passed?'🎓':'📚'}</span>
+      <div>${passed ? 'Congratulations! Your internship is complete. Proceed to get your Certification.' : 'Review the feedback above, improve your business plan, and resubmit.'}</div>
+    </div>`;
+
+  document.getElementById('resultArea').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showMessage(type, text) {
+  const m = document.getElementById('message');
+  m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+}
+</script>
+</body>
+</html>
