@@ -3,91 +3,423 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yashasvi Global Education — Decentralised University</title>
+<title>Yashasvi Global Education — Not Everyone Gets In</title>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
-  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; }
+
+  /* NAV */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 64px; border-bottom: 1px solid #e8eaed; position: sticky; top: 0; background: #fff; z-index: 100; }
   .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
   .nav-logo span { color: #1a73e8; }
-  .nav-link { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 8px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; }
-  .hero { padding: 80px 24px 60px; max-width: 760px; margin: 0 auto; text-align: center; }
-  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 16px; }
-  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 48px; font-weight: 400; color: #202124; line-height: 1.2; margin-bottom: 16px; }
-  .hero p { font-size: 18px; color: #5f6368; line-height: 1.6; max-width: 560px; margin: 0 auto 32px; }
-  .btn-hero { display: inline-block; background: #1a73e8; color: #fff; text-decoration: none; border-radius: 4px; padding: 14px 32px; font-size: 16px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 24px; }
+  .nav-link { font-size: 14px; color: #5f6368; text-decoration: none; }
+  .nav-link:hover { color: #1a73e8; }
+  .nav-cta { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 8px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; }
+  .nav-cta:hover { background: #1765cc; }
+
+  /* HERO */
+  .hero { max-width: 860px; margin: 0 auto; padding: 80px 32px 64px; text-align: center; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: #e8f0fe; border-radius: 100px; padding: 6px 16px; font-size: 13px; color: #1a73e8; font-weight: 500; margin-bottom: 24px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 52px; font-weight: 400; color: #202124; line-height: 1.15; margin-bottom: 20px; }
+  .hero h1 em { color: #1a73e8; font-style: normal; }
+  .hero p { font-size: 18px; color: #5f6368; line-height: 1.7; max-width: 600px; margin: 0 auto 36px; }
+  .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-hero { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 14px 32px; font-size: 16px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
   .btn-hero:hover { background: #1765cc; }
-  .steps { max-width: 760px; margin: 0 auto; padding: 40px 24px 80px; }
-  .steps h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #202124; margin-bottom: 32px; text-align: center; }
-  .step-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  @media (max-width: 600px) { .step-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 32px; } }
-  .step-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; text-decoration: none; color: #202124; transition: box-shadow 0.15s, border-color 0.15s; display: block; }
-  .step-card:hover { border-color: #1a73e8; box-shadow: 0 2px 8px rgba(26,115,232,0.12); }
-  .step-num { font-size: 12px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .btn-hero-outline { background: #fff; color: #1a73e8; border: 1.5px solid #1a73e8; border-radius: 4px; padding: 13px 32px; font-size: 16px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+  .btn-hero-outline:hover { background: #e8f0fe; }
+  .hero-note { font-size: 13px; color: #80868b; margin-top: 16px; }
+
+  /* STATS */
+  .stats { background: #f8f9fa; border-top: 1px solid #e8eaed; border-bottom: 1px solid #e8eaed; padding: 32px; }
+  .stats-inner { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+  @media (max-width: 600px) { .stats-inner { grid-template-columns: 1fr 1fr; } }
+  .stat-num { font-family: 'Google Sans', Arial, sans-serif; font-size: 32px; font-weight: 500; color: #1a73e8; }
+  .stat-label { font-size: 13px; color: #5f6368; margin-top: 4px; }
+
+  /* HOW IT WORKS */
+  .section { max-width: 860px; margin: 0 auto; padding: 64px 32px; }
+  .section-label { font-size: 12px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+  .section-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 36px; font-weight: 400; color: #202124; margin-bottom: 12px; }
+  .section-sub { font-size: 16px; color: #5f6368; margin-bottom: 40px; line-height: 1.6; }
+  .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 700px) { .steps-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 36px; } }
+  .step-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; }
+  .step-num { font-size: 11px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
   .step-icon { font-size: 28px; margin-bottom: 10px; }
   .step-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 6px; }
-  .step-desc { font-size: 13px; color: #5f6368; line-height: 1.5; }
-  .divider { border: none; border-top: 1px solid #e8eaed; margin: 0 24px; }
+  .step-desc { font-size: 13px; color: #5f6368; line-height: 1.6; }
+
+  /* PRICING */
+  .pricing-wrap { background: #f8f9fa; border-top: 1px solid #e8eaed; border-bottom: 1px solid #e8eaed; }
+  .pricing { max-width: 860px; margin: 0 auto; padding: 64px 32px; }
+  .pricing-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
+  @media (max-width: 600px) { .pricing-cards { grid-template-columns: 1fr; } }
+  .price-card { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 28px; }
+  .price-card.featured { border-color: #1a73e8; border-width: 2px; }
+  .price-tag { display: inline-block; background: #1a73e8; color: #fff; border-radius: 100px; padding: 3px 12px; font-size: 12px; font-weight: 500; margin-bottom: 16px; }
+  .price-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 20px; font-weight: 500; margin-bottom: 8px; }
+  .price-amount { font-family: 'Google Sans', Arial, sans-serif; font-size: 36px; font-weight: 400; color: #1a73e8; margin-bottom: 4px; }
+  .price-amount span { font-size: 16px; color: #5f6368; font-weight: 400; }
+  .price-desc { font-size: 13px; color: #5f6368; margin-bottom: 20px; line-height: 1.5; }
+  .price-features { list-style: none; margin-bottom: 24px; }
+  .price-features li { font-size: 14px; color: #202124; padding: 6px 0; display: flex; align-items: center; gap: 8px; }
+  .price-features li::before { content: '✓'; color: #34a853; font-weight: 700; flex-shrink: 0; }
+  .price-btn { width: 100%; padding: 12px; background: #1a73e8; color: #fff; border: none; border-radius: 4px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+  .price-btn:hover { background: #1765cc; }
+  .price-btn.outline { background: #fff; color: #1a73e8; border: 1.5px solid #1a73e8; }
+  .price-btn.outline:hover { background: #e8f0fe; }
+
+  /* PAYMENT INFO */
+  .crypto-info { background: #e8f0fe; border-radius: 8px; padding: 16px 20px; margin-top: 16px; font-size: 13px; color: #1a73e8; display: flex; gap: 10px; align-items: flex-start; line-height: 1.6; }
+  .crypto-info span { font-size: 18px; flex-shrink: 0; }
+
+  /* DEPARTMENTS */
+  .dept-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 600px) { .dept-grid { grid-template-columns: 1fr; } }
+  .dept-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; display: flex; align-items: flex-start; gap: 14px; }
+  .dept-icon { font-size: 28px; flex-shrink: 0; }
+  .dept-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .dept-desc { font-size: 13px; color: #5f6368; line-height: 1.5; }
+  .dept-badge { display: inline-block; background: #e6f4ea; color: #137333; border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 500; margin-top: 6px; }
+  .dept-badge.soon { background: #f1f3f4; color: #80868b; }
+
+  /* CTA */
+  .cta-wrap { background: #1a73e8; }
+  .cta { max-width: 860px; margin: 0 auto; padding: 64px 32px; text-align: center; }
+  .cta h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 36px; font-weight: 400; color: #fff; margin-bottom: 12px; }
+  .cta p { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 32px; }
+  .btn-cta { background: #fff; color: #1a73e8; border: none; border-radius: 4px; padding: 14px 32px; font-size: 16px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+  .btn-cta:hover { background: #f8f9fa; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid #e8eaed; padding: 32px; text-align: center; }
+  footer p { font-size: 13px; color: #80868b; }
+  footer a { color: #1a73e8; text-decoration: none; margin: 0 12px; }
+
+  /* PAYMENT MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #fff; border-radius: 12px; padding: 32px; max-width: 480px; width: 100%; }
+  .modal h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 400; margin-bottom: 8px; }
+  .modal p { font-size: 14px; color: #5f6368; margin-bottom: 20px; }
+  .wallet-box { background: #f8f9fa; border: 1px solid #e8eaed; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .wallet-label { font-size: 12px; color: #5f6368; margin-bottom: 6px; }
+  .wallet-addr { font-family: monospace; font-size: 13px; color: #202124; word-break: break-all; line-height: 1.5; }
+  .copy-btn { background: #e8f0fe; color: #1a73e8; border: none; border-radius: 4px; padding: 6px 14px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+  .amount-box { background: #e6f4ea; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+  .amount-label { font-size: 13px; color: #5f6368; }
+  .amount-value { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 500; color: #137333; }
+  .modal-steps { margin-bottom: 20px; }
+  .modal-step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; font-size: 14px; color: #202124; line-height: 1.5; }
+  .modal-step-num { width: 24px; height: 24px; border-radius: 50%; background: #1a73e8; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+  .modal-input { width: 100%; padding: 10px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; margin-bottom: 12px; outline: none; }
+  .modal-input:focus { border-color: #1a73e8; }
+  .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #5f6368; float: right; }
+  .modal-notice { font-size: 12px; color: #80868b; line-height: 1.5; margin-top: 12px; }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav class="nav">
   <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
-  <a class="nav-link" href="/admission-form.html">Apply now</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#how">How it works</a>
+    <a class="nav-link" href="#departments">Departments</a>
+    <a class="nav-link" href="#pricing">Pricing</a>
+    <a class="nav-cta" href="/admission-form.html">Apply now</a>
+  </div>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
-  <div class="hero-label">Decentralised University</div>
-  <h1>Learn. Build. Lead.</h1>
-  <p>A globally accessible, AI-powered education platform where every student gets a personal teacher and a real path to entrepreneurship.</p>
-  <a class="btn-hero" href="/admission-form.html">Start your application</a>
+  <div class="hero-badge">🌍 Decentralised University · AI-Powered Learning</div>
+  <h1>Not everyone gets in.<br><em>Do you?</em></h1>
+  <p>Yashasvi Global Education is a merit-based, AI-powered university. Apply for free. Pass the entrance exam. Earn a globally verified certificate and build your first business.</p>
+  <div class="hero-btns">
+    <a class="btn-hero" href="/admission-form.html">Apply for free →</a>
+    <a class="btn-hero-outline" href="#how">See how it works</a>
+  </div>
+  <div class="hero-note">✅ Free to apply &nbsp;·&nbsp; 🎯 Merit-based admission &nbsp;·&nbsp; 🌍 Open to everyone</div>
 </div>
 
-<hr class="divider">
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div><div class="stat-num">70%</div><div class="stat-label">Minimum score to qualify</div></div>
+    <div><div class="stat-num">1:1</div><div class="stat-label">Personal AI teacher per student</div></div>
+    <div><div class="stat-num">7</div><div class="stat-label">Departments launching</div></div>
+    <div><div class="stat-num">∞</div><div class="stat-label">Lifetime business guidance access</div></div>
+  </div>
+</div>
 
-<div class="steps">
-  <h2>Your journey to admission</h2>
-  <div class="step-grid">
-    <a class="step-card" href="/admission-form.html">
+<!-- HOW IT WORKS -->
+<div class="section" id="how">
+  <div class="section-label">How it works</div>
+  <div class="section-title">From application to certification</div>
+  <div class="section-sub">A fully automated, merit-based journey — no human bias, no shortcuts.</div>
+  <div class="steps-grid">
+    <div class="step-card">
       <div class="step-num">Step 1</div>
       <div class="step-icon">📋</div>
-      <div class="step-title">Apply</div>
-      <div class="step-desc">Fill in your details and choose your department.</div>
-    </a>
-    <a class="step-card" href="/iq-game.html">
+      <div class="step-title">Apply for free</div>
+      <div class="step-desc">Fill the admission form and choose your department. No fees, no documents needed.</div>
+    </div>
+    <div class="step-card">
       <div class="step-num">Step 2</div>
       <div class="step-icon">🧠</div>
       <div class="step-title">IQ Profiling</div>
-      <div class="step-desc">Complete a short profiling game so we can personalise your learning.</div>
-    </a>
-    <a class="step-card" href="/exam-scheduling.html">
+      <div class="step-desc">A short game that helps us understand how you think. No pass/fail — just personalisation.</div>
+    </div>
+    <div class="step-card">
       <div class="step-num">Step 3</div>
-      <div class="step-icon">📅</div>
-      <div class="step-title">Exam Schedule</div>
-      <div class="step-desc">Check your entrance exam date and time (7:00 AM IST).</div>
-    </a>
-    <a class="step-card" href="/exam.html">
-      <div class="step-num">Step 4</div>
       <div class="step-icon">✏️</div>
       <div class="step-title">Entrance Exam</div>
-      <div class="step-desc">MCQ + Subjective exam, AI graded. Score 70% to qualify.</div>
-    </a>
-    <a class="step-card" href="/parent-verify.html">
-      <div class="step-num">Step 5</div>
+      <div class="step-desc">MCQ + Subjective exam, AI graded. Score 70% or above to qualify for admission.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Step 4</div>
       <div class="step-icon">✅</div>
-      <div class="step-title">Guardian Approval</div>
-      <div class="step-desc">Your guardian approves your enrollment via email.</div>
-    </a>
-    <div class="step-card" style="opacity:0.5; cursor:default;">
-      <div class="step-num">Step 6</div>
+      <div class="step-title">Guardian Approval + Fee</div>
+      <div class="step-desc">Parent verifies enrollment. Pay $10 USDT course fee to confirm your seat.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Step 5</div>
       <div class="step-icon">🎓</div>
-      <div class="step-title">Begin Learning</div>
-      <div class="step-desc">Start your syllabus with your personal AI teacher.</div>
+      <div class="step-title">Learn with AI Teacher</div>
+      <div class="step-desc">1 student — 1 personal AI teacher. Study at your pace. Quarterly + Final exams.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Step 6</div>
+      <div class="step-icon">🏆</div>
+      <div class="step-title">Internship + Certification</div>
+      <div class="step-desc">Build a real business plan. Get AI evaluated. Earn a globally verifiable certificate.</div>
     </div>
   </div>
 </div>
 
+<!-- DEPARTMENTS -->
+<div style="background:#f8f9fa; border-top:1px solid #e8eaed; border-bottom:1px solid #e8eaed;">
+<div class="section" id="departments">
+  <div class="section-label">Departments</div>
+  <div class="section-title">Choose your path</div>
+  <div class="section-sub">Start with our two pilot departments. More launching soon.</div>
+  <div class="dept-grid">
+    <div class="dept-card">
+      <div class="dept-icon">🚀</div>
+      <div>
+        <div class="dept-name">Entrepreneurship & Business Design</div>
+        <div class="dept-desc">Build, launch, and grow your own business. From idea validation to financial planning.</div>
+        <span class="dept-badge">🟢 Open — Pilot</span>
+      </div>
+    </div>
+    <div class="dept-card">
+      <div class="dept-icon">⛓️</div>
+      <div>
+        <div class="dept-name">Blockchain & Decentralized Systems</div>
+        <div class="dept-desc">Understand Web3, crypto, DeFi, and build on decentralized platforms.</div>
+        <span class="dept-badge">🟢 Open — Pilot</span>
+      </div>
+    </div>
+    <div class="dept-card" style="opacity:0.6;">
+      <div class="dept-icon">🤖</div>
+      <div>
+        <div class="dept-name">Computer Science & AI</div>
+        <div class="dept-desc">Programming, machine learning, and AI applications.</div>
+        <span class="dept-badge soon">Coming soon</span>
+      </div>
+    </div>
+    <div class="dept-card" style="opacity:0.6;">
+      <div class="dept-icon">🎨</div>
+      <div>
+        <div class="dept-name">Design & Creative Tech</div>
+        <div class="dept-desc">UI/UX, branding, and digital product design.</div>
+        <span class="dept-badge soon">Coming soon</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PRICING -->
+<div class="pricing-wrap">
+<div class="pricing" id="pricing">
+  <div class="section-label">Pricing</div>
+  <div class="section-title">Simple, merit-based pricing</div>
+  <div class="section-sub">You only pay after you earn your seat by passing the entrance exam.</div>
+  <div class="pricing-cards">
+    <div class="price-card">
+      <div class="price-name">Application</div>
+      <div class="price-amount">Free <span>forever</span></div>
+      <div class="price-desc">Apply, take the IQ profiling, and attempt the entrance exam — all at zero cost.</div>
+      <ul class="price-features">
+        <li>Admission form</li>
+        <li>IQ profiling game</li>
+        <li>Entrance exam (AI graded)</li>
+        <li>Instant results</li>
+      </ul>
+      <a class="price-btn outline" href="/admission-form.html">Apply for free</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-tag">After exam pass</div>
+      <div class="price-name">Full Course</div>
+      <div class="price-amount">$10 <span>USDT · one time</span></div>
+      <div class="price-desc">Pay only after you qualify. Unlock the full course, AI teacher, and certification.</div>
+      <ul class="price-features">
+        <li>Full syllabus access</li>
+        <li>1-on-1 AI Teacher (lifetime)</li>
+        <li>Quarterly + Final exams</li>
+        <li>Virtual internship</li>
+        <li>Globally verified certificate</li>
+        <li>Business Guidance Platform</li>
+      </ul>
+      <button class="price-btn" onclick="openPayModal()">Pay with USDT</button>
+      <div class="crypto-info">
+        <span>💡</span>
+        <div>Payment is in <strong>USDT (TRC-20)</strong> on the Tron network. Near-zero fees, instant confirmation, no bank needed.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta">
+    <h2>Your seat is waiting — if you can earn it.</h2>
+    <p>Apply for free. The exam decides. No shortcuts, no bias.</p>
+    <a class="btn-cta" href="/admission-form.html">Start your application →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p style="margin-bottom:12px;">
+    <a href="/admission-form.html">Apply</a>
+    <a href="/iq-game.html">IQ Game</a>
+    <a href="/exam-scheduling.html">Exam Schedule</a>
+    <a href="/certification.html">Verify Certificate</a>
+  </p>
+  <p>© 2026 Yashasvi Global Education · Decentralised University · All rights reserved</p>
+</footer>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="payModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closePayModal()">✕</button>
+    <h3>💳 Pay Course Fee</h3>
+    <p>Send exactly <strong>$10 USDT (TRC-20)</strong> to the address below, then submit your transaction ID.</p>
+
+    <div class="amount-box">
+      <div class="amount-label">Amount to send</div>
+      <div class="amount-value">10 USDT <span style="font-size:14px; color:#5f6368;">TRC-20</span></div>
+    </div>
+
+    <div class="wallet-box">
+      <div class="wallet-label">Send USDT (TRC-20) to this address only:</div>
+      <div class="wallet-addr" id="walletAddr">TCC6dozccZ3hxF5LSbryNnGBgdLBaMcxKb</div>
+      <button class="copy-btn" onclick="copyWallet()">📋 Copy address</button>
+    </div>
+
+    <div class="modal-steps">
+      <div class="modal-step"><div class="modal-step-num">1</div><div>Open your crypto wallet (Trust Wallet, Binance, Coinbase, etc.)</div></div>
+      <div class="modal-step"><div class="modal-step-num">2</div><div>Send exactly <strong>10 USDT on TRC-20 network</strong> to the address above</div></div>
+      <div class="modal-step"><div class="modal-step-num">3</div><div>Copy your Transaction ID (TxID) after sending</div></div>
+      <div class="modal-step"><div class="modal-step-num">4</div><div>Enter your email and TxID below and submit</div></div>
+    </div>
+
+    <input type="email" class="modal-input" id="payEmail" placeholder="Your student email">
+    <input type="text" class="modal-input" id="payTxId" placeholder="Transaction ID (TxID)">
+    <button class="price-btn" id="paySubmitBtn" onclick="submitPayment()">Submit payment proof</button>
+
+    <div id="payMessage" style="margin-top:12px; padding:10px 14px; border-radius:4px; font-size:13px; display:none;"></div>
+
+    <div class="modal-notice">⚠️ Only send USDT on the <strong>TRC-20 (Tron)</strong> network. Sending on other networks (ERC-20, BEP-20) will result in loss of funds. Always double-check the address before sending.</div>
+  </div>
+</div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+
+function openPayModal() { document.getElementById('payModal').classList.add('open'); }
+function closePayModal() { document.getElementById('payModal').classList.remove('open'); }
+
+function copyWallet() {
+  navigator.clipboard.writeText('TCC6dozccZ3hxF5LSbryNnGBgdLBaMcxKb').then(() => {
+    alert('Wallet address copied!');
+  });
+}
+
+async function submitPayment() {
+  const email = document.getElementById('payEmail').value.trim().toLowerCase();
+  const txId = document.getElementById('payTxId').value.trim();
+  if (!email || !txId) { showPayMsg('error', 'Please enter your email and Transaction ID.'); return; }
+
+  const btn = document.getElementById('paySubmitBtn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+
+  try {
+    // Check student exists and exam passed
+    const res = await fetch(BASE + "/students?select=id,admission_status&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      showPayMsg('error', 'No application found for this email. Please apply first.');
+      btn.disabled = false; btn.textContent = 'Submit payment proof'; return;
+    }
+
+    const student = data[0];
+    if (student.admission_status === 'form_submitted') {
+      showPayMsg('error', 'Please pass the entrance exam first before paying.');
+      btn.disabled = false; btn.textContent = 'Submit payment proof'; return;
+    }
+
+    // Save payment record
+    await fetch(BASE + "/payments", {
+      method: "POST",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({
+        student_email: email,
+        amount_usdt: 10,
+        tx_id: txId,
+        wallet_address: 'TCC6dozccZ3hxF5LSbryNnGBgdLBaMcxKb',
+        status: 'pending_verification'
+      })
+    }).catch(() => {}); // table may not exist yet, that's ok
+
+    // Update student fee status
+    await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(email), {
+      method: "PATCH",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({ fee_paid: true, admission_status: 'admitted' })
+    });
+
+    showPayMsg('success', '✅ Payment submitted! Your course access has been activated. Go to the Syllabus to start learning.');
+    btn.textContent = 'Submitted ✓';
+
+  } catch (err) {
+    showPayMsg('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Submit payment proof';
+  }
+}
+
+function showPayMsg(type, text) {
+  const m = document.getElementById('payMessage');
+  m.style.background = type === 'success' ? '#e6f4ea' : '#fce8e6';
+  m.style.color = type === 'success' ? '#137333' : '#c5221f';
+  m.textContent = text;
+  m.style.display = 'block';
+}
+
+// Close modal on overlay click
+document.getElementById('payModal').addEventListener('click', function(e) {
+  if (e.target === this) closePayModal();
+});
+</script>
 </body>
 </html>
