@@ -224,7 +224,7 @@
 const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
 const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
-const GROQ_KEY = "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";
+
 
 const MCQ_ANSWERS = { m0:'c', m1:'b', m2:'c', m3:'c', m4:'b', m5:'c', m6:'b', m7:'b' };
 
@@ -335,15 +335,7 @@ async function submitExam() {
   let subScore = 0, aiFeedback = [];
 
   try {
-    const aiRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: { "Authorization": "Bearer " + GROQ_KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        max_tokens: 800,
-        messages: [{
-          role: "user",
-          content: `You are an examiner for a quarterly entrepreneurship exam. Grade these 2 subjective answers. Each out of 10. Be fair but strict. Respond ONLY in valid JSON, no extra text.
+    const prompt = `You are an examiner for a quarterly entrepreneurship exam. Grade these 2 subjective answers. Each out of 10. Be fair but strict. Respond ONLY in valid JSON, no extra text.
 
 Q1: "Explain the Business Model Canvas using a real business example (4 building blocks)."
 Answer: "${s0}"
@@ -351,13 +343,16 @@ Answer: "${s0}"
 Q2: "₹5,000 service business plan: service, customers, pricing, first 10 customers."
 Answer: "${s1}"
 
-JSON format: {"results":[{"question":"Q1","score":0,"feedback":"..."},{"question":"Q2","score":0,"feedback":"..."}]}`
-        }]
-      })
+JSON format: {"results":[{"question":"Q1","score":0,"feedback":"..."},{"question":"Q2","score":0,"feedback":"..."}]}`;
+
+    const aiRes = await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher", {
+      method: "POST",
+      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: [{ role: "user", content: prompt }], systemPrompt: "You are a strict but fair exam grader. Always respond in valid JSON only." })
     });
 
     const aiData = await aiRes.json();
-    const raw = aiData.choices?.[0]?.message?.content || '{}';
+    const raw = aiData.reply || '{}';
     const clean = raw.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
     aiFeedback = parsed.results || [];
