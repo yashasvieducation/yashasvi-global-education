@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Revision</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+  .hero { padding: 48px 24px 32px; max-width: 760px; margin: 0 auto; }
+  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 32px; font-weight: 400; color: #202124; margin-bottom: 10px; }
+  .hero p { font-size: 15px; color: #5f6368; line-height: 1.6; max-width: 560px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; outline: none; }
+  .field input:focus { border-color: #1a73e8; }
+  .field { margin-bottom: 16px; }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; min-width: 160px; }
+  .btn-primary:hover { background: #1765cc; }
+  .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; }
+  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+  .msg-info { background: #e8f0fe; color: #1a73e8; display: block !important; }
+  .notice { border-radius: 8px; padding: 14px 16px; font-size: 14px; display: flex; gap: 10px; line-height: 1.5; margin-bottom: 20px; }
+  .notice.blue { background: #e8f0fe; color: #1a73e8; }
+  .notice.yellow { background: #fef7e0; color: #b06000; }
+  .notice.red { background: #fce8e6; color: #c5221f; }
+  .notice span { font-size: 18px; flex-shrink: 0; }
+  .section-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #e8eaed; }
+  .attempts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .attempt-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 16px; text-align: center; }
+  .attempt-card.used { border-color: #34a853; background: #e6f4ea; }
+  .attempt-card.active { border-color: #1a73e8; background: #e8f0fe; }
+  .attempt-card.locked { opacity: 0.5; }
+  .attempt-num { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; margin-bottom: 4px; }
+  .attempt-label { font-size: 12px; color: #5f6368; }
+  .attempt-status { font-size: 11px; font-weight: 500; margin-top: 6px; }
+  .q-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 20px 24px; margin-bottom: 14px; }
+  .q-label { font-size: 12px; font-weight: 500; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .q-text { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; color: #202124; margin-bottom: 14px; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid #dadce0; border-radius: 4px; background: #fff; color: #202124; cursor: pointer; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; text-align: left; transition: all 0.15s; }
+  .opt-btn:hover { border-color: #1a73e8; background: #f8f9ff; }
+  .opt-btn.selected { border-color: #1a73e8; background: #e8f0fe; color: #1a73e8; font-weight: 500; }
+  .opt-circle { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #dadce0; flex-shrink: 0; }
+  .opt-btn.selected .opt-circle { border-color: #1a73e8; background: #1a73e8; }
+  .timer-bar { background: #f1f3f4; border-radius: 100px; height: 4px; margin-bottom: 20px; }
+  .timer-fill { background: #1a73e8; height: 4px; border-radius: 100px; transition: width 1s linear; }
+  .result-box { border-radius: 8px; padding: 24px; text-align: center; margin-bottom: 20px; }
+  .score-big { font-family: 'Google Sans', Arial, sans-serif; font-size: 56px; font-weight: 400; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Revision System</div>
+  <h1>Course revision</h1>
+  <p>Revise key concepts from your course. You have 3 attempts per revision cycle. Complete all revisions to unlock your certificate.</p>
+</div>
+
+<div class="wrap">
+
+  <div id="emailStep">
+    <div class="field">
+      <label>Student email</label>
+      <input type="email" id="studentEmail" placeholder="you@example.com">
+    </div>
+    <button class="btn-primary" id="startBtn">View my revisions →</button>
+    <div id="message"></div>
+  </div>
+
+  <div id="revisionArea" style="display:none;"></div>
+
+</div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
+
+let studentEmail = "", courseName = "", revisionData = null;
+let questions = [], mcqAnswers = {}, attemptNum = 1;
+
+// Auto-fill
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('email')) document.getElementById('studentEmail').value = urlParams.get('email');
+
+document.getElementById('startBtn').addEventListener('click', async () => {
+  const email = document.getElementById('studentEmail').value.trim().toLowerCase();
+  if (!email) { showMsg('error', 'Please enter your email.'); return; }
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true; btn.textContent = 'Loading…';
+  try {
+    const res = await fetch(BASE + "/students?select=student_name,admission_status,selected_course,fee_paid&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showMsg('error', 'No account found. Please complete admission first.');
+      btn.disabled = false; btn.textContent = 'View my revisions →'; return;
+    }
+    const s = data[0];
+    if (!s.fee_paid && !['admitted','final_exam_passed','internship_passed','certified'].includes(s.admission_status)) {
+      showMsg('error', 'Please complete enrollment first.');
+      btn.disabled = false; btn.textContent = 'View my revisions →'; return;
+    }
+    studentEmail = email;
+    courseName = s.selected_course || 'General';
+    await loadRevisions();
+    document.getElementById('emailStep').style.display = 'none';
+  } catch (err) {
+    showMsg('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'View my revisions →';
+  }
+});
+
+async function loadRevisions() {
+  try {
+    const res = await fetch(BASE + "/revisions?select=*&student_email=ilike." + encodeURIComponent(studentEmail) + "&order=revision_number.asc", { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    revisionData = Array.isArray(data) ? data : [];
+  } catch(e) { revisionData = []; }
+
+  const currentRevision = revisionData.length + 1;
+  const totalAttempts = revisionData.reduce((s, r) => s + (r.attempts_used || 0), 0);
+  const pendingRevisions = revisionData.filter(r => r.status === 'pending').length;
+
+  // Find current attempt for this revision
+  const currentRevData = revisionData.find(r => r.revision_number === currentRevision);
+  const attemptsUsed = currentRevData?.attempts_used || 0;
+  const attemptsLeft = 3 - attemptsUsed;
+
+  let html = `
+    <div class="notice blue"><span>ℹ️</span><div>You have <strong>3 attempts</strong> per revision. If not completed in 3 attempts, the course continues but revision remains pending. All pending revisions must be cleared before certification.</div></div>
+
+    <div class="section-title">Revision ${currentRevision} — ${courseName}</div>
+
+    <div class="attempts-grid">
+      <div class="attempt-card ${attemptsUsed >= 1 ? 'used' : attemptsLeft >= 3 ? 'active' : 'locked'}">
+        <div class="attempt-num">${attemptsUsed >= 1 ? '✅' : '1'}</div>
+        <div class="attempt-label">Attempt 1</div>
+        <div class="attempt-status" style="color:${attemptsUsed >= 1 ? '#137333' : '#1a73e8'}">${attemptsUsed >= 1 ? 'Completed' : 'Available'}</div>
+      </div>
+      <div class="attempt-card ${attemptsUsed >= 2 ? 'used' : attemptsUsed === 1 ? 'active' : 'locked'}">
+        <div class="attempt-num">${attemptsUsed >= 2 ? '✅' : '2'}</div>
+        <div class="attempt-label">Attempt 2</div>
+        <div class="attempt-status" style="color:${attemptsUsed >= 2 ? '#137333' : attemptsUsed === 1 ? '#1a73e8' : '#80868b'}">${attemptsUsed >= 2 ? 'Completed' : attemptsUsed === 1 ? 'Available' : 'Locked'}</div>
+      </div>
+      <div class="attempt-card ${attemptsUsed >= 3 ? 'used' : attemptsUsed === 2 ? 'active' : 'locked'}">
+        <div class="attempt-num">${attemptsUsed >= 3 ? '✅' : '3'}</div>
+        <div class="attempt-label">Attempt 3</div>
+        <div class="attempt-status" style="color:${attemptsUsed >= 3 ? '#137333' : attemptsUsed === 2 ? '#1a73e8' : '#80868b'}">${attemptsUsed >= 3 ? 'Completed' : attemptsUsed === 2 ? 'Last attempt' : 'Locked'}</div>
+      </div>
+    </div>`;
+
+  if (attemptsLeft <= 0) {
+    html += `<div class="notice yellow"><span>⚠️</span><div>You have used all 3 attempts for this revision. Your course continues — this revision is marked as <strong>pending</strong>. You can complete it in the next revision cycle.</div></div>
+    <a href="/dashboard.html?email=${encodeURIComponent(studentEmail)}" class="btn-primary" style="display:inline-block; text-decoration:none; margin-top:8px;">Back to dashboard →</a>`;
+  } else {
+    attemptNum = attemptsUsed + 1;
+    html += `<button class="btn-primary" id="startRevBtn" onclick="startRevision()">Start Attempt ${attemptNum} →</button>`;
+  }
+
+  // Pending revisions
+  const pending = revisionData.filter(r => r.status === 'pending');
+  if (pending.length > 0) {
+    html += `<div class="notice red" style="margin-top:20px;"><span>⚠️</span><div>You have <strong>${pending.length} pending revision(s)</strong> from previous cycles. Complete these before your final exam to unlock certification.</div></div>`;
+  }
+
+  html += `<div id="quizArea" style="display:none; margin-top:24px;"></div>
+           <div id="revResult" style="display:none;"></div>`;
+
+  document.getElementById('revisionArea').innerHTML = html;
+  document.getElementById('revisionArea').style.display = 'block';
+}
+
+async function startRevision() {
+  document.getElementById('startRevBtn').disabled = true;
+  document.getElementById('startRevBtn').textContent = 'Generating questions…';
+
+  const prompt = `Generate 10 revision MCQ questions for "${courseName}" course. These are revision questions to test recall and understanding. Mix easy, medium and hard questions. Respond ONLY in valid JSON:
+{"questions":[{"question":"Question?","options":["A","B","C","D"],"correct":"A"}]}`;
+
+  try {
+    const res = await fetch(EDGE, {
+      method: "POST",
+      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: [{ role: "user", content: prompt }], systemPrompt: "You are an expert quiz maker. Always respond in valid JSON only." })
+    });
+    const data = await res.json();
+    const raw = data.reply || '{}';
+    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    questions = parsed.questions || [];
+    if (questions.length === 0) throw new Error('No questions generated');
+    renderRevisionQuiz();
+  } catch(e) {
+    questions = [
+      { question: `What is the main purpose of studying ${courseName}?`, options: ["To gain knowledge and skills", "To waste time", "To avoid work", "None"], correct: "To gain knowledge and skills" },
+      { question: "Which approach leads to better learning outcomes?", options: ["Active practice", "Passive reading only", "Skipping lessons", "Guessing"], correct: "Active practice" },
+      { question: "What should you do when you don't understand a concept?", options: ["Ask the AI teacher", "Skip it", "Give up", "Ignore it"], correct: "Ask the AI teacher" }
+    ];
+    renderRevisionQuiz();
+  }
+}
+
+function renderRevisionQuiz() {
+  document.getElementById('startRevBtn')?.remove();
+  const quizArea = document.getElementById('quizArea');
+  quizArea.style.display = 'block';
+
+  let html = `<div class="section-title">Attempt ${attemptNum} — ${questions.length} Questions</div>
+    <div class="timer-bar"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>`;
+
+  questions.forEach((q, i) => {
+    html += `<div class="q-card">
+      <div class="q-label">Question ${i+1} of ${questions.length}</div>
+      <div class="q-text">${q.question}</div>
+      <div class="options" data-q="${i}" data-correct="${q.correct}">
+        ${(q.options||[]).map(opt => `<button class="opt-btn" data-val="${opt}"><span class="opt-circle"></span>${opt}</button>`).join('')}
+      </div>
+    </div>`;
+  });
+
+  html += `<div style="display:flex; align-items:center; gap:16px; margin-top:20px;">
+    <button class="btn-primary" id="submitRevBtn" onclick="submitRevision()">Submit revision</button>
+    <span id="revProgress" style="font-size:13px; color:#5f6368;">0 of ${questions.length} answered</span>
+  </div>`;
+
+  quizArea.innerHTML = html;
+
+  document.querySelectorAll('.options').forEach(group => {
+    group.addEventListener('click', e => {
+      const btn = e.target.closest('.opt-btn');
+      if (!btn) return;
+      const qi = group.getAttribute('data-q');
+      group.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      mcqAnswers[qi] = btn.getAttribute('data-val');
+      const done = Object.keys(mcqAnswers).length;
+      document.getElementById('revProgress').textContent = done + ' of ' + questions.length + ' answered';
+    });
+  });
+
+  // 20 min timer
+  let secs = 1200;
+  const interval = setInterval(() => {
+    secs--;
+    document.getElementById('timerFill').style.width = (secs / 1200 * 100) + '%';
+    if (secs <= 0) { clearInterval(interval); submitRevision(); }
+  }, 1000);
+}
+
+async function submitRevision() {
+  const btn = document.getElementById('submitRevBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+
+  let correct = 0;
+  questions.forEach((q, i) => {
+    if (mcqAnswers[i] === q.correct) correct++;
+  });
+  const score = Math.round((correct / questions.length) * 100);
+  const passed = score >= 70;
+
+  // Save to Supabase
+  try {
+    const existing = revisionData.find(r => r.revision_number === (revisionData.length + 1));
+    if (existing) {
+      await fetch(BASE + "/revisions?id=eq." + existing.id, {
+        method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" },
+        body: JSON.stringify({ attempts_used: attemptNum, last_score: score, status: passed ? 'completed' : attemptNum >= 3 ? 'pending' : 'in_progress' })
+      });
+    } else {
+      await fetch(BASE + "/revisions", {
+        method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
+        body: JSON.stringify({ student_email: studentEmail, course_name: courseName, revision_number: revisionData.length + 1, attempts_used: attemptNum, last_score: score, status: passed ? 'completed' : attemptNum >= 3 ? 'pending' : 'in_progress' })
+      });
+    }
+  } catch(e) { console.error(e); }
+
+  document.getElementById('quizArea').style.display = 'none';
+  const resultDiv = document.getElementById('revResult');
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = `
+    <div class="result-box" style="border:2px solid ${passed?'#34a853':'#1a73e8'}; background:${passed?'#f6fef8':'#f8f9ff'};">
+      <div style="font-size:40px; margin-bottom:12px;">${passed ? '🎉' : attemptNum >= 3 ? '⏳' : '💪'}</div>
+      <div class="score-big" style="color:${passed?'#137333':'#1a73e8'}">${score}%</div>
+      <div style="font-size:15px; color:#5f6368; margin:8px 0 16px;">${correct} of ${questions.length} correct</div>
+      <span style="display:inline-block; padding:8px 20px; border-radius:100px; font-size:14px; font-weight:500; background:${passed?'#e6f4ea':'#e8f0fe'}; color:${passed?'#137333':'#1a73e8'};">
+        ${passed ? '✅ Revision completed!' : attemptNum >= 3 ? '⏳ Marked as pending — try next cycle' : `💪 ${3 - attemptNum} attempt(s) remaining`}
+      </span>
+    </div>
+    <div class="notice ${passed ? 'blue' : 'yellow'}">
+      <span>${passed ? '✅' : '📚'}</span>
+      <div>${passed ? 'Great job! This revision is complete. Keep learning to unlock your certificate.' : attemptNum >= 3 ? 'This revision is marked pending. Your course continues and you can clear it in the next cycle.' : 'Review your lessons and try again. You have ' + (3 - attemptNum) + ' attempt(s) left.'}</div>
+    </div>
+    <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+      <a href="/syllabus.html?email=${encodeURIComponent(studentEmail)}" class="btn-primary" style="text-decoration:none;">Back to course</a>
+      <a href="/dashboard.html?email=${encodeURIComponent(studentEmail)}" style="display:inline-block; padding:12px 20px; border:1.5px solid #1a73e8; border-radius:4px; color:#1a73e8; text-decoration:none; font-size:14px; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">Dashboard</a>
+    </div>`;
+}
+
+function showMsg(type, text) {
+  const m = document.getElementById('message');
+  m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+}
+</script>
+</body>
+</html>

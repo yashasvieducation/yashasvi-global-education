@@ -193,6 +193,13 @@ When you are ready to suggest a course, end your message with exactly: "SUGGEST_
       reply = reply.replace('SUGGEST_COURSES', '').trim();
       await aiSay(reply);
       showCourseCards();
+    } else if (reply.includes('COURSE_NOT_FOUND:')) {
+      const requestedCourse = reply.split('COURSE_NOT_FOUND:')[1].trim().split('
+')[0];
+      reply = reply.replace('COURSE_NOT_FOUND:' + requestedCourse, '').trim();
+      conversationHistory.push({ role: 'assistant', content: reply });
+      await aiSay(reply);
+      await saveCourseRequest(requestedCourse);
     } else {
       conversationHistory.push({ role: 'assistant', content: reply });
       await aiSay(reply);
@@ -266,6 +273,34 @@ function addBubble(role, text, name) {
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
   document.getElementById('typing').style.display = 'none';
+}
+
+async function saveCourseRequest(requestedCourse) {
+  try {
+    await fetch(BASE + '/course_requests', {
+      method: 'POST',
+      headers: { ...HEADERS, 'Prefer': 'return=representation' },
+      body: JSON.stringify({ student_email: studentEmail, student_name: studentName, requested_course: requestedCourse, country: '' })
+    });
+
+    // Send email to admin via Edge Function
+    await fetch('https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/send-verification-email', {
+      method: 'POST',
+      headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to: 'yashasvieducation@gmail.com',
+        studentName: studentName,
+        examScore: 0,
+        verifyUrl: 'https://yashasvi-global-education.vercel.app/admin.html',
+        parentEmail: 'New course request: ' + requestedCourse + ' from ' + studentEmail
+      })
+    });
+
+    await aiSay('I have sent a request to our team to create the  + requestedCourse +  course. You will be notified as soon as it is available! 🔔 Meanwhile, would you like to explore one of our current courses?');
+    showCourseCards();
+  } catch(e) {
+    showCourseCards();
+  }
 }
 
 function showEmailMsg(text) {
