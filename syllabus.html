@@ -3,33 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yashasvi Global Education — My Syllabus</title>
+<title>Yashasvi Global Education — My Course</title>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
-
   .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
   .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
   .nav-logo span { color: #1a73e8; }
-  .nav-student { font-size: 13px; color: #5f6368; }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .nav-user { font-size: 13px; color: #5f6368; }
+  .bell-btn { position: relative; background: none; border: none; font-size: 20px; cursor: pointer; }
+  .bell-badge { position: absolute; top: -4px; right: -4px; background: #c5221f; color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; display: none; }
 
-  /* Layout */
-  .layout { display: grid; grid-template-columns: 300px 1fr 360px; gap: 0; min-height: calc(100vh - 64px); }
-  @media (max-width: 1100px) { .layout { grid-template-columns: 260px 1fr; } .chat-panel { display: none; } }
+  .layout { display: grid; grid-template-columns: 280px 1fr 340px; min-height: calc(100vh - 64px); }
+  @media (max-width: 1100px) { .layout { grid-template-columns: 240px 1fr; } .chat-panel { display: none; } }
   @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
 
   /* Sidebar */
-  .sidebar { background: #fff; border-right: 1px solid #e8eaed; overflow-y: auto; padding: 20px 0; }
-  .sidebar-title { font-size: 11px; font-weight: 500; color: #5f6368; text-transform: uppercase; letter-spacing: 1px; padding: 0 20px; margin-bottom: 12px; }
-  .module { margin-bottom: 4px; }
-  .module-header { display: flex; align-items: center; gap: 10px; padding: 10px 20px; cursor: pointer; font-size: 14px; font-weight: 500; color: #202124; transition: background 0.15s; border-radius: 0; }
+  .sidebar { background: #fff; border-right: 1px solid #e8eaed; overflow-y: auto; padding: 16px 0; }
+  .sidebar-header { padding: 0 16px 16px; border-bottom: 1px solid #e8eaed; margin-bottom: 12px; }
+  .course-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #202124; margin-bottom: 8px; }
+  .progress-wrap { }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #5f6368; margin-bottom: 4px; }
+  .progress-bg { background: #f1f3f4; border-radius: 100px; height: 6px; }
+  .progress-fill { background: #1a73e8; height: 6px; border-radius: 100px; transition: width 0.4s; }
+  .module-header { display: flex; align-items: center; gap: 8px; padding: 10px 16px; cursor: pointer; font-size: 14px; font-weight: 500; color: #202124; transition: background 0.15s; }
   .module-header:hover { background: #f1f3f4; }
-  .module-header.active { background: #e8f0fe; color: #1a73e8; }
+  .module-header.active { color: #1a73e8; }
   .module-icon { font-size: 16px; }
-  .module-lessons { display: none; padding: 0 0 4px; }
+  .module-lessons { display: none; }
   .module.open .module-lessons { display: block; }
-  .lesson-item { display: flex; align-items: center; gap: 10px; padding: 8px 20px 8px 44px; font-size: 13px; color: #5f6368; cursor: pointer; transition: background 0.15s; }
+  .lesson-item { display: flex; align-items: center; gap: 8px; padding: 8px 16px 8px 36px; font-size: 13px; color: #5f6368; cursor: pointer; transition: background 0.15s; }
   .lesson-item:hover { background: #f1f3f4; color: #202124; }
   .lesson-item.active { color: #1a73e8; background: #e8f0fe; font-weight: 500; }
   .lesson-item.completed { color: #137333; }
@@ -37,535 +42,348 @@
   .lesson-item.completed .lesson-dot { background: #34a853; }
   .lesson-item.active .lesson-dot { background: #1a73e8; }
 
-  /* Progress bar in sidebar */
-  .progress-section { padding: 16px 20px; border-bottom: 1px solid #e8eaed; margin-bottom: 12px; }
-  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #5f6368; margin-bottom: 6px; }
-  .progress-bg { background: #f1f3f4; border-radius: 100px; height: 6px; }
-  .progress-fill { background: #1a73e8; height: 6px; border-radius: 100px; transition: width 0.4s; }
-
-  /* Main content */
-  .main { padding: 32px; overflow-y: auto; }
-  .lesson-header { margin-bottom: 24px; }
+  /* Main */
+  .main { overflow-y: auto; padding: 28px; }
   .lesson-breadcrumb { font-size: 12px; color: #5f6368; margin-bottom: 8px; }
-  .lesson-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #202124; margin-bottom: 8px; }
-  .lesson-meta { font-size: 13px; color: #5f6368; display: flex; gap: 16px; }
-
-  .lesson-body { background: #fff; border-radius: 8px; border: 1px solid #e8eaed; padding: 28px; margin-bottom: 20px; line-height: 1.75; font-size: 15px; color: #202124; }
-  .lesson-body h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; margin: 20px 0 10px; }
+  .lesson-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #202124; margin-bottom: 10px; }
+  .lesson-meta { font-size: 13px; color: #5f6368; display: flex; gap: 16px; margin-bottom: 20px; }
+  .lesson-body { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; margin-bottom: 16px; font-size: 15px; line-height: 1.75; color: #3c4043; }
+  .lesson-body h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 17px; font-weight: 500; color: #202124; margin: 18px 0 8px; }
   .lesson-body h3:first-child { margin-top: 0; }
-  .lesson-body p { margin-bottom: 14px; color: #3c4043; }
-  .lesson-body ul { padding-left: 20px; margin-bottom: 14px; }
-  .lesson-body ul li { margin-bottom: 6px; color: #3c4043; }
-  .lesson-body .highlight { background: #e8f0fe; border-left: 3px solid #1a73e8; padding: 12px 16px; border-radius: 0 4px 4px 0; margin: 16px 0; font-size: 14px; color: #1a73e8; }
+  .highlight { background: #e8f0fe; border-left: 3px solid #1a73e8; padding: 10px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; color: #1a73e8; }
+  .project-box { background: #e6f4ea; border-left: 3px solid #34a853; padding: 12px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; color: #137333; }
+  .project-box strong { display: block; margin-bottom: 4px; }
 
-  .lesson-nav { display: flex; justify-content: space-between; align-items: center; }
+  /* MCQ */
+  .mcq-section { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+  .mcq-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; margin-bottom: 16px; color: #202124; }
+  .mcq-q { font-size: 14px; color: #202124; margin-bottom: 10px; font-weight: 500; }
+  .mcq-opts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .mcq-opt { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1.5px solid #dadce0; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.15s; }
+  .mcq-opt:hover { border-color: #1a73e8; background: #f8f9ff; }
+  .mcq-opt.correct { border-color: #34a853; background: #e6f4ea; color: #137333; }
+  .mcq-opt.wrong { border-color: #c5221f; background: #fce8e6; color: #c5221f; }
+  .mcq-opt.show-correct { border-color: #34a853; background: #e6f4ea; color: #137333; }
+
+  .lesson-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
   .btn { border: none; border-radius: 4px; padding: 10px 24px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; }
   .btn-primary { background: #1a73e8; color: #fff; }
   .btn-primary:hover { background: #1765cc; }
   .btn-secondary { background: #f1f3f4; color: #202124; }
   .btn-secondary:hover { background: #e8eaed; }
-  .btn:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
   .btn-complete { background: #34a853; color: #fff; }
   .btn-complete:hover { background: #2d9142; }
+  .btn:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
 
-  /* Chat panel */
+  /* Chat */
   .chat-panel { background: #fff; border-left: 1px solid #e8eaed; display: flex; flex-direction: column; height: calc(100vh - 64px); position: sticky; top: 64px; }
-  .chat-header { padding: 16px 20px; border-bottom: 1px solid #e8eaed; }
-  .chat-header h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; color: #202124; }
+  .chat-header { padding: 14px 16px; border-bottom: 1px solid #e8eaed; }
+  .chat-header h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; }
   .chat-header p { font-size: 12px; color: #5f6368; margin-top: 2px; }
-  .chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
   .chat-msg { max-width: 85%; }
   .chat-msg.user { align-self: flex-end; }
   .chat-msg.ai { align-self: flex-start; }
-  .chat-bubble { padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
+  .chat-bubble { padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
   .chat-msg.user .chat-bubble { background: #1a73e8; color: #fff; border-radius: 12px 12px 2px 12px; }
   .chat-msg.ai .chat-bubble { background: #f1f3f4; color: #202124; border-radius: 12px 12px 12px 2px; }
-  .chat-msg .chat-name { font-size: 11px; color: #5f6368; margin-bottom: 4px; }
+  .chat-name { font-size: 10px; color: #80868b; margin-bottom: 3px; }
   .chat-msg.user .chat-name { text-align: right; }
-  .chat-input-wrap { padding: 12px 16px; border-top: 1px solid #e8eaed; display: flex; gap: 8px; }
-  .chat-input { flex: 1; padding: 10px 14px; border: 1px solid #dadce0; border-radius: 20px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; outline: none; resize: none; max-height: 100px; }
-  .chat-input:focus { border-color: #1a73e8; }
-  .chat-send { background: #1a73e8; color: #fff; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; align-self: flex-end; }
-  .chat-send:disabled { background: #dadce0; cursor: not-allowed; }
   .typing { font-size: 12px; color: #5f6368; padding: 4px 14px; display: none; }
+  .chat-input-wrap { padding: 10px 14px; border-top: 1px solid #e8eaed; display: flex; gap: 8px; }
+  .chat-input { flex: 1; padding: 8px 14px; border: 1px solid #dadce0; border-radius: 20px; font-size: 13px; font-family: 'Roboto', Arial, sans-serif; outline: none; resize: none; }
+  .chat-input:focus { border-color: #1a73e8; }
+  .chat-send { background: #1a73e8; color: #fff; border: none; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; font-size: 14px; flex-shrink: 0; align-self: flex-end; }
+  .chat-send:disabled { background: #dadce0; cursor: not-allowed; }
 
-  /* Email step */
-  #emailStep { max-width: 480px; margin: 80px auto; padding: 0 24px; }
-  #emailStep h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
-  #emailStep p { font-size: 15px; color: #5f6368; margin-bottom: 24px; }
+  /* Login */
+  #loginWrap { max-width: 480px; margin: 80px auto; padding: 0 24px; }
+  #loginWrap h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+  #loginWrap p { font-size: 15px; color: #5f6368; margin-bottom: 24px; }
   .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
-  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; outline: none; }
-  .field input:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.12); }
-  #emailMessage { margin-top: 12px; padding: 12px; border-radius: 4px; font-size: 14px; display: none; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; outline: none; }
+  .field input:focus { border-color: #1a73e8; }
+  #loginMsg { margin-top: 12px; padding: 10px; border-radius: 4px; font-size: 14px; display: none; }
   .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+
+  /* Loading */
+  .loading { text-align: center; padding: 60px 24px; color: #5f6368; font-size: 15px; }
+  .loading-spinner { font-size: 32px; animation: spin 1s linear infinite; display: block; margin-bottom: 12px; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
 <nav class="nav">
   <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
-  <span class="nav-student" id="navStudent"></span>
+  <div class="nav-right">
+    <span class="nav-user" id="navUser"></span>
+    <button class="bell-btn" onclick="checkNotifications()" title="Notifications">
+      🔔<span class="bell-badge" id="bellBadge"></span>
+    </button>
+  </div>
 </nav>
 
-<!-- Email Login Step -->
-<div id="emailStep">
-  <h2>Welcome back</h2>
-  <p>Enter your student email to access your syllabus and AI teacher.</p>
+<!-- Login -->
+<div id="loginWrap">
+  <h2>My Course</h2>
+  <p>Enter your email to access your personalised course and AI teacher.</p>
   <div class="field">
-    <label>Student email address</label>
-    <input type="email" id="loginEmail" placeholder="you@example.com">
+    <label>Student email</label>
+    <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
   </div>
-  <button class="btn btn-primary" id="loginBtn" style="margin-top:16px; width:100%; padding:12px;">Access my syllabus</button>
-  <div id="emailMessage"></div>
+  <button class="btn btn-primary" id="loginBtn" style="margin-top:16px; width:100%; padding:12px;" onclick="doLogin()">Access my course →</button>
+  <div id="loginMsg"></div>
 </div>
 
-<!-- Main Layout (hidden until login) -->
+<!-- Main Layout -->
 <div class="layout" id="mainLayout" style="display:none;">
-
-  <!-- Sidebar -->
   <div class="sidebar">
-    <div class="progress-section">
-      <div class="progress-label">
-        <span>Overall progress</span>
-        <span id="progressPct">0%</span>
+    <div class="sidebar-header">
+      <div class="course-name" id="courseName">Loading…</div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Progress</span><span id="progressPct">0%</span></div>
+        <div class="progress-bg"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
       </div>
-      <div class="progress-bg"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     </div>
-    <div class="sidebar-title">Entrepreneurship & Business Design</div>
-    <div id="syllabusNav"></div>
+    <div id="syllabusNav"><div class="loading"><span class="loading-spinner">⏳</span>Loading modules…</div></div>
   </div>
 
-  <!-- Main Content -->
   <div class="main" id="mainContent">
-    <div class="lesson-header">
-      <div class="lesson-breadcrumb" id="lessonBreadcrumb">Module 1 · Lesson 1</div>
-      <div class="lesson-title" id="lessonTitle">Loading...</div>
-      <div class="lesson-meta">
-        <span id="lessonDuration">⏱ 15 min read</span>
-        <span id="lessonType">📖 Core Lesson</span>
-      </div>
-    </div>
-    <div class="lesson-body" id="lessonBody"></div>
-    <div class="lesson-nav">
-      <button class="btn btn-secondary" id="prevBtn" onclick="navigate(-1)">← Previous</button>
-      <button class="btn btn-complete" id="completeBtn" onclick="completeLesson()">Mark as complete ✓</button>
-      <button class="btn btn-primary" id="nextBtn" onclick="navigate(1)">Next →</button>
-    </div>
+    <div class="loading"><span class="loading-spinner">⏳</span>Loading your course…</div>
   </div>
 
-  <!-- AI Teacher Chat -->
   <div class="chat-panel">
     <div class="chat-header">
-      <h3>🤖 Your AI Teacher</h3>
-      <p>Ask anything about this lesson or entrepreneurship</p>
+      <h3>🤖 AI Teacher</h3>
+      <p>Ask anything about this lesson</p>
     </div>
     <div class="chat-messages" id="chatMessages">
       <div class="chat-msg ai">
         <div class="chat-name">AI Teacher</div>
-        <div class="chat-bubble">Hello! I'm your personal AI teacher. I'm here to help you understand entrepreneurship and business design. What would you like to know? 😊</div>
+        <div class="chat-bubble">Hello! I'm your personal AI teacher. Ask me anything about your current lesson or course. 😊</div>
       </div>
     </div>
-    <div class="typing" id="typingIndicator">AI Teacher is typing...</div>
+    <div class="typing" id="typingIndicator">AI Teacher is typing…</div>
     <div class="chat-input-wrap">
-      <textarea class="chat-input" id="chatInput" placeholder="Ask your AI teacher..." rows="1"></textarea>
+      <textarea class="chat-input" id="chatInput" placeholder="Ask your AI teacher…" rows="1"></textarea>
       <button class="chat-send" id="sendBtn" onclick="sendMessage()">➤</button>
     </div>
   </div>
-
 </div>
 
 <script>
 const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
 const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
 
-// ── SYLLABUS DATA ──
-const SYLLABUS = [
-  {
-    module: "Foundations of Entrepreneurship",
-    icon: "🚀",
-    lessons: [
-      {
-        title: "What is Entrepreneurship?",
-        duration: "10 min", type: "Core Lesson",
-        content: `
-          <h3>What is Entrepreneurship?</h3>
-          <p>Entrepreneurship is the process of identifying a problem in society, designing a solution, and building a sustainable business around that solution. An entrepreneur is not just a businessperson — they are a problem-solver, a risk-taker, and a value creator.</p>
-          <div class="highlight">💡 Key Insight: Every successful business started by solving a real problem that real people faced every day.</div>
-          <h3>The Entrepreneur's Mindset</h3>
-          <p>Before starting any business, you need to develop the right mindset. Successful entrepreneurs share these traits:</p>
-          <ul>
-            <li><strong>Curiosity</strong> — They constantly ask "Why?" and "What if?"</li>
-            <li><strong>Resilience</strong> — They treat failure as data, not defeat</li>
-            <li><strong>Action bias</strong> — They start before they feel ready</li>
-            <li><strong>Customer obsession</strong> — They listen more than they speak</li>
-          </ul>
-          <h3>Types of Entrepreneurs</h3>
-          <p>Entrepreneurship takes many forms. You might become a <strong>small business owner</strong> (local shop, services), a <strong>startup founder</strong> (scalable tech product), a <strong>social entrepreneur</strong> (solving social problems), or an <strong>intrapreneur</strong> (innovating inside a large company).</p>
-          <div class="highlight">🇮🇳 India Context: India has over 60 million MSMEs (Micro, Small and Medium Enterprises). This makes it one of the most entrepreneurial countries in the world. Your opportunity is massive.</div>
-        `
-      },
-      {
-        title: "Identifying a Business Opportunity",
-        duration: "12 min", type: "Core Lesson",
-        content: `
-          <h3>How to Find Your Business Idea</h3>
-          <p>The best business ideas come from problems you personally experience — or problems you observe others struggling with daily. You don't need a revolutionary idea. You need a <em>better solution</em> to an existing problem.</p>
-          <h3>The 4 Sources of Business Ideas</h3>
-          <ul>
-            <li><strong>Your own pain points</strong> — What frustrates you every day?</li>
-            <li><strong>Market gaps</strong> — What do people want but can't easily find?</li>
-            <li><strong>Trends</strong> — What is growing fast? (AI, sustainability, health)</li>
-            <li><strong>Existing businesses</strong> — What can you do cheaper, faster, or better?</li>
-          </ul>
-          <div class="highlight">🔍 Exercise: Write down 3 things that frustrated you this week. Each one is a potential business idea.</div>
-          <h3>Validating Your Idea</h3>
-          <p>Before investing time or money, validate your idea by asking 10 potential customers: "Would you pay for this solution?" Their honest answer will save you months of wasted effort.</p>
-        `
-      },
-      {
-        title: "The Business Model Canvas",
-        duration: "15 min", type: "Core Lesson",
-        content: `
-          <h3>What is the Business Model Canvas?</h3>
-          <p>The Business Model Canvas (BMC) is a one-page strategic tool that helps you design, describe, and test your business model. It was created by Alexander Osterwalder and is used by startups and Fortune 500 companies alike.</p>
-          <h3>The 9 Building Blocks</h3>
-          <ul>
-            <li><strong>Customer Segments</strong> — Who are your customers?</li>
-            <li><strong>Value Proposition</strong> — What problem do you solve for them?</li>
-            <li><strong>Channels</strong> — How do you reach your customers?</li>
-            <li><strong>Customer Relationships</strong> — How do you interact with them?</li>
-            <li><strong>Revenue Streams</strong> — How do you make money?</li>
-            <li><strong>Key Resources</strong> — What do you need to operate?</li>
-            <li><strong>Key Activities</strong> — What do you do every day?</li>
-            <li><strong>Key Partnerships</strong> — Who helps you?</li>
-            <li><strong>Cost Structure</strong> — What does it cost to run the business?</li>
-          </ul>
-          <div class="highlight">📋 Action: Before your next lesson, fill out a simple BMC for any business idea you have — even a rough one. This is your first real business document.</div>
-        `
-      }
-    ]
-  },
-  {
-    module: "Financial Literacy for Entrepreneurs",
-    icon: "💰",
-    lessons: [
-      {
-        title: "Revenue, Profit & Cash Flow",
-        duration: "12 min", type: "Core Lesson",
-        content: `
-          <h3>The Three Numbers Every Entrepreneur Must Know</h3>
-          <p>Many businesses fail not because they have no customers, but because they don't understand their own numbers. Let's fix that.</p>
-          <h3>Revenue</h3>
-          <p><strong>Revenue</strong> is the total money your business receives from customers. If you sell 100 cups of tea at ₹20 each, your revenue is ₹2,000. Revenue is also called "top line" or "turnover."</p>
-          <h3>Profit</h3>
-          <p><strong>Profit</strong> is what remains after you subtract all your costs from revenue. If your tea stall costs ₹1,200 to operate (ingredients, rent, staff), your profit is ₹800. This is your reward for running the business.</p>
-          <div class="highlight">Formula: Profit = Revenue − Costs</div>
-          <h3>Cash Flow</h3>
-          <p><strong>Cash flow</strong> is the movement of money in and out of your business over time. A business can be profitable on paper but still fail if it runs out of cash. Always know: how much money is in your account right now?</p>
-          <ul>
-            <li><strong>Positive cash flow</strong> — More money coming in than going out ✅</li>
-            <li><strong>Negative cash flow</strong> — More money going out than coming in ⚠️</li>
-          </ul>
-        `
-      },
-      {
-        title: "Pricing Your Product or Service",
-        duration: "10 min", type: "Core Lesson",
-        content: `
-          <h3>How to Price Your Product</h3>
-          <p>Pricing is one of the most important — and most difficult — decisions in business. Price too high and you lose customers. Price too low and you lose money. Here's how to get it right.</p>
-          <h3>3 Pricing Strategies</h3>
-          <ul>
-            <li><strong>Cost-plus pricing</strong> — Calculate your cost, add a profit margin. Simple and safe for beginners. (Cost ₹50 + 40% margin = Price ₹70)</li>
-            <li><strong>Competitive pricing</strong> — Match or beat your competitors' prices. Good when entering a crowded market.</li>
-            <li><strong>Value-based pricing</strong> — Charge based on the value you deliver, not your cost. Most profitable when done right.</li>
-          </ul>
-          <div class="highlight">💡 Beginner Tip: Start with cost-plus pricing to ensure you're always making a profit, then experiment with value-based pricing as you grow.</div>
-          <h3>The Danger of Underpricing</h3>
-          <p>Many first-time entrepreneurs price too low because they're afraid of losing customers. This is a trap. Low prices signal low quality and make it impossible to grow. Know your worth.</p>
-        `
-      }
-    ]
-  },
-  {
-    module: "Marketing & Customer Acquisition",
-    icon: "📣",
-    lessons: [
-      {
-        title: "Understanding Your Customer",
-        duration: "12 min", type: "Core Lesson",
-        content: `
-          <h3>Who is Your Customer?</h3>
-          <p>The most common mistake entrepreneurs make is trying to sell to everyone. The riches are in the niches. The more specifically you define your customer, the more effectively you can reach and serve them.</p>
-          <h3>Creating a Customer Persona</h3>
-          <p>A <strong>customer persona</strong> is a detailed profile of your ideal customer. Give them a name, age, job, income, daily routine, problems, and goals. For example:</p>
-          <div class="highlight">
-            <strong>Persona: Rahul, 24, Software Developer</strong><br>
-            Lives in Pune, earns ₹60,000/month, works long hours, wants to eat healthy but has no time to cook. Frustrated by expensive, unhealthy office food.
-          </div>
-          <h3>The Customer Journey</h3>
-          <p>Every customer goes through 5 stages before buying from you:</p>
-          <ul>
-            <li><strong>Awareness</strong> — They discover your business exists</li>
-            <li><strong>Interest</strong> — They want to learn more</li>
-            <li><strong>Consideration</strong> — They compare you to alternatives</li>
-            <li><strong>Purchase</strong> — They buy from you</li>
-            <li><strong>Loyalty</strong> — They come back and refer others</li>
-          </ul>
-        `
-      },
-      {
-        title: "Digital Marketing Basics",
-        duration: "15 min", type: "Core Lesson",
-        content: `
-          <h3>Marketing in the Digital Age</h3>
-          <p>Today, even a small local business needs an online presence. Digital marketing allows you to reach thousands of potential customers with very little money — if you do it right.</p>
-          <h3>The 5 Core Digital Marketing Channels</h3>
-          <ul>
-            <li><strong>Social Media</strong> (Instagram, YouTube, WhatsApp) — Best for local businesses, personal brands, and visual products</li>
-            <li><strong>Content Marketing</strong> (blogs, videos) — Build trust and attract customers organically</li>
-            <li><strong>Email Marketing</strong> — Highest ROI of any channel. Build your list from day one.</li>
-            <li><strong>SEO (Search Engine Optimization)</strong> — Help customers find you on Google</li>
-            <li><strong>Paid Advertising</strong> (Google Ads, Meta Ads) — Fast results but costs money</li>
-          </ul>
-          <div class="highlight">📱 Start Here: For most Indian small businesses, WhatsApp Business + Instagram is the fastest and cheapest way to get your first 100 customers.</div>
-          <h3>Content is King</h3>
-          <p>Whatever channel you choose, consistently creating valuable content is the most powerful long-term marketing strategy. Educate, entertain, or inspire your audience — and they will trust you enough to buy.</p>
-        `
-      }
-    ]
-  },
-  {
-    module: "Building & Launching Your Business",
-    icon: "🏗️",
-    lessons: [
-      {
-        title: "The MVP (Minimum Viable Product)",
-        duration: "12 min", type: "Core Lesson",
-        content: `
-          <h3>What is an MVP?</h3>
-          <p>An MVP (Minimum Viable Product) is the simplest version of your product or service that delivers value to customers and allows you to test your assumptions. It is not a half-baked product — it is a focused, functional solution to one specific problem.</p>
-          <h3>Why Start with an MVP?</h3>
-          <ul>
-            <li>Saves time and money by testing before building everything</li>
-            <li>Gets real customer feedback early</li>
-            <li>Reduces the risk of building something nobody wants</li>
-            <li>Allows you to start generating revenue quickly</li>
-          </ul>
-          <div class="highlight">🏆 Famous MVPs: Airbnb's first "MVP" was just a website with photos of their own apartment. Dropbox launched with a demo video before writing a single line of code.</div>
-          <h3>How to Build Your MVP</h3>
-          <p>1. Identify the ONE core problem your product solves. 2. Build only the features needed to solve that problem. 3. Launch to a small group of early customers. 4. Collect feedback. 5. Improve. Repeat.</p>
-        `
-      },
-      {
-        title: "Legal Setup & Registration",
-        duration: "10 min", type: "Core Lesson",
-        content: `
-          <h3>Making Your Business Official</h3>
-          <p>Before you start serving customers, you need to make your business legally registered. This protects you, builds trust with customers, and allows you to open a business bank account.</p>
-          <h3>Business Structures in India</h3>
-          <ul>
-            <li><strong>Sole Proprietorship</strong> — Simplest, no registration needed for very small businesses. You and the business are legally the same person.</li>
-            <li><strong>Partnership</strong> — Two or more people share ownership and profits. Register with a partnership deed.</li>
-            <li><strong>Private Limited Company (Pvt Ltd)</strong> — Separate legal entity, best for startups seeking investment. Register on MCA portal.</li>
-            <li><strong>LLP (Limited Liability Partnership)</strong> — Mix of partnership and company. Good for professional services.</li>
-          </ul>
-          <div class="highlight">✅ For most beginners: Start as a Sole Proprietorship. Get a GST registration if your revenue exceeds ₹20 lakhs/year. Upgrade to Pvt Ltd when you seek investors.</div>
-          <h3>Essential Registrations</h3>
-          <p><strong>PAN Card</strong> (mandatory), <strong>GST Registration</strong> (if applicable), <strong>UDYAM Registration</strong> (free MSME certificate — gives you access to government schemes and bank loans).</p>
-        `
-      }
-    ]
-  }
-];
+let studentEmail = "", studentName = "", currentCourse = null;
+let modules = [], currentMod = 0, currentLesson = 0;
+let completedLessons = new Set(), progressId = null;
+let chatHistory = [], mcqAnswered = {};
 
-let studentEmail = "";
-let studentName = "";
-let currentModule = 0;
-let currentLesson = 0;
-let completedLessons = new Set();
-let chatHistory = [];
-let progressId = null;
+// Auto-fill from URL
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('email')) document.getElementById('loginEmail').value = urlParams.get('email');
 
-const totalLessons = SYLLABUS.reduce((s, m) => s + m.lessons.length, 0);
-
-// ── LOGIN ──
-document.getElementById('loginBtn').addEventListener('click', async () => {
+async function doLogin() {
   const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-  if (!email) { showEmailMsg('error', 'Please enter your email.'); return; }
-
+  if (!email) { showLoginMsg('Please enter your email.'); return; }
   const btn = document.getElementById('loginBtn');
-  btn.disabled = true; btn.textContent = 'Checking…';
-
+  btn.disabled = true; btn.textContent = 'Loading…';
   try {
-    const res = await fetch(
-      BASE + "/students?select=id,student_name,admission_status,track&student_email=ilike." + encodeURIComponent(email),
-      { method: "GET", headers: HEADERS }
-    );
+    const res = await fetch(BASE + "/students?select=student_name,admission_status,selected_course,fee_paid&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
     const data = await res.json();
-
     if (!Array.isArray(data) || data.length === 0) {
-      showEmailMsg('error', 'No application found. Please complete the admission process first.');
-      btn.disabled = false; btn.textContent = 'Access my syllabus'; return;
+      showLoginMsg('No application found. Please complete the admission process first.');
+      btn.disabled = false; btn.textContent = 'Access my course →'; return;
     }
-
     const s = data[0];
-    if (s.admission_status !== 'admitted') {
-      showEmailMsg('error', 'Your admission is not confirmed yet. Please complete all steps first.');
-      btn.disabled = false; btn.textContent = 'Access my syllabus'; return;
+    if (!['admitted','final_exam_passed','internship_passed','certified'].includes(s.admission_status)) {
+      showLoginMsg('Please complete all admission steps first.');
+      btn.disabled = false; btn.textContent = 'Access my course →'; return;
     }
-
     studentEmail = email;
     studentName = s.student_name;
-
+    document.getElementById('navUser').textContent = studentName;
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('mainLayout').style.display = 'grid';
+    await loadCourse(s.selected_course);
     await loadProgress();
-    initUI();
-
+    checkNotifications();
   } catch (err) {
-    showEmailMsg('error', 'Error: ' + err.message);
-    btn.disabled = false; btn.textContent = 'Access my syllabus';
+    showLoginMsg('Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Access my course →';
   }
-});
+}
+
+async function loadCourse(courseName) {
+  try {
+    // Get course
+    const cRes = await fetch(BASE + "/courses?select=id,name,department&name=eq." + encodeURIComponent(courseName) + "&is_active=eq.true", { method: "GET", headers: HEADERS });
+    const courses = await cRes.json();
+    if (!Array.isArray(courses) || courses.length === 0) {
+      document.getElementById('mainContent').innerHTML = '<div class="loading">Course content is being prepared. Please check back soon!</div>';
+      return;
+    }
+    currentCourse = courses[0];
+    document.getElementById('courseName').textContent = currentCourse.name;
+
+    // Get modules
+    const mRes = await fetch(BASE + "/course_modules?select=*&course_id=eq." + currentCourse.id + "&order=module_index.asc", { method: "GET", headers: HEADERS });
+    modules = await mRes.json();
+
+    if (!Array.isArray(modules) || modules.length === 0) {
+      document.getElementById('mainContent').innerHTML = '<div class="loading">Course content is being generated by AI. Please refresh in a moment!</div>';
+      return;
+    }
+
+    buildNav();
+    loadLesson(0, 0);
+  } catch (e) { console.error(e); }
+}
 
 async function loadProgress() {
   try {
-    const res = await fetch(
-      BASE + "/syllabus_progress?select=*&student_email=ilike." + encodeURIComponent(studentEmail),
-      { method: "GET", headers: HEADERS }
-    );
+    const res = await fetch(BASE + "/syllabus_progress?select=*&student_email=ilike." + encodeURIComponent(studentEmail), { method: "GET", headers: HEADERS });
     const data = await res.json();
-
     if (Array.isArray(data) && data.length > 0) {
-      const p = data[0];
-      progressId = p.id;
-      currentModule = p.module_index || 0;
-      currentLesson = p.lesson_index || 0;
-      completedLessons = new Set(p.completed_lessons || []);
+      progressId = data[0].id;
+      currentMod = data[0].module_index || 0;
+      currentLesson = data[0].lesson_index || 0;
+      completedLessons = new Set(data[0].completed_lessons || []);
+      loadLesson(currentMod, currentLesson);
     } else {
-      // Create progress record
       const res2 = await fetch(BASE + "/syllabus_progress", {
-        method: "POST",
-        headers: { ...HEADERS, "Prefer": "return=representation" },
-        body: JSON.stringify({
-          student_email: studentEmail,
-          department: "Entrepreneurship & Business Design",
-          module_index: 0, lesson_index: 0,
-          completed_lessons: [], total_lessons: totalLessons
-        })
+        method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
+        body: JSON.stringify({ student_email: studentEmail, department: currentCourse?.name || '', module_index: 0, lesson_index: 0, completed_lessons: [], total_lessons: modules.reduce((s,m) => s + (m.lessons?.length || 0), 0) })
       });
       const d2 = await res2.json();
       if (Array.isArray(d2) && d2.length > 0) progressId = d2[0].id;
     }
+    updateProgress();
+    buildNav();
   } catch (e) { console.error(e); }
 }
 
 async function saveProgress() {
   if (!progressId) return;
   await fetch(BASE + "/syllabus_progress?id=eq." + progressId, {
-    method: "PATCH",
-    headers: { ...HEADERS, "Prefer": "return=representation" },
-    body: JSON.stringify({
-      module_index: currentModule,
-      lesson_index: currentLesson,
-      completed_lessons: [...completedLessons],
-      last_active: new Date().toISOString()
-    })
+    method: "PATCH", headers: HEADERS,
+    body: JSON.stringify({ module_index: currentMod, lesson_index: currentLesson, completed_lessons: [...completedLessons], last_active: new Date().toISOString() })
   });
 }
 
-function initUI() {
-  document.getElementById('emailStep').style.display = 'none';
-  document.getElementById('mainLayout').style.display = 'grid';
-  document.getElementById('navStudent').textContent = studentName;
-  buildSidebarNav();
-  loadLesson(currentModule, currentLesson);
-}
-
-function buildSidebarNav() {
+function buildNav() {
   const nav = document.getElementById('syllabusNav');
-  nav.innerHTML = '';
-  SYLLABUS.forEach((mod, mi) => {
-    const div = document.createElement('div');
-    div.className = 'module' + (mi === currentModule ? ' open' : '');
-    div.innerHTML = `
-      <div class="module-header ${mi === currentModule ? 'active' : ''}" onclick="toggleModule(${mi})">
-        <span class="module-icon">${mod.icon}</span>
-        <span>${mod.module}</span>
+  nav.innerHTML = modules.map((mod, mi) => `
+    <div class="module ${mi === currentMod ? 'open' : ''}" id="mod-${mi}">
+      <div class="module-header ${mi === currentMod ? 'active' : ''}" onclick="toggleMod(${mi})">
+        <span class="module-icon">📖</span>
+        <span>${mod.module_title}</span>
       </div>
       <div class="module-lessons">
-        ${mod.lessons.map((l, li) => {
+        ${(mod.lessons || []).map((l, li) => {
           const key = mi + '-' + li;
-          const isComplete = completedLessons.has(key);
-          const isActive = mi === currentModule && li === currentLesson;
-          return `<div class="lesson-item ${isComplete ? 'completed' : ''} ${isActive ? 'active' : ''}" onclick="loadLesson(${mi},${li})">
+          return `<div class="lesson-item ${completedLessons.has(key) ? 'completed' : ''} ${mi===currentMod && li===currentLesson ? 'active' : ''}" onclick="loadLesson(${mi},${li})">
             <span class="lesson-dot"></span>${l.title}
           </div>`;
         }).join('')}
-      </div>`;
-    nav.appendChild(div);
-  });
+      </div>
+    </div>`).join('');
   updateProgress();
 }
 
-function toggleModule(mi) {
-  const modules = document.querySelectorAll('.module');
-  modules[mi].classList.toggle('open');
+function toggleMod(mi) {
+  document.querySelectorAll('.module').forEach((m,i) => { if (i===mi) m.classList.toggle('open'); else m.classList.remove('open'); });
 }
 
 function loadLesson(mi, li) {
-  currentModule = mi; currentLesson = li;
-  const mod = SYLLABUS[mi];
-  const lesson = mod.lessons[li];
-  document.getElementById('lessonBreadcrumb').textContent = `${mod.module} · Lesson ${li + 1}`;
-  document.getElementById('lessonTitle').textContent = lesson.title;
-  document.getElementById('lessonDuration').textContent = '⏱ ' + lesson.duration;
-  document.getElementById('lessonType').textContent = '📖 ' + lesson.type;
-  document.getElementById('lessonBody').innerHTML = lesson.content;
+  currentMod = mi; currentLesson = li;
+  const mod = modules[mi];
+  if (!mod) return;
+  const lesson = (mod.lessons || [])[li];
+  if (!lesson) return;
 
+  mcqAnswered = {};
   const key = mi + '-' + li;
   const isDone = completedLessons.has(key);
-  document.getElementById('completeBtn').textContent = isDone ? '✓ Completed' : 'Mark as complete ✓';
-  document.getElementById('completeBtn').style.background = isDone ? '#34a853' : '#34a853';
 
-  document.getElementById('prevBtn').disabled = mi === 0 && li === 0;
-  const isLast = mi === SYLLABUS.length - 1 && li === SYLLABUS[mi].lessons.length - 1;
-  document.getElementById('nextBtn').disabled = isLast;
+  document.getElementById('mainContent').innerHTML = `
+    <div class="lesson-breadcrumb">${mod.module_title} · Lesson ${li + 1}</div>
+    <div class="lesson-title">${lesson.title}</div>
+    <div class="lesson-meta">
+      <span>⏱ ${lesson.duration || '15 min'}</span>
+      <span>📖 Core Lesson</span>
+    </div>
+    <div class="lesson-body">
+      ${lesson.content ? lesson.content.split('\n').filter(p=>p.trim()).map(p => `<p>${p}</p>`).join('') : '<p>Content loading…</p>'}
+      ${lesson.project ? `<div class="project-box"><strong>🛠 Practical Assignment</strong>${lesson.project}</div>` : ''}
+    </div>
+    ${lesson.mcq && lesson.mcq.length > 0 ? `
+    <div class="mcq-section">
+      <div class="mcq-title">📝 Quick Check — Test your understanding</div>
+      ${lesson.mcq.map((q, qi) => `
+        <div class="mcq-q">Q${qi+1}. ${q.question}</div>
+        <div class="mcq-opts" id="mcq-${qi}">
+          ${(q.options || []).map((opt, oi) => `
+            <div class="mcq-opt" onclick="answerMCQ(${qi}, '${opt}', '${q.correct}', this, ${oi})">${opt}</div>
+          `).join('')}
+        </div>`).join('')}
+    </div>` : ''}
+    <div class="lesson-nav">
+      <button class="btn btn-secondary" onclick="navigate(-1)" ${mi===0 && li===0 ? 'disabled' : ''}>← Previous</button>
+      <button class="btn btn-complete" onclick="completeLesson()">${isDone ? '✓ Completed' : 'Mark complete ✓'}</button>
+      <button class="btn btn-primary" onclick="navigate(1)" ${mi===modules.length-1 && li===(modules[mi].lessons||[]).length-1 ? 'disabled' : ''}>Next →</button>
+    </div>`;
 
-  buildSidebarNav();
+  buildNav();
   saveProgress();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+function answerMCQ(qi, selected, correct, el, oi) {
+  if (mcqAnswered[qi]) return;
+  mcqAnswered[qi] = true;
+  const opts = document.querySelectorAll(`#mcq-${qi} .mcq-opt`);
+  opts.forEach(o => {
+    if (o.textContent.trim() === correct) o.classList.add('show-correct');
+  });
+  if (selected === correct) el.classList.add('correct');
+  else el.classList.add('wrong');
+}
+
 function navigate(dir) {
-  let mi = currentModule, li = currentLesson;
+  let mi = currentMod, li = currentLesson;
   if (dir === 1) {
-    if (li < SYLLABUS[mi].lessons.length - 1) li++;
-    else if (mi < SYLLABUS.length - 1) { mi++; li = 0; }
+    if (li < (modules[mi].lessons||[]).length - 1) li++;
+    else if (mi < modules.length - 1) { mi++; li = 0; }
   } else {
     if (li > 0) li--;
-    else if (mi > 0) { mi--; li = SYLLABUS[mi].lessons.length - 1; }
+    else if (mi > 0) { mi--; li = (modules[mi].lessons||[]).length - 1; }
   }
   loadLesson(mi, li);
 }
 
 async function completeLesson() {
-  const key = currentModule + '-' + currentLesson;
+  const key = currentMod + '-' + currentLesson;
   completedLessons.add(key);
-  document.getElementById('completeBtn').textContent = '✓ Completed';
-  buildSidebarNav();
+  updateProgress();
+  buildNav();
   await saveProgress();
-  setTimeout(() => navigate(1), 600);
+  setTimeout(() => navigate(1), 500);
 }
 
 function updateProgress() {
-  const pct = Math.round((completedLessons.size / totalLessons) * 100);
+  const total = modules.reduce((s,m) => s + (m.lessons?.length || 0), 0);
+  const pct = total > 0 ? Math.round((completedLessons.size / total) * 100) : 0;
   document.getElementById('progressPct').textContent = pct + '%';
   document.getElementById('progressFill').style.width = pct + '%';
 }
 
-// ── AI TEACHER CHAT ──
-document.getElementById('chatInput').addEventListener('keydown', (e) => {
+// AI Teacher Chat
+document.getElementById('chatInput').addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });
 
@@ -573,61 +391,42 @@ async function sendMessage() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
-
   input.value = '';
-  addChatBubble('user', text, studentName || 'You');
-
-  const sendBtn = document.getElementById('sendBtn');
-  sendBtn.disabled = true;
+  addBubble('user', text, studentName);
+  document.getElementById('sendBtn').disabled = true;
   document.getElementById('typingIndicator').style.display = 'block';
-
   chatHistory.push({ role: 'user', content: text });
 
-  const currentLessonTitle = SYLLABUS[currentModule].lessons[currentLesson].title;
-  const systemPrompt = `You are a personal AI teacher at Yashasvi Global Education, a decentralised university. You are teaching a student about Entrepreneurship & Business Design. The student is currently studying the lesson: "${currentLessonTitle}" in the module "${SYLLABUS[currentModule].module}". 
-
-Be encouraging, clear, and practical. Use simple English. Give real-world Indian examples when possible. Keep your answers concise (2-4 paragraphs max). If the student asks something unrelated to entrepreneurship or education, gently redirect them back to the topic.`;
+  const currentLessonTitle = modules[currentMod]?.lessons?.[currentLesson]?.title || 'current lesson';
+  const systemPrompt = `You are a personal AI teacher at Yashasvi Global Education. The student ${studentName} is studying "${currentCourse?.name}". Current lesson: "${currentLessonTitle}". Be encouraging, clear, and use practical Indian examples. Keep answers concise (2-3 paragraphs max).`;
 
   try {
-    const res = await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher", {
+    const res = await fetch(EDGE, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": KEY,
-        "Authorization": "Bearer " + KEY
-      },
-      body: JSON.stringify({
-        messages: chatHistory.slice(-10),
-        systemPrompt: systemPrompt
-      })
+      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: chatHistory.slice(-8), systemPrompt })
     });
-
     const data = await res.json();
     const reply = data.reply || "Sorry, I couldn't process that. Please try again.";
     chatHistory.push({ role: 'assistant', content: reply });
-    addChatBubble('ai', reply, 'AI Teacher');
+    addBubble('ai', reply, 'AI Teacher');
 
-    // Save to Supabase
     await fetch(BASE + "/ai_chat_history", {
-      method: "POST",
-      headers: HEADERS,
+      method: "POST", headers: HEADERS,
       body: JSON.stringify({ student_email: studentEmail, role: 'user', content: text })
     });
     await fetch(BASE + "/ai_chat_history", {
-      method: "POST",
-      headers: HEADERS,
+      method: "POST", headers: HEADERS,
       body: JSON.stringify({ student_email: studentEmail, role: 'assistant', content: reply })
     });
-
-  } catch (err) {
-    addChatBubble('ai', 'Sorry, I had trouble connecting. Please try again in a moment.', 'AI Teacher');
+  } catch (e) {
+    addBubble('ai', 'Sorry, connection issue. Please try again.', 'AI Teacher');
   }
-
-  sendBtn.disabled = false;
+  document.getElementById('sendBtn').disabled = false;
   document.getElementById('typingIndicator').style.display = 'none';
 }
 
-function addChatBubble(role, text, name) {
+function addBubble(role, text, name) {
   const msgs = document.getElementById('chatMessages');
   const div = document.createElement('div');
   div.className = 'chat-msg ' + role;
@@ -636,9 +435,41 @@ function addChatBubble(role, text, name) {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-function showEmailMsg(type, text) {
-  const m = document.getElementById('emailMessage');
-  m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+// Notifications
+async function checkNotifications() {
+  if (!studentEmail) return;
+  try {
+    const res = await fetch(BASE + "/notifications?select=*&student_email=ilike." + encodeURIComponent(studentEmail) + "&is_read=eq.false", { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      document.getElementById('bellBadge').textContent = data.length;
+      document.getElementById('bellBadge').style.display = 'flex';
+      const n = data[0];
+      if (confirm(`🔔 ${n.title}\n\n${n.message}\n\nClick OK to add this course to your syllabus!`)) {
+        await fetch(BASE + "/notifications?id=eq." + n.id, { method: "PATCH", headers: HEADERS, body: JSON.stringify({ is_read: true }) });
+        if (n.course_id) {
+          const cRes = await fetch(BASE + "/courses?select=name&id=eq." + n.course_id, { method: "GET", headers: HEADERS });
+          const cData = await cRes.json();
+          if (Array.isArray(cData) && cData.length > 0) {
+            await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(studentEmail), {
+              method: "PATCH", headers: HEADERS,
+              body: JSON.stringify({ selected_course: cData[0].name, track: cData[0].name })
+            });
+            alert('Course added to your syllabus! Refreshing…');
+            location.reload();
+          }
+        }
+        document.getElementById('bellBadge').style.display = 'none';
+      }
+    }
+  } catch (e) { console.error(e); }
+}
+
+document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function showLoginMsg(text) {
+  const m = document.getElementById('loginMsg');
+  m.className = 'msg-error'; m.textContent = text; m.style.display = 'block';
 }
 </script>
 </body>
