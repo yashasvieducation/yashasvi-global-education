@@ -112,6 +112,7 @@
     <div class="sidebar-item" onclick="switchPanel('courses')" id="tab-courses"><span class="s-icon">📚</span> Courses</div>
     <div class="sidebar-item" onclick="switchPanel('requests')" id="tab-requests"><span class="s-icon">🔔</span> Course Requests</div>
     <div class="sidebar-item" onclick="switchPanel('payments')" id="tab-payments"><span class="s-icon">💰</span> Payments</div>
+    <div class="sidebar-item" onclick="switchPanel('institutions')" id="tab-institutions"><span class="s-icon">🏫</span> Institutions</div>
   </div>
 
   <!-- Main -->
@@ -219,6 +220,18 @@
       <div id="requestsList"><p style="color:#5f6368;">Loading…</p></div>
     </div>
 
+    <!-- Institutions -->
+    <div class="panel" id="panel-institutions">
+      <div class="panel-title">Institutions</div>
+      <p style="font-size:14px; color:#5f6368; margin-bottom:20px;">Review and approve institution registration requests.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Type</th><th>Email</th><th>City</th><th>Plan</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="instList"><tr><td colspan="7" style="text-align:center; color:#5f6368; padding:24px;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- Payments -->
     <div class="panel" id="panel-payments">
       <div class="panel-title">Payments</div>
@@ -268,6 +281,7 @@ function switchPanel(name) {
   if (name === 'courses') loadCourses();
   if (name === 'requests') loadRequests();
   if (name === 'payments') loadPayments();
+  if (name === 'institutions') loadInstitutions();
 }
 
 // Dashboard
@@ -500,6 +514,45 @@ async function verifyPayment(id, email) {
 function statusBadge(status) {
   const map = { 'form_submitted': 'badge-grey', 'exam_passed': 'badge-blue', 'admitted': 'badge-green', 'certified': 'badge-green', 'final_exam_passed': 'badge-blue', 'internship_passed': 'badge-blue' };
   return map[status] || 'badge-grey';
+}
+
+async function loadInstitutions() {
+  try {
+    const res = await fetch(BASE + "/institutions?select=*&order=created_at.desc", { headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      document.getElementById("instList").innerHTML = "<tr><td colspan='7' style='text-align:center; color:#5f6368; padding:24px;'>No institution requests yet.</td></tr>";
+      return;
+    }
+    document.getElementById("instList").innerHTML = data.map(inst => {
+      const actions = !inst.verified_by_admin
+        ? `<button class="btn btn-success btn-sm" onclick="verifyInstitution('${inst.id}','${inst.email}','${inst.name}')">Accept</button> <button class="btn btn-danger btn-sm" onclick="rejectInstitution('${inst.id}')">Reject</button>`
+        : `<a href="/institution-dashboard.html?email=${inst.email}" class="btn btn-outline btn-sm" target="_blank">Dashboard</a>`;
+      return "<tr><td><strong>" + inst.name + "</strong></td><td><span class='badge badge-blue'>" + inst.type + "</span></td><td style='font-size:12px;'>" + inst.email + "</td><td>" + (inst.city||"") + "</td><td><span class='badge " + (inst.plan==="paid"?"badge-blue":"badge-green") + "'>" + inst.plan + "</span></td><td><span class='badge " + (inst.verified_by_admin?"badge-green":"badge-grey") + "'>" + (inst.verified_by_admin?"Verified":"Pending") + "</span></td><td>" + actions + "</td></tr>";
+    }).join("");
+  } catch(e) { console.error(e); }
+}
+
+async function verifyInstitution(id, email, name) {
+  const prefix = name.substring(0,3).toUpperCase();
+  const rand = Math.random().toString(36).substring(2,6).toUpperCase();
+  const refCode = "YGE-" + prefix + "-" + rand;
+  await fetch(BASE + "/institutions?id=eq." + id, {
+    method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" },
+    body: JSON.stringify({ verified_by_admin: true, is_active: true, is_verified: true, referral_code: refCode })
+  });
+  showToast("Institution verified! Code: " + refCode);
+  loadInstitutions();
+}
+
+async function rejectInstitution(id) {
+  if (!confirm("Reject this institution?")) return;
+  await fetch(BASE + "/institutions?id=eq." + id, {
+    method: "PATCH", headers: HEADERS,
+    body: JSON.stringify({ verified_by_admin: false, is_active: false })
+  });
+  showToast("Institution rejected.");
+  loadInstitutions();
 }
 
 function showToast(msg) {

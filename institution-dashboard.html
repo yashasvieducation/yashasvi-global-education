@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Institution Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+  .nav-inst { font-size: 13px; color: #5f6368; }
+
+  #loginWrap { max-width: 480px; margin: 100px auto; padding: 0 24px; }
+  #loginWrap h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+  #loginWrap p { font-size: 15px; color: #5f6368; margin-bottom: 24px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; outline: none; }
+  .field input:focus { border-color: #1a73e8; }
+  .field { margin-bottom: 16px; }
+  #loginMsg { margin-top: 12px; padding: 10px; border-radius: 4px; font-size: 14px; display: none; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
+
+  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 64px); }
+  .sidebar { background: #fff; border-right: 1px solid #e8eaed; padding: 16px 0; }
+  .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 14px; color: #202124; cursor: pointer; transition: background 0.15s; }
+  .sidebar-item:hover { background: #f1f3f4; }
+  .sidebar-item.active { background: #e8f0fe; color: #1a73e8; font-weight: 500; }
+  .s-icon { font-size: 18px; }
+  .main { padding: 24px; overflow-y: auto; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  @media (max-width: 800px) { .stats-grid { grid-template-columns: 1fr 1fr; } .layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
+  .stat-card { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 18px 20px; }
+  .stat-num { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #1a73e8; }
+  .stat-label { font-size: 12px; color: #5f6368; margin-top: 2px; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .panel-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 400; margin-bottom: 20px; }
+
+  .card { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+  .card h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; margin-bottom: 14px; }
+
+  .table-wrap { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: #f8f9fa; padding: 10px 16px; text-align: left; font-size: 12px; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid #e8eaed; }
+  td { padding: 12px 16px; border-bottom: 1px solid #f1f3f4; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8f9fa; }
+
+  .badge { display: inline-block; border-radius: 100px; padding: 3px 10px; font-size: 12px; font-weight: 500; }
+  .badge-green { background: #e6f4ea; color: #137333; }
+  .badge-blue { background: #e8f0fe; color: #1a73e8; }
+  .badge-grey { background: #f1f3f4; color: #5f6368; }
+
+  .code-box { font-family: monospace; background: #f1f3f4; border-radius: 4px; padding: 4px 10px; font-size: 14px; color: #202124; display: inline-block; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
+  .f-field { margin-bottom: 12px; }
+  .f-field label { display: block; font-size: 13px; color: #5f6368; margin-bottom: 4px; }
+  .f-field input, .f-field select { width: 100%; padding: 10px 12px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; outline: none; }
+  .f-field input:focus { border-color: #1a73e8; }
+
+  .btn { border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .btn-primary { background: #1a73e8; color: #fff; }
+  .btn-primary:hover { background: #1765cc; }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-outline { background: #fff; color: #1a73e8; border: 1.5px solid #1a73e8; }
+
+  .referral-code-card { background: #e8f0fe; border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .ref-label { font-size: 13px; color: #5f6368; margin-bottom: 4px; }
+  .ref-code { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 500; color: #1a73e8; letter-spacing: 2px; }
+  .copy-btn { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 8px 16px; font-size: 13px; cursor: pointer; font-family: 'Google Sans', Arial, sans-serif; }
+
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #202124; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 9999; display: none; }
+  .notice { border-radius: 8px; padding: 12px 16px; font-size: 14px; display: flex; gap: 10px; line-height: 1.5; margin-bottom: 16px; }
+  .notice.blue { background: #e8f0fe; color: #1a73e8; }
+  .notice span { font-size: 16px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
+  <span class="nav-inst" id="navInst"></span>
+</nav>
+
+<!-- Login -->
+<div id="loginWrap">
+  <h2>Institution Login</h2>
+  <p>Enter your registered institution email to access your dashboard.</p>
+  <div class="field">
+    <label>Institution email</label>
+    <input type="email" id="loginEmail" placeholder="principal@school.edu.in">
+  </div>
+  <button class="btn btn-primary" id="loginBtn" style="width:100%; padding:12px;" onclick="doLogin()">Access dashboard →</button>
+  <div id="loginMsg"></div>
+</div>
+
+<!-- Dashboard -->
+<div class="layout" id="dashLayout" style="display:none;">
+  <div class="sidebar">
+    <div class="sidebar-item active" onclick="switchPanel('overview')" id="tab-overview"><span class="s-icon">📊</span> Overview</div>
+    <div class="sidebar-item" onclick="switchPanel('students')" id="tab-students"><span class="s-icon">👥</span> Students / Users</div>
+    <div class="sidebar-item" onclick="switchPanel('codes')" id="tab-codes"><span class="s-icon">🔑</span> Referral Codes</div>
+    <div class="sidebar-item" onclick="switchPanel('settings')" id="tab-settings"><span class="s-icon">⚙️</span> Settings</div>
+  </div>
+
+  <div class="main">
+
+    <!-- Overview -->
+    <div class="panel active" id="panel-overview">
+      <div class="panel-title" id="instNameTitle">Dashboard</div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total students</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-active">0</div><div class="stat-label">Active learners</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-limit">0</div><div class="stat-label">User limit</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-certified">0</div><div class="stat-label">Certified</div></div>
+      </div>
+
+      <div class="referral-code-card">
+        <div>
+          <div class="ref-label">Your institution referral code</div>
+          <div class="ref-code" id="mainRefCode">—</div>
+          <div style="font-size:12px; color:#5f6368; margin-top:4px;">Share this code with students to give them access</div>
+        </div>
+        <button class="copy-btn" onclick="copyCode()">📋 Copy code</button>
+      </div>
+
+      <div class="notice blue">
+        <span>ℹ️</span>
+        <div>Students use your referral code on the admission form to access free courses. Each student gets a unique personal code generated by you.</div>
+      </div>
+    </div>
+
+    <!-- Students -->
+    <div class="panel" id="panel-students">
+      <div class="panel-title">Students / Users</div>
+
+      <div class="card">
+        <h3>➕ Add student / user</h3>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Full name *</label>
+            <input type="text" id="sName" placeholder="Student name">
+          </div>
+          <div class="f-field">
+            <label>Email *</label>
+            <input type="email" id="sEmail" placeholder="student@email.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Roll No / Employee ID</label>
+            <input type="text" id="sRoll" placeholder="e.g. 2024001">
+          </div>
+          <div class="f-field">
+            <label>Class / Department</label>
+            <input type="text" id="sDept" placeholder="e.g. Class 10 / HR Dept">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="addStudent()">Add & generate code</button>
+        <div id="addMsg" style="margin-top:12px; font-size:14px; display:none;"></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Class/Dept</th><th>Referral Code</th><th>Status</th></tr></thead>
+          <tbody id="studentsList"><tr><td colspan="5" style="text-align:center; color:#5f6368; padding:24px;">No students added yet</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Codes -->
+    <div class="panel" id="panel-codes">
+      <div class="panel-title">Referral Codes</div>
+      <div class="notice blue">
+        <span>ℹ️</span>
+        <div>Each student gets a unique referral code. They enter this code during admission to get free access to courses. Codes are single-use — one student per code.</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Student</th><th>Code</th><th>Used</th><th>Actions</th></tr></thead>
+          <tbody id="codesList"><tr><td colspan="4" style="text-align:center; color:#5f6368; padding:24px;">No codes generated yet</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="panel" id="panel-settings">
+      <div class="panel-title">Institution Settings</div>
+      <div class="card" id="settingsCard">
+        <p style="color:#5f6368;">Loading…</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+
+let instData = null;
+
+// Auto-fill from URL
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('email')) document.getElementById('loginEmail').value = urlParams.get('email');
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  if (!email) { showLoginMsg('Please enter your email.'); return; }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Loading…';
+  try {
+    const res = await fetch(BASE + "/institutions?select=*&email=eq." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showLoginMsg('No institution found with this email. Please register first.');
+      btn.disabled = false; btn.textContent = 'Access dashboard →'; return;
+    }
+    instData = data[0];
+    if (!instData.verified_by_admin) {
+      showLoginMsg('Your institution is pending verification. Our team will verify within 24-48 hours.');
+      btn.disabled = false; btn.textContent = 'Access dashboard →'; return;
+    }
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('dashLayout').style.display = 'grid';
+    document.getElementById('navInst').textContent = instData.name;
+    document.getElementById('instNameTitle').textContent = instData.name;
+    document.getElementById('mainRefCode').textContent = instData.referral_code || '—';
+    document.getElementById('stat-limit').textContent = instData.user_limit;
+    await loadStudents();
+  } catch (err) {
+    showLoginMsg('Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Access dashboard →';
+  }
+}
+
+function switchPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'students') loadStudents();
+  if (name === 'codes') loadCodes();
+  if (name === 'settings') loadSettings();
+}
+
+function generateCode() {
+  const prefix = (instData?.referral_code || 'YGE').substring(0, 3).toUpperCase();
+  const rand = Math.random().toString(36).substring(2, 7).toUpperCase();
+  return prefix + '-' + rand;
+}
+
+async function addStudent() {
+  const name = document.getElementById('sName').value.trim();
+  const email = document.getElementById('sEmail').value.trim().toLowerCase();
+  const roll = document.getElementById('sRoll').value.trim();
+  const dept = document.getElementById('sDept').value.trim();
+  if (!name || !email) { showAddMsg('error', 'Name and email are required.'); return; }
+
+  const code = generateCode();
+  try {
+    const res = await fetch(BASE + "/institution_students", {
+      method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({ institution_id: instData.id, referral_code: code, student_name: name, student_email: email, student_roll_no: roll, grade_or_dept: dept, registered_by: 'institution', admission_status: 'pending' })
+    });
+    if (!res.ok) { showAddMsg('error', 'Failed to add student.'); return; }
+
+    // Update users count
+    await fetch(BASE + "/institutions?id=eq." + instData.id, {
+      method: "PATCH", headers: HEADERS,
+      body: JSON.stringify({ users_used: (instData.users_used || 0) + 1 })
+    });
+    instData.users_used = (instData.users_used || 0) + 1;
+
+    showAddMsg('success', '✅ Student added! Code: ' + code);
+    document.getElementById('sName').value = '';
+    document.getElementById('sEmail').value = '';
+    document.getElementById('sRoll').value = '';
+    document.getElementById('sDept').value = '';
+    loadStudents();
+  } catch (e) { showAddMsg('error', 'Error: ' + e.message); }
+}
+
+async function loadStudents() {
+  try {
+    const res = await fetch(BASE + "/institution_students?select=*&institution_id=eq." + instData.id + "&order=created_at.desc", { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) return;
+    document.getElementById('stat-total').textContent = data.length;
+    document.getElementById('stat-active').textContent = data.filter(s => s.admission_status === 'active').length;
+    document.getElementById('stat-certified').textContent = data.filter(s => s.admission_status === 'certified').length;
+    document.getElementById('studentsList').innerHTML = data.map(s => `
+      <tr>
+        <td><strong>${s.student_name}</strong></td>
+        <td style="font-size:12px;">${s.student_email}</td>
+        <td>${s.grade_or_dept || '—'}</td>
+        <td><span class="code-box">${s.referral_code}</span> <button class="btn btn-sm btn-outline" onclick="navigator.clipboard.writeText('${s.referral_code}').then(()=>showToast('Code copied!'))">Copy</button></td>
+        <td><span class="badge ${s.admission_status === 'certified' ? 'badge-green' : s.admission_status === 'active' ? 'badge-blue' : 'badge-grey'}">${s.admission_status}</span></td>
+      </tr>`).join('');
+  } catch(e) {}
+}
+
+async function loadCodes() {
+  try {
+    const res = await fetch(BASE + "/institution_students?select=student_name,referral_code,student_email,admission_status&institution_id=eq." + instData.id + "&order=created_at.desc", { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) return;
+    document.getElementById('codesList').innerHTML = data.map(s => `
+      <tr>
+        <td>${s.student_name}</td>
+        <td><span class="code-box">${s.referral_code}</span></td>
+        <td><span class="badge ${s.admission_status !== 'pending' ? 'badge-green' : 'badge-grey'}">${s.admission_status !== 'pending' ? '✅ Used' : '⏳ Unused'}</span></td>
+        <td><button class="btn btn-sm btn-outline" onclick="navigator.clipboard.writeText('${s.referral_code}').then(()=>showToast('Code copied!'))">Copy</button></td>
+      </tr>`).join('');
+  } catch(e) {}
+}
+
+function loadSettings() {
+  document.getElementById('settingsCard').innerHTML = `
+    <h3>Institution Info</h3>
+    <table style="font-size:14px; width:100%; border-collapse:collapse;">
+      <tr><td style="padding:8px 0; color:#5f6368; width:140px;">Name</td><td><strong>${instData.name}</strong></td></tr>
+      <tr><td style="padding:8px 0; color:#5f6368;">Type</td><td><span class="badge badge-blue">${instData.type}</span></td></tr>
+      <tr><td style="padding:8px 0; color:#5f6368;">Email</td><td>${instData.email}</td></tr>
+      <tr><td style="padding:8px 0; color:#5f6368;">City</td><td>${instData.city}, ${instData.state}</td></tr>
+      <tr><td style="padding:8px 0; color:#5f6368;">Plan</td><td><span class="badge ${instData.plan === 'paid' ? 'badge-blue' : 'badge-green'}">${instData.plan}</span></td></tr>
+      <tr><td style="padding:8px 0; color:#5f6368;">User limit</td><td>${instData.users_used || 0} / ${instData.user_limit}</td></tr>
+      <tr><td style="padding:8px 0; color:#5f6368;">Referral code</td><td><span class="code-box">${instData.referral_code}</span></td></tr>
+      <tr><td style="padding:8px 0; color:#5f6368;">Status</td><td><span class="badge badge-green">✅ Verified</span></td></tr>
+    </table>`;
+}
+
+function copyCode() {
+  const code = instData?.referral_code;
+  if (code) navigator.clipboard.writeText(code).then(() => showToast('Referral code copied!'));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2500);
+}
+
+function showLoginMsg(text) {
+  const m = document.getElementById('loginMsg');
+  m.className = 'msg-error'; m.textContent = text; m.style.display = 'block';
+}
+
+function showAddMsg(type, text) {
+  const m = document.getElementById('addMsg');
+  m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+}
+
+document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+</script>
+</body>
+</html>
