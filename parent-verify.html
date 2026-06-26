@@ -213,7 +213,7 @@
       btn.textContent = 'Sending email…';
 
       // Build verification URL
-      const verifyUrl = 'https://yashasvi-global-education-cpp8dxu9n-yashasviglobaleducation.vercel.app/parent-verify.html?token=' + s.verification_token;
+      const verifyUrl = 'https://yashasvi-global-education.vercel.app/parent-verify.html?token=' + s.verification_token;
 
       // Send email via Resend
       const emailRes = await fetch('https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/send-verification-email', {
