@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Complete Enrollment</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+  .hero { padding: 48px 24px 32px; max-width: 600px; margin: 0 auto; }
+  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 32px; font-weight: 400; color: #202124; line-height: 1.25; margin-bottom: 10px; }
+  .hero p { font-size: 15px; color: #5f6368; line-height: 1.6; }
+  .wrap { max-width: 600px; margin: 0 auto; padding: 0 24px 80px; }
+  .card { border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; margin-bottom: 20px; background: #fff; }
+  .card h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 16px; color: #202124; }
+  .amount-box { background: #e6f4ea; border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .amount-label { font-size: 14px; color: #5f6368; }
+  .amount-value { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 500; color: #137333; }
+  .wallet-box { background: #f8f9fa; border: 1px solid #e8eaed; border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+  .wallet-label { font-size: 12px; color: #5f6368; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+  .wallet-addr { font-family: monospace; font-size: 14px; color: #202124; word-break: break-all; line-height: 1.5; }
+  .copy-btn { background: #e8f0fe; color: #1a73e8; border: none; border-radius: 4px; padding: 6px 14px; font-size: 13px; cursor: pointer; margin-top: 8px; font-family: 'Google Sans', Arial, sans-serif; }
+  .steps-list { list-style: none; margin-bottom: 16px; }
+  .steps-list li { display: flex; gap: 12px; margin-bottom: 12px; font-size: 14px; align-items: flex-start; line-height: 1.5; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; background: #1a73e8; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; outline: none; }
+  .field input:focus { border-color: #1a73e8; }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 13px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; width: 100%; }
+  .btn-primary:hover { background: #1765cc; }
+  .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; }
+  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+  .notice { border-radius: 8px; padding: 14px 16px; font-size: 13px; display: flex; gap: 10px; line-height: 1.5; margin-bottom: 16px; }
+  .notice.warn { background: #fef7e0; color: #b06000; }
+  .notice.blue { background: #e8f0fe; color: #1a73e8; }
+  .notice span { font-size: 18px; flex-shrink: 0; }
+  .feature-list { list-style: none; }
+  .feature-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #202124; padding: 6px 0; }
+  .feature-list li::before { content: '✓'; color: #34a853; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Final Step — Enrollment</div>
+  <h1>Complete your enrollment</h1>
+  <p>Pay the one-time course fee to unlock full access to your course, AI teacher, and certification.</p>
+</div>
+
+<div class="wrap">
+
+  <div class="card">
+    <h3>What you get</h3>
+    <ul class="feature-list">
+      <li>Full AI-generated course content</li>
+      <li>Personal 1-on-1 AI Teacher (lifetime)</li>
+      <li>Quarterly + Final exams</li>
+      <li>Virtual internship</li>
+      <li>Globally verified certificate</li>
+      <li>Business Guidance Platform access</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>💳 Pay with USDT (TRC-20)</h3>
+
+    <div class="amount-box">
+      <div class="amount-label">Course fee — one time</div>
+      <div class="amount-value">$10 <span style="font-size:16px; color:#5f6368; font-weight:400;">USDT</span></div>
+    </div>
+
+    <div class="wallet-box">
+      <div class="wallet-label">Send USDT (TRC-20) to this address only</div>
+      <div class="wallet-addr">TCC6dozccZ3hxF5LSbryNnGBgdLBaMcxKb</div>
+      <button class="copy-btn" onclick="copyAddr()">📋 Copy address</button>
+    </div>
+
+    <ul class="steps-list">
+      <li><span class="step-num">1</span>Open your crypto wallet (Trust Wallet, Binance, etc.)</li>
+      <li><span class="step-num">2</span>Send exactly <strong>10 USDT on TRC-20 network</strong> to the address above</li>
+      <li><span class="step-num">3</span>Copy your Transaction ID (TxID) after sending</li>
+      <li><span class="step-num">4</span>Enter your email and TxID below and submit</li>
+    </ul>
+
+    <div class="notice warn">
+      <span>⚠️</span>
+      <div>Only send USDT on <strong>TRC-20 (Tron)</strong> network. Sending on ERC-20 or BEP-20 will result in loss of funds.</div>
+    </div>
+
+    <div class="field">
+      <label>Your student email</label>
+      <input type="email" id="payEmail" placeholder="you@example.com">
+    </div>
+    <div class="field">
+      <label>Transaction ID (TxID)</label>
+      <input type="text" id="payTxId" placeholder="Paste your transaction ID here">
+    </div>
+
+    <button class="btn-primary" id="payBtn" onclick="submitPayment()">Submit payment & unlock course</button>
+    <div id="message"></div>
+  </div>
+
+  <div class="notice blue">
+    <span>ℹ️</span>
+    <div>Your payment will be verified within a few minutes. Once verified, you'll have immediate access to your course dashboard.</div>
+  </div>
+
+</div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+
+// Auto-fill from URL
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('email')) document.getElementById('payEmail').value = urlParams.get('email');
+
+function copyAddr() {
+  navigator.clipboard.writeText('TCC6dozccZ3hxF5LSbryNnGBgdLBaMcxKb').then(() => alert('Address copied!'));
+}
+
+async function submitPayment() {
+  const email = document.getElementById('payEmail').value.trim().toLowerCase();
+  const txId = document.getElementById('payTxId').value.trim();
+  if (!email || !txId) { showMsg('error', 'Please enter your email and transaction ID.'); return; }
+
+  const btn = document.getElementById('payBtn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+
+  try {
+    const res = await fetch(BASE + "/students?select=id,admission_status&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showMsg('error', 'No application found for this email.');
+      btn.disabled = false; btn.textContent = 'Submit payment & unlock course'; return;
+    }
+
+    // Save payment
+    await fetch(BASE + "/payments", {
+      method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({ student_email: email, amount_usdt: 10, tx_id: txId, wallet_address: 'TCC6dozccZ3hxF5LSbryNnGBgdLBaMcxKb', status: 'pending_verification' })
+    });
+
+    // Admit student
+    await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(email), {
+      method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({ fee_paid: true, admission_status: 'admitted' })
+    });
+
+    showMsg('success', '✅ Payment submitted! Your course access is now active. Redirecting to your course…');
+    btn.textContent = 'Submitted ✓';
+
+    setTimeout(() => {
+      window.location.href = '/syllabus.html?email=' + encodeURIComponent(email);
+    }, 2500);
+
+  } catch (err) {
+    showMsg('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Submit payment & unlock course';
+  }
+}
+
+function showMsg(type, text) {
+  const m = document.getElementById('message');
+  m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+}
+</script>
+</body>
+</html>

@@ -8,569 +8,423 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
-
-  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; position: sticky; top: 0; background: #fff; z-index: 10; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
   .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
   .nav-logo span { color: #1a73e8; }
   .nav-timer { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; color: #c5221f; display: none; }
-
   .hero { padding: 48px 24px 32px; max-width: 760px; margin: 0 auto; }
   .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
   .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 32px; font-weight: 400; color: #202124; line-height: 1.25; margin-bottom: 10px; }
   .hero p { font-size: 15px; color: #5f6368; line-height: 1.6; max-width: 560px; }
-
   .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
-
-  /* Email step */
   .field { margin-bottom: 20px; }
   .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
-  .field input, .field textarea { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; color: #202124; outline: none; transition: border-color 0.15s; }
-  .field input:focus, .field textarea:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.12); }
-  .field textarea { resize: vertical; min-height: 100px; }
-
-  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; min-width: 160px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; outline: none; }
+  .field input:focus { border-color: #1a73e8; }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; min-width: 160px; }
   .btn-primary:hover { background: #1765cc; }
   .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
-
-  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; line-height: 1.5; }
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; }
   .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
   .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
   .msg-info { background: #e8f0fe; color: #1a73e8; display: block !important; }
-
-  /* Exam area */
   #examArea { display: none; }
-
-  .progress-wrap { margin-bottom: 28px; }
+  .progress-wrap { margin-bottom: 24px; }
   .progress-label { display: flex; justify-content: space-between; font-size: 13px; color: #5f6368; margin-bottom: 6px; }
-  .progress-bar-bg { background: #f1f3f4; border-radius: 100px; height: 4px; }
+  .progress-bg { background: #f1f3f4; border-radius: 100px; height: 4px; }
   .progress-bar { background: #1a73e8; height: 4px; border-radius: 100px; transition: width 0.3s; width: 0%; }
-
-  .section-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #e8eaed; }
-
-  .q-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 22px 24px; margin-bottom: 16px; }
+  .section-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #e8eaed; }
+  .q-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 22px 24px; margin-bottom: 14px; }
   .q-label { font-size: 12px; font-weight: 500; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
   .q-text { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; color: #202124; margin-bottom: 16px; line-height: 1.5; }
   .options { display: flex; flex-direction: column; gap: 8px; }
-  .opt-btn { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1.5px solid #dadce0; border-radius: 4px; background: #fff; color: #202124; cursor: pointer; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; text-align: left; transition: border-color 0.15s, background 0.15s; }
+  .opt-btn { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1.5px solid #dadce0; border-radius: 4px; background: #fff; color: #202124; cursor: pointer; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; text-align: left; transition: all 0.15s; }
   .opt-btn:hover { border-color: #1a73e8; background: #f8f9ff; }
   .opt-btn.selected { border-color: #1a73e8; background: #e8f0fe; color: #1a73e8; font-weight: 500; }
-  .opt-circle { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #dadce0; flex-shrink: 0; transition: all 0.15s; }
+  .opt-circle { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #dadce0; flex-shrink: 0; }
   .opt-btn.selected .opt-circle { border-color: #1a73e8; background: #1a73e8; }
-
-  .submit-row { margin-top: 32px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .field textarea { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; outline: none; resize: vertical; min-height: 100px; }
+  .field textarea:focus { border-color: #1a73e8; }
+  .submit-row { margin-top: 28px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
   .answered-info { font-size: 13px; color: #5f6368; }
-
-  /* Result */
-  #resultArea { display: none; }
-  .result-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 32px; text-align: center; margin-bottom: 20px; }
-  .result-score { font-family: 'Google Sans', Arial, sans-serif; font-size: 56px; font-weight: 400; margin-bottom: 4px; }
-  .result-label { font-size: 16px; color: #5f6368; margin-bottom: 20px; }
-  .result-badge { display: inline-block; padding: 6px 20px; border-radius: 100px; font-size: 15px; font-weight: 500; font-family: 'Google Sans', Arial, sans-serif; }
-  .pass { color: #137333; } .pass .result-badge { background: #e6f4ea; color: #137333; }
-  .fail { color: #c5221f; } .fail .result-badge { background: #fce8e6; color: #c5221f; }
-
-  .feedback-section { text-align: left; margin-top: 24px; }
-  .feedback-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; }
-  .feedback-q { font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
-  .feedback-ans { font-size: 14px; color: #202124; margin-bottom: 6px; }
-  .feedback-comment { font-size: 13px; color: #1a73e8; line-height: 1.5; }
-  .score-chip { display: inline-block; background: #f1f3f4; border-radius: 100px; padding: 2px 10px; font-size: 12px; color: #5f6368; margin-left: 8px; }
-
-  .notice { background: #e8f0fe; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a73e8; display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; margin-top: 20px; }
+  .diff-badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 100px; padding: 6px 16px; font-size: 14px; font-weight: 500; margin-bottom: 20px; font-family: 'Google Sans', Arial, sans-serif; }
+  .diff-basic { background: #e6f4ea; color: #137333; }
+  .diff-normal { background: #e8f0fe; color: #1a73e8; }
+  .diff-extreme { background: #fce8e6; color: #c5221f; }
+  .generating-msg { text-align: center; padding: 48px 24px; }
+  .generating-msg .spin { font-size: 40px; animation: spin 1s linear infinite; display: block; margin-bottom: 16px; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .result-card { border-radius: 8px; padding: 32px; text-align: center; margin-bottom: 20px; }
+  .result-score { font-family: 'Google Sans', Arial, sans-serif; font-size: 64px; font-weight: 400; margin-bottom: 4px; }
+  .notice { border-radius: 8px; padding: 14px 16px; font-size: 14px; display: flex; gap: 10px; line-height: 1.5; margin-top: 16px; }
   .notice span { font-size: 18px; flex-shrink: 0; }
-
-  .locked-banner { background: #fce8e6; border-radius: 8px; padding: 20px 24px; font-size: 15px; color: #c5221f; text-align: center; margin-top: 8px; line-height: 1.6; }
-  .locked-banner strong { display: block; font-size: 18px; margin-bottom: 6px; font-family: 'Google Sans', Arial, sans-serif; }
+  .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .score-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 16px; }
+  .score-item .s-label { font-size: 12px; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .score-item .s-value { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; color: #202124; }
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <a class="nav-logo" href="#">Yashasvi <span>Global Education</span></a>
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
   <div class="nav-timer" id="navTimer">60:00</div>
 </nav>
 
 <div class="hero">
-  <div class="hero-label">Entrance Exam — Entrepreneurship & Business Design</div>
+  <div class="hero-label">Entrance Exam</div>
   <h1>Admission entrance exam</h1>
-  <p>10 multiple choice questions and 3 subjective questions. 60 minutes total. Minimum 70% to qualify for admission.</p>
+  <p>AI-generated questions based on your selected difficulty. Pass or fail — you'll still be enrolled. Your score determines your starting level.</p>
 </div>
 
 <div class="wrap">
 
-  <!-- Email Step -->
   <div id="emailStep">
     <div class="field">
       <label>Student email address</label>
       <input type="email" id="studentEmail" placeholder="you@example.com" autocomplete="email">
     </div>
-    <button class="btn-primary" id="startBtn">Start exam</button>
+    <button class="btn-primary" id="startBtn">Load my exam →</button>
     <div id="message"></div>
   </div>
 
-  <!-- Exam Area -->
+  <div id="generatingArea" style="display:none;">
+    <div class="generating-msg">
+      <span class="spin">⚙️</span>
+      <h2 style="font-family:'Google Sans',Arial,sans-serif; font-size:22px; font-weight:400; margin-bottom:8px;">Generating your exam…</h2>
+      <p style="color:#5f6368; font-size:15px;">AI is creating personalised questions based on your course and difficulty level. This takes about 15 seconds.</p>
+    </div>
+  </div>
+
   <div id="examArea">
+    <div id="diffBadgeWrap"></div>
     <div class="progress-wrap">
       <div class="progress-label">
-        <span id="progressText">0 of 13 answered</span>
+        <span id="progressText">0 answered</span>
         <span id="timerText" style="color:#c5221f; font-weight:500;">60:00</span>
       </div>
-      <div class="progress-bar-bg"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="progress-bg"><div class="progress-bar" id="progressBar"></div></div>
     </div>
-
-    <div class="section-title">Part A — Multiple Choice (10 questions)</div>
-
-    <!-- MCQ Questions -->
-    <div class="q-card">
-      <div class="q-label">Question 1 of 10</div>
-      <div class="q-text">What is the primary goal of an entrepreneur?</div>
-      <div class="options" data-q="m0">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>To get a stable job</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>To identify problems and create value-based solutions</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>To invest in stock markets</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>To copy existing businesses</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 2 of 10</div>
-      <div class="q-text">Which of the following best describes a "business model"?</div>
-      <div class="options" data-q="m1">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>A physical model of a shop</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>A plan for how a business creates, delivers, and captures value</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>A list of employees</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>A government registration document</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 3 of 10</div>
-      <div class="q-text">What does "MVP" stand for in the startup world?</div>
-      <div class="options" data-q="m2">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>Most Valuable Player</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>Minimum Viable Product</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Maximum Value Proposal</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Market Value Percentage</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 4 of 10</div>
-      <div class="q-text">Which of these is NOT a source of startup funding?</div>
-      <div class="options" data-q="m3">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>Angel investors</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>Venture capital</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Monthly electricity bill</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Bootstrapping</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 5 of 10</div>
-      <div class="q-text">What is "market research" used for in business?</div>
-      <div class="options" data-q="m4">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>To decorate the office</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>To understand customer needs, competitors, and market opportunities</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>To hire employees</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>To apply for bank loans only</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 6 of 10</div>
-      <div class="q-text">What does "ROI" stand for?</div>
-      <div class="options" data-q="m5">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>Return on Investment</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>Rate of Interest</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Risk of Investment</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Record of Income</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 7 of 10</div>
-      <div class="q-text">Which document summarises a business's goals, strategies, and financial projections?</div>
-      <div class="options" data-q="m6">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>Resume</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>Business plan</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Tax return</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Purchase invoice</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 8 of 10</div>
-      <div class="q-text">What is "cash flow" in a business context?</div>
-      <div class="options" data-q="m7">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>The amount of physical cash kept in the office</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>The movement of money in and out of a business over time</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Profit earned in one year</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Total number of customers</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 9 of 10</div>
-      <div class="q-text">Which of the following is an example of a "B2B" (Business to Business) model?</div>
-      <div class="options" data-q="m8">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>A restaurant selling food to customers</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>A software company selling tools to other companies</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>An individual selling clothes on Instagram</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>A student buying a laptop</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 10 of 10</div>
-      <div class="q-text">What is "branding" in business?</div>
-      <div class="options" data-q="m9">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>The process of burning a logo onto a product</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>Creating a unique identity, image, and perception for a business in customers' minds</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Registering a company name</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Printing business cards</button>
-      </div>
-    </div>
-
-    <div class="section-title">Part B — Subjective (3 questions · AI graded)</div>
-
-    <div class="q-card">
-      <div class="q-label">Subjective Question 1</div>
-      <div class="q-text">You want to start a small food business in your city with ₹10,000. Describe your plan: What will you sell, who are your customers, and how will you make a profit?</div>
-      <div class="field" style="margin:0;">
-        <textarea id="s0" placeholder="Write your answer here (minimum 50 words)..." rows="5"></textarea>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Subjective Question 2</div>
-      <div class="q-text">What do you think is the biggest challenge a first-time entrepreneur faces, and how would you overcome it?</div>
-      <div class="field" style="margin:0;">
-        <textarea id="s1" placeholder="Write your answer here (minimum 50 words)..." rows="5"></textarea>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Subjective Question 3</div>
-      <div class="q-text">Imagine you have an idea for a mobile app that helps farmers sell vegetables directly to customers. What steps would you take to turn this idea into a real business?</div>
-      <div class="field" style="margin:0;">
-        <textarea id="s2" placeholder="Write your answer here (minimum 50 words)..." rows="5"></textarea>
-      </div>
-    </div>
-
+    <div id="questionsArea"></div>
     <div class="submit-row">
       <button class="btn-primary" id="submitExamBtn">Submit exam</button>
-      <span class="answered-info" id="answeredInfo">0 of 13 answered</span>
+      <span class="answered-info" id="answeredInfo">Answer all questions</span>
     </div>
     <div id="message"></div>
   </div>
 
-  <!-- Result Area -->
   <div id="resultArea"></div>
-
 </div>
 
 <script>
-  const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
-  const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
-  const HEADERS = { "apikey": ANON_KEY, "Authorization": "Bearer " + ANON_KEY, "Content-Type": "application/json" };
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
 
-  const MCQ_ANSWERS = { m0:'b', m1:'b', m2:'b', m3:'c', m4:'b', m5:'a', m6:'b', m7:'b', m8:'b', m9:'b' };
-  const MCQ_LABELS = { m0:'Q1', m1:'Q2', m2:'Q3', m3:'Q4', m4:'Q5', m5:'Q6', m6:'Q7', m7:'Q8', m8:'Q9', m9:'Q10' };
+let studentEmail = "", studentId = "", difficulty = "normal", courseName = "";
+let questions = [], mcqAnswers = {}, timerInterval = null, secondsLeft = 3600;
+let totalQ = 0;
 
-  let studentEmail = "";
-  let studentId = "";
-  let mcqAnswers = {};
-  let timerInterval = null;
-  let secondsLeft = 3600;
-  let examStarted = false;
+// Auto-fill from URL
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('email')) document.getElementById('studentEmail').value = urlParams.get('email');
 
-  // Timer
-  function startTimer() {
-    document.getElementById('navTimer').style.display = 'block';
-    timerInterval = setInterval(() => {
-      secondsLeft--;
-      const m = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
-      const s = (secondsLeft % 60).toString().padStart(2, '0');
-      const str = m + ':' + s;
-      document.getElementById('navTimer').textContent = str;
-      document.getElementById('timerText').textContent = str;
-      if (secondsLeft <= 300) {
-        document.getElementById('timerText').style.color = '#c5221f';
-      }
-      if (secondsLeft <= 0) {
-        clearInterval(timerInterval);
-        autoSubmit();
-      }
-    }, 1000);
+document.getElementById('startBtn').addEventListener('click', async () => {
+  const email = document.getElementById('studentEmail').value.trim().toLowerCase();
+  if (!email) { showMsg('error', 'Please enter your email.'); return; }
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true; btn.textContent = 'Checking…';
+  try {
+    const res = await fetch(BASE + "/students?select=id,exam_date,exam_difficulty,selected_course,iq_game_completed&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showMsg('error', 'No application found. Please complete the admission form first.');
+      btn.disabled = false; btn.textContent = 'Load my exam →'; return;
+    }
+    const s = data[0];
+    if (!s.iq_game_completed) {
+      showMsg('error', 'Please complete the IQ profiling first.');
+      btn.disabled = false; btn.textContent = 'Load my exam →'; return;
+    }
+    if (!s.exam_date) {
+      showMsg('error', 'Please schedule your exam first.');
+      btn.disabled = false; btn.textContent = 'Load my exam →'; return;
+    }
+    studentEmail = email;
+    studentId = s.id;
+    difficulty = s.exam_difficulty || 'normal';
+    courseName = s.selected_course || 'General';
+
+    document.getElementById('emailStep').style.display = 'none';
+    document.getElementById('generatingArea').style.display = 'block';
+
+    await generateExam();
+
+  } catch (err) {
+    showMsg('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Load my exam →';
   }
+});
 
-  function updateProgress() {
-    const mcqCount = Object.keys(mcqAnswers).length;
-    const s0 = document.getElementById('s0').value.trim();
-    const s1 = document.getElementById('s1').value.trim();
-    const s2 = document.getElementById('s2').value.trim();
-    const subCount = [s0, s1, s2].filter(v => v.length > 10).length;
-    const total = mcqCount + subCount;
-    document.getElementById('progressBar').style.width = (total / 13 * 100) + '%';
-    document.getElementById('progressText').textContent = total + ' of 13 answered';
-    document.getElementById('answeredInfo').textContent = total + ' of 13 answered';
+async function generateExam() {
+  const diffDescriptions = {
+    basic: 'simple, foundational questions suitable for beginners with basic understanding',
+    normal: 'standard difficulty questions testing understanding and application',
+    extreme: 'advanced, challenging questions requiring deep knowledge and critical thinking'
+  };
+
+  const prompt = `Generate an entrance exam for "${courseName}" course at ${difficulty.toUpperCase()} difficulty level.
+Create ${difficulty === 'extreme' ? '12' : difficulty === 'normal' ? '10' : '8'} MCQ questions and 2 subjective questions.
+Questions should be ${diffDescriptions[difficulty]}.
+
+Respond ONLY in valid JSON:
+{
+  "mcq": [
+    {"question": "Question text?", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": "Option A"}
+  ],
+  "subjective": [
+    {"question": "Subjective question text?"}
+  ]
+}`;
+
+  try {
+    const res = await fetch(EDGE, {
+      method: "POST",
+      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages: [{ role: "user", content: prompt }],
+        systemPrompt: "You are an expert exam setter. Generate high-quality exam questions. Always respond in valid JSON only, no extra text."
+      })
+    });
+    const data = await res.json();
+    const raw = data.reply || '{}';
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    questions = parsed;
+    totalQ = (parsed.mcq?.length || 0) + (parsed.subjective?.length || 0);
+    renderExam(parsed);
+  } catch (e) {
+    // Fallback basic questions
+    questions = {
+      mcq: [
+        { question: `What is the main goal of studying ${courseName}?`, options: ["To gain knowledge", "To waste time", "To avoid work", "None of these"], correct: "To gain knowledge" },
+        { question: "Which skill is most important for success?", options: ["Learning ability", "Luck", "Connections only", "Money only"], correct: "Learning ability" },
+        { question: "What does continuous learning help with?", options: ["Personal growth", "Nothing", "Confusion", "Laziness"], correct: "Personal growth" }
+      ],
+      subjective: [
+        { question: `Why do you want to study ${courseName}? What are your goals?` },
+        { question: "How do you plan to apply what you learn in real life?" }
+      ]
+    };
+    totalQ = questions.mcq.length + questions.subjective.length;
+    renderExam(questions);
   }
+}
 
-  // MCQ selection
+function renderExam(q) {
+  document.getElementById('generatingArea').style.display = 'none';
+  document.getElementById('examArea').style.display = 'block';
+
+  const diffConfig = { basic: { icon: '🌱', label: 'Basic Level', cls: 'diff-basic' }, normal: { icon: '⚡', label: 'Normal Level', cls: 'diff-normal' }, extreme: { icon: '🔥', label: 'Extreme Level', cls: 'diff-extreme' } };
+  const d = diffConfig[difficulty] || diffConfig.normal;
+  document.getElementById('diffBadgeWrap').innerHTML = `<span class="diff-badge ${d.cls}">${d.icon} ${d.label} — ${courseName}</span>`;
+
+  let html = `<div class="section-title">Part A — Multiple Choice (${q.mcq?.length || 0} questions)</div>`;
+  (q.mcq || []).forEach((mcq, i) => {
+    html += `<div class="q-card">
+      <div class="q-label">Question ${i+1} of ${q.mcq.length}</div>
+      <div class="q-text">${mcq.question}</div>
+      <div class="options" data-q="m${i}" data-correct="${mcq.correct}">
+        ${(mcq.options || []).map(opt => `<button class="opt-btn" data-val="${opt}"><span class="opt-circle"></span>${opt}</button>`).join('')}
+      </div>
+    </div>`;
+  });
+
+  html += `<div class="section-title">Part B — Subjective (${q.subjective?.length || 0} questions · AI graded)</div>`;
+  (q.subjective || []).forEach((sq, i) => {
+    html += `<div class="q-card">
+      <div class="q-label">Subjective Question ${i+1}</div>
+      <div class="q-text">${sq.question}</div>
+      <div class="field" style="margin:0;"><textarea id="s${i}" placeholder="Write your answer here…" rows="4"></textarea></div>
+    </div>`;
+  });
+
+  document.getElementById('questionsArea').innerHTML = html;
+
+  // MCQ click handlers
   document.querySelectorAll('.options').forEach(group => {
     group.addEventListener('click', e => {
       const btn = e.target.closest('.opt-btn');
       if (!btn) return;
       const q = group.getAttribute('data-q');
-      const val = btn.getAttribute('data-val');
       group.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
-      mcqAnswers[q] = val;
+      mcqAnswers[q] = btn.getAttribute('data-val');
       updateProgress();
     });
   });
 
-  ['s0','s1','s2'].forEach(id => {
-    document.getElementById(id).addEventListener('input', updateProgress);
-  });
-
-  // Start exam
-  document.getElementById('startBtn').addEventListener('click', async () => {
-    studentEmail = document.getElementById('studentEmail').value.trim().toLowerCase();
-    if (!studentEmail) { showMessage('error', 'Please enter your email address.'); return; }
-
-    const btn = document.getElementById('startBtn');
-    btn.disabled = true; btn.textContent = "Checking…";
-
-    try {
-      const res = await fetch(
-        BASE + "/students?select=id,exam_date,iq_game_completed&student_email=ilike." + encodeURIComponent(studentEmail),
-        { method: "GET", headers: HEADERS }
-      );
-      const data = await res.json();
-
-      if (!Array.isArray(data) || data.length === 0) {
-        showMessage('error', 'No application found for this email. Please complete the admission form first.');
-        btn.disabled = false; btn.textContent = "Start exam"; return;
-      }
-
-      const student = data[0];
-      studentId = student.id;
-
-      if (!student.iq_game_completed) {
-        showMessage('error', 'Please complete the IQ profiling before taking the exam.');
-        btn.disabled = false; btn.textContent = "Start exam"; return;
-      }
-
-      if (!student.exam_date) {
-        showMessage('error', 'Please check your exam schedule first.');
-        btn.disabled = false; btn.textContent = "Start exam"; return;
-      }
-
-      // Check if exam date is today
-      const today = new Date().toISOString().split('T')[0];
-      const examDate = student.exam_date;
-
-      // For testing — allow any date. In production, uncomment below:
-      // if (examDate !== today) {
-      //   const d = new Date(examDate + 'T07:00:00+05:30');
-      //   showLockedBanner(d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long' }));
-      //   btn.disabled = false; btn.textContent = "Start exam"; return;
-      // }
-
-      document.getElementById('emailStep').style.display = 'none';
-      document.getElementById('examArea').style.display = 'block';
-      startTimer();
-
-    } catch (err) {
-      showMessage('error', 'Error: ' + err.message);
-      btn.disabled = false; btn.textContent = "Start exam";
-    }
-  });
-
-  async function autoSubmit() {
-    showMessage('msg-info', 'Time is up! Auto-submitting your exam…');
-    await submitExam();
+  // Textarea handlers
+  const subCount = q.subjective?.length || 0;
+  for (let i = 0; i < subCount; i++) {
+    document.getElementById('s' + i)?.addEventListener('input', updateProgress);
   }
 
-  document.getElementById('submitExamBtn').addEventListener('click', async () => {
-    const mcqCount = Object.keys(mcqAnswers).length;
-    if (mcqCount < 10) {
-      showMessage('error', 'Please answer all 10 MCQ questions before submitting.');
-      return;
-    }
-    await submitExam();
+  startTimer(difficulty === 'extreme' ? 5400 : difficulty === 'normal' ? 3600 : 2700);
+}
+
+function updateProgress() {
+  const mcqCount = Object.keys(mcqAnswers).length;
+  const subCount = (questions.subjective?.length || 0);
+  let subDone = 0;
+  for (let i = 0; i < subCount; i++) {
+    if ((document.getElementById('s' + i)?.value || '').trim().length > 10) subDone++;
+  }
+  const total = mcqCount + subDone;
+  const pct = (total / totalQ) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = total + ' of ' + totalQ + ' answered';
+  document.getElementById('answeredInfo').textContent = total + ' of ' + totalQ + ' answered';
+}
+
+function startTimer(seconds) {
+  secondsLeft = seconds;
+  document.getElementById('navTimer').style.display = 'block';
+  timerInterval = setInterval(() => {
+    secondsLeft--;
+    const m = Math.floor(secondsLeft / 60).toString().padStart(2,'0');
+    const s = (secondsLeft % 60).toString().padStart(2,'0');
+    const str = m + ':' + s;
+    document.getElementById('navTimer').textContent = str;
+    document.getElementById('timerText').textContent = str;
+    if (secondsLeft <= 0) { clearInterval(timerInterval); submitExam(); }
+  }, 1000);
+}
+
+document.getElementById('submitExamBtn').addEventListener('click', async () => {
+  const mcqNeeded = questions.mcq?.length || 0;
+  if (Object.keys(mcqAnswers).length < mcqNeeded) {
+    showMsg('error', `Please answer all ${mcqNeeded} MCQ questions before submitting.`); return;
+  }
+  await submitExam();
+});
+
+async function submitExam() {
+  const btn = document.getElementById('submitExamBtn');
+  btn.disabled = true; btn.textContent = 'Grading…';
+  clearInterval(timerInterval);
+
+  // MCQ Score
+  let mcqCorrect = 0;
+  const mcqList = questions.mcq || [];
+  mcqList.forEach((q, i) => {
+    if (mcqAnswers['m' + i] === q.correct) mcqCorrect++;
   });
+  const mcqScore = mcqList.length > 0 ? (mcqCorrect / mcqList.length) * 100 : 0;
 
-  async function submitExam() {
-    const btn = document.getElementById('submitExamBtn');
-    btn.disabled = true; btn.textContent = "Grading…";
-    clearInterval(timerInterval);
+  // Collect subjective answers
+  const subAnswers = (questions.subjective || []).map((q, i) => ({
+    question: q.question,
+    answer: document.getElementById('s' + i)?.value?.trim() || ''
+  }));
 
-    const s0 = document.getElementById('s0').value.trim();
-    const s1 = document.getElementById('s1').value.trim();
-    const s2 = document.getElementById('s2').value.trim();
+  showMsg('info', 'AI is grading your subjective answers…');
 
-    // MCQ Score
-    let mcqCorrect = 0;
-    Object.keys(MCQ_ANSWERS).forEach(q => {
-      if (mcqAnswers[q] === MCQ_ANSWERS[q]) mcqCorrect++;
+  let subScore = 50, aiFeedback = [];
+  try {
+    const subPrompt = `Grade these ${subAnswers.length} subjective answers for a ${difficulty} level ${courseName} entrance exam. Each out of 10. Be fair. Respond ONLY in valid JSON:
+{"results":[${subAnswers.map((s,i) => `{"question":"${s.question.replace(/"/g,"'")}","answer":"${s.answer.substring(0,200).replace(/"/g,"'")}","score":0,"feedback":"..."}`).join(',')}]}`;
+
+    const aiRes = await fetch(EDGE, {
+      method: "POST",
+      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: [{ role: "user", content: subPrompt }], systemPrompt: "You are a fair exam grader. Always respond in valid JSON only." })
     });
-    const mcqScore = (mcqCorrect / 10) * 100;
-
-    // AI Grading
-    showMessage('msg-info', 'Grading your subjective answers with AI. Please wait…');
-    document.getElementById('message').className = 'msg-info';
-    document.getElementById('message').style.display = 'block';
-
-    let subScore = 0;
-    let aiFeedback = [];
-
-    try {
-      const aiRes = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-calls": "true" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          messages: [{
-            role: "user",
-            content: `You are an expert examiner for an Entrepreneurship & Business Design university entrance exam. Grade the following 3 subjective answers. For each answer, give a score out of 10 and brief feedback (1-2 sentences). Be fair but strict. Respond ONLY in valid JSON, no extra text.
-
-Q1: "You want to start a small food business in your city with ₹10,000. Describe your plan."
-Answer: "${s0}"
-
-Q2: "What is the biggest challenge a first-time entrepreneur faces, and how would you overcome it?"
-Answer: "${s1}"
-
-Q3: "You have an idea for a mobile app helping farmers sell vegetables directly. What steps to turn it into a business?"
-Answer: "${s2}"
-
-Respond with this exact JSON:
-{"results":[{"question":"Q1","score":0,"feedback":"..."},{"question":"Q2","score":0,"feedback":"..."},{"question":"Q3","score":0,"feedback":"..."}]}`
-          }]
-        })
-      });
-
-      const aiData = await aiRes.json();
-      const rawText = aiData.content?.[0]?.text || '{}';
-      const clean = rawText.replace(/```json|```/g, '').trim();
-      const parsed = JSON.parse(clean);
-      aiFeedback = parsed.results || [];
-      const totalSubPoints = aiFeedback.reduce((sum, r) => sum + (r.score || 0), 0);
-      subScore = (totalSubPoints / 30) * 100;
-
-    } catch (err) {
-      // Fallback if AI fails
-      subScore = 50;
-      aiFeedback = [
-        { question: 'Q1', score: 5, feedback: 'Auto-graded (AI unavailable).' },
-        { question: 'Q2', score: 5, feedback: 'Auto-graded (AI unavailable).' },
-        { question: 'Q3', score: 5, feedback: 'Auto-graded (AI unavailable).' }
-      ];
-    }
-
-    // Final score: MCQ 60% weight, Subjective 40% weight
-    const finalScore = Math.round((mcqScore * 0.6) + (subScore * 0.4));
-    const passed = finalScore >= 70;
-
-    // Save to Supabase
-    try {
-      await fetch(BASE + "/exam_results", {
-        method: "POST",
-        headers: { ...HEADERS, "Prefer": "return=representation" },
-        body: JSON.stringify({
-          student_id: studentId,
-          student_email: studentEmail,
-          department: "Entrepreneurship & Business Design",
-          mcq_answers: mcqAnswers,
-          mcq_score: mcqScore,
-          subjective_answers: { s0, s1, s2 },
-          subjective_score: subScore,
-          final_score: finalScore,
-          status: passed ? 'pass' : 'fail',
-          ai_feedback: aiFeedback
-        })
-      });
-
-      // Update student status
-      await fetch(
-        BASE + "/students?student_email=ilike." + encodeURIComponent(studentEmail),
-        {
-          method: "PATCH",
-          headers: { ...HEADERS, "Prefer": "return=representation" },
-          body: JSON.stringify({ exam_score: finalScore, admission_status: passed ? 'exam_passed' : 'exam_failed' })
-        }
-      );
-    } catch (e) { console.error('Save error:', e); }
-
-    showResult(finalScore, passed, mcqScore, subScore, mcqCorrect, aiFeedback, s0, s1, s2);
+    const aiData = await aiRes.json();
+    const raw = aiData.reply || '{}';
+    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    aiFeedback = parsed.results || [];
+    const totalPoints = aiFeedback.reduce((s,r) => s + (r.score || 0), 0);
+    subScore = subAnswers.length > 0 ? (totalPoints / (subAnswers.length * 10)) * 100 : 50;
+  } catch(e) {
+    subScore = 50;
+    aiFeedback = subAnswers.map(s => ({ question: s.question, answer: s.answer, score: 5, feedback: 'Auto-graded.' }));
   }
 
-  function showResult(finalScore, passed, mcqScore, subScore, mcqCorrect, aiFeedback, s0, s1, s2) {
-    document.getElementById('examArea').style.display = 'none';
-    document.getElementById('message').style.display = 'none';
+  const finalScore = Math.round((mcqScore * 0.6) + (subScore * 0.4));
+  const passed = finalScore >= 70;
 
-    const subQuestions = [
-      'You want to start a small food business with ₹10,000.',
-      'Biggest challenge for a first-time entrepreneur.',
-      'Mobile app idea to help farmers sell vegetables.'
-    ];
-    const subAnswers = [s0, s1, s2];
+  // Save result
+  try {
+    await fetch(BASE + "/exam_results", {
+      method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({
+        student_id: studentId, student_email: studentEmail,
+        department: courseName, mcq_answers: mcqAnswers,
+        mcq_score: mcqScore, subjective_answers: subAnswers,
+        subjective_score: subScore, final_score: finalScore,
+        status: passed ? 'pass' : 'fail', ai_feedback: aiFeedback
+      })
+    });
 
-    const feedbackHTML = aiFeedback.map((f, i) => `
-      <div class="feedback-item">
-        <div class="feedback-q">${subQuestions[i]} <span class="score-chip">${f.score}/10</span></div>
-        <div class="feedback-ans" style="color:#5f6368; font-style:italic;">"${subAnswers[i] ? subAnswers[i].substring(0, 120) + '…' : 'No answer'}"</div>
-        <div class="feedback-comment">💬 ${f.feedback}</div>
-      </div>`).join('');
+    // BOTH pass and fail → update to exam_completed (not blocking enrollment)
+    await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(studentEmail), {
+      method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({
+        exam_score: finalScore,
+        admission_status: 'exam_completed'
+      })
+    });
+  } catch(e) { console.error(e); }
 
-    document.getElementById('resultArea').innerHTML = `
-      <div class="result-card ${passed ? 'pass' : 'fail'}">
-        <div class="result-score" style="color:${passed ? '#137333' : '#c5221f'}">${finalScore}%</div>
-        <div class="result-label">Final score (MCQ 60% + Subjective 40%)</div>
-        <span class="result-badge">${passed ? '✅ Passed — Proceed to parent verification' : '❌ Not qualified — Retry next month'}</span>
-      </div>
+  showResult(finalScore, passed, mcqScore, subScore, mcqCorrect, aiFeedback);
+}
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px;">
-        <div style="border:1px solid #e8eaed; border-radius:8px; padding:16px 20px;">
-          <div style="font-size:12px; color:#5f6368; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:4px;">MCQ Score</div>
-          <div style="font-family:'Google Sans',Arial,sans-serif; font-size:22px; color:#202124;">${Math.round(mcqScore)}%</div>
-          <div style="font-size:13px; color:#5f6368;">${mcqCorrect} of 10 correct</div>
-        </div>
-        <div style="border:1px solid #e8eaed; border-radius:8px; padding:16px 20px;">
-          <div style="font-size:12px; color:#5f6368; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:4px;">Subjective Score</div>
-          <div style="font-family:'Google Sans',Arial,sans-serif; font-size:22px; color:#202124;">${Math.round(subScore)}%</div>
-          <div style="font-size:13px; color:#5f6368;">AI graded · 3 questions</div>
-        </div>
-      </div>
+function showResult(finalScore, passed, mcqScore, subScore, mcqCorrect, aiFeedback) {
+  document.getElementById('examArea').style.display = 'none';
+  document.getElementById('message').style.display = 'none';
 
-      <div class="feedback-section">
-        <div class="section-title" style="margin-top:0;">AI Feedback — Subjective Answers</div>
-        ${feedbackHTML}
-      </div>
+  const feedbackHTML = aiFeedback.map(f => `
+    <div style="border:1px solid #e8eaed; border-radius:8px; padding:14px 16px; margin-bottom:10px;">
+      <div style="font-size:13px; color:#5f6368; margin-bottom:4px;">${f.question}</div>
+      <div style="font-size:13px; color:#1a73e8;">💬 ${f.feedback} <span style="background:#f1f3f4; border-radius:100px; padding:2px 8px; font-size:11px; color:#5f6368; margin-left:6px;">${f.score}/10</span></div>
+    </div>`).join('');
 
-      ${passed ? `<div class="notice"><span>ℹ️</span><div>Congratulations! Your next step is to complete the Parent Verification form. An email will be sent to your guardian for approval.</div></div>` :
-      `<div class="notice" style="background:#fce8e6; color:#c5221f;"><span>ℹ️</span><div>You scored ${finalScore}%. You need 70% to qualify. You can retake the exam next month. Keep studying!</div></div>`}
-    `;
+  document.getElementById('resultArea').innerHTML = `
+    <div class="result-card" style="border:2px solid ${passed?'#34a853':'#1a73e8'}; background:${passed?'#f6fef8':'#f8f9ff'};">
+      <div style="font-size:48px; margin-bottom:12px;">${passed ? '🎉' : '👍'}</div>
+      <div class="result-score" style="color:${passed?'#137333':'#1a73e8'}">${finalScore}%</div>
+      <div style="font-size:16px; color:#5f6368; margin-bottom:16px;">Entrance Exam Score</div>
+      <span style="display:inline-block; padding:8px 24px; border-radius:100px; font-size:15px; font-weight:500; background:${passed?'#e6f4ea':'#e8f0fe'}; color:${passed?'#137333':'#1a73e8'};">
+        ${passed ? '✅ Excellent! You qualified with distinction.' : '👍 Good effort! You\'re enrolled regardless — keep learning!'}
+      </span>
+    </div>
 
-    document.getElementById('resultArea').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+    <div class="score-grid">
+      <div class="score-item"><div class="s-label">MCQ Score</div><div class="s-value">${Math.round(mcqScore)}%</div><div style="font-size:13px;color:#5f6368;">${mcqCorrect} of ${questions.mcq?.length || 0} correct</div></div>
+      <div class="score-item"><div class="s-label">Subjective Score</div><div class="s-value">${Math.round(subScore)}%</div><div style="font-size:13px;color:#5f6368;">AI graded</div></div>
+    </div>
 
-  function showLockedBanner(dateStr) {
-    document.getElementById('emailStep').innerHTML = `
-      <div class="locked-banner">
-        <strong>Exam not available yet</strong>
-        Your exam is scheduled for <strong>${dateStr}</strong> at 7:00 AM IST.<br>
-        Please come back on that date to start your exam.
-      </div>`;
-  }
+    ${feedbackHTML}
 
-  function showMessage(type, text) {
-    const m = document.getElementById('message');
-    m.className = type; m.textContent = text; m.style.display = 'block';
-  }
+    <div class="notice" style="background:#e8f0fe; color:#1a73e8;">
+      <span>ℹ️</span>
+      <div>Whether you passed or not, you're enrolled in <strong>${courseName}</strong>. Your score helps us personalise your learning journey. Next step: complete your enrollment and pay the course fee.</div>
+    </div>
+
+    <div style="margin-top:20px; text-align:center;">
+      <a href="/fee.html?email=${encodeURIComponent(studentEmail)}" style="display:inline-block; background:#1a73e8; color:#fff; text-decoration:none; border-radius:4px; padding:13px 32px; font-size:15px; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">Complete enrollment → Pay fee</a>
+    </div>`;
+
+  document.getElementById('resultArea').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showMsg(type, text) {
+  const m = document.getElementById('message');
+  m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+}
 </script>
 </body>
 </html>
