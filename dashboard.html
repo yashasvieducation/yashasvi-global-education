@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .nav-user { font-size: 13px; color: #5f6368; }
+  .bell-btn { position: relative; background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px; }
+  .bell-badge { position: absolute; top: 0; right: 0; background: #c5221f; color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: none; align-items: center; justify-content: center; }
+
+  /* Login */
+  #loginWrap { max-width: 480px; margin: 100px auto; padding: 0 24px; }
+  #loginWrap h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+  #loginWrap p { font-size: 15px; color: #5f6368; margin-bottom: 24px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; outline: none; }
+  .field input:focus { border-color: #1a73e8; }
+  #loginMsg { margin-top: 12px; padding: 10px; border-radius: 4px; font-size: 14px; display: none; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+
+  /* Dashboard */
+  #dashWrap { display: none; max-width: 1000px; margin: 0 auto; padding: 28px 24px 60px; }
+
+  /* Greeting */
+  .greeting { margin-bottom: 28px; }
+  .greeting h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 26px; font-weight: 400; color: #202124; margin-bottom: 4px; }
+  .greeting p { font-size: 14px; color: #5f6368; }
+
+  /* Stats */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  @media (max-width: 700px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+  .stat-card { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 18px 20px; }
+  .stat-icon { font-size: 22px; margin-bottom: 8px; }
+  .stat-num { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #1a73e8; }
+  .stat-label { font-size: 12px; color: #5f6368; margin-top: 2px; }
+
+  /* Grid */
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .dash-grid { grid-template-columns: 1fr; } }
+
+  .card { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+  .card-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; color: #202124; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+  /* Progress */
+  .progress-bg { background: #f1f3f4; border-radius: 100px; height: 8px; margin-bottom: 6px; }
+  .progress-fill { background: #1a73e8; height: 8px; border-radius: 100px; transition: width 0.4s; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #5f6368; }
+
+  /* Journey Steps */
+  .journey-step { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid #f1f3f4; }
+  .journey-step:last-child { border-bottom: none; }
+  .step-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .step-icon.done { background: #e6f4ea; }
+  .step-icon.active { background: #e8f0fe; }
+  .step-icon.pending { background: #f1f3f4; }
+  .step-info { flex: 1; }
+  .step-name { font-size: 14px; font-weight: 500; color: #202124; }
+  .step-status { font-size: 12px; color: #5f6368; margin-top: 2px; }
+  .step-badge { font-size: 11px; border-radius: 100px; padding: 3px 10px; font-weight: 500; }
+  .badge-done { background: #e6f4ea; color: #137333; }
+  .badge-active { background: #e8f0fe; color: #1a73e8; }
+  .badge-pending { background: #f1f3f4; color: #80868b; }
+
+  /* Quick links */
+  .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .quick-link { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid #e8eaed; border-radius: 8px; text-decoration: none; color: #202124; font-size: 14px; transition: all 0.15s; }
+  .quick-link:hover { border-color: #1a73e8; background: #f8f9ff; color: #1a73e8; }
+  .quick-link .ql-icon { font-size: 20px; }
+
+  /* Notifications */
+  .notif-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f1f3f4; align-items: flex-start; }
+  .notif-item:last-child { border-bottom: none; }
+  .notif-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .notif-title { font-size: 14px; font-weight: 500; color: #202124; margin-bottom: 2px; }
+  .notif-msg { font-size: 12px; color: #5f6368; line-height: 1.4; }
+  .notif-time { font-size: 11px; color: #80868b; margin-top: 4px; }
+  .empty-state { text-align: center; padding: 20px; color: #5f6368; font-size: 14px; }
+
+  .btn { border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+  .btn-primary { background: #1a73e8; color: #fff; }
+  .btn-primary:hover { background: #1765cc; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
+  <div class="nav-right">
+    <span class="nav-user" id="navUser"></span>
+    <button class="bell-btn" id="bellBtn" title="Notifications">🔔<span class="bell-badge" id="bellBadge"></span></button>
+  </div>
+</nav>
+
+<!-- Login -->
+<div id="loginWrap">
+  <h2>My Dashboard</h2>
+  <p>Enter your student email to access your personal dashboard.</p>
+  <div class="field">
+    <label>Student email</label>
+    <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+  </div>
+  <button class="btn btn-primary" id="loginBtn" style="margin-top:16px; width:100%; padding:12px;" onclick="doLogin()">View my dashboard →</button>
+  <div id="loginMsg"></div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashWrap">
+
+  <div class="greeting">
+    <h2 id="greetingText">Good morning! 👋</h2>
+    <p id="greetingSubText">Here's your learning overview</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-num" id="statLessons">0</div><div class="stat-label">Lessons completed</div></div>
+    <div class="stat-card"><div class="stat-icon">⏱</div><div class="stat-num" id="statProgress">0%</div><div class="stat-label">Course progress</div></div>
+    <div class="stat-card"><div class="stat-icon">🤖</div><div class="stat-num" id="statChats">0</div><div class="stat-label">AI Teacher chats</div></div>
+    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-num" id="statScore">—</div><div class="stat-label">Exam score</div></div>
+  </div>
+
+  <div class="dash-grid">
+
+    <!-- Left column -->
+    <div>
+      <!-- Course Progress -->
+      <div class="card">
+        <div class="card-title">📖 Current Course</div>
+        <div style="font-size:14px; font-weight:500; color:#202124; margin-bottom:12px;" id="currentCourse">—</div>
+        <div class="progress-bg"><div class="progress-fill" id="dashProgress" style="width:0%"></div></div>
+        <div class="progress-label" style="margin-top:4px;"><span id="dashLessonsText">0 lessons done</span><span id="dashPct">0%</span></div>
+        <div style="margin-top:16px;">
+          <a href="/syllabus.html" class="btn btn-primary" style="font-size:14px; padding:10px 20px;">Continue learning →</a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="card">
+        <div class="card-title">⚡ Quick access</div>
+        <div class="quick-links">
+          <a class="quick-link" href="/syllabus.html"><span class="ql-icon">📖</span>My Course</a>
+          <a class="quick-link" href="/quarterly-exam.html"><span class="ql-icon">✏️</span>Quarterly Exam</a>
+          <a class="quick-link" href="/final-exam.html"><span class="ql-icon">🎯</span>Final Exam</a>
+          <a class="quick-link" href="/internship.html"><span class="ql-icon">💼</span>Internship</a>
+          <a class="quick-link" href="/certification.html"><span class="ql-icon">🎓</span>My Certificate</a>
+          <a class="quick-link" href="/business-guidance.html"><span class="ql-icon">🚀</span>Business Guidance</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div>
+      <!-- Journey Progress -->
+      <div class="card">
+        <div class="card-title">🗺️ Your journey</div>
+        <div id="journeySteps"></div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="card">
+        <div class="card-title">🔔 Notifications</div>
+        <div id="notifList"><div class="empty-state">No notifications yet</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+
+let studentEmail = "";
+
+// Auto-fill from URL
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('email')) document.getElementById('loginEmail').value = urlParams.get('email');
+
+// Greeting
+const hour = new Date().getHours();
+const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  if (!email) { showLoginMsg('Please enter your email.'); return; }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Loading…';
+  try {
+    const res = await fetch(BASE + "/students?select=*&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showLoginMsg('No account found. Please complete the admission form first.');
+      btn.disabled = false; btn.textContent = 'View my dashboard →'; return;
+    }
+    studentEmail = email;
+    const s = data[0];
+    document.getElementById('navUser').textContent = s.student_name;
+    document.getElementById('greetingText').textContent = greet + ', ' + s.student_name.split(' ')[0] + '! 👋';
+    document.getElementById('greetingSubText').textContent = 'Here\'s your learning overview for today';
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('dashWrap').style.display = 'block';
+    await loadDashboard(s);
+    await loadNotifications();
+  } catch (err) {
+    showLoginMsg('Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'View my dashboard →';
+  }
+}
+
+async function loadDashboard(student) {
+  // Course progress
+  try {
+    const pRes = await fetch(BASE + "/syllabus_progress?select=*&student_email=ilike." + encodeURIComponent(studentEmail), { method: "GET", headers: HEADERS });
+    const pData = await pRes.json();
+    if (Array.isArray(pData) && pData.length > 0) {
+      const p = pData[0];
+      const completed = (p.completed_lessons || []).length;
+      const total = p.total_lessons || 10;
+      const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+      document.getElementById('statLessons').textContent = completed;
+      document.getElementById('statProgress').textContent = pct + '%';
+      document.getElementById('dashProgress').style.width = pct + '%';
+      document.getElementById('dashLessonsText').textContent = completed + ' of ' + total + ' lessons done';
+      document.getElementById('dashPct').textContent = pct + '%';
+    }
+  } catch(e) {}
+
+  // Course name
+  document.getElementById('currentCourse').textContent = student.selected_course || 'No course selected yet';
+
+  // Exam score
+  if (student.exam_score) {
+    document.getElementById('statScore').textContent = Math.round(student.exam_score) + '%';
+  }
+
+  // Chat count
+  try {
+    const cRes = await fetch(BASE + "/ai_chat_history?select=id&student_email=ilike." + encodeURIComponent(studentEmail) + "&role=eq.user", { method: "GET", headers: HEADERS });
+    const cData = await cRes.json();
+    document.getElementById('statChats').textContent = Array.isArray(cData) ? cData.length : 0;
+  } catch(e) {}
+
+  // Journey steps
+  const steps = [
+    { name: 'Admission Form', status: 'done', icon: '📋' },
+    { name: 'IQ Profiling', status: student.iq_game_completed ? 'done' : 'active', icon: '🧠' },
+    { name: 'Course Selection', status: student.selected_course && student.selected_course !== 'pending' ? 'done' : 'active', icon: '📚' },
+    { name: 'Exam Scheduled', status: student.exam_date ? 'done' : 'pending', icon: '📅' },
+    { name: 'Entrance Exam', status: student.exam_score ? 'done' : student.exam_date ? 'active' : 'pending', icon: '✏️' },
+    { name: 'Parent Verification', status: student.verification_status === 'verified' ? 'done' : student.exam_score ? 'active' : 'pending', icon: '✅' },
+    { name: 'Fee Payment', status: student.fee_paid ? 'done' : 'pending', icon: '💳' },
+    { name: 'Course Learning', status: ['admitted','final_exam_passed','internship_passed','certified'].includes(student.admission_status) ? 'active' : 'pending', icon: '🎓' },
+    { name: 'Certification', status: student.admission_status === 'certified' ? 'done' : 'pending', icon: '🏆' }
+  ];
+
+  document.getElementById('journeySteps').innerHTML = steps.map(s => `
+    <div class="journey-step">
+      <div class="step-icon ${s.status}">
+        ${s.status === 'done' ? '✅' : s.status === 'active' ? s.icon : '⭕'}
+      </div>
+      <div class="step-info">
+        <div class="step-name">${s.name}</div>
+      </div>
+      <span class="step-badge badge-${s.status}">${s.status === 'done' ? 'Done' : s.status === 'active' ? 'In progress' : 'Pending'}</span>
+    </div>`).join('');
+}
+
+async function loadNotifications() {
+  try {
+    const res = await fetch(BASE + "/notifications?select=*&student_email=ilike." + encodeURIComponent(studentEmail) + "&order=created_at.desc&limit=5", { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) return;
+
+    const unread = data.filter(n => !n.is_read).length;
+    if (unread > 0) {
+      document.getElementById('bellBadge').textContent = unread;
+      document.getElementById('bellBadge').style.display = 'flex';
+    }
+
+    document.getElementById('notifList').innerHTML = data.map(n => `
+      <div class="notif-item" style="${!n.is_read ? 'background:#f8f9ff; border-radius:8px; padding:10px; margin:-4px;' : ''}">
+        <div class="notif-icon">${n.type === 'course_launched' ? '🎉' : '🔔'}</div>
+        <div>
+          <div class="notif-title">${n.title}</div>
+          <div class="notif-msg">${n.message || ''}</div>
+          <div class="notif-time">${new Date(n.created_at).toLocaleDateString('en-IN')}</div>
+        </div>
+      </div>`).join('');
+  } catch(e) {}
+}
+
+document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('bellBtn').addEventListener('click', async () => {
+  if (!studentEmail) return;
+  await fetch(BASE + "/notifications?student_email=ilike." + encodeURIComponent(studentEmail) + "&is_read=eq.false", {
+    method: "PATCH", headers: HEADERS, body: JSON.stringify({ is_read: true })
+  });
+  document.getElementById('bellBadge').style.display = 'none';
+});
+
+function showLoginMsg(text) {
+  const m = document.getElementById('loginMsg');
+  m.className = 'msg-error'; m.textContent = text; m.style.display = 'block';
+}
+</script>
+</body>
+</html>
