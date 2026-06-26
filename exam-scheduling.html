@@ -8,80 +8,122 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
-
-  .nav { display: flex; align-items: center; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; position: sticky; top: 0; background: #fff; z-index: 10; }
+  .nav { display: flex; align-items: center; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
   .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
   .nav-logo span { color: #1a73e8; }
-
   .hero { padding: 56px 24px 40px; max-width: 720px; margin: 0 auto; }
   .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
   .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 36px; font-weight: 400; color: #202124; line-height: 1.25; margin-bottom: 12px; }
   .hero p { font-size: 16px; color: #5f6368; line-height: 1.6; max-width: 560px; }
-
   .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
-
   .field { margin-bottom: 20px; }
   .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
   .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; color: #202124; outline: none; transition: border-color 0.15s; }
   .field input:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.12); }
-
-  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; min-width: 160px; }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; min-width: 160px; }
   .btn-primary:hover { background: #1765cc; }
   .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; }
+  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
+  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+  .notice { border-radius: 8px; padding: 14px 16px; font-size: 14px; display: flex; gap: 10px; line-height: 1.5; margin-bottom: 20px; }
+  .notice.blue { background: #e8f0fe; color: #1a73e8; }
+  .notice span { font-size: 18px; flex-shrink: 0; }
 
-  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; line-height: 1.5; }
-  .success { background: #e6f4ea; color: #137333; display: block !important; }
-  .error { background: #fce8e6; color: #c5221f; display: block !important; }
+  /* Difficulty cards */
+  .section-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #e8eaed; }
+  .difficulty-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  @media (max-width: 560px) { .difficulty-grid { grid-template-columns: 1fr; } }
+  .diff-card { border: 1.5px solid #dadce0; border-radius: 8px; padding: 20px 16px; cursor: pointer; transition: all 0.15s; text-align: center; }
+  .diff-card:hover { border-color: #1a73e8; background: #f8f9ff; }
+  .diff-card.selected { border-color: #1a73e8; background: #e8f0fe; }
+  .diff-card.selected-basic { border-color: #34a853; background: #e6f4ea; }
+  .diff-card.selected-extreme { border-color: #c5221f; background: #fce8e6; }
+  .diff-icon { font-size: 28px; margin-bottom: 8px; }
+  .diff-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .diff-desc { font-size: 12px; color: #5f6368; line-height: 1.5; margin-bottom: 8px; }
+  .diff-tag { display: inline-block; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 500; }
+  .tag-basic { background: #e6f4ea; color: #137333; }
+  .tag-normal { background: #e8f0fe; color: #1a73e8; }
+  .tag-extreme { background: #fce8e6; color: #c5221f; }
 
-  /* Exam card */
-  #scheduleCard { display: none; margin-top: 8px; }
-  .exam-header { margin-bottom: 28px; }
-  .exam-header h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 400; color: #202124; margin-bottom: 6px; }
-  .exam-header p { font-size: 14px; color: #5f6368; }
-
-  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  /* Schedule card */
+  #scheduleCard { display: none; }
+  .track-badge { display: inline-flex; align-items: center; gap: 6px; background: #f1f3f4; border-radius: 100px; padding: 4px 12px; font-size: 13px; color: #202124; font-weight: 500; margin-bottom: 20px; }
+  .diff-badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 100px; padding: 4px 12px; font-size: 13px; font-weight: 500; margin-bottom: 20px; margin-left: 8px; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
   @media (max-width: 520px) { .detail-grid { grid-template-columns: 1fr; } }
-
   .detail-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 18px 20px; }
   .detail-item .d-label { font-size: 12px; font-weight: 500; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
   .detail-item .d-value { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; color: #202124; font-weight: 500; }
   .detail-item .d-sub { font-size: 13px; color: #5f6368; margin-top: 2px; }
-
-  .notice { background: #e8f0fe; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a73e8; display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; }
-  .notice span { font-size: 18px; flex-shrink: 0; }
-
-  .track-badge { display: inline-flex; align-items: center; gap: 6px; background: #f1f3f4; border-radius: 100px; padding: 4px 12px; font-size: 13px; color: #202124; font-weight: 500; margin-bottom: 24px; }
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <a class="nav-logo" href="#">Yashasvi <span>Global Education</span></a>
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
 </nav>
 
 <div class="hero">
-  <div class="hero-label">Step 3 of 3 — Exam Schedule</div>
-  <h1>Your exam schedule</h1>
-  <p>All entrance exams begin at 7:00 AM IST. Once scheduled, your date is confirmed automatically.</p>
+  <div class="hero-label">Step 4 — Exam Schedule</div>
+  <h1>Schedule your exam</h1>
+  <p>Choose your exam difficulty level, then confirm your schedule. All exams start at 7:00 AM IST.</p>
 </div>
 
 <div class="wrap">
 
+  <!-- Email Step -->
   <div id="checkStep">
     <div class="field">
       <label>Student email address</label>
       <input type="email" id="studentEmail" placeholder="you@example.com" autocomplete="email">
     </div>
-    <button class="btn-primary" id="checkBtn">View my schedule</button>
+    <button class="btn-primary" id="checkBtn">Continue →</button>
     <div id="message"></div>
   </div>
 
-  <div id="scheduleCard">
-    <div class="track-badge" id="trackBadge">📚 Department</div>
-    <div class="exam-header">
-      <h2>Entrance exam scheduled</h2>
-      <p>Your seat is confirmed. Be ready at 7:00 AM on the date below.</p>
+  <!-- Difficulty + Schedule -->
+  <div id="difficultyStep" style="display:none;">
+    <div class="notice blue">
+      <span>ℹ️</span>
+      <div>Choose your difficulty level carefully. <strong>All levels lead to the same course</strong> — difficulty only affects question complexity. You can change this before confirming.</div>
     </div>
+
+    <div class="section-title">Select exam difficulty</div>
+    <div class="difficulty-grid">
+      <div class="diff-card" id="diff-basic" onclick="selectDiff('basic')">
+        <div class="diff-icon">🌱</div>
+        <div class="diff-name">Basic</div>
+        <div class="diff-desc">Fundamental concepts, simple questions. Best for beginners or younger students.</div>
+        <span class="diff-tag tag-basic">Beginner friendly</span>
+      </div>
+      <div class="diff-card" id="diff-normal" onclick="selectDiff('normal')">
+        <div class="diff-icon">⚡</div>
+        <div class="diff-name">Normal</div>
+        <div class="diff-desc">Standard difficulty. Mix of conceptual and applied questions.</div>
+        <span class="diff-tag tag-normal">Recommended</span>
+      </div>
+      <div class="diff-card" id="diff-extreme" onclick="selectDiff('extreme')">
+        <div class="diff-icon">🔥</div>
+        <div class="diff-name">Extreme</div>
+        <div class="diff-desc">Advanced questions. For experienced learners who want a real challenge.</div>
+        <span class="diff-tag tag-extreme">Advanced</span>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="confirmDiffBtn" onclick="confirmDifficulty()" disabled>Confirm exam schedule →</button>
+    <div id="message2" style="margin-top:12px; padding:12px; border-radius:4px; font-size:14px; display:none;"></div>
+  </div>
+
+  <!-- Schedule Card -->
+  <div id="scheduleCard">
+    <div>
+      <span class="track-badge" id="trackBadge">📚 Course</span>
+      <span class="diff-badge" id="diffBadge">⚡ Normal</span>
+    </div>
+    <h2 style="font-family:'Google Sans',Arial,sans-serif; font-size:22px; font-weight:400; color:#202124; margin-bottom:6px;">Entrance exam scheduled</h2>
+    <p style="font-size:14px; color:#5f6368; margin-bottom:20px;">Your seat is confirmed. Be ready at 7:00 AM on the date below.</p>
 
     <div class="detail-grid">
       <div class="detail-item">
@@ -106,94 +148,132 @@
       </div>
     </div>
 
-    <div class="notice">
+    <div class="notice blue">
       <span>ℹ️</span>
-      <div>The exam link will appear automatically on this page at 7:00 AM on your exam date. Keep this page bookmarked and do not share your email with others.</div>
+      <div>The exam link will appear automatically at 7:00 AM on your exam date. Keep this page bookmarked.</div>
     </div>
   </div>
 
 </div>
 
 <script>
-  const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
-  const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
-  const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
 
-  function getNextExamDate() {
-    const now = new Date();
-    const next = new Date(now);
-    next.setDate(now.getDate() + 1);
-    return next.toISOString().split('T')[0];
-  }
+let studentEmail = "", selectedDiff = "", studentData = {};
 
-  function formatDate(dateStr) {
-    const d = new Date(dateStr + 'T07:00:00+05:30');
-    return {
-      date: d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
-      day: d.toLocaleDateString('en-IN', { weekday: 'long' })
-    };
-  }
+// Auto-fill from URL
+const urlParams = new URLSearchParams(window.location.search);
+const emailFromUrl = urlParams.get('email');
+if (emailFromUrl) document.getElementById('studentEmail').value = emailFromUrl;
 
-  document.getElementById('checkBtn').addEventListener('click', async () => {
-    const email = document.getElementById('studentEmail').value.trim().toLowerCase();
-    if (!email) { showMessage('error', 'Please enter your email address.'); return; }
+function getNextExamDate() {
+  const next = new Date();
+  next.setDate(next.getDate() + 1);
+  return next.toISOString().split('T')[0];
+}
 
-    const btn = document.getElementById('checkBtn');
-    btn.disabled = true; btn.textContent = "Loading…";
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T07:00:00+05:30');
+  return {
+    date: d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+    day: d.toLocaleDateString('en-IN', { weekday: 'long' })
+  };
+}
 
-    try {
-      const res = await fetch(
-        BASE + "/students?select=id,iq_game_completed,exam_date,track&student_email=ilike." + encodeURIComponent(email),
-        { method: "GET", headers: HEADERS }
-      );
-      const data = await res.json();
-
-      if (!Array.isArray(data) || data.length === 0) {
-        showMessage('error', 'No application found for this email. Please complete the admission form first.');
-        btn.disabled = false; btn.textContent = "View my schedule"; return;
-      }
-
-      const student = data[0];
-      if (!student.iq_game_completed) {
-        showMessage('error', 'Please complete the IQ profiling before viewing your exam schedule.');
-        btn.disabled = false; btn.textContent = "View my schedule"; return;
-      }
-
-      let examDate = student.exam_date;
-      if (!examDate) {
-        examDate = getNextExamDate();
-        await fetch(
-          BASE + "/students?student_email=ilike." + encodeURIComponent(email),
-          { method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" }, body: JSON.stringify({ exam_date: examDate }) }
-        );
-      }
-
-      const formatted = formatDate(examDate);
-      document.getElementById('examDate').textContent = formatted.date;
-      document.getElementById('examDay').textContent = formatted.day;
-
-      const deptIcons = {
-        'Entrepreneurship & Business Design': '🚀',
-        'Blockchain & Decentralized Systems': '⛓️',
-        'Computer Science & AI': '🤖',
-      };
-      const icon = deptIcons[student.track] || '📚';
-      document.getElementById('trackBadge').textContent = icon + ' ' + (student.track || 'General');
-
-      document.getElementById('checkStep').style.display = 'none';
-      document.getElementById('scheduleCard').style.display = 'block';
-      document.getElementById('message').style.display = 'none';
-
-    } catch (err) {
-      showMessage('error', 'Error: ' + err.message);
-      btn.disabled = false; btn.textContent = "View my schedule";
+document.getElementById('checkBtn').addEventListener('click', async () => {
+  const email = document.getElementById('studentEmail').value.trim().toLowerCase();
+  if (!email) { showMsg('error', 'Please enter your email.'); return; }
+  const btn = document.getElementById('checkBtn');
+  btn.disabled = true; btn.textContent = 'Checking…';
+  try {
+    const res = await fetch(BASE + "/students?select=id,iq_game_completed,selected_course,exam_date,exam_difficulty&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showMsg('error', 'No application found. Please complete the admission form first.');
+      btn.disabled = false; btn.textContent = 'Continue →'; return;
     }
-  });
+    const s = data[0];
+    if (!s.iq_game_completed) {
+      showMsg('error', 'Please complete the IQ profiling first.');
+      btn.disabled = false; btn.textContent = 'Continue →'; return;
+    }
+    if (!s.selected_course) {
+      showMsg('error', 'Please select your course first.');
+      btn.disabled = false; btn.textContent = 'Continue →'; return;
+    }
+    studentEmail = email;
+    studentData = s;
 
-  function showMessage(type, text) {
-    const m = document.getElementById('message');
-    m.className = type; m.textContent = text; m.style.display = 'block';
+    // Already scheduled
+    if (s.exam_date && s.exam_difficulty) {
+      showScheduleCard(s.exam_date, s.exam_difficulty, s.selected_course);
+      document.getElementById('checkStep').style.display = 'none';
+      return;
+    }
+
+    document.getElementById('checkStep').style.display = 'none';
+    document.getElementById('difficultyStep').style.display = 'block';
+  } catch (err) {
+    showMsg('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Continue →';
   }
+});
+
+function selectDiff(level) {
+  selectedDiff = level;
+  document.querySelectorAll('.diff-card').forEach(c => c.classList.remove('selected', 'selected-basic', 'selected-extreme'));
+  const card = document.getElementById('diff-' + level);
+  if (level === 'basic') card.classList.add('selected-basic');
+  else if (level === 'extreme') card.classList.add('selected-extreme');
+  else card.classList.add('selected');
+  document.getElementById('confirmDiffBtn').disabled = false;
+}
+
+async function confirmDifficulty() {
+  if (!selectedDiff) return;
+  const btn = document.getElementById('confirmDiffBtn');
+  btn.disabled = true; btn.textContent = 'Scheduling…';
+  const examDate = getNextExamDate();
+  try {
+    await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(studentEmail), {
+      method: "PATCH",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({ exam_date: examDate, exam_difficulty: selectedDiff })
+    });
+    document.getElementById('difficultyStep').style.display = 'none';
+    showScheduleCard(examDate, selectedDiff, studentData.selected_course);
+  } catch (err) {
+    const m = document.getElementById('message2');
+    m.style.background = '#fce8e6'; m.style.color = '#c5221f';
+    m.textContent = 'Error: ' + err.message; m.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Confirm exam schedule →';
+  }
+}
+
+function showScheduleCard(examDate, difficulty, course) {
+  const formatted = formatDate(examDate);
+  document.getElementById('examDate').textContent = formatted.date;
+  document.getElementById('examDay').textContent = formatted.day;
+
+  const deptIcons = { 'Entrepreneurship & Business Design': '🚀', 'Blockchain & Decentralized Systems': '⛓️', 'Computer Science & AI': '💻', 'Design & Creative Tech': '🎨' };
+  document.getElementById('trackBadge').textContent = (deptIcons[course] || '📚') + ' ' + (course || 'Course');
+
+  const diffConfig = { basic: { icon: '🌱', label: 'Basic', bg: '#e6f4ea', color: '#137333' }, normal: { icon: '⚡', label: 'Normal', bg: '#e8f0fe', color: '#1a73e8' }, extreme: { icon: '🔥', label: 'Extreme', bg: '#fce8e6', color: '#c5221f' } };
+  const d = diffConfig[difficulty] || diffConfig.normal;
+  const badge = document.getElementById('diffBadge');
+  badge.textContent = d.icon + ' ' + d.label;
+  badge.style.background = d.bg;
+  badge.style.color = d.color;
+
+  document.getElementById('scheduleCard').style.display = 'block';
+}
+
+function showMsg(type, text) {
+  const m = document.getElementById('message');
+  m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+}
 </script>
 </body>
 </html>
