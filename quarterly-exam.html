@@ -361,5 +361,24 @@ function showMsg(type, text) {
   m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
 }
 </script>
+
+<script>
+// Copy & Screenshot Protection
+document.addEventListener('copy', e => e.preventDefault());
+document.addEventListener('cut', e => e.preventDefault());
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey && ['c','u','s','a','p'].includes(e.key.toLowerCase())) ||
+      e.key === 'F12' ||
+      (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase()))) {
+    e.preventDefault();
+  }
+});
+// Disable text selection on questions
+document.querySelectorAll('.q-text, .opt-btn, .options').forEach(el => {
+  el.style.userSelect = 'none';
+  el.style.webkitUserSelect = 'none';
+});
+</script>
 </body>
 </html>
