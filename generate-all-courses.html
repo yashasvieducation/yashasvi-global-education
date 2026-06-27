@@ -32,9 +32,10 @@
 <body>
 <div class="wrap">
   <h1>🤖 Generate All Course Content</h1>
-  <p>This will generate AI content for all courses that don't have modules yet. Takes about 2-3 minutes.</p>
+  <p>This will generate AI content for all courses that don't have modules yet. Each course takes ~20 seconds.</p>
+  <p style="font-size:13px; color:#1a73e8; margin-top:-16px; margin-bottom:20px;" id="totalCount">Loading courses…</p>
 
-  <button class="btn" id="startBtn" onclick="startGeneration()">Generate All Courses →</button>
+  <button class="btn" id="startBtn" onclick="startGeneration()" disabled>Loading…</button>
 
   <div class="progress-bar-wrap">
     <div class="progress-bar" id="progressBar"></div>
@@ -50,25 +51,40 @@ const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZi
 const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
 const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/generate-course-content";
 
-const PENDING_COURSES = [
-  { id: "aaf1919c-958a-4ca0-90a1-ecfa752080d3", name: "Blockchain & Decentralized Systems", department: "Technology", level: "intermediate", icon: "⛓️" },
-  { id: "e94aa30d-d5fa-4e24-a67f-040e1afe0305", name: "Computer Science & AI", department: "Technology", level: "beginner", icon: "💻" },
-  { id: "391d6c40-3e6f-470c-9f65-f2006c45840b", name: "Design & Creative Tech", department: "Design", level: "beginner", icon: "🎨" },
-  { id: "e80a6117-0218-40b6-9af5-799232b8066b", name: "8th Standard Foundation", department: "School", level: "beginner", icon: "📚" },
-  { id: "635ddfe9-4909-4d77-85a8-799502d4752e", name: "10th Standard Excellence", department: "School", level: "intermediate", icon: "📗" },
-  { id: "6c1f8379-bbf7-4b2c-83ab-eec92c8c8627", name: "12th Standard Mastery", department: "School", level: "intermediate", icon: "📘" }
-];
+// Load courses dynamically from Supabase
+let PENDING_COURSES = [];
 
-// Render course list
-document.getElementById('courseList').innerHTML = PENDING_COURSES.map((c, i) => `
-  <div class="course-item" id="item-${i}">
-    <div class="course-icon">${c.icon}</div>
-    <div class="course-info">
-      <div class="course-name">${c.name}</div>
-      <div class="course-meta">${c.department} · ${c.level}</div>
-    </div>
-    <div class="status pending" id="status-${i}">⏳ Pending</div>
-  </div>`).join('');
+async function loadPendingCourses() {
+  try {
+    const res = await fetch(BASE + "/courses?select=id,name,department,level&is_active=eq.false", { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+
+    const icons = { 'Technology': '💻', 'School': '📚', 'Design': '🎨', 'Business': '🚀', 'Corporate': '🏢', 'Other': '📖' };
+    PENDING_COURSES = data.map(c => ({ ...c, icon: icons[c.department] || '📖' }));
+
+    document.getElementById('courseList').innerHTML = PENDING_COURSES.map((c, i) => `
+      <div class="course-item" id="item-${i}">
+        <div class="course-icon">${c.icon}</div>
+        <div class="course-info">
+          <div class="course-name">${c.name}</div>
+          <div class="course-meta">${c.department} · ${c.level}</div>
+        </div>
+        <div class="status pending" id="status-${i}">⏳ Pending</div>
+      </div>`).join('');
+
+    document.getElementById('totalCount').textContent = PENDING_COURSES.length + ' courses to generate';
+    document.getElementById('startBtn').disabled = false;
+    document.getElementById('startBtn').textContent = 'Generate All ' + PENDING_COURSES.length + ' Courses →';
+  } catch(e) {
+    document.getElementById('courseList').innerHTML = '<p style="color:#c5221f;">Error loading courses: ' + e.message + '</p>';
+  }
+}
+
+// Load on page start
+loadPendingCourses();
+
+
 
 function log(msg) {
   const el = document.getElementById('log');
