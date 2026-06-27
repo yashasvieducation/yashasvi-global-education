@@ -175,41 +175,82 @@ async function doLogin() {
       return;
     }
 
-    // 3. Check Student (regular)
+    // 3. Check Student
     const stuRes = await fetch(BASE + "/students?select=*&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
     const stuData = await stuRes.json();
+
     if (Array.isArray(stuData) && stuData.length > 0) {
       const stu = stuData[0];
 
-      // Check password
+      // Step 1: Check students table password
       if (stu.password) {
-        // Regular student with password
         if (stu.password !== password) {
-          hideLoading(); showMsg('error', 'Incorrect password. Please try again.');
+          hideLoading();
+          showMsg('error', 'Incorrect password. Please try again.');
           btn.disabled = false; btn.textContent = 'Sign in →'; return;
         }
       } else {
-        // Check institution_students password
+        // Step 2: Check institution_students table password
         const iStuRes = await fetch(BASE + "/institution_students?select=student_password&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
         const iStuData = await iStuRes.json();
         if (Array.isArray(iStuData) && iStuData.length > 0 && iStuData[0].student_password) {
           if (iStuData[0].student_password !== password) {
-            hideLoading(); showMsg('error', 'Incorrect password. Please try again.');
+            hideLoading();
+            showMsg('error', 'Incorrect password. Please try again.');
             btn.disabled = false; btn.textContent = 'Sign in →'; return;
           }
         }
       }
 
-      showLoading('Welcome ' + stu.student_name + '! Redirecting…');
+      // Login success
+      showLoading('Welcome ' + (stu.student_name || 'Student') + '! Redirecting…');
 
-      // Redirect based on admission status
+      // Smart redirect based on admission status
       const status = stu.admission_status;
       let redirect = '/dashboard.html';
-      if (status === 'form_submitted') redirect = '/iq-game.html';
+      if (!status || status === 'form_submitted') redirect = '/iq-game.html';
+      else if (status === 'iq_completed') redirect = '/course-select.html';
+      else if (status === 'course_selected') redirect = '/exam-scheduling.html';
+      else if (status === 'exam_scheduled') redirect = '/exam.html';
       else if (status === 'exam_completed') redirect = '/fee.html';
       else if (['admitted','final_exam_passed','internship_passed','certified'].includes(status)) redirect = '/dashboard.html';
 
-      setTimeout(() => window.location.href = redirect + '?email=' + encodeURIComponent(email), 1000);
+      setTimeout(() => window.location.href = redirect + '?email=' + encodeURIComponent(email), 1200);
+      return;
+    }
+
+    // 4. Check Institution Students (who don't have entry in students table yet)
+    const iStuRes2 = await fetch(BASE + "/institution_students?select=*&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const iStuData2 = await iStuRes2.json();
+    if (Array.isArray(iStuData2) && iStuData2.length > 0) {
+      const iStu = iStuData2[0];
+      if (iStu.student_password && iStu.student_password !== password) {
+        hideLoading();
+        showMsg('error', 'Incorrect password. Please try again.');
+        btn.disabled = false; btn.textContent = 'Sign in →'; return;
+      }
+
+      // Auto-create entry in students table
+      showLoading('Setting up your account…');
+      try {
+        await fetch(BASE + "/students", {
+          method: "POST",
+          headers: { ...HEADERS, "Prefer": "return=representation" },
+          body: JSON.stringify({
+            student_name: iStu.student_name,
+            student_email: iStu.student_email,
+            password: iStu.student_password,
+            track: 'pending',
+            admission_status: 'form_submitted',
+            verification_status: 'pending',
+            country: 'India',
+            address: ''
+          })
+        });
+      } catch(e) {}
+
+      showLoading('Welcome ' + iStu.student_name + '! Redirecting…');
+      setTimeout(() => window.location.href = '/iq-game.html?email=' + encodeURIComponent(email), 1200);
       return;
     }
 
