@@ -81,6 +81,10 @@
 
   /* Field hint */
   .field input[type="password"] { letter-spacing: 2px; }
+  .password-wrap { position: relative; }
+  .password-wrap input { padding-right: 44px; }
+  .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 18px; color: #5f6368; padding: 4px; line-height: 1; }
+  .eye-btn:hover { color: #1a73e8; }
 </style>
 </head>
 <body>
@@ -96,7 +100,10 @@
   <p>This panel is restricted to administrators only.</p>
   <div class="field">
     <label>Admin Password</label>
-    <input type="password" id="adminPassword" placeholder="Enter admin password">
+    <div class="password-wrap">
+      <input type="password" id="adminPassword" placeholder="Enter admin password">
+      <button type="button" class="eye-btn" onclick="togglePass('adminPassword', this)">👁️</button>
+    </div>
   </div>
   <button class="btn btn-primary" id="loginBtn" style="width:100%; padding:12px;" onclick="adminLogin()">Login →</button>
   <div id="loginMsg" style="margin-top:12px; font-size:14px; color:#c5221f; display:none;"></div>
@@ -255,6 +262,12 @@ const HEADERS = { "apikey": ANON_KEY, "Authorization": "Bearer " + ANON_KEY, "Co
 const RESEND_KEY = "re_Jm8jbeFV_NZC4VkDZN5fuhbxWFJQTgfcn";
 const ADMIN_EMAIL = "yashasvieducation@gmail.com";
 const ADMIN_PASS = "yashasvi@admin2026";
+
+function togglePass(id, btn) {
+  const input = document.getElementById(id);
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁️'; }
+}
 
 function adminLogin() {
   const pass = document.getElementById('adminPassword').value;
