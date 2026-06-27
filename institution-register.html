@@ -118,7 +118,7 @@
   <div class="form-section-title" id="instDetailsTitle">Institution Details</div>
 
   <div class="field">
-    <label>Institution name <span class="required">*</span></label>
+    <label id="instNameLabel">School / Institute / College Name <span class="required">*</span></label>
     <input type="text" id="instName" autocomplete="off" placeholder="e.g. St. Xavier's High School">
   </div>
 
@@ -286,37 +286,53 @@ const typeIcons = { school: '🏫', college: '🎓', corporate: '🏢', individu
 const typeLabels = { school: 'School', college: 'College / University', corporate: 'Corporate', individual: 'Individual' };
 
 function selectType(type, el) {
-  selectedType = type;
-  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('selectedTypeBadge').textContent = typeIcons[type] + ' ' + typeLabels[type];
-  document.getElementById('formWrap').style.display = 'block';
+  try {
+    selectedType = type;
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
 
-  // Corporate fields
-  document.getElementById('corporateFields').style.display = type === 'corporate' ? 'block' : 'none';
+    const badge = document.getElementById('selectedTypeBadge');
+    if (badge) badge.textContent = typeIcons[type] + ' ' + typeLabels[type];
 
-  // Individual fields
-  document.getElementById('individualFields').style.display = type === 'individual' ? 'block' : 'none';
+    const formWrap = document.getElementById('formWrap');
+    if (formWrap) formWrap.style.display = 'block';
 
-  // Dynamic labels
-  if (type === 'corporate') {
-    document.getElementById('instDetailsTitle').textContent = 'Corporate Details';
-    document.getElementById('instNameLabel').innerHTML = 'Corporate / Company Name <span class="required">*</span>';
-    document.getElementById('instName').placeholder = 'e.g. Infosys Ltd / Tata Consultancy Services';
-    document.getElementById('userLimitLabel').innerHTML = 'Number of employees <span class="required">*</span>';
-  } else if (type === 'individual') {
-    document.getElementById('instDetailsTitle').textContent = 'Personal Details';
-    document.getElementById('instNameLabel').innerHTML = 'Full Name <span class="required">*</span>';
-    document.getElementById('instName').placeholder = 'Your full name';
-    document.getElementById('userLimitLabel').innerHTML = 'Number of seats needed <span class="required">*</span>';
-  } else {
-    document.getElementById('instDetailsTitle').textContent = 'Institution Details';
-    document.getElementById('instNameLabel').innerHTML = 'School / Institute / College Name <span class="required">*</span>';
-    document.getElementById('instName').placeholder = 'e.g. St. Xavier's High School';
-    document.getElementById('userLimitLabel').innerHTML = 'Number of students <span class="required">*</span>';
+    const corpFields = document.getElementById('corporateFields');
+    if (corpFields) corpFields.style.display = type === 'corporate' ? 'block' : 'none';
+
+    const indivFields = document.getElementById('individualFields');
+    if (indivFields) indivFields.style.display = type === 'individual' ? 'block' : 'none';
+
+    const titleEl = document.getElementById('instDetailsTitle');
+    const nameLabel = document.getElementById('instNameLabel');
+    const nameInput = document.getElementById('instName');
+    const limitLabel = document.getElementById('userLimitLabel');
+
+    if (type === 'corporate') {
+      if (titleEl) titleEl.textContent = 'Corporate Details';
+      if (nameLabel) nameLabel.innerHTML = 'Corporate / Company Name <span class="required">*</span>';
+      if (nameInput) nameInput.placeholder = 'e.g. Infosys Ltd / Tata Consultancy Services';
+      if (limitLabel) limitLabel.innerHTML = 'Number of employees <span class="required">*</span>';
+    } else if (type === 'individual') {
+      if (titleEl) titleEl.textContent = 'Personal Details';
+      if (nameLabel) nameLabel.innerHTML = 'Full Name <span class="required">*</span>';
+      if (nameInput) nameInput.placeholder = 'Your full name';
+      if (limitLabel) limitLabel.innerHTML = 'Number of seats needed <span class="required">*</span>';
+    } else {
+      if (titleEl) titleEl.textContent = 'Institution Details';
+      if (nameLabel) nameLabel.innerHTML = 'School / Institute / College Name <span class="required">*</span>';
+      if (nameInput) nameInput.placeholder = type === 'college' ? 'e.g. Pune University / MIT College' : 'e.g. St. Xavier's High School';
+      if (limitLabel) limitLabel.innerHTML = 'Number of students <span class="required">*</span>';
+    }
+
+    if (formWrap) formWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch(err) {
+    console.error('selectType error:', err);
+    // Fallback - just show form
+    const formWrap = document.getElementById('formWrap');
+    if (formWrap) formWrap.style.display = 'block';
   }
-
-  document.getElementById('formWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 async function submitRegistration() {
