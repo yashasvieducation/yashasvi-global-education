@@ -187,111 +187,102 @@ function drawCertificate(name, course, certId, joinDate) {
 
   // Logo area
   ctx.fillStyle = '#fff';
-  ctx.font = 'bold 18px Google Sans, Arial';
+  ctx.font = 'bold 20px Google Sans, Arial';
   ctx.textAlign = 'center';
-  ctx.fillText('YASHASVI GLOBAL EDUCATION', W/2, 38);
+  ctx.fillText('YASHASVI GLOBAL EDUCATION', W/2, 35);
   ctx.font = '13px Roboto, Arial';
-  ctx.fillStyle = 'rgba(255,255,255,0.8)';
-  ctx.fillText('Decentralised AI-Powered University', W/2, 58);
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.fillText('Decentralised AI-Powered University', W/2, 55);
+  ctx.font = '11px Roboto, Arial';
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.fillText('yashasvi-global-education.vercel.app', W/2, 72);
 
-  // Seal circle
+  // Seal circle - moved below header
   ctx.beginPath();
-  ctx.arc(W/2, 80, 40, 0, Math.PI*2);
+  ctx.arc(W/2, 130, 44, 0, Math.PI*2);
   ctx.fillStyle = '#fff';
   ctx.fill();
   ctx.strokeStyle = '#c9a84c';
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2.5;
   ctx.stroke();
-  ctx.fillStyle = '#1a73e8';
+  ctx.font = '32px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('🎓', W/2, 143);
+
+  // Certificate of Completion - bigger & bold
+  ctx.fillStyle = '#1a3a5c';
   ctx.font = 'bold 28px Georgia, serif';
   ctx.textAlign = 'center';
-  ctx.fillText('🎓', W/2, 90);
-
-  // Certificate of Completion
-  ctx.fillStyle = '#1a3a5c';
-  ctx.font = 'italic 14px Georgia, serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('Certificate of Completion', W/2, 155);
+  ctx.fillText('Certificate of Completion', W/2, 210);
 
   // Decorative line
   ctx.strokeStyle = '#c9a84c';
-  ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(100, 165); ctx.lineTo(W-100, 165); ctx.stroke();
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(80, 222); ctx.lineTo(W-80, 222); ctx.stroke();
 
   // This is to certify
   ctx.fillStyle = '#5f6368';
   ctx.font = '13px Roboto, Arial';
-  ctx.fillText('This is to certify that', W/2, 200);
+  ctx.fillText('This is to certify that', W/2, 252);
 
   // Student Name
   ctx.fillStyle = '#202124';
   ctx.font = 'bold 36px Google Sans, Arial';
-  ctx.fillText(name, W/2, 248);
+  ctx.fillText(name, W/2, 300);
 
   // Underline name
   const nameWidth = ctx.measureText(name).width;
   ctx.strokeStyle = '#c9a84c';
   ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(W/2 - nameWidth/2, 256); ctx.lineTo(W/2 + nameWidth/2, 256); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W/2 - nameWidth/2, 308); ctx.lineTo(W/2 + nameWidth/2, 308); ctx.stroke();
 
   // has successfully completed
   ctx.fillStyle = '#5f6368';
   ctx.font = '14px Roboto, Arial';
-  ctx.fillText('has successfully completed the course', W/2, 290);
+  ctx.fillText('has successfully completed the course', W/2, 340);
 
   // Course Name
   ctx.fillStyle = '#1a73e8';
   ctx.font = 'bold 22px Google Sans, Arial';
-  ctx.fillText(course, W/2, 330);
+  ctx.fillText(course, W/2, 378);
 
   // at Yashasvi
   ctx.fillStyle = '#5f6368';
   ctx.font = '13px Roboto, Arial';
-  ctx.fillText('at Yashasvi Global Education — Decentralised University', W/2, 360);
+  ctx.fillText('at Yashasvi Global Education — Decentralised University', W/2, 408);
 
   // Date
   const issueDate = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
   ctx.fillStyle = '#80868b';
   ctx.font = '12px Roboto, Arial';
-  ctx.fillText('Issued on ' + issueDate, W/2, 395);
+  ctx.fillText('Issued on ' + issueDate, W/2, 432);
 
   // Bottom divider
   ctx.strokeStyle = '#e8d5a0';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(60, 420); ctx.lineTo(W-60, 420); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(60, 455); ctx.lineTo(W-60, 455); ctx.stroke();
 
-  // Bottom section - 3 columns
-  const cols = [W/4, W/2, 3*W/4];
+  // Bottom section - 2 columns only (no founder)
+  const cols = [W/3, 2*W/3];
 
-  // Signature 1 - Director
-  ctx.fillStyle = '#202124';
-  ctx.font = 'italic 13px Georgia, serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('Tushar Kumbhar', cols[0], 460);
-  ctx.strokeStyle = '#202124';
-  ctx.lineWidth = 0.5;
-  ctx.beginPath(); ctx.moveTo(cols[0]-60, 467); ctx.lineTo(cols[0]+60, 467); ctx.stroke();
-  ctx.fillStyle = '#5f6368';
-  ctx.font = '11px Roboto, Arial';
-  ctx.fillText('Founder & Director', cols[0], 480);
-
-  // Cert ID middle
+  // Cert ID left
   ctx.fillStyle = '#1a73e8';
-  ctx.font = 'bold 11px monospace';
-  ctx.fillText(certId, cols[1], 455);
+  ctx.font = 'bold 12px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(certId, cols[0], 478);
   ctx.fillStyle = '#80868b';
-  ctx.font = '10px Roboto, Arial';
-  ctx.fillText('Certificate ID', cols[1], 468);
-  ctx.fillText('Verified & Blockchain Secured', cols[1], 482);
+  ctx.font = '11px Roboto, Arial';
+  ctx.fillText('Certificate ID', cols[0], 492);
+  ctx.fillText('Blockchain Secured', cols[0], 506);
 
   // AI Verified right
   ctx.fillStyle = '#137333';
-  ctx.font = 'bold 12px Roboto, Arial';
-  ctx.fillText('✅ AI Verified', cols[2], 452);
+  ctx.font = 'bold 13px Roboto, Arial';
+  ctx.fillText('✅ AI Verified', cols[1], 475);
   ctx.fillStyle = '#5f6368';
   ctx.font = '11px Roboto, Arial';
-  ctx.fillText('Yashasvi Global Education', cols[2], 466);
-  ctx.fillText('Digital Seal', cols[2], 480);
+  ctx.fillText('Yashasvi Global Education', cols[1], 490);
+  ctx.fillText('Decentralised University', cols[1], 505);
 
   // Footer
   const footGrad = ctx.createLinearGradient(0, H-50, W, H);
