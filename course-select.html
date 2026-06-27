@@ -99,15 +99,34 @@ const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZi
 const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
 const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
 
-const COURSES = [
-  { id: "entrepreneurship", icon: "🚀", name: "Entrepreneurship & Business Design", desc: "Start and grow your own business from scratch.", badge: "Open" },
-  { id: "blockchain", icon: "⛓️", name: "Blockchain & Decentralized Systems", desc: "Web3, crypto, DeFi and decentralized platforms.", badge: "Open" },
-  { id: "coding", icon: "💻", name: "Computer Science & AI", desc: "Programming, machine learning and AI applications.", badge: "Open" },
-  { id: "design", icon: "🎨", name: "Design & Creative Tech", desc: "UI/UX, branding and digital product design.", badge: "Open" },
-  { id: "8th", icon: "📚", name: "8th Standard Courses", desc: "Foundation courses for Class 8 students.", badge: "Free" },
-  { id: "10th", icon: "📗", name: "10th Standard Courses", desc: "Board prep + skill development for Class 10.", badge: "Free" },
-  { id: "12th", icon: "📘", name: "12th Standard Courses", desc: "Career guidance + subject mastery for Class 12.", badge: "Free" }
+const ALL_COURSES = [
+  // School
+  { id: "8th", icon: "📚", name: "8th Standard Foundation", desc: "Foundation courses for Class 8 students.", badge: "Free", type: "school" },
+  { id: "9th", icon: "📓", name: "9th Standard Excellence", desc: "Skill development + academics for Class 9.", badge: "Free", type: "school" },
+  { id: "10th", icon: "📗", name: "10th Standard Mastery", desc: "Board prep + skill development for Class 10.", badge: "Free", type: "school" },
+  // College
+  { id: "11th", icon: "📘", name: "11th Standard Courses", desc: "Career readiness + subject mastery for Class 11.", badge: "Free", type: "college" },
+  { id: "12th", icon: "📙", name: "12th Standard Mastery", desc: "Career guidance + subject mastery for Class 12.", badge: "Free", type: "college" },
+  { id: "entrepreneurship", icon: "🚀", name: "Entrepreneurship & Business Design", desc: "Start and grow your own business from scratch.", badge: "Open", type: "college" },
+  { id: "coding", icon: "💻", name: "Computer Science & AI", desc: "Programming, machine learning and AI applications.", badge: "Open", type: "college" },
+  // Corporate
+  { id: "blockchain", icon: "⛓️", name: "Blockchain & Decentralized Systems", desc: "Web3, crypto, DeFi and decentralized platforms.", badge: "Paid", type: "corporate" },
+  { id: "corporate-ai", icon: "🤖", name: "AI for Business", desc: "AI tools, automation and productivity for teams.", badge: "Paid", type: "corporate" },
+  { id: "corporate-leadership", icon: "👔", name: "Leadership & Management", desc: "Team building, leadership and corporate strategy.", badge: "Paid", type: "corporate" },
+  { id: "corporate-finance", icon: "💰", name: "Finance & Accounting", desc: "Corporate finance, budgeting and accounting basics.", badge: "Paid", type: "corporate" },
+  // Regular (all)
+  { id: "design", icon: "🎨", name: "Design & Creative Tech", desc: "UI/UX, branding and digital product design.", badge: "Open", type: "regular" },
 ];
+
+// Filter courses based on institution type
+function getCoursesForType(instType) {
+  if (instType === 'school') return ALL_COURSES.filter(c => c.type === 'school');
+  if (instType === 'college') return ALL_COURSES.filter(c => c.type === 'college');
+  if (instType === 'corporate') return ALL_COURSES.filter(c => c.type === 'corporate');
+  return ALL_COURSES; // regular — show all
+}
+
+let COURSES = ALL_COURSES; // default
 
 let studentEmail = "", studentName = "", conversationHistory = [], selectedCourse = null, courseShown = false;
 
@@ -138,6 +157,21 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
       window.location.href = '/exam-scheduling.html?email=' + encodeURIComponent(email);
       return;
     }
+
+    // Detect institution type via referral code
+    let instType = 'regular';
+    try {
+      const instStudRes = await fetch(BASE + "/institution_students?select=institution_id&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+      const instStudData = await instStudRes.json();
+      if (Array.isArray(instStudData) && instStudData.length > 0) {
+        const instRes = await fetch(BASE + "/institutions?select=type&id=eq." + instStudData[0].institution_id, { method: "GET", headers: HEADERS });
+        const instData = await instRes.json();
+        if (Array.isArray(instData) && instData.length > 0) instType = instData[0].type;
+      }
+    } catch(e) {}
+
+    COURSES = getCoursesForType(instType);
+
     document.getElementById('emailStep').style.display = 'none';
     document.getElementById('chatArea').style.display = 'flex';
     startConversation();
@@ -166,16 +200,11 @@ async function sendMsg() {
   document.getElementById('typing').style.display = 'block';
 
   try {
+    const courseList = COURSES.map((c,i) => `${i+1}. ${c.name} — ${c.desc}`).join('\n');
     const systemPrompt = `You are a friendly course advisor at Yashasvi Global Education. Your job is to understand what the student wants to learn and suggest the best course from our available options.
 
-Available courses:
-1. Entrepreneurship & Business Design — for students who want to start a business
-2. Blockchain & Decentralized Systems — for students interested in crypto, Web3, DeFi
-3. Computer Science & AI — for students who want to learn coding, AI, technology
-4. Design & Creative Tech — for students interested in UI/UX, branding, design
-5. 8th Standard Courses (FREE) — for Class 8 students (foundation + skills)
-6. 10th Standard Courses (FREE) — for Class 10 students (board prep + skills)
-7. 12th Standard Courses (FREE) — for Class 12 students (career guidance + subjects)
+Available courses for this student:
+${courseList}
 
 Ask 2-3 short, friendly questions to understand the student's interest and current education level. After understanding, suggest ONE best course clearly. Keep messages SHORT — max 3 sentences. Be warm and encouraging.
 
