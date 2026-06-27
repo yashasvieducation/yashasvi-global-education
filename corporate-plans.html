@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Corporate Plans</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
+  .nav-logo span { color: #1a73e8; }
+  .nav-cta { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 8px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; }
+
+  .hero { padding: 64px 24px 48px; text-align: center; max-width: 760px; margin: 0 auto; }
+  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 42px; font-weight: 400; color: #202124; line-height: 1.2; margin-bottom: 14px; }
+  .hero p { font-size: 17px; color: #5f6368; line-height: 1.6; max-width: 560px; margin: 0 auto 32px; }
+
+  /* Unique feature banner */
+  .unique-banner { background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%); border-radius: 12px; padding: 24px 32px; max-width: 900px; margin: 0 auto 60px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .unique-banner .u-icon { font-size: 40px; flex-shrink: 0; }
+  .unique-banner .u-text h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #fff; margin-bottom: 6px; }
+  .unique-banner .u-text p { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.5; }
+
+  /* Plans */
+  .plans-wrap { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+  .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 60px; }
+  @media (max-width: 700px) { .plans-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 28px; } }
+
+  .plan-card { border: 1.5px solid #e8eaed; border-radius: 12px; padding: 28px 24px; position: relative; transition: all 0.2s; }
+  .plan-card:hover { border-color: #1a73e8; box-shadow: 0 4px 20px rgba(26,115,232,0.12); }
+  .plan-card.popular { border-color: #1a73e8; box-shadow: 0 4px 24px rgba(26,115,232,0.15); }
+  .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #1a73e8; color: #fff; border-radius: 100px; padding: 4px 16px; font-size: 12px; font-weight: 500; font-family: 'Google Sans', Arial, sans-serif; white-space: nowrap; }
+  .plan-icon { font-size: 32px; margin-bottom: 12px; }
+  .plan-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 20px; font-weight: 500; color: #202124; margin-bottom: 4px; }
+  .plan-seats { font-size: 13px; color: #5f6368; margin-bottom: 20px; }
+  .plan-price { margin-bottom: 6px; }
+  .plan-price .amount { font-family: 'Google Sans', Arial, sans-serif; font-size: 42px; font-weight: 400; color: #1a73e8; }
+  .plan-price .currency { font-size: 20px; color: #1a73e8; vertical-align: super; }
+  .plan-price .period { font-size: 14px; color: #5f6368; }
+  .plan-per-seat { font-size: 12px; color: #80868b; margin-bottom: 24px; }
+  .plan-features { list-style: none; margin-bottom: 28px; }
+  .plan-features li { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; color: #3c4043; padding: 6px 0; border-bottom: 1px solid #f1f3f4; line-height: 1.4; }
+  .plan-features li:last-child { border-bottom: none; }
+  .plan-features li::before { content: '✓'; color: #34a853; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .btn-plan { width: 100%; border: none; border-radius: 4px; padding: 13px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; text-align: center; text-decoration: none; display: block; }
+  .btn-plan-primary { background: #1a73e8; color: #fff; }
+  .btn-plan-primary:hover { background: #1765cc; }
+  .btn-plan-outline { background: #fff; color: #1a73e8; border: 1.5px solid #1a73e8; }
+  .btn-plan-outline:hover { background: #e8f0fe; }
+
+  /* Seat system */
+  .seat-section { background: #f8f9fa; border-radius: 12px; padding: 32px; margin-bottom: 48px; }
+  .seat-section h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 24px; font-weight: 400; color: #202124; margin-bottom: 8px; }
+  .seat-section p { font-size: 15px; color: #5f6368; margin-bottom: 28px; line-height: 1.6; }
+  .seat-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 700px) { .seat-flow { grid-template-columns: 1fr 1fr; } }
+  .seat-card { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 16px; text-align: center; }
+  .seat-num { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; margin-bottom: 4px; }
+  .seat-label { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .seat-desc { font-size: 12px; color: #5f6368; line-height: 1.4; }
+  .seat-active { border-color: #1a73e8; }
+  .seat-active .seat-num { color: #1a73e8; }
+  .seat-completed { border-color: #34a853; }
+  .seat-completed .seat-num { color: #34a853; }
+  .seat-failed { border-color: #fbbc04; }
+  .seat-failed .seat-num { color: #b06000; }
+  .seat-available { border-color: #dadce0; }
+  .seat-available .seat-num { color: #5f6368; }
+
+  /* FAQ */
+  .faq-section { max-width: 680px; margin: 0 auto 60px; }
+  .faq-section h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 24px; font-weight: 400; color: #202124; margin-bottom: 24px; text-align: center; }
+  .faq-item { border-bottom: 1px solid #e8eaed; padding: 16px 0; }
+  .faq-q { font-size: 15px; font-weight: 500; color: #202124; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .faq-a { font-size: 14px; color: #5f6368; line-height: 1.6; margin-top: 10px; display: none; }
+  .faq-item.open .faq-a { display: block; }
+  .faq-item.open .faq-arrow { transform: rotate(180deg); }
+  .faq-arrow { transition: transform 0.2s; font-size: 12px; }
+
+  /* Renewal */
+  .renewal-section { background: #e8f0fe; border-radius: 12px; padding: 28px 32px; margin-bottom: 48px; display: flex; gap: 20px; align-items: flex-start; }
+  .renewal-section .r-icon { font-size: 32px; flex-shrink: 0; }
+  .renewal-section h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #1a73e8; margin-bottom: 8px; }
+  .renewal-section p { font-size: 14px; color: #3c4043; line-height: 1.6; }
+  .renewal-list { list-style: none; margin-top: 10px; }
+  .renewal-list li { font-size: 14px; color: #3c4043; padding: 3px 0; display: flex; gap: 8px; }
+  .renewal-list li::before { content: '✅'; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">Yashasvi <span>Global Education</span></a>
+  <a class="nav-cta" href="/institution-register.html">Get Started →</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Corporate Training Plans</div>
+  <h1>Upskill your team with AI-powered learning</h1>
+  <p>Annual plans with revolving seats — pay once, train unlimited employees throughout the year.</p>
+</div>
+
+<div class="plans-wrap">
+
+  <!-- Unique Banner -->
+  <div class="unique-banner">
+    <div class="u-icon">🔄</div>
+    <div class="u-text">
+      <h3>Industry-first Dynamic Seat System</h3>
+      <p>When an employee completes their course, their seat is automatically freed — letting you onboard the next employee without paying extra. Your 10 seats can train 30+ employees a year.</p>
+    </div>
+  </div>
+
+  <!-- Plans -->
+  <div class="plans-grid">
+
+    <div class="plan-card">
+      <div class="plan-icon">🌱</div>
+      <div class="plan-name">Starter</div>
+      <div class="plan-seats">10 revolving seats</div>
+      <div class="plan-price">
+        <span class="currency">$</span><span class="amount">99</span><span class="period">/year</span>
+      </div>
+      <div class="plan-per-seat">$9.90 per seat · Billed annually</div>
+      <ul class="plan-features">
+        <li>10 active seats at a time</li>
+        <li>Dynamic seat recycling</li>
+        <li>AI-generated courses</li>
+        <li>Employee progress tracking</li>
+        <li>Completion certificates</li>
+        <li>1 free retry per failed seat</li>
+        <li>Annual renewal — data intact</li>
+      </ul>
+      <a class="btn-plan btn-plan-outline" href="/institution-register.html">Get Starter →</a>
+    </div>
+
+    <div class="plan-card popular">
+      <div class="popular-badge">⭐ Most Popular</div>
+      <div class="plan-icon">🚀</div>
+      <div class="plan-name">Growth</div>
+      <div class="plan-seats">25 revolving seats</div>
+      <div class="plan-price">
+        <span class="currency">$</span><span class="amount">199</span><span class="period">/year</span>
+      </div>
+      <div class="plan-per-seat">$7.96 per seat · Billed annually</div>
+      <ul class="plan-features">
+        <li>25 active seats at a time</li>
+        <li>Dynamic seat recycling</li>
+        <li>AI-generated courses</li>
+        <li>Batch course assignment</li>
+        <li>Employee progress tracking</li>
+        <li>Completion certificates</li>
+        <li>1 free retry per failed seat</li>
+        <li>Priority support</li>
+        <li>Annual renewal — data intact</li>
+      </ul>
+      <a class="btn-plan btn-plan-primary" href="/institution-register.html">Get Growth →</a>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-icon">💼</div>
+      <div class="plan-name">Business</div>
+      <div class="plan-seats">50 revolving seats</div>
+      <div class="plan-price">
+        <span class="currency">$</span><span class="amount">349</span><span class="period">/year</span>
+      </div>
+      <div class="plan-per-seat">$6.98 per seat · Billed annually</div>
+      <ul class="plan-features">
+        <li>50 active seats at a time</li>
+        <li>Dynamic seat recycling</li>
+        <li>AI-generated courses</li>
+        <li>Batch course assignment</li>
+        <li>Department-wise tracking</li>
+        <li>Completion certificates</li>
+        <li>1 free retry per failed seat</li>
+        <li>Extra seat top-up ($12/seat)</li>
+        <li>Dedicated support</li>
+        <li>Annual renewal — data intact</li>
+      </ul>
+      <a class="btn-plan btn-plan-outline" href="/institution-register.html">Get Business →</a>
+    </div>
+
+  </div>
+
+  <!-- Dynamic Seat System -->
+  <div class="seat-section">
+    <h2>🔄 How Dynamic Seat System works</h2>
+    <p>Unlike traditional LMS platforms that lock you to a fixed number of users, our revolving seat model means completed employees free up seats for new ones — maximizing your investment.</p>
+    <div class="seat-flow">
+      <div class="seat-card seat-active">
+        <div class="seat-num" style="color:#1a73e8;">14</div>
+        <div class="seat-label" style="color:#1a73e8;">Active</div>
+        <div class="seat-desc">Currently learning</div>
+      </div>
+      <div class="seat-card seat-completed">
+        <div class="seat-num" style="color:#34a853;">4</div>
+        <div class="seat-label" style="color:#34a853;">Completed</div>
+        <div class="seat-desc">Seats freed — add new employees!</div>
+      </div>
+      <div class="seat-card seat-failed">
+        <div class="seat-num" style="color:#b06000;">1</div>
+        <div class="seat-label" style="color:#b06000;">Retry</div>
+        <div class="seat-desc">1 free retry available</div>
+      </div>
+      <div class="seat-card seat-available">
+        <div class="seat-num" style="color:#5f6368;">1</div>
+        <div class="seat-label" style="color:#5f6368;">Available</div>
+        <div class="seat-desc">Ready for new employee</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Annual Renewal -->
+  <div class="renewal-section">
+    <div class="r-icon">🔁</div>
+    <div>
+      <h3>Annual Renewal — Your data is always safe</h3>
+      <p>When your plan expires, simply renew with the same account. Everything stays exactly as it was.</p>
+      <ul class="renewal-list">
+        <li>All employee records and progress intact</li>
+        <li>Certificates remain valid for lifetime</li>
+        <li>Completed courses still accessible</li>
+        <li>Same login credentials — no reset needed</li>
+        <li>New AI courses available immediately after renewal</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What happens when an employee completes their course? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Their seat becomes "Alumni" status and is automatically freed. You can immediately add a new employee to that seat at no extra cost.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What if an employee fails the course? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">They get 1 free retry. If they fail again, the seat goes inactive. You can either purchase a retry ($2/seat) or replace them with a new employee.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I add more seats mid-year? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Yes! You can top-up additional seats at $12/seat anytime. Business plan users get priority access to seat top-ups.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What payment methods do you accept? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">We accept USDT (TRC-20) cryptocurrency payments. This ensures fast, global transactions with no currency conversion fees.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What courses are available for corporate teams? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Python, AI for Business, Leadership & Management, Finance & Accounting, Blockchain & Web3, and more. Our AI can also generate custom courses based on your team's specific needs.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How does batch course assignment work? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">In your corporate dashboard, select multiple employees and assign them the same course with one click. All their progress is tracked together in a batch report.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center; padding-bottom:20px;">
+    <p style="font-size:15px; color:#5f6368; margin-bottom:20px;">Ready to upskill your team?</p>
+    <a href="/institution-register.html" style="display:inline-block; background:#1a73e8; color:#fff; text-decoration:none; border-radius:4px; padding:14px 40px; font-size:16px; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">Register your company →</a>
+  </div>
+
+</div>
+
+<script>
+function toggleFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>

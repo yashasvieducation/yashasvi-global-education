@@ -123,6 +123,8 @@
     <div class="sidebar-item" onclick="switchPanel('students')" id="tab-students"><span class="s-icon">👥</span> Students / Users</div>
     <div class="sidebar-item" onclick="switchPanel('codes')" id="tab-codes"><span class="s-icon">🔑</span> Referral Codes</div>
     <div class="sidebar-item" onclick="switchPanel('settings')" id="tab-settings"><span class="s-icon">⚙️</span> Settings</div>
+    <div class="sidebar-item" id="tab-batch" onclick="switchPanel('batch')" style="display:none;"><span class="s-icon">📦</span> Batch Management</div>
+    <div class="sidebar-item" id="tab-seats" onclick="switchPanel('seats')" style="display:none;"><span class="s-icon">🔄</span> Seat Management</div>
   </div>
 
   <div class="main">
@@ -220,6 +222,43 @@
       </div>
     </div>
 
+    <!-- Batch Management -->
+    <div class="panel" id="panel-batch">
+      <div class="panel-title">Batch Course Assignment</div>
+      <div class="notice blue"><span>ℹ️</span><div>Select employees and assign them the same course in one click. All progress tracked together.</div></div>
+      <div class="card">
+        <h3>Assign Course to Employees</h3>
+        <div class="f-field" style="margin-bottom:16px;">
+          <label>Select Course</label>
+          <select id="batchCourse">
+            <option value="">— Select course to assign —</option>
+            <option value="AI for Business">🤖 AI for Business</option>
+            <option value="Python Programming">💻 Python Programming</option>
+            <option value="Leadership & Management">👔 Leadership & Management</option>
+            <option value="Finance & Accounting">💰 Finance & Accounting</option>
+            <option value="Blockchain & Decentralized Systems">⛓️ Blockchain & Web3</option>
+            <option value="Entrepreneurship & Business Design">🚀 Entrepreneurship</option>
+          </select>
+        </div>
+        <div style="font-size:13px; color:#5f6368; margin-bottom:12px;">Select employees:</div>
+        <div id="batchEmployeeList" style="border:1px solid #e8eaed; border-radius:8px; padding:12px; margin-bottom:16px; max-height:240px; overflow-y:auto;">
+          <div style="color:#5f6368; font-size:14px;">Loading employees…</div>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="assignBatch()">Assign course to selected</button>
+          <button class="btn btn-outline" onclick="selectAllEmployees()">Select all</button>
+          <span id="selectedCount" style="font-size:13px; color:#5f6368;">0 selected</span>
+        </div>
+        <div id="batchMsg" style="margin-top:12px; font-size:14px; display:none;"></div>
+      </div>
+    </div>
+
+    <!-- Seat Management -->
+    <div class="panel" id="panel-seats">
+      <div class="panel-title">Dynamic Seat Management</div>
+      <div id="seatDashboard"></div>
+    </div>
+
     <!-- Settings -->
     <div class="panel" id="panel-settings">
       <div class="panel-title">Institution Settings</div>
@@ -292,6 +331,8 @@ function switchPanel(name) {
   if (name === 'students') loadStudents();
   if (name === 'codes') loadCodes();
   if (name === 'settings') loadSettings();
+  if (name === 'batch') loadBatchPanel();
+  if (name === 'seats') loadSeatDashboard();
 }
 
 function generateCode() {
@@ -438,6 +479,126 @@ function autoGenPass() {
   inp.type = 'text';
   inp.nextElementSibling.textContent = '🙈';
   showToast('Password generated: ' + pass);
+}
+
+// Batch Management
+async function loadBatchPanel() {
+  try {
+    const res = await fetch(BASE + "/institution_students?select=*&institution_id=eq." + instData.id + "&order=created_at.desc", { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      document.getElementById('batchEmployeeList').innerHTML = '<div style="color:#5f6368; font-size:14px;">No employees added yet.</div>';
+      return;
+    }
+    document.getElementById('batchEmployeeList').innerHTML = data.map(s => `
+      <div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #f1f3f4;">
+        <input type="checkbox" class="emp-check" data-email="${s.student_email}" data-id="${s.id}" onchange="updateSelectedCount()">
+        <div>
+          <div style="font-size:14px; font-weight:500;">${s.student_name}</div>
+          <div style="font-size:12px; color:#5f6368;">${s.grade_or_dept || ''} · ${s.student_email}</div>
+        </div>
+        ${s.admission_status !== 'pending' ? '<span class="badge badge-blue" style="margin-left:auto;">'+s.admission_status+'</span>' : ''}
+      </div>`).join('');
+  } catch(e) {}
+}
+
+function updateSelectedCount() {
+  const count = document.querySelectorAll('.emp-check:checked').length;
+  document.getElementById('selectedCount').textContent = count + ' selected';
+}
+
+function selectAllEmployees() {
+  document.querySelectorAll('.emp-check').forEach(c => c.checked = true);
+  updateSelectedCount();
+}
+
+async function assignBatch() {
+  const course = document.getElementById('batchCourse').value;
+  const selected = [...document.querySelectorAll('.emp-check:checked')].map(c => ({ email: c.dataset.email, id: c.dataset.id }));
+  if (!course) { showBatchMsg('error', 'Please select a course.'); return; }
+  if (selected.length === 0) { showBatchMsg('error', 'Please select at least one employee.'); return; }
+
+  showBatchMsg('info', 'Assigning course to ' + selected.length + ' employees…');
+  try {
+    for (const emp of selected) {
+      await fetch(BASE + "/institution_students?id=eq." + emp.id, {
+        method: "PATCH", headers: HEADERS,
+        body: JSON.stringify({ admission_status: 'course_assigned', grade_or_dept: document.getElementById('batchCourse').value })
+      });
+      // Also update in students table if exists
+      await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(emp.email), {
+        method: "PATCH", headers: HEADERS,
+        body: JSON.stringify({ selected_course: course, track: course })
+      });
+    }
+    showBatchMsg('success', '✅ Course assigned to ' + selected.length + ' employees successfully!');
+    loadStudents();
+  } catch(e) { showBatchMsg('error', 'Error: ' + e.message); }
+}
+
+function showBatchMsg(type, text) {
+  const m = document.getElementById('batchMsg');
+  const colors = { success: '#e6f4ea', error: '#fce8e6', info: '#e8f0fe' };
+  const textColors = { success: '#137333', error: '#c5221f', info: '#1a73e8' };
+  m.style.background = colors[type]; m.style.color = textColors[type];
+  m.style.padding = '10px 14px'; m.style.borderRadius = '4px';
+  m.textContent = text; m.style.display = 'block';
+}
+
+// Seat Dashboard
+async function loadSeatDashboard() {
+  try {
+    const res = await fetch(BASE + "/institution_students?select=*&institution_id=eq." + instData.id, { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+
+    const active = data.filter(s => ['pending','course_assigned','active'].includes(s.admission_status)).length;
+    const completed = data.filter(s => s.admission_status === 'completed' || s.admission_status === 'certified').length;
+    const failed = data.filter(s => s.admission_status === 'failed').length;
+    const available = (instData.user_limit || 0) - active;
+
+    document.getElementById('seatDashboard').innerHTML = `
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px;">
+        <div style="background:#e8f0fe; border-radius:8px; padding:20px; text-align:center;">
+          <div style="font-size:36px; font-weight:400; font-family:'Google Sans',Arial,sans-serif; color:#1a73e8;">${active}</div>
+          <div style="font-size:13px; color:#1a73e8; font-weight:500;">Active</div>
+          <div style="font-size:12px; color:#5f6368; margin-top:4px;">Currently learning</div>
+        </div>
+        <div style="background:#e6f4ea; border-radius:8px; padding:20px; text-align:center;">
+          <div style="font-size:36px; font-weight:400; font-family:'Google Sans',Arial,sans-serif; color:#137333;">${completed}</div>
+          <div style="font-size:13px; color:#137333; font-weight:500;">Completed</div>
+          <div style="font-size:12px; color:#5f6368; margin-top:4px;">Seats freed ✓</div>
+        </div>
+        <div style="background:#fef7e0; border-radius:8px; padding:20px; text-align:center;">
+          <div style="font-size:36px; font-weight:400; font-family:'Google Sans',Arial,sans-serif; color:#b06000;">${failed}</div>
+          <div style="font-size:13px; color:#b06000; font-weight:500;">Failed/Retry</div>
+          <div style="font-size:12px; color:#5f6368; margin-top:4px;">1 free retry left</div>
+        </div>
+        <div style="background:#f1f3f4; border-radius:8px; padding:20px; text-align:center;">
+          <div style="font-size:36px; font-weight:400; font-family:'Google Sans',Arial,sans-serif; color:#5f6368;">${Math.max(0,available)}</div>
+          <div style="font-size:13px; color:#5f6368; font-weight:500;">Available</div>
+          <div style="font-size:12px; color:#5f6368; margin-top:4px;">Add new employee</div>
+        </div>
+      </div>
+      <div style="background:#e8f0fe; border-radius:8px; padding:16px 20px; font-size:14px; color:#1a73e8; margin-bottom:20px;">
+        💡 <strong>${completed} seat(s)</strong> freed up from completed employees. You can add ${completed} new employees at no extra cost!
+      </div>
+      <div style="background:#fff; border:1px solid #e8eaed; border-radius:8px; overflow:hidden;">
+        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+          <thead><tr style="background:#f8f9fa;"><th style="padding:10px 16px; text-align:left; font-size:12px; color:#5f6368; text-transform:uppercase;">Employee</th><th style="padding:10px 16px; text-align:left; font-size:12px; color:#5f6368; text-transform:uppercase;">Department</th><th style="padding:10px 16px; text-align:left; font-size:12px; color:#5f6368; text-transform:uppercase;">Seat Status</th><th style="padding:10px 16px; text-align:left; font-size:12px; color:#5f6368; text-transform:uppercase;">Action</th></tr></thead>
+          <tbody>${data.map(s => {
+            const statusMap = { pending: ['🟡','Active','#fef7e0','#b06000'], course_assigned: ['🔵','Learning','#e8f0fe','#1a73e8'], completed: ['🟢','Alumni — Seat Free','#e6f4ea','#137333'], certified: ['🟢','Certified','#e6f4ea','#137333'], failed: ['🔴','Retry Available','#fce8e6','#c5221f'] };
+            const [icon, label, bg, color] = statusMap[s.admission_status] || ['⚪','Pending','#f1f3f4','#5f6368'];
+            return `<tr style="border-bottom:1px solid #f1f3f4;"><td style="padding:12px 16px;"><strong>${s.student_name}</strong><br><span style="font-size:12px;color:#5f6368;">${s.student_email}</span></td><td style="padding:12px 16px;">${s.grade_or_dept||'—'}</td><td style="padding:12px 16px;"><span style="background:${bg};color:${color};border-radius:100px;padding:3px 10px;font-size:12px;font-weight:500;">${icon} ${label}</span></td><td style="padding:12px 16px;">${s.admission_status==='completed'||s.admission_status==='certified'?'<button class="btn btn-primary btn-sm" onclick="reuseAlert()">Add new employee</button>':'—'}</td></tr>`;
+          }).join('')}</tbody>
+        </table>
+      </div>`;
+  } catch(e) { console.error(e); }
+}
+
+function reuseAlert() {
+  showToast('Go to Students tab to add a new employee in the freed seat!');
+  switchPanel('students');
 }
 
 function showToast(msg) {
