@@ -81,6 +81,9 @@
   .ref-code { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 500; color: #1a73e8; letter-spacing: 2px; }
   .copy-btn { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 8px 16px; font-size: 13px; cursor: pointer; font-family: 'Google Sans', Arial, sans-serif; }
 
+  .pass-wrap { position: relative; }
+  .pass-wrap input { padding-right: 44px; }
+  .pass-eye { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: #5f6368; }
   .toast { position: fixed; bottom: 24px; right: 24px; background: #202124; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 9999; display: none; }
   .notice { border-radius: 8px; padding: 12px 16px; font-size: 14px; display: flex; gap: 10px; line-height: 1.5; margin-bottom: 16px; }
   .notice.blue { background: #e8f0fe; color: #1a73e8; }
@@ -174,6 +177,18 @@
           <div class="f-field">
             <label>Class / Department</label>
             <input type="text" id="sDept" placeholder="e.g. Class 10 / HR Dept">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="f-field">
+            <label>Password * <span style="font-size:11px; color:#80868b;">(Student will use this to login)</span></label>
+            <div class="pass-wrap">
+              <input type="password" id="sPassword" placeholder="Set student password">
+              <button type="button" class="pass-eye" onclick="toggleStudPass()">👁️</button>
+            </div>
+          </div>
+          <div class="f-field" style="display:flex; align-items:flex-end;">
+            <button class="btn btn-outline" type="button" onclick="autoGenPass()" style="width:100%; padding:10px;">🔀 Auto generate</button>
           </div>
         </div>
         <button class="btn btn-primary" onclick="addStudent()">Add & generate code</button>
@@ -289,11 +304,14 @@ async function addStudent() {
   const dept = document.getElementById('sDept').value.trim();
   if (!name || !email) { showAddMsg('error', 'Name and email are required.'); return; }
 
+  const password = document.getElementById('sPassword').value.trim();
+  if (!password) { showAddMsg('error', 'Please set a password for the student.'); return; }
+
   const code = generateCode();
   try {
     const res = await fetch(BASE + "/institution_students", {
       method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
-      body: JSON.stringify({ institution_id: instData.id, referral_code: code, student_name: name, student_email: email, student_roll_no: roll, grade_or_dept: dept, registered_by: 'institution', admission_status: 'pending' })
+      body: JSON.stringify({ institution_id: instData.id, referral_code: code, student_name: name, student_email: email, student_roll_no: roll, grade_or_dept: dept, student_password: password, registered_by: 'institution', admission_status: 'pending' })
     });
     if (!res.ok) { showAddMsg('error', 'Failed to add student.'); return; }
 
@@ -304,11 +322,12 @@ async function addStudent() {
     });
     instData.users_used = (instData.users_used || 0) + 1;
 
-    showAddMsg('success', '✅ Student added! Code: ' + code);
+    showAddMsg('success', '✅ Student added! Code: ' + code + ' | Password: ' + password);
     document.getElementById('sName').value = '';
     document.getElementById('sEmail').value = '';
     document.getElementById('sRoll').value = '';
     document.getElementById('sDept').value = '';
+    document.getElementById('sPassword').value = '';
     loadStudents();
   } catch (e) { showAddMsg('error', 'Error: ' + e.message); }
 }
@@ -365,6 +384,24 @@ function loadSettings() {
 function copyCode() {
   const code = instData?.referral_code;
   if (code) navigator.clipboard.writeText(code).then(() => showToast('Referral code copied!'));
+}
+
+function toggleStudPass() {
+  const inp = document.getElementById('sPassword');
+  const btn = inp.nextElementSibling;
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+  else { inp.type = 'password'; btn.textContent = '👁️'; }
+}
+
+function autoGenPass() {
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  let pass = '';
+  for (let i = 0; i < 8; i++) pass += chars[Math.floor(Math.random() * chars.length)];
+  const inp = document.getElementById('sPassword');
+  inp.value = pass;
+  inp.type = 'text';
+  inp.nextElementSibling.textContent = '🙈';
+  showToast('Password generated: ' + pass);
 }
 
 function showToast(msg) {
