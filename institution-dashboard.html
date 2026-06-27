@@ -108,7 +108,7 @@
   <div class="field">
     <label>Password</label>
     <div class="password-wrap">
-      <input type="password" id="loginPassword" placeholder="Enter your password">
+      <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Enter your password">
       <button type="button" class="eye-btn" onclick="togglePass('loginPassword', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
   </div>
@@ -185,7 +185,7 @@
           <div class="f-field">
             <label>Password * <span style="font-size:11px; color:#80868b;">(Student will use this to login)</span></label>
             <div class="pass-wrap">
-              <input type="password" id="sPassword" placeholder="Set student password">
+              <input type="password" id="sPassword" autocomplete="new-password" placeholder="Set student password">
               <button type="button" class="pass-eye" onclick="toggleStudPass()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
             </div>
           </div>
