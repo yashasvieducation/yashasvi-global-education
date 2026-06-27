@@ -101,8 +101,8 @@
   <div class="type-card" onclick="selectType('individual', this)">
     <div class="type-icon">👤</div>
     <div class="type-name">Individual</div>
-    <div class="type-desc">Personal enrollment for students, employees, job seekers and more.</div>
-    <span class="type-badge badge-paid">Paid plan</span>
+    <div class="type-desc">Personal enrollment for students, employees, job seekers and more. Merit-based admission.</div>
+    <span class="type-badge badge-free">Merit-based · Free apply</span>
   </div>
 </div>
 
@@ -311,7 +311,7 @@ function selectType(type, el) {
       school: '🔍 Our system will automatically cross-verify your school details using public records and official databases. Once verified, you will receive your institution dashboard access and unique student referral codes within <strong>24-48 hours</strong>.',
       college: '🔍 Our system will automatically cross-verify your college/university details using official records. Once verified, you will receive your institution dashboard access and unique student referral codes within <strong>24-48 hours</strong>.',
       corporate: '🔍 Our AI system will verify your company details using business registration databases. Once verified, your corporate training dashboard will be activated with your custom employee access codes within <strong>24-48 hours</strong>.',
-      individual: '✅ Your registration will be reviewed and activated within a few minutes. You will receive your personal login credentials directly on your email once approved.'
+      individual: '✅ Your application will be reviewed. You will need to complete the IQ profiling and entrance exam (merit-based). Access will be granted after verification within 24-48 hours.'
     };
     if (noticeText) noticeText.innerHTML = notices[type] || notices.school;
 
