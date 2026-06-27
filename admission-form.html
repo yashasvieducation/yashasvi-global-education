@@ -188,8 +188,15 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
       btn.disabled = false; btn.textContent = 'Submit application →'; return;
     }
 
-    showMsg('success', '✅ Application submitted! Next step: Complete the IQ Profiling Game.');
+    showMsg('success', '✅ Application submitted! Redirecting to IQ Profiling Game…');
     btn.textContent = 'Submitted ✓';
+
+    // Lock all fields
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      el.disabled = true;
+      el.style.background = '#f8f9fa';
+      el.style.color = '#80868b';
+    });
 
     setTimeout(() => {
       window.location.href = '/iq-game.html?email=' + encodeURIComponent(studentEmail);

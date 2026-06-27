@@ -295,6 +295,18 @@ async function submitRegistration() {
 
     showMsg('success', '✅ Registration submitted successfully! Our team will verify your institution within 24-48 hours and send you an email with your dashboard access and referral codes.');
     btn.textContent = 'Submitted ✓';
+
+    // Lock all form fields
+    document.querySelectorAll('#formWrap input, #formWrap select, #formWrap textarea').forEach(el => {
+      el.disabled = true;
+      el.style.background = '#f8f9fa';
+      el.style.color = '#80868b';
+    });
+    document.querySelectorAll('.type-card').forEach(c => {
+      c.style.pointerEvents = 'none';
+      c.style.opacity = '0.7';
+    });
+
     document.getElementById('formWrap').scrollIntoView({ behavior: 'smooth' });
 
   } catch (err) {
