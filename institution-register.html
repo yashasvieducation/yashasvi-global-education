@@ -98,6 +98,12 @@
     <div class="type-desc">Employee training, upskilling and certification programs.</div>
     <span class="type-badge badge-paid">Paid plan</span>
   </div>
+  <div class="type-card" onclick="selectType('individual', this)">
+    <div class="type-icon">👤</div>
+    <div class="type-name">Individual</div>
+    <div class="type-desc">Personal enrollment for students, employees, job seekers and more.</div>
+    <span class="type-badge badge-paid">Paid plan</span>
+  </div>
 </div>
 
 <!-- Registration Form -->
@@ -109,7 +115,7 @@
     <div>After submitting, our team will verify your institution within <strong>24-48 hours</strong>. You will receive an email with your login credentials and referral codes once approved.</div>
   </div>
 
-  <div class="form-section-title">Institution Details</div>
+  <div class="form-section-title" id="instDetailsTitle">Institution Details</div>
 
   <div class="field">
     <label>Institution name <span class="required">*</span></label>
@@ -156,7 +162,7 @@
       </select>
     </div>
     <div class="field">
-      <label>Number of students/employees <span class="required">*</span></label>
+      <label id="userLimitLabel">Number of students/employees <span class="required">*</span></label>
       <select id="instUserLimit">
         <option value="50">Up to 50</option>
         <option value="100">Up to 100</option>
@@ -206,6 +212,40 @@
     </div>
   </div>
 
+  <!-- Individual only fields -->
+  <div id="individualFields" style="display:none;">
+    <div class="form-section-title">About You</div>
+    <div class="field">
+      <label>I am a <span class="required">*</span></label>
+      <select id="indivType">
+        <option value="">— Select your category —</option>
+        <option value="Student">🎓 Student</option>
+        <option value="Employee">💼 Employee (Private Sector)</option>
+        <option value="Government Servant">🏛️ Government Servant</option>
+        <option value="Unemployed">🔍 Unemployed / Job Seeker</option>
+        <option value="Self Employed">🚀 Self Employed / Freelancer</option>
+        <option value="Business Owner">🏢 Business Owner</option>
+        <option value="Homemaker">🏠 Homemaker</option>
+        <option value="Retired">👴 Retired</option>
+        <option value="Other">📌 Other</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Current qualification</label>
+      <select id="indivQual">
+        <option value="">— Select qualification —</option>
+        <option value="8th Standard">8th Standard</option>
+        <option value="10th Standard">10th Standard (SSC)</option>
+        <option value="12th Standard">12th Standard (HSC)</option>
+        <option value="Diploma">Diploma</option>
+        <option value="Graduate">Graduate (BA/BSc/BCom/BE etc.)</option>
+        <option value="Post Graduate">Post Graduate (MA/MSc/MBA etc.)</option>
+        <option value="PhD">PhD / Doctorate</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+  </div>
+
   <!-- Corporate only fields -->
   <div id="corporateFields" style="display:none;">
     <div class="form-section-title">Corporate Plan</div>
@@ -242,8 +282,8 @@ const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type
 
 let selectedType = '';
 
-const typeIcons = { school: '🏫', college: '🎓', corporate: '🏢' };
-const typeLabels = { school: 'School', college: 'College / University', corporate: 'Corporate' };
+const typeIcons = { school: '🏫', college: '🎓', corporate: '🏢', individual: '👤' };
+const typeLabels = { school: 'School', college: 'College / University', corporate: 'Corporate', individual: 'Individual' };
 
 function selectType(type, el) {
   selectedType = type;
@@ -251,7 +291,31 @@ function selectType(type, el) {
   el.classList.add('selected');
   document.getElementById('selectedTypeBadge').textContent = typeIcons[type] + ' ' + typeLabels[type];
   document.getElementById('formWrap').style.display = 'block';
+
+  // Corporate fields
   document.getElementById('corporateFields').style.display = type === 'corporate' ? 'block' : 'none';
+
+  // Individual fields
+  document.getElementById('individualFields').style.display = type === 'individual' ? 'block' : 'none';
+
+  // Dynamic labels
+  if (type === 'corporate') {
+    document.getElementById('instDetailsTitle').textContent = 'Corporate Details';
+    document.getElementById('instNameLabel').innerHTML = 'Corporate / Company Name <span class="required">*</span>';
+    document.getElementById('instName').placeholder = 'e.g. Infosys Ltd / Tata Consultancy Services';
+    document.getElementById('userLimitLabel').innerHTML = 'Number of employees <span class="required">*</span>';
+  } else if (type === 'individual') {
+    document.getElementById('instDetailsTitle').textContent = 'Personal Details';
+    document.getElementById('instNameLabel').innerHTML = 'Full Name <span class="required">*</span>';
+    document.getElementById('instName').placeholder = 'Your full name';
+    document.getElementById('userLimitLabel').innerHTML = 'Number of seats needed <span class="required">*</span>';
+  } else {
+    document.getElementById('instDetailsTitle').textContent = 'Institution Details';
+    document.getElementById('instNameLabel').innerHTML = 'School / Institute / College Name <span class="required">*</span>';
+    document.getElementById('instName').placeholder = 'e.g. St. Xavier's High School';
+    document.getElementById('userLimitLabel').innerHTML = 'Number of students <span class="required">*</span>';
+  }
+
   document.getElementById('formWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
