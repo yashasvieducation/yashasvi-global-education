@@ -173,6 +173,20 @@
     <textarea id="instReason" placeholder="Tell us briefly why you want to bring this platform to your institution…"></textarea>
   </div>
 
+  <div class="form-section-title">Set Dashboard Password</div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Password <span class="required">*</span></label>
+      <input type="password" id="instPassword" placeholder="Set a strong password">
+      <div class="field-hint">Minimum 8 characters. You will use this to login to your dashboard.</div>
+    </div>
+    <div class="field">
+      <label>Confirm password <span class="required">*</span></label>
+      <input type="password" id="instPasswordConfirm" placeholder="Re-enter password">
+    </div>
+  </div>
+
   <!-- Corporate only fields -->
   <div id="corporateFields" style="display:none;">
     <div class="form-section-title">Corporate Plan</div>
@@ -233,8 +247,17 @@ async function submitRegistration() {
   const state = document.getElementById('instState').value.trim();
   const contactName = document.getElementById('contactName').value.trim();
 
-  if (!name || !email || !phone || !address || !city || !state || !contactName) {
-    showMsg('error', 'Please fill in all required fields.'); return;
+  const password = document.getElementById('instPassword').value;
+  const passwordConfirm = document.getElementById('instPasswordConfirm').value;
+
+  if (!name || !email || !phone || !address || !city || !state || !contactName || !password) {
+    showMsg('error', 'Please fill in all required fields including password.'); return;
+  }
+  if (password.length < 8) {
+    showMsg('error', 'Password must be at least 8 characters.'); return;
+  }
+  if (password !== passwordConfirm) {
+    showMsg('error', 'Passwords do not match.'); return;
   }
 
   const btn = document.getElementById('submitBtn');

@@ -98,6 +98,10 @@
     <label>Institution email</label>
     <input type="email" id="loginEmail" placeholder="principal@school.edu.in">
   </div>
+  <div class="field">
+    <label>Password</label>
+    <input type="password" id="loginPassword" placeholder="Enter your password">
+  </div>
   <button class="btn btn-primary" id="loginBtn" style="width:100%; padding:12px;" onclick="doLogin()">Access dashboard →</button>
   <div id="loginMsg"></div>
 </div>
@@ -222,6 +226,9 @@ async function doLogin() {
   const btn = document.getElementById('loginBtn');
   btn.disabled = true; btn.textContent = 'Loading…';
   try {
+    const password = document.getElementById('loginPassword').value;
+    if (!password) { showLoginMsg('Please enter your password.'); btn.disabled = false; btn.textContent = 'Access dashboard →'; return; }
+
     const res = await fetch(BASE + "/institutions?select=*&email=eq." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
     const data = await res.json();
     if (!Array.isArray(data) || data.length === 0) {
@@ -229,6 +236,12 @@ async function doLogin() {
       btn.disabled = false; btn.textContent = 'Access dashboard →'; return;
     }
     instData = data[0];
+
+    if (instData.password && instData.password !== password) {
+      showLoginMsg('Incorrect password. Please try again.');
+      btn.disabled = false; btn.textContent = 'Access dashboard →'; return;
+    }
+
     if (!instData.verified_by_admin) {
       showLoginMsg('Your institution is pending verification. Our team will verify within 24-48 hours.');
       btn.disabled = false; btn.textContent = 'Access dashboard →'; return;
@@ -364,6 +377,7 @@ function showAddMsg(type, text) {
 }
 
 document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 </script>
 </body>
 </html>
