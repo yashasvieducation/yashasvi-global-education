@@ -14,56 +14,51 @@
   .nav-timer { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; color: #c5221f; display: none; }
   .hero { padding: 48px 24px 32px; max-width: 760px; margin: 0 auto; }
   .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
-  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 32px; font-weight: 400; color: #202124; line-height: 1.25; margin-bottom: 10px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 32px; font-weight: 400; color: #202124; margin-bottom: 10px; }
   .hero p { font-size: 15px; color: #5f6368; line-height: 1.6; max-width: 560px; }
   .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
-  .field { margin-bottom: 20px; }
+  .field { margin-bottom: 18px; }
   .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
-  .field input, .field textarea { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; color: #202124; outline: none; transition: border-color 0.15s; }
-  .field input:focus, .field textarea:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.12); }
-  .field textarea { resize: vertical; min-height: 100px; }
-  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; min-width: 160px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; outline: none; }
+  .field input:focus { border-color: #1a73e8; }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
   .btn-primary:hover { background: #1765cc; }
   .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
-  .btn-success { background: #34a853; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; min-width: 160px; }
-  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; line-height: 1.5; }
-  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; }
   .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
+  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
   .msg-info { background: #e8f0fe; color: #1a73e8; display: block !important; }
-  #examArea { display: none; }
-  .progress-wrap { margin-bottom: 28px; }
-  .progress-label { display: flex; justify-content: space-between; font-size: 13px; color: #5f6368; margin-bottom: 6px; }
-  .progress-bar-bg { background: #f1f3f4; border-radius: 100px; height: 4px; }
-  .progress-bar { background: #1a73e8; height: 4px; border-radius: 100px; transition: width 0.3s; width: 0%; }
-  .section-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #e8eaed; }
-  .q-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 22px 24px; margin-bottom: 16px; }
-  .q-label { font-size: 12px; font-weight: 500; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
-  .q-text { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; color: #202124; margin-bottom: 16px; line-height: 1.5; }
+  .notice { border-radius: 8px; padding: 14px 16px; font-size: 14px; display: flex; gap: 10px; line-height: 1.5; margin-bottom: 20px; }
+  .notice.blue { background: #e8f0fe; color: #1a73e8; }
+  .notice.yellow { background: #fef7e0; color: #b06000; }
+  .notice span { font-size: 18px; flex-shrink: 0; }
+  .section-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #e8eaed; }
+  .q-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 20px 24px; margin-bottom: 14px; }
+  .q-label { font-size: 12px; font-weight: 500; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .q-text { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; color: #202124; margin-bottom: 14px; line-height: 1.5; }
   .options { display: flex; flex-direction: column; gap: 8px; }
-  .opt-btn { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1.5px solid #dadce0; border-radius: 4px; background: #fff; color: #202124; cursor: pointer; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; text-align: left; transition: border-color 0.15s, background 0.15s; }
+  .opt-btn { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid #dadce0; border-radius: 4px; background: #fff; color: #202124; cursor: pointer; font-size: 14px; text-align: left; transition: all 0.15s; }
   .opt-btn:hover { border-color: #1a73e8; background: #f8f9ff; }
   .opt-btn.selected { border-color: #1a73e8; background: #e8f0fe; color: #1a73e8; font-weight: 500; }
-  .opt-circle { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #dadce0; flex-shrink: 0; transition: all 0.15s; }
+  .opt-circle { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #dadce0; flex-shrink: 0; }
   .opt-btn.selected .opt-circle { border-color: #1a73e8; background: #1a73e8; }
-  .submit-row { margin-top: 32px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-  .answered-info { font-size: 13px; color: #5f6368; }
-  .quarter-badge { display: inline-flex; align-items: center; gap: 6px; background: #e8f0fe; border-radius: 100px; padding: 6px 16px; font-size: 14px; color: #1a73e8; font-weight: 500; margin-bottom: 24px; font-family: 'Google Sans', Arial, sans-serif; }
-  .result-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 32px; text-align: center; margin-bottom: 20px; }
-  .result-score { font-family: 'Google Sans', Arial, sans-serif; font-size: 56px; font-weight: 400; margin-bottom: 4px; }
-  .result-label { font-size: 16px; color: #5f6368; margin-bottom: 20px; }
-  .result-badge { display: inline-block; padding: 6px 20px; border-radius: 100px; font-size: 15px; font-weight: 500; }
-  .notice { background: #e8f0fe; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a73e8; display: flex; gap: 10px; line-height: 1.5; margin-top: 20px; }
-  .notice span { font-size: 18px; flex-shrink: 0; }
-  .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-  .score-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 16px 20px; }
+  .progress-wrap { margin-bottom: 20px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 13px; color: #5f6368; margin-bottom: 6px; }
+  .progress-bg { background: #f1f3f4; border-radius: 100px; height: 4px; }
+  .progress-bar { background: #1a73e8; height: 4px; border-radius: 100px; transition: width 0.3s; }
+  .generating-msg { text-align: center; padding: 48px 24px; }
+  .spin { font-size: 40px; animation: spin 1s linear infinite; display: block; margin-bottom: 16px; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .result-card { border-radius: 8px; padding: 32px; text-align: center; margin-bottom: 20px; }
+  .score-big { font-family: 'Google Sans', Arial, sans-serif; font-size: 64px; font-weight: 400; }
+  .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .score-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 16px; text-align: center; }
   .score-item .s-label { font-size: 12px; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
   .score-item .s-value { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; color: #202124; }
-  .score-item .s-sub { font-size: 13px; color: #5f6368; margin-top: 2px; }
-  .feedback-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; }
-  .feedback-q { font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
-  .feedback-ans { font-size: 14px; color: #5f6368; font-style: italic; margin-bottom: 6px; }
-  .feedback-comment { font-size: 13px; color: #1a73e8; line-height: 1.5; }
-  .score-chip { display: inline-block; background: #f1f3f4; border-radius: 100px; padding: 2px 10px; font-size: 12px; color: #5f6368; margin-left: 8px; }
+  .exam-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .exam-info-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 14px 16px; }
+  .info-label { font-size: 11px; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .info-value { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; color: #202124; }
 </style>
 </head>
 <body>
@@ -74,149 +69,77 @@
 </nav>
 
 <div class="hero">
-  <div class="hero-label" id="heroLabel">Quarterly Exam</div>
+  <div class="hero-label">Quarterly Exam</div>
   <h1>Quarterly assessment</h1>
-  <p>This exam tests your understanding of the lessons completed so far. 8 MCQ + 2 Subjective questions. 45 minutes. Minimum 70% to pass.</p>
+  <p>Test your understanding of all modules covered so far. AI-generated questions based on your course content. 70% required to pass.</p>
 </div>
 
 <div class="wrap">
 
+  <!-- Email Step -->
   <div id="emailStep">
     <div class="field">
-      <label>Student email address</label>
-      <input type="email" id="studentEmail" placeholder="you@example.com">
+      <label>Student email</label>
+      <input type="email" id="studentEmail" placeholder="you@example.com" autocomplete="off">
     </div>
-    <button class="btn-primary" id="startBtn">Start quarterly exam</button>
+    <button class="btn-primary" id="startBtn" onclick="loadExam()">Load my exam →</button>
     <div id="message"></div>
   </div>
 
-  <div id="examArea">
-    <div class="quarter-badge" id="quarterBadge">📅 Quarter 1 Assessment</div>
+  <!-- Info Step -->
+  <div id="infoStep" style="display:none;">
+    <div class="exam-info-grid">
+      <div class="exam-info-item">
+        <div class="info-label">Course</div>
+        <div class="info-value" id="infoCourse">—</div>
+      </div>
+      <div class="exam-info-item">
+        <div class="info-label">Questions</div>
+        <div class="info-value">15 MCQ</div>
+      </div>
+      <div class="exam-info-item">
+        <div class="info-label">Duration</div>
+        <div class="info-value">45 minutes</div>
+      </div>
+      <div class="exam-info-item">
+        <div class="info-label">Pass mark</div>
+        <div class="info-value">70%</div>
+      </div>
+    </div>
+    <div class="notice blue">
+      <span>ℹ️</span>
+      <div>Questions are generated from your course modules. Complete at least 2 modules before taking this exam for best results.</div>
+    </div>
+    <button class="btn-primary" id="beginBtn" onclick="beginExam()">Begin exam →</button>
+  </div>
 
+  <!-- Generating -->
+  <div id="generatingArea" style="display:none;">
+    <div class="generating-msg">
+      <span class="spin">⚙️</span>
+      <h2 style="font-family:'Google Sans',Arial,sans-serif; font-size:22px; font-weight:400; margin-bottom:8px;">Generating your quarterly exam…</h2>
+      <p style="color:#5f6368;">AI is creating 15 questions from your course content. Takes about 15 seconds.</p>
+    </div>
+  </div>
+
+  <!-- Exam -->
+  <div id="examArea" style="display:none;">
     <div class="progress-wrap">
       <div class="progress-label">
-        <span id="progressText">0 of 10 answered</span>
+        <span id="progressText">0 of 15 answered</span>
         <span id="timerText" style="color:#c5221f; font-weight:500;">45:00</span>
       </div>
-      <div class="progress-bar-bg"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="progress-bg"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
     </div>
-
-    <div class="section-title">Part A — Multiple Choice (8 questions)</div>
-
-    <div class="q-card">
-      <div class="q-label">Question 1 of 8</div>
-      <div class="q-text">Which of the following is a key characteristic of a successful entrepreneur?</div>
-      <div class="options" data-q="m0">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>Avoiding all risks</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>Waiting for the perfect idea before starting</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Taking calculated risks and learning from failure</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Working alone without any team</button>
-      </div>
+    <div id="questionsArea"></div>
+    <div style="margin-top:24px; display:flex; align-items:center; gap:16px;">
+      <button class="btn-primary" id="submitBtn" onclick="submitExam()">Submit exam</button>
+      <span id="answeredInfo" style="font-size:13px; color:#5f6368;">Answer all questions</span>
     </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 2 of 8</div>
-      <div class="q-text">What is the difference between revenue and profit?</div>
-      <div class="options" data-q="m1">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>They are the same thing</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>Revenue is total income; profit is what remains after costs</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Profit is total income; revenue is what remains after costs</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Revenue includes only online sales</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 3 of 8</div>
-      <div class="q-text">The Business Model Canvas has how many building blocks?</div>
-      <div class="options" data-q="m2">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>5</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>7</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>9</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>12</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 4 of 8</div>
-      <div class="q-text">Which pricing strategy charges based on the value delivered to the customer, not the cost of production?</div>
-      <div class="options" data-q="m3">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>Cost-plus pricing</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>Competitive pricing</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Value-based pricing</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Discount pricing</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 5 of 8</div>
-      <div class="q-text">A customer persona is used to:</div>
-      <div class="options" data-q="m4">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>Create a logo for your business</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>Define a detailed profile of your ideal customer</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Register your business legally</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Calculate your monthly expenses</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 6 of 8</div>
-      <div class="q-text">What does "cash flow" mean in business?</div>
-      <div class="options" data-q="m5">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>The total profit earned in a year</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>The physical cash stored in the office safe</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>The movement of money in and out of a business over time</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>The amount borrowed from a bank</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 7 of 8</div>
-      <div class="q-text">Which digital marketing channel typically has the highest ROI?</div>
-      <div class="options" data-q="m6">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>Paid advertising</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>Email marketing</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>Print advertising</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>Cold calling</button>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Question 8 of 8</div>
-      <div class="q-text">An MVP (Minimum Viable Product) is best described as:</div>
-      <div class="options" data-q="m7">
-        <button class="opt-btn" data-val="a"><span class="opt-circle"></span>A fully finished, polished product ready for mass market</button>
-        <button class="opt-btn" data-val="b"><span class="opt-circle"></span>The simplest version of a product that delivers core value and allows testing</button>
-        <button class="opt-btn" data-val="c"><span class="opt-circle"></span>A product made only for investors to see</button>
-        <button class="opt-btn" data-val="d"><span class="opt-circle"></span>A product that costs the minimum to produce</button>
-      </div>
-    </div>
-
-    <div class="section-title">Part B — Subjective (2 questions · AI graded)</div>
-
-    <div class="q-card">
-      <div class="q-label">Subjective Question 1</div>
-      <div class="q-text">Explain the Business Model Canvas in your own words. Pick any one real business (e.g. Zomato, a local tea stall, or any business you know) and describe at least 4 of its 9 building blocks.</div>
-      <div class="field" style="margin:0;">
-        <textarea id="s0" placeholder="Write your answer here (minimum 60 words)..." rows="5"></textarea>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-label">Subjective Question 2</div>
-      <div class="q-text">You have ₹5,000 and want to start a small service business (e.g. tutoring, delivery, repair, cleaning). Describe: (1) what service you would offer, (2) who your customers are, (3) how you would price it, and (4) how you would get your first 10 customers.</div>
-      <div class="field" style="margin:0;">
-        <textarea id="s1" placeholder="Write your answer here (minimum 60 words)..." rows="5"></textarea>
-      </div>
-    </div>
-
-    <div class="submit-row">
-      <button class="btn-primary" id="submitExamBtn">Submit exam</button>
-      <span class="answered-info" id="answeredInfo">0 of 10 answered</span>
-    </div>
-    <div id="message"></div>
   </div>
 
-  <div id="resultArea"></div>
+  <!-- Result -->
+  <div id="resultArea" style="display:none;"></div>
 
 </div>
 
@@ -224,232 +147,167 @@
 const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
 const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
 
+let studentEmail = "", courseName = "", questions = [], mcqAnswers = {}, timerInterval = null;
 
-const MCQ_ANSWERS = { m0:'c', m1:'b', m2:'c', m3:'c', m4:'b', m5:'c', m6:'b', m7:'b' };
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('email')) document.getElementById('studentEmail').value = urlParams.get('email');
 
-let studentEmail = "", studentId = "", currentQuarter = 1;
-let mcqAnswers = {}, timerInterval = null, secondsLeft = 2700;
+async function loadExam() {
+  const email = document.getElementById('studentEmail').value.trim().toLowerCase();
+  if (!email) { showMsg('error', 'Please enter your email.'); return; }
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true; btn.textContent = 'Loading…';
+  try {
+    const res = await fetch(BASE + "/students?select=admission_status,selected_course,exam_score&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showMsg('error', 'No account found. Please complete admission first.');
+      btn.disabled = false; btn.textContent = 'Load my exam →'; return;
+    }
+    const s = data[0];
+    if (!['admitted','final_exam_passed','internship_passed','certified'].includes(s.admission_status)) {
+      showMsg('error', 'Please complete enrollment and fee payment first.');
+      btn.disabled = false; btn.textContent = 'Load my exam →'; return;
+    }
+    studentEmail = email;
+    courseName = s.selected_course || 'General';
+    document.getElementById('infoCourse').textContent = courseName;
+    document.getElementById('emailStep').style.display = 'none';
+    document.getElementById('infoStep').style.display = 'block';
+  } catch (err) {
+    showMsg('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Load my exam →';
+  }
+}
 
-function startTimer() {
+async function beginExam() {
+  document.getElementById('infoStep').style.display = 'none';
+  document.getElementById('generatingArea').style.display = 'block';
+
+  const prompt = `Generate 15 MCQ questions for a quarterly exam on "${courseName}". 
+Mix of easy (5), medium (7), and hard (3) questions. Test recall, understanding and application.
+Respond ONLY in valid JSON:
+{"questions":[{"question":"Question?","options":["A","B","C","D"],"correct":"A"}]}`;
+
+  try {
+    const res = await fetch(EDGE, {
+      method: "POST",
+      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: [{ role: "user", content: prompt }], systemPrompt: "You are an expert exam setter. Respond ONLY in valid JSON." })
+    });
+    const data = await res.json();
+    const parsed = JSON.parse(data.reply.replace(/```json|```/g,'').trim());
+    questions = parsed.questions || [];
+    if (questions.length === 0) throw new Error('No questions');
+    renderExam();
+  } catch(e) {
+    // Fallback
+    questions = Array.from({length: 15}, (_, i) => ({
+      question: `Question ${i+1} about ${courseName}?`,
+      options: ["Option A", "Option B", "Option C", "Option D"],
+      correct: "Option A"
+    }));
+    renderExam();
+  }
+}
+
+function renderExam() {
+  document.getElementById('generatingArea').style.display = 'none';
+  document.getElementById('examArea').style.display = 'block';
   document.getElementById('navTimer').style.display = 'block';
+
+  document.getElementById('questionsArea').innerHTML = questions.map((q, i) => `
+    <div class="q-card">
+      <div class="q-label">Question ${i+1} of ${questions.length}</div>
+      <div class="q-text">${q.question}</div>
+      <div class="options" data-q="${i}" data-correct="${q.correct}">
+        ${(q.options||[]).map(opt => `<button class="opt-btn" data-val="${opt}"><span class="opt-circle"></span>${opt}</button>`).join('')}
+      </div>
+    </div>`).join('');
+
+  document.querySelectorAll('.options').forEach(group => {
+    group.addEventListener('click', e => {
+      const btn = e.target.closest('.opt-btn');
+      if (!btn) return;
+      const qi = group.getAttribute('data-q');
+      group.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      mcqAnswers[qi] = btn.getAttribute('data-val');
+      const done = Object.keys(mcqAnswers).length;
+      document.getElementById('progressBar').style.width = (done / questions.length * 100) + '%';
+      document.getElementById('progressText').textContent = done + ' of ' + questions.length + ' answered';
+      document.getElementById('answeredInfo').textContent = done + ' of ' + questions.length + ' answered';
+    });
+  });
+
+  // 45 min timer
+  let secs = 2700;
   timerInterval = setInterval(() => {
-    secondsLeft--;
-    const m = Math.floor(secondsLeft / 60).toString().padStart(2,'0');
-    const s = (secondsLeft % 60).toString().padStart(2,'0');
+    secs--;
+    const m = Math.floor(secs/60).toString().padStart(2,'0');
+    const s = (secs%60).toString().padStart(2,'0');
     const str = m + ':' + s;
     document.getElementById('navTimer').textContent = str;
     document.getElementById('timerText').textContent = str;
-    if (secondsLeft <= 0) { clearInterval(timerInterval); submitExam(); }
+    if (secs <= 0) { clearInterval(timerInterval); submitExam(); }
   }, 1000);
 }
 
-function updateProgress() {
-  const mcqCount = Object.keys(mcqAnswers).length;
-  const s0 = document.getElementById('s0').value.trim();
-  const s1 = document.getElementById('s1').value.trim();
-  const subCount = [s0, s1].filter(v => v.length > 10).length;
-  const total = mcqCount + subCount;
-  document.getElementById('progressBar').style.width = (total / 10 * 100) + '%';
-  document.getElementById('progressText').textContent = total + ' of 10 answered';
-  document.getElementById('answeredInfo').textContent = total + ' of 10 answered';
-}
-
-document.querySelectorAll('.options').forEach(group => {
-  group.addEventListener('click', e => {
-    const btn = e.target.closest('.opt-btn');
-    if (!btn) return;
-    const q = group.getAttribute('data-q');
-    group.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    mcqAnswers[q] = btn.getAttribute('data-val');
-    updateProgress();
-  });
-});
-
-['s0','s1'].forEach(id => document.getElementById(id).addEventListener('input', updateProgress));
-
-document.getElementById('startBtn').addEventListener('click', async () => {
-  const email = document.getElementById('studentEmail').value.trim().toLowerCase();
-  if (!email) { showMessage('error', 'Please enter your email address.'); return; }
-
-  const btn = document.getElementById('startBtn');
-  btn.disabled = true; btn.textContent = 'Checking…';
-
-  try {
-    const res = await fetch(
-      BASE + "/students?select=id,admission_status,current_quarter,track&student_email=ilike." + encodeURIComponent(email),
-      { method: "GET", headers: HEADERS }
-    );
-    const data = await res.json();
-
-    if (!Array.isArray(data) || data.length === 0) {
-      showMessage('error', 'No application found. Please complete admission first.');
-      btn.disabled = false; btn.textContent = 'Start quarterly exam'; return;
-    }
-
-    const student = data[0];
-    if (student.admission_status !== 'admitted') {
-      showMessage('error', 'Your admission is not confirmed yet.');
-      btn.disabled = false; btn.textContent = 'Start quarterly exam'; return;
-    }
-
-    studentEmail = email;
-    studentId = student.id;
-    currentQuarter = student.current_quarter || 1;
-
-    document.getElementById('quarterBadge').textContent = '📅 Quarter ' + currentQuarter + ' Assessment';
-    document.getElementById('heroLabel').textContent = 'Quarter ' + currentQuarter + ' Exam';
-    document.getElementById('emailStep').style.display = 'none';
-    document.getElementById('examArea').style.display = 'block';
-    startTimer();
-
-  } catch (err) {
-    showMessage('error', 'Error: ' + err.message);
-    btn.disabled = false; btn.textContent = 'Start quarterly exam';
-  }
-});
-
-document.getElementById('submitExamBtn').addEventListener('click', async () => {
-  if (Object.keys(mcqAnswers).length < 8) {
-    showMessage('error', 'Please answer all 8 MCQ questions before submitting.'); return;
-  }
-  await submitExam();
-});
-
 async function submitExam() {
-  const btn = document.getElementById('submitExamBtn');
-  btn.disabled = true; btn.textContent = 'Grading…';
   clearInterval(timerInterval);
+  const btn = document.getElementById('submitBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Grading…'; }
 
-  const s0 = document.getElementById('s0').value.trim();
-  const s1 = document.getElementById('s1').value.trim();
-
-  // MCQ Score
-  let mcqCorrect = 0;
-  Object.keys(MCQ_ANSWERS).forEach(q => { if (mcqAnswers[q] === MCQ_ANSWERS[q]) mcqCorrect++; });
-  const mcqScore = (mcqCorrect / 8) * 100;
-
-  showMessage('info', 'Grading your subjective answers with AI. Please wait…');
-
-  let subScore = 0, aiFeedback = [];
-
-  try {
-    const prompt = `You are an examiner for a quarterly entrepreneurship exam. Grade these 2 subjective answers. Each out of 10. Be fair but strict. Respond ONLY in valid JSON, no extra text.
-
-Q1: "Explain the Business Model Canvas using a real business example (4 building blocks)."
-Answer: "${s0}"
-
-Q2: "₹5,000 service business plan: service, customers, pricing, first 10 customers."
-Answer: "${s1}"
-
-JSON format: {"results":[{"question":"Q1","score":0,"feedback":"..."},{"question":"Q2","score":0,"feedback":"..."}]}`;
-
-    const aiRes = await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher", {
-      method: "POST",
-      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: [{ role: "user", content: prompt }], systemPrompt: "You are a strict but fair exam grader. Always respond in valid JSON only." })
-    });
-
-    const aiData = await aiRes.json();
-    const raw = aiData.reply || '{}';
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
-    aiFeedback = parsed.results || [];
-    const totalPoints = aiFeedback.reduce((s, r) => s + (r.score || 0), 0);
-    subScore = (totalPoints / 20) * 100;
-
-  } catch (e) {
-    subScore = 50;
-    aiFeedback = [
-      { question: 'Q1', score: 5, feedback: 'Auto-graded.' },
-      { question: 'Q2', score: 5, feedback: 'Auto-graded.' }
-    ];
-  }
-
-  const finalScore = Math.round((mcqScore * 0.6) + (subScore * 0.4));
-  const passed = finalScore >= 70;
+  let correct = 0;
+  questions.forEach((q, i) => { if (mcqAnswers[i] === q.correct) correct++; });
+  const score = Math.round((correct / questions.length) * 100);
+  const passed = score >= 70;
 
   // Save result
   try {
     await fetch(BASE + "/quarterly_exams", {
-      method: "POST",
-      headers: { ...HEADERS, "Prefer": "return=representation" },
-      body: JSON.stringify({
-        student_email: studentEmail,
-        department: "Entrepreneurship & Business Design",
-        quarter: currentQuarter,
-        mcq_answers: mcqAnswers,
-        mcq_score: mcqScore,
-        subjective_answers: { s0, s1 },
-        subjective_score: subScore,
-        final_score: finalScore,
-        status: passed ? 'pass' : 'fail',
-        ai_feedback: aiFeedback
-      })
+      method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({ student_email: studentEmail, course_name: courseName, score, correct_answers: correct, total_questions: questions.length, status: passed ? 'pass' : 'fail' })
     });
-
     if (passed) {
       await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(studentEmail), {
-        method: "PATCH",
-        headers: { ...HEADERS, "Prefer": "return=representation" },
-        body: JSON.stringify({ quarterly_exam_status: 'passed', current_quarter: currentQuarter + 1 })
+        method: "PATCH", headers: HEADERS,
+        body: JSON.stringify({ admission_status: 'quarterly_passed' })
       });
     }
-  } catch (e) { console.error(e); }
+  } catch(e) { console.error(e); }
 
-  showResult(finalScore, passed, mcqScore, subScore, mcqCorrect, aiFeedback, s0, s1);
-}
-
-function showResult(finalScore, passed, mcqScore, subScore, mcqCorrect, aiFeedback, s0, s1) {
   document.getElementById('examArea').style.display = 'none';
-  document.getElementById('message').style.display = 'none';
-
-  const subQs = ['Explain the Business Model Canvas with a real business example.', '₹5,000 service business plan.'];
-  const subAs = [s0, s1];
-
-  const feedbackHTML = aiFeedback.map((f, i) => `
-    <div class="feedback-item">
-      <div class="feedback-q">${subQs[i]} <span class="score-chip">${f.score}/10</span></div>
-      <div class="feedback-ans">"${subAs[i] ? subAs[i].substring(0,120) + '…' : 'No answer'}"</div>
-      <div class="feedback-comment">💬 ${f.feedback}</div>
-    </div>`).join('');
-
+  document.getElementById('navTimer').style.display = 'none';
+  document.getElementById('resultArea').style.display = 'block';
   document.getElementById('resultArea').innerHTML = `
-    <div class="result-card" style="border-color:${passed ? '#34a853' : '#c5221f'}">
-      <div class="result-score" style="color:${passed ? '#137333' : '#c5221f'}">${finalScore}%</div>
-      <div class="result-label">Quarter ${currentQuarter} — Final Score (MCQ 60% + Subjective 40%)</div>
-      <span class="result-badge" style="background:${passed ? '#e6f4ea' : '#fce8e6'}; color:${passed ? '#137333' : '#c5221f'}">
-        ${passed ? '✅ Passed — Continue to next quarter' : '❌ Not passed — Review lessons and retry'}
+    <div class="result-card" style="border:2px solid ${passed?'#34a853':'#c5221f'}; background:${passed?'#f6fef8':'#fdf3f3'};">
+      <div style="font-size:48px; margin-bottom:12px;">${passed?'🎉':'💪'}</div>
+      <div class="score-big" style="color:${passed?'#137333':'#c5221f'}">${score}%</div>
+      <div style="font-size:15px; color:#5f6368; margin:8px 0 16px;">Quarterly Exam Score</div>
+      <span style="display:inline-block; padding:8px 24px; border-radius:100px; font-size:14px; font-weight:500; background:${passed?'#e6f4ea':'#fce8e6'}; color:${passed?'#137333':'#c5221f'};">
+        ${passed ? '✅ Passed! Ready for Final Exam.' : '❌ Not passed. Review your lessons and try again.'}
       </span>
     </div>
-
     <div class="score-grid">
-      <div class="score-item">
-        <div class="s-label">MCQ Score</div>
-        <div class="s-value">${Math.round(mcqScore)}%</div>
-        <div class="s-sub">${mcqCorrect} of 8 correct</div>
-      </div>
-      <div class="score-item">
-        <div class="s-label">Subjective Score</div>
-        <div class="s-value">${Math.round(subScore)}%</div>
-        <div class="s-sub">AI graded · 2 questions</div>
-      </div>
+      <div class="score-item"><div class="s-label">Correct</div><div class="s-value">${correct}/${questions.length}</div></div>
+      <div class="score-item"><div class="s-label">Score</div><div class="s-value">${score}%</div></div>
     </div>
-
-    <div class="section-title" style="margin-top:0;">AI Feedback</div>
-    ${feedbackHTML}
-
-    <div class="notice">
-      <span>${passed ? '🎓' : '📚'}</span>
-      <div>${passed ? 'Well done! You have passed Quarter ' + currentQuarter + '. Continue your syllabus to prepare for Quarter ' + (currentQuarter + 1) + '.' : 'You scored ' + finalScore + '%. Review the lessons and try again. You need 70% to pass.'}</div>
+    <div class="notice ${passed?'blue':'yellow'}">
+      <span>${passed?'🎯':'📚'}</span>
+      <div>${passed ? 'Excellent! Proceed to the Final Exam to complete your course.' : 'Review your course modules and attempt the quarterly exam again.'}</div>
+    </div>
+    <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+      ${passed ? `<a href="/final-exam.html?email=${encodeURIComponent(studentEmail)}" class="btn-primary" style="text-decoration:none; padding:12px 24px;">Go to Final Exam →</a>` : ''}
+      <a href="/syllabus.html?email=${encodeURIComponent(studentEmail)}" style="display:inline-block; padding:12px 20px; border:1.5px solid #1a73e8; border-radius:4px; color:#1a73e8; text-decoration:none; font-size:14px; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">Back to Course</a>
     </div>`;
-
-  document.getElementById('resultArea').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function showMessage(type, text) {
+document.getElementById('studentEmail').addEventListener('keydown', e => { if (e.key === 'Enter') loadExam(); });
+
+function showMsg(type, text) {
   const m = document.getElementById('message');
   m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
 }
