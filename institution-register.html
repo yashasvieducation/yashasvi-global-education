@@ -63,6 +63,55 @@
   .modal-msg { font-size: 15px; color: #5f6368; line-height: 1.6; margin-bottom: 28px; }
   .modal-btn { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 13px 40px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
   .modal-btn:hover { background: #1765cc; }
+
+  /* ===== MOBILE RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .nav { padding: 0 16px; }
+    .nav-links { display: none; }
+    .hero { padding: 32px 16px 24px; }
+    .hero h1 { font-size: 26px !important; }
+    .hero p { font-size: 14px !important; }
+    .wrap, .form-wrap { padding: 0 16px 60px !important; }
+    .field-row { grid-template-columns: 1fr !important; }
+    .stats-grid { grid-template-columns: 1fr 1fr !important; }
+    .layout { grid-template-columns: 1fr !important; }
+    .sidebar { display: none !important; }
+    .chat-panel { display: none !important; }
+    .dash-grid { grid-template-columns: 1fr !important; }
+    .plans-grid { grid-template-columns: 1fr !important; }
+    .type-grid { grid-template-columns: 1fr !important; }
+    .difficulty-grid { grid-template-columns: 1fr !important; }
+    .attempts-grid { grid-template-columns: 1fr !important; }
+    .score-grid { grid-template-columns: 1fr !important; }
+    .exam-info-grid { grid-template-columns: 1fr !important; }
+    .detail-grid { grid-template-columns: 1fr !important; }
+    .seat-flow { grid-template-columns: 1fr 1fr !important; }
+    .form-row { grid-template-columns: 1fr !important; }
+    .quick-links { grid-template-columns: 1fr 1fr !important; }
+    .course-cards { grid-template-columns: 1fr !important; }
+    .register-links { gap: 8px; }
+    .login-card { padding: 28px 20px !important; }
+    table { font-size: 12px !important; }
+    th, td { padding: 8px 10px !important; }
+    .btn-hero, .btn-hero-outline { padding: 12px 20px !important; font-size: 14px !important; }
+    .hero-btns { flex-direction: column; align-items: center; }
+    .unique-banner { flex-direction: column; }
+    .renewal-section { flex-direction: column; }
+    .cert-actions { flex-direction: column; align-items: stretch; }
+    .cert-actions a, .cert-actions button { text-align: center; }
+    #certificate { width: 100% !important; height: auto !important; }
+    .referral-code-card { flex-direction: column; }
+    .request-card { flex-direction: column; }
+    .chat-input-wrap { padding: 10px; }
+    .admin-panel .layout { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 22px !important; }
+    .stat-num { font-size: 22px !important; }
+    .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+    .quick-links { grid-template-columns: 1fr !important; }
+    .nav-logo { font-size: 15px; }
+  }
 </style>
 </head>
 <body>
