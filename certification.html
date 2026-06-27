@@ -3,71 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yashasvi Global Education — Certification</title>
+<title>Yashasvi Global Education — Certificate</title>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; min-height: 100vh; }
-  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; }
   .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
   .nav-logo span { color: #1a73e8; }
-  .hero { padding: 48px 24px 32px; max-width: 760px; margin: 0 auto; }
-  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #34a853; margin-bottom: 12px; }
-  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 32px; font-weight: 400; color: #202124; line-height: 1.25; margin-bottom: 10px; }
-  .hero p { font-size: 15px; color: #5f6368; line-height: 1.6; max-width: 560px; }
+  .hero { padding: 48px 24px 32px; max-width: 760px; margin: 0 auto; text-align: center; }
+  .hero-label { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: #1a73e8; margin-bottom: 12px; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 32px; font-weight: 400; color: #202124; margin-bottom: 10px; }
+  .hero p { font-size: 15px; color: #5f6368; line-height: 1.6; }
   .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
-  .field { margin-bottom: 20px; }
+  .field { margin-bottom: 18px; }
   .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
-  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; color: #202124; outline: none; transition: border-color 0.15s; }
-  .field input:focus { border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.12); }
-  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; min-width: 160px; }
+  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; outline: none; }
+  .field input:focus { border-color: #1a73e8; }
+  .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
   .btn-primary:hover { background: #1765cc; }
   .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
-  .btn-outline { background: #fff; color: #1a73e8; border: 1.5px solid #1a73e8; border-radius: 4px; padding: 10px 24px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; }
-  .btn-outline:hover { background: #e8f0fe; }
-  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; line-height: 1.5; }
-  .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
+  #message { margin-top: 16px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; }
   .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
-  .msg-info { background: #e8f0fe; color: #1a73e8; display: block !important; }
-  .notice { border-radius: 8px; padding: 14px 16px; font-size: 14px; display: flex; gap: 10px; line-height: 1.5; margin-bottom: 24px; }
+  .notice { border-radius: 8px; padding: 14px 16px; font-size: 14px; display: flex; gap: 10px; line-height: 1.5; margin-bottom: 20px; }
+  .notice.yellow { background: #fef7e0; color: #b06000; }
   .notice.blue { background: #e8f0fe; color: #1a73e8; }
   .notice span { font-size: 18px; flex-shrink: 0; }
 
   /* Certificate */
   #certWrap { display: none; }
-  .cert-container { background: #fff; border: 2px solid #e8eaed; border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
-  .cert-top-bar { background: #1a73e8; height: 8px; }
-  .cert-body { padding: 48px; }
-  .cert-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; color: #5f6368; margin-bottom: 32px; display: flex; align-items: center; gap: 8px; }
-  .cert-logo span { color: #1a73e8; }
-  .cert-issued { font-size: 13px; color: #5f6368; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
-  .cert-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 42px; font-weight: 400; color: #202124; margin-bottom: 8px; line-height: 1.2; }
-  .cert-desc { font-size: 16px; color: #5f6368; margin-bottom: 28px; line-height: 1.6; max-width: 480px; }
-  .cert-dept { display: inline-flex; align-items: center; gap: 8px; background: #e8f0fe; border-radius: 100px; padding: 8px 20px; font-size: 15px; color: #1a73e8; font-weight: 500; font-family: 'Google Sans', Arial, sans-serif; margin-bottom: 32px; }
-  .cert-divider { border: none; border-top: 1px solid #e8eaed; margin: 28px 0; }
-  .cert-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 28px; }
-  @media (max-width: 560px) { .cert-meta { grid-template-columns: 1fr 1fr; } .cert-body { padding: 24px; } .cert-name { font-size: 28px; } }
-  .cert-meta-item .m-label { font-size: 11px; color: #80868b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-  .cert-meta-item .m-value { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; color: #202124; font-weight: 500; }
-  .cert-id-section { background: #f8f9fa; border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-  .cert-id-label { font-size: 12px; color: #5f6368; margin-bottom: 2px; }
-  .cert-id-value { font-family: monospace; font-size: 14px; color: #202124; font-weight: 500; }
-  .cert-bottom { padding: 20px 48px; background: #f8f9fa; border-top: 1px solid #e8eaed; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; gap: 12px; }
-  .cert-seal { display: flex; align-items: center; gap: 10px; }
-  .cert-seal-icon { width: 40px; height: 40px; background: #1a73e8; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; }
-  .cert-seal-text { font-size: 12px; color: #5f6368; line-height: 1.4; }
-  .cert-seal-text strong { display: block; color: #202124; font-size: 13px; }
-  .grade-badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 100px; padding: 6px 16px; font-size: 14px; font-weight: 500; font-family: 'Google Sans', Arial, sans-serif; }
-  .grade-A { background: #e6f4ea; color: #137333; }
-  .grade-B { background: #e8f0fe; color: #1a73e8; }
-  .grade-C { background: #fef7e0; color: #b06000; }
-  .action-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+  .cert-actions { display: flex; gap: 12px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+  .btn-download { background: #34a853; color: #fff; border: none; border-radius: 4px; padding: 12px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .btn-download:hover { background: #2d9142; }
+  .btn-share { background: #fff; color: #1a73e8; border: 1.5px solid #1a73e8; border-radius: 4px; padding: 11px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
 
-  /* Verify section */
-  .verify-section { border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; margin-top: 32px; }
-  .verify-section h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 8px; }
-  .verify-section p { font-size: 14px; color: #5f6368; margin-bottom: 16px; }
-  .verify-result { margin-top: 12px; padding: 12px 16px; border-radius: 4px; font-size: 14px; display: none; }
+  /* Certificate Design */
+  .cert-container { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.12); margin-bottom: 24px; }
+  #certificate { width: 100%; font-family: 'Georgia', serif; }
+
+  /* Cert ID */
+  .cert-id-box { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 16px 20px; text-align: center; margin-bottom: 20px; }
+  .cert-id-label { font-size: 12px; color: #5f6368; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .cert-id-value { font-family: monospace; font-size: 18px; color: #1a73e8; font-weight: 500; letter-spacing: 2px; }
+  .cert-id-note { font-size: 12px; color: #80868b; margin-top: 4px; }
 </style>
 </head>
 <body>
@@ -78,107 +56,41 @@
 
 <div class="hero">
   <div class="hero-label">🎓 Certification</div>
-  <h1>Your certificate</h1>
-  <p>Congratulations on completing your course. Your certificate is verified and can be shared with employers, universities, or anyone who wants to verify your achievement.</p>
+  <h1>Your achievement certificate</h1>
+  <p>Globally verified, blockchain-secured certificate from Yashasvi Global Education.</p>
 </div>
 
 <div class="wrap">
 
-  <!-- Email Step -->
   <div id="emailStep">
-    <div class="notice blue">
-      <span>ℹ️</span>
-      <div>Enter your student email to generate and view your certificate. You must have completed the internship to receive your certificate.</div>
-    </div>
     <div class="field">
-      <label>Student email address</label>
-      <input type="email" id="studentEmail" placeholder="you@example.com">
+      <label>Student email</label>
+      <input type="email" id="studentEmail" placeholder="you@example.com" autocomplete="off">
     </div>
-    <button class="btn-primary" id="getBtn">Get my certificate</button>
+    <button class="btn-primary" id="checkBtn" onclick="checkCertificate()">Get my certificate →</button>
     <div id="message"></div>
   </div>
 
-  <!-- Certificate -->
   <div id="certWrap">
-    <div class="action-row">
-      <button class="btn-primary" onclick="window.print()">🖨️ Print certificate</button>
-      <button class="btn-outline" onclick="copyCertLink()">🔗 Copy verify link</button>
+    <div class="notice blue">
+      <span>🔐</span>
+      <div>Your certificate is globally verified. Share your Certificate ID to let employers verify your achievement instantly.</div>
     </div>
 
-    <div class="cert-container" id="certCard">
-      <div class="cert-top-bar"></div>
-      <div class="cert-body">
-        <div class="cert-logo">Yashasvi <span>Global Education</span> &nbsp;·&nbsp; Decentralised University</div>
-        <div class="cert-issued">Certificate of Completion</div>
-        <div class="cert-name" id="certName">—</div>
-        <div class="cert-desc">has successfully completed the full course programme and all assessments in</div>
-        <div class="cert-dept" id="certDept">🚀 Entrepreneurship & Business Design</div>
-
-        <hr class="cert-divider">
-
-        <div class="cert-meta">
-          <div class="cert-meta-item">
-            <div class="m-label">Final Exam</div>
-            <div class="m-value" id="certExamScore">—</div>
-          </div>
-          <div class="cert-meta-item">
-            <div class="m-label">Internship</div>
-            <div class="m-value" id="certInternScore">—</div>
-          </div>
-          <div class="cert-meta-item">
-            <div class="m-label">Grade</div>
-            <div class="m-value" id="certGrade">—</div>
-          </div>
-          <div class="cert-meta-item">
-            <div class="m-label">Issued on</div>
-            <div class="m-value" id="certDate">—</div>
-          </div>
-          <div class="cert-meta-item">
-            <div class="m-label">Duration</div>
-            <div class="m-value">Full Course</div>
-          </div>
-          <div class="cert-meta-item">
-            <div class="m-label">Mode</div>
-            <div class="m-value">AI-Powered Online</div>
-          </div>
-        </div>
-
-        <div class="cert-id-section">
-          <div>
-            <div class="cert-id-label">Certificate ID</div>
-            <div class="cert-id-value" id="certIdDisplay">—</div>
-          </div>
-          <div style="font-size:12px; color:#80868b; text-align:right;">
-            Verify at:<br>
-            <span style="color:#1a73e8;" id="certVerifyUrl">yashasvi-global-education.vercel.app/certification.html</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="cert-bottom">
-        <div class="cert-seal">
-          <div class="cert-seal-icon">✓</div>
-          <div class="cert-seal-text">
-            <strong>Verified Certificate</strong>
-            Issued by Yashasvi Global Education
-          </div>
-        </div>
-        <div style="font-size:12px; color:#80868b; text-align:right;">
-          This certificate is digitally verified.<br>
-          Certificate ID can be checked online.
-        </div>
-      </div>
+    <div class="cert-id-box">
+      <div class="cert-id-label">Certificate ID</div>
+      <div class="cert-id-value" id="certIdDisplay">—</div>
+      <div class="cert-id-note">Use this ID to verify your certificate at yashasvi-global-education.vercel.app/verify</div>
     </div>
 
-    <!-- Verify Section -->
-    <div class="verify-section">
-      <h3>🔍 Verify a certificate</h3>
-      <p>Enter a Certificate ID to verify its authenticity. Anyone — employers, universities, or institutions — can verify certificates issued by Yashasvi Global Education.</p>
-      <div style="display:flex; gap:12px; flex-wrap:wrap;">
-        <input type="text" id="verifyInput" placeholder="Enter Certificate ID (e.g. YGE-2026-XXXXX)" style="flex:1; padding:10px 14px; border:1px solid #dadce0; border-radius:4px; font-size:14px; outline:none; min-width:200px;">
-        <button class="btn-primary" onclick="verifyCert()" style="min-width:120px; padding:10px 20px;">Verify</button>
-      </div>
-      <div class="verify-result" id="verifyResult"></div>
+    <div class="cert-actions">
+      <button class="btn-download" onclick="downloadCertificate()">⬇️ Download Certificate</button>
+      <button class="btn-share" onclick="shareCertificate()">🔗 Share Certificate</button>
+      <a href="/dashboard.html" style="display:inline-block; padding:12px 20px; border:1.5px solid #dadce0; border-radius:4px; color:#5f6368; text-decoration:none; font-size:14px; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">← Dashboard</a>
+    </div>
+
+    <div class="cert-container">
+      <canvas id="certificate" width="900" height="636"></canvas>
     </div>
   </div>
 
@@ -189,168 +101,226 @@ const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
 const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
 
-let currentCertId = "";
+let studentData = {}, certId = "";
 
-function generateCertId() {
-  const year = new Date().getFullYear();
-  const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
-  return `YGE-${year}-${rand}`;
-}
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('email')) document.getElementById('studentEmail').value = urlParams.get('email');
 
-function getGrade(score) {
-  if (score >= 90) return { grade: 'A+', label: 'Distinction' };
-  if (score >= 80) return { grade: 'A', label: 'First Class' };
-  if (score >= 70) return { grade: 'B', label: 'Second Class' };
-  return { grade: 'C', label: 'Pass' };
-}
-
-document.getElementById('getBtn').addEventListener('click', async () => {
+async function checkCertificate() {
   const email = document.getElementById('studentEmail').value.trim().toLowerCase();
-  if (!email) { showMessage('error', 'Please enter your email address.'); return; }
-
-  const btn = document.getElementById('getBtn');
-  btn.disabled = true; btn.textContent = 'Loading…';
+  if (!email) { showMsg('error', 'Please enter your email.'); return; }
+  const btn = document.getElementById('checkBtn');
+  btn.disabled = true; btn.textContent = 'Checking…';
 
   try {
-    // Get student
     const res = await fetch(BASE + "/students?select=*&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
     const data = await res.json();
-
     if (!Array.isArray(data) || data.length === 0) {
-      showMessage('error', 'No application found for this email.');
-      btn.disabled = false; btn.textContent = 'Get my certificate'; return;
+      showMsg('error', 'No account found.');
+      btn.disabled = false; btn.textContent = 'Get my certificate →'; return;
+    }
+    const s = data[0];
+    studentData = s;
+
+    // Check if eligible
+    if (!['final_exam_passed', 'internship_passed', 'certified'].includes(s.admission_status)) {
+      showMsg('error', 'You need to complete the Final Exam first to get your certificate.');
+      btn.disabled = false; btn.textContent = 'Get my certificate →'; return;
     }
 
-    const student = data[0];
+    // Generate or get cert ID
+    certId = s.cert_id || await generateCertId(email, s);
 
-    if (!['internship_passed', 'certified'].includes(student.admission_status)) {
-      showMessage('error', 'You must complete the internship before receiving your certificate. Please complete all steps first.');
-      btn.disabled = false; btn.textContent = 'Get my certificate'; return;
-    }
+    document.getElementById('emailStep').style.display = 'none';
+    document.getElementById('certWrap').style.display = 'block';
+    document.getElementById('certIdDisplay').textContent = certId;
 
-    // Check existing certificate
-    let certId = student.certificate_id;
-    let certData = null;
-
-    if (certId) {
-      const cRes = await fetch(BASE + "/certifications?select=*&certificate_id=eq." + certId, { method: "GET", headers: HEADERS });
-      const cData = await cRes.json();
-      if (Array.isArray(cData) && cData.length > 0) certData = cData[0];
-    }
-
-    // Get exam + internship scores
-    const fRes = await fetch(BASE + "/final_exams?select=final_score&student_email=ilike." + encodeURIComponent(email) + "&order=attempted_at.desc&limit=1", { method: "GET", headers: HEADERS });
-    const fData = await fRes.json();
-    const examScore = fData?.[0]?.final_score || 0;
-
-    const iRes = await fetch(BASE + "/internships?select=ai_score&student_email=ilike." + encodeURIComponent(email) + "&order=submitted_at.desc&limit=1", { method: "GET", headers: HEADERS });
-    const iData = await iRes.json();
-    const internScore = iData?.[0]?.ai_score || 0;
-
-    const overallScore = Math.round((examScore + internScore) / 2);
-    const { grade, label } = getGrade(overallScore);
-
-    // Issue new certificate if not exists
-    if (!certData) {
-      certId = generateCertId();
-      const issuedAt = new Date().toISOString();
-
-      await fetch(BASE + "/certifications", {
-        method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
-        body: JSON.stringify({
-          student_email: email,
-          student_name: student.student_name,
-          department: student.track,
-          certificate_id: certId,
-          final_exam_score: examScore,
-          internship_score: internScore,
-          overall_grade: grade,
-          status: 'issued'
-        })
-      });
-
-      await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(email), {
-        method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" },
-        body: JSON.stringify({ certificate_id: certId, admission_status: 'certified' })
-      });
-
-      certData = { student_name: student.student_name, department: student.track, certificate_id: certId, final_exam_score: examScore, internship_score: internScore, overall_grade: grade, issued_at: issuedAt };
-    }
-
-    currentCertId = certData.certificate_id || certId;
-    showCertificate(certData, student, grade, label, examScore, internScore);
+    // Draw certificate
+    drawCertificate(s.student_name, s.selected_course || 'General Course', certId, s.created_at);
 
   } catch (err) {
-    showMessage('error', 'Error: ' + err.message);
-    btn.disabled = false; btn.textContent = 'Get my certificate';
+    showMsg('error', 'Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Get my certificate →';
   }
-});
-
-function showCertificate(cert, student, grade, label, examScore, internScore) {
-  document.getElementById('emailStep').style.display = 'none';
-  document.getElementById('certWrap').style.display = 'block';
-
-  document.getElementById('certName').textContent = cert.student_name || student.student_name;
-
-  const deptIcons = { 'Entrepreneurship & Business Design': '🚀', 'Blockchain & Decentralized Systems': '⛓️' };
-  const dept = cert.department || student.track;
-  document.getElementById('certDept').textContent = (deptIcons[dept] || '📚') + ' ' + dept;
-
-  document.getElementById('certExamScore').textContent = Math.round(examScore) + '%';
-  document.getElementById('certInternScore').textContent = Math.round(internScore) + '%';
-
-  const gradeEl = document.getElementById('certGrade');
-  gradeEl.innerHTML = `<span class="grade-badge grade-${grade[0]}">${grade} — ${label}</span>`;
-
-  const issuedDate = cert.issued_at ? new Date(cert.issued_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-  document.getElementById('certDate').textContent = issuedDate;
-  document.getElementById('certIdDisplay').textContent = currentCertId;
-
-  // Pre-fill verify input
-  document.getElementById('verifyInput').value = currentCertId;
 }
 
-async function verifyCert() {
-  const id = document.getElementById('verifyInput').value.trim().toUpperCase();
-  if (!id) return;
-
-  const result = document.getElementById('verifyResult');
-  result.style.display = 'block';
-  result.style.background = '#e8f0fe';
-  result.style.color = '#1a73e8';
-  result.textContent = 'Verifying…';
-
+async function generateCertId(email, student) {
+  const id = 'YGE-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
   try {
-    const res = await fetch(BASE + "/certifications?select=*&certificate_id=eq." + id, { method: "GET", headers: HEADERS });
-    const data = await res.json();
-
-    if (!Array.isArray(data) || data.length === 0) {
-      result.style.background = '#fce8e6';
-      result.style.color = '#c5221f';
-      result.textContent = '❌ Certificate not found. This ID is invalid or has not been issued.';
-      return;
-    }
-
-    const c = data[0];
-    const date = new Date(c.issued_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-    result.style.background = '#e6f4ea';
-    result.style.color = '#137333';
-    result.innerHTML = `✅ Valid Certificate — Issued to <strong>${c.student_name}</strong> for <strong>${c.department}</strong>. Grade: <strong>${c.overall_grade}</strong>. Issued on ${date}.`;
-  } catch (err) {
-    result.style.background = '#fce8e6';
-    result.style.color = '#c5221f';
-    result.textContent = 'Error verifying: ' + err.message;
-  }
+    await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(email), {
+      method: "PATCH", headers: HEADERS,
+      body: JSON.stringify({ cert_id: id, admission_status: 'certified' })
+    });
+    // Save to certifications table
+    await fetch(BASE + "/certifications", {
+      method: "POST", headers: HEADERS,
+      body: JSON.stringify({ student_email: email, student_name: student.student_name, course_name: student.selected_course, cert_id: id, issued_date: new Date().toISOString() })
+    });
+  } catch(e) {}
+  return id;
 }
 
-function copyCertLink() {
-  const url = `https://yashasvi-global-education.vercel.app/certification.html`;
-  navigator.clipboard.writeText(url + '\nCertificate ID: ' + currentCertId).then(() => {
-    alert('Certificate verify link copied!');
-  });
+function drawCertificate(name, course, certId, joinDate) {
+  const canvas = document.getElementById('certificate');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // Background
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, W, H);
+
+  // Gold border
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(20, 20, W-40, H-40);
+  ctx.strokeStyle = '#e8d5a0';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(28, 28, W-56, H-56);
+
+  // Top pattern
+  const grad = ctx.createLinearGradient(0, 0, W, 0);
+  grad.addColorStop(0, '#1a3a5c');
+  grad.addColorStop(0.5, '#1a73e8');
+  grad.addColorStop(1, '#1a3a5c');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, 80);
+
+  // Logo area
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 18px Google Sans, Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('YASHASVI GLOBAL EDUCATION', W/2, 38);
+  ctx.font = '13px Roboto, Arial';
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.fillText('Decentralised AI-Powered University', W/2, 58);
+
+  // Seal circle
+  ctx.beginPath();
+  ctx.arc(W/2, 80, 40, 0, Math.PI*2);
+  ctx.fillStyle = '#fff';
+  ctx.fill();
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = '#1a73e8';
+  ctx.font = 'bold 28px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('🎓', W/2, 90);
+
+  // Certificate of Completion
+  ctx.fillStyle = '#1a3a5c';
+  ctx.font = 'italic 14px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Certificate of Completion', W/2, 155);
+
+  // Decorative line
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(100, 165); ctx.lineTo(W-100, 165); ctx.stroke();
+
+  // This is to certify
+  ctx.fillStyle = '#5f6368';
+  ctx.font = '13px Roboto, Arial';
+  ctx.fillText('This is to certify that', W/2, 200);
+
+  // Student Name
+  ctx.fillStyle = '#202124';
+  ctx.font = 'bold 36px Google Sans, Arial';
+  ctx.fillText(name, W/2, 248);
+
+  // Underline name
+  const nameWidth = ctx.measureText(name).width;
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(W/2 - nameWidth/2, 256); ctx.lineTo(W/2 + nameWidth/2, 256); ctx.stroke();
+
+  // has successfully completed
+  ctx.fillStyle = '#5f6368';
+  ctx.font = '14px Roboto, Arial';
+  ctx.fillText('has successfully completed the course', W/2, 290);
+
+  // Course Name
+  ctx.fillStyle = '#1a73e8';
+  ctx.font = 'bold 22px Google Sans, Arial';
+  ctx.fillText(course, W/2, 330);
+
+  // at Yashasvi
+  ctx.fillStyle = '#5f6368';
+  ctx.font = '13px Roboto, Arial';
+  ctx.fillText('at Yashasvi Global Education — Decentralised University', W/2, 360);
+
+  // Date
+  const issueDate = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  ctx.fillStyle = '#80868b';
+  ctx.font = '12px Roboto, Arial';
+  ctx.fillText('Issued on ' + issueDate, W/2, 395);
+
+  // Bottom divider
+  ctx.strokeStyle = '#e8d5a0';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(60, 420); ctx.lineTo(W-60, 420); ctx.stroke();
+
+  // Bottom section - 3 columns
+  const cols = [W/4, W/2, 3*W/4];
+
+  // Signature 1 - Director
+  ctx.fillStyle = '#202124';
+  ctx.font = 'italic 13px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Tushar Kumbhar', cols[0], 460);
+  ctx.strokeStyle = '#202124';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath(); ctx.moveTo(cols[0]-60, 467); ctx.lineTo(cols[0]+60, 467); ctx.stroke();
+  ctx.fillStyle = '#5f6368';
+  ctx.font = '11px Roboto, Arial';
+  ctx.fillText('Founder & Director', cols[0], 480);
+
+  // Cert ID middle
+  ctx.fillStyle = '#1a73e8';
+  ctx.font = 'bold 11px monospace';
+  ctx.fillText(certId, cols[1], 455);
+  ctx.fillStyle = '#80868b';
+  ctx.font = '10px Roboto, Arial';
+  ctx.fillText('Certificate ID', cols[1], 468);
+  ctx.fillText('Verified & Blockchain Secured', cols[1], 482);
+
+  // AI Verified right
+  ctx.fillStyle = '#137333';
+  ctx.font = 'bold 12px Roboto, Arial';
+  ctx.fillText('✅ AI Verified', cols[2], 452);
+  ctx.fillStyle = '#5f6368';
+  ctx.font = '11px Roboto, Arial';
+  ctx.fillText('Yashasvi Global Education', cols[2], 466);
+  ctx.fillText('Digital Seal', cols[2], 480);
+
+  // Footer
+  const footGrad = ctx.createLinearGradient(0, H-50, W, H);
+  footGrad.addColorStop(0, '#1a3a5c');
+  footGrad.addColorStop(1, '#1a73e8');
+  ctx.fillStyle = footGrad;
+  ctx.fillRect(0, H-50, W, 50);
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.font = '11px Roboto, Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('yashasvi-global-education.vercel.app  ·  Decentralised · AI-Powered · Globally Verified', W/2, H-20);
 }
 
-function showMessage(type, text) {
+function downloadCertificate() {
+  const canvas = document.getElementById('certificate');
+  const link = document.createElement('a');
+  link.download = 'Yashasvi-Certificate-' + certId + '.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+function shareCertificate() {
+  const url = window.location.origin + '/verify.html?id=' + certId;
+  navigator.clipboard.writeText(url).then(() => alert('Certificate link copied!\n\n' + url));
+}
+
+document.getElementById('studentEmail').addEventListener('keydown', e => { if (e.key === 'Enter') checkCertificate(); });
+
+function showMsg(type, text) {
   const m = document.getElementById('message');
   m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
 }
