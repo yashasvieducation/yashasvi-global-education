@@ -41,6 +41,10 @@
   @media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
   .required { color: #c5221f; margin-left: 2px; }
   .field-hint { font-size: 12px; color: #80868b; margin-top: 4px; }
+  .password-wrap { position: relative; }
+  .password-wrap input { padding-right: 44px; }
+  .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 18px; color: #5f6368; padding: 4px; line-height: 1; }
+  .eye-btn:hover { color: #1a73e8; }
   .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 13px 28px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; min-width: 180px; }
   .btn-primary:hover { background: #1765cc; }
   .btn-primary:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
@@ -178,12 +182,18 @@
   <div class="field-row">
     <div class="field">
       <label>Password <span class="required">*</span></label>
-      <input type="password" id="instPassword" placeholder="Set a strong password">
+      <div class="password-wrap">
+        <input type="password" id="instPassword" placeholder="Set a strong password">
+        <button type="button" class="eye-btn" onclick="togglePass('instPassword', this)">👁️</button>
+      </div>
       <div class="field-hint">Minimum 8 characters. You will use this to login to your dashboard.</div>
     </div>
     <div class="field">
       <label>Confirm password <span class="required">*</span></label>
-      <input type="password" id="instPasswordConfirm" placeholder="Re-enter password">
+      <div class="password-wrap">
+        <input type="password" id="instPasswordConfirm" placeholder="Re-enter password">
+        <button type="button" class="eye-btn" onclick="togglePass('instPasswordConfirm', this)">👁️</button>
+      </div>
     </div>
   </div>
 
@@ -312,6 +322,17 @@ async function submitRegistration() {
   } catch (err) {
     showMsg('error', 'Network error: ' + err.message);
     btn.disabled = false; btn.textContent = 'Submit registration →';
+  }
+}
+
+function togglePass(id, btn) {
+  const input = document.getElementById(id);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️';
   }
 }
 

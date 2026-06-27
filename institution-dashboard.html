@@ -21,6 +21,10 @@
   .field input:focus { border-color: #1a73e8; }
   .field { margin-bottom: 16px; }
   #loginMsg { margin-top: 12px; padding: 10px; border-radius: 4px; font-size: 14px; display: none; }
+  .password-wrap { position: relative; }
+  .password-wrap input { padding-right: 44px; }
+  .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 18px; color: #5f6368; padding: 4px; line-height: 1; }
+  .eye-btn:hover { color: #1a73e8; }
   .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
   .msg-success { background: #e6f4ea; color: #137333; display: block !important; }
 
@@ -100,7 +104,10 @@
   </div>
   <div class="field">
     <label>Password</label>
-    <input type="password" id="loginPassword" placeholder="Enter your password">
+    <div class="password-wrap">
+      <input type="password" id="loginPassword" placeholder="Enter your password">
+      <button type="button" class="eye-btn" onclick="togglePass('loginPassword', this)">👁️</button>
+    </div>
   </div>
   <button class="btn btn-primary" id="loginBtn" style="width:100%; padding:12px;" onclick="doLogin()">Access dashboard →</button>
   <div id="loginMsg"></div>
@@ -374,6 +381,12 @@ function showLoginMsg(text) {
 function showAddMsg(type, text) {
   const m = document.getElementById('addMsg');
   m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
+}
+
+function togglePass(id, btn) {
+  const input = document.getElementById(id);
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁️'; }
 }
 
 document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
