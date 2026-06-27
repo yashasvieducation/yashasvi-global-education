@@ -161,6 +161,7 @@
         <option value="Other">🌍 Other</option>
       </select>
     </div>
+    <div id="userLimitWrap">
     <div class="field">
       <label id="userLimitLabel">Number of students/employees <span class="required">*</span></label>
       <select id="instUserLimit">
@@ -172,9 +173,10 @@
         <option value="5000">5000+</option>
       </select>
     </div>
+    </div>
   </div>
 
-  <div class="form-section-title">Contact Person</div>
+  <div class="form-section-title" id="contactSection">Contact Person</div>
 
   <div class="field-row">
     <div class="field">
@@ -302,6 +304,21 @@ function selectType(type, el) {
 
     const indivFields = document.getElementById('individualFields');
     if (indivFields) indivFields.style.display = type === 'individual' ? 'block' : 'none';
+
+    // Hide contact section for individual
+    const contactSection = document.getElementById('contactSection');
+    const contactFields = document.getElementById('contactFields');
+    const isIndiv = type === 'individual';
+    if (contactSection) contactSection.style.display = isIndiv ? 'none' : 'block';
+    if (contactFields) contactFields.style.display = isIndiv ? 'none' : 'block';
+
+    // Update email label
+    const emailLabel = document.getElementById('emailLabel');
+    if (emailLabel) emailLabel.innerHTML = isIndiv ? 'Your email <span class="required">*</span>' : 'Official email <span class="required">*</span>';
+
+    // Hide user limit for individual
+    const userLimitWrap = document.getElementById('userLimitWrap');
+    if (userLimitWrap) userLimitWrap.style.display = isIndiv ? 'none' : 'block';
 
     const titleEl = document.getElementById('instDetailsTitle');
     const nameLabel = document.getElementById('instNameLabel');
