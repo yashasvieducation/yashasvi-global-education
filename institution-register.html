@@ -110,9 +110,9 @@
 <div class="form-wrap" id="formWrap">
   <div class="selected-type-badge" id="selectedTypeBadge">🏫 School</div>
 
-  <div class="notice">
-    <span>ℹ️</span>
-    <div>After submitting, our team will verify your institution within <strong>24-48 hours</strong>. You will receive an email with your login credentials and referral codes once approved.</div>
+  <div class="notice" id="verifyNotice">
+    <span>🔍</span>
+    <div id="verifyNoticeText">Our AI system will automatically verify your details. You will receive your access credentials once approved.</div>
   </div>
 
   <div class="form-section-title" id="instDetailsTitle">Institution Details</div>
@@ -304,6 +304,17 @@ function selectType(type, el) {
 
     const indivFields = document.getElementById('individualFields');
     if (indivFields) indivFields.style.display = type === 'individual' ? 'block' : 'none';
+
+    // Update verification notice
+    const noticeText = document.getElementById('verifyNoticeText');
+    const noticeWrap = document.getElementById('verifyNotice');
+    const notices = {
+      school: '🔍 Our system will automatically cross-verify your school details using public records and official databases. Once verified, you will receive your institution dashboard access and unique student referral codes within <strong>24-48 hours</strong>.',
+      college: '🔍 Our system will automatically cross-verify your college/university details using official records. Once verified, you will receive your institution dashboard access and unique student referral codes within <strong>24-48 hours</strong>.',
+      corporate: '🔍 Our AI system will verify your company details using business registration databases. Once verified, your corporate training dashboard will be activated with your custom employee access codes within <strong>24-48 hours</strong>.',
+      individual: '✅ Your registration will be reviewed and activated within a few minutes. You will receive your personal login credentials directly on your email once approved.'
+    };
+    if (noticeText) noticeText.innerHTML = notices[type] || notices.school;
 
     // Hide contact section for individual
     const contactSection = document.getElementById('contactSection');
