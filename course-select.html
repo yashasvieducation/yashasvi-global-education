@@ -364,14 +364,8 @@ async function saveCourseRequest(requestedCourse) {
     // Send email to admin via Edge Function
     await fetch('https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/send-verification-email', {
       method: 'POST',
-      headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to: 'yashasvieducation@gmail.com',
-        studentName: studentName,
-        examScore: 0,
-        verifyUrl: 'https://yashasvi-global-education.vercel.app/admin.html',
-        parentEmail: 'New course request: ' + requestedCourse + ' from ' + studentEmail
-      })
+      headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'course_request', to: 'yashasvieducation@gmail.com', studentName, requestedCourse })
     });
 
     await aiSay('I have sent a request to our team to create the  + requestedCourse +  course. You will be notified as soon as it is available! 🔔 Meanwhile, would you like to explore one of our current courses?');

@@ -180,6 +180,9 @@ async function checkCertificate() {
     // Generate or get cert ID
     certId = s.cert_id || await generateCertId(email, s);
 
+    // Send certificate email
+    sendEmail('certificate', email, { studentName: s.student_name, courseName: s.selected_course, certId, parentEmail: s.parent_email });
+
     document.getElementById('emailStep').style.display = 'none';
     document.getElementById('certWrap').style.display = 'block';
     document.getElementById('certIdDisplay').textContent = certId;
@@ -359,6 +362,17 @@ function shareCertificate() {
 }
 
 document.getElementById('studentEmail').addEventListener('keydown', e => { if (e.key === 'Enter') checkCertificate(); });
+
+
+async function sendEmail(type, to, data) {
+  try {
+    await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/send-verification-email", {
+      method: "POST",
+      headers: { "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE", "Content-Type": "application/json" },
+      body: JSON.stringify({ type, to, ...data })
+    });
+  } catch(e) { console.log('Email error:', e.message); }
+}
 
 function showMsg(type, text) {
   const m = document.getElementById('message');

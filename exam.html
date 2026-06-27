@@ -470,6 +470,17 @@ function showResult(finalScore, passed, mcqScore, subScore, mcqCorrect, aiFeedba
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+
+async function sendEmail(type, to, data) {
+  try {
+    await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/send-verification-email", {
+      method: "POST",
+      headers: { "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE", "Content-Type": "application/json" },
+      body: JSON.stringify({ type, to, ...data })
+    });
+  } catch(e) { console.log('Email error:', e.message); }
+}
+
 function showMsg(type, text) {
   const m = document.getElementById('message');
   m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
