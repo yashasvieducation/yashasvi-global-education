@@ -45,6 +45,15 @@
   .feature-list { list-style: none; }
   .feature-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #202124; padding: 6px 0; }
   .feature-list li::before { content: '✓'; color: #34a853; font-weight: 700; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: #fff; border-radius: 12px; padding: 40px 32px; max-width: 440px; width: 100%; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+  .modal-icon { font-size: 56px; margin-bottom: 16px; }
+  .modal-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 400; color: #202124; margin-bottom: 10px; }
+  .modal-msg { font-size: 15px; color: #5f6368; line-height: 1.6; margin-bottom: 28px; }
+  .modal-btn { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 13px 40px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .modal-btn:hover { background: #1765cc; }
 </style>
 </head>
 <body>
@@ -160,7 +169,7 @@ async function submitPayment() {
       body: JSON.stringify({ fee_paid: true, admission_status: 'admitted' })
     });
 
-    showMsg('success', '✅ Payment submitted! Your course access is now active. Redirecting to your course…');
+    showSuccessModal('Payment Successful!', 'Your enrollment is complete and course access is now active. Click Okay to start learning!', '/syllabus.html?email=' + encodeURIComponent(email));
     btn.textContent = 'Submitted ✓';
 
     setTimeout(() => {
@@ -173,10 +182,25 @@ async function submitPayment() {
   }
 }
 
+function showSuccessModal(title, msg, redirectUrl) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalMsg').textContent = msg;
+  if (redirectUrl) document.getElementById('modalOkBtn').onclick = function() { window.location.href = redirectUrl; };
+  document.getElementById('successModal').classList.add('open');
+}
+
 function showMsg(type, text) {
   const m = document.getElementById('message');
   m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
 }
 </script>
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title" id="modalTitle">Done!</div>
+    <div class="modal-msg" id="modalMsg">Your submission was successful.</div>
+    <button class="modal-btn" id="modalOkBtn" onclick="window.location.href='/'">Okay</button>
+  </div>
+</div>
 </body>
 </html>

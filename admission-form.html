@@ -34,6 +34,16 @@
   .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
   .notice { background: #e8f0fe; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a73e8; display: flex; gap: 10px; margin-bottom: 24px; line-height: 1.5; }
   .notice span { font-size: 18px; flex-shrink: 0; }
+
+  /* Success Modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: #fff; border-radius: 12px; padding: 40px 32px; max-width: 440px; width: 100%; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+  .modal-icon { font-size: 56px; margin-bottom: 16px; }
+  .modal-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 400; color: #202124; margin-bottom: 10px; }
+  .modal-msg { font-size: 15px; color: #5f6368; line-height: 1.6; margin-bottom: 28px; }
+  .modal-btn { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 13px 40px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .modal-btn:hover { background: #1765cc; }
 </style>
 </head>
 <body>
@@ -188,7 +198,7 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
       btn.disabled = false; btn.textContent = 'Submit application →'; return;
     }
 
-    showMsg('success', '✅ Application submitted! Redirecting to IQ Profiling Game…');
+    showSuccessModal('✅', 'Application Submitted!', 'Your application has been received successfully. Click Okay to proceed to the IQ Profiling Game.');
     btn.textContent = 'Submitted ✓';
 
     // Lock all fields
@@ -198,9 +208,8 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
       el.style.color = '#80868b';
     });
 
-    setTimeout(() => {
-      window.location.href = '/iq-game.html?email=' + encodeURIComponent(studentEmail);
-    }, 2000);
+    // Set modal OK to go to IQ game
+    document.getElementById('modalOkBtn').onclick = function() { window.location.href = '/iq-game.html?email=' + encodeURIComponent(studentEmail); };
 
   } catch (err) {
     showMsg('error', 'Network error: ' + err.message);
@@ -208,10 +217,27 @@ document.getElementById('submitBtn').addEventListener('click', async () => {
   }
 });
 
+
+function showSuccessModal(icon, title, msg) {
+  document.getElementById('modalIcon').textContent = icon;
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalMsg').textContent = msg;
+  document.getElementById('successModal').classList.add('open');
+}
+
 function showMsg(type, text) {
   const m = document.getElementById('message');
   m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
 }
 </script>
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div class="modal-icon" id="modalIcon">✅</div>
+    <div class="modal-title" id="modalTitle">Done!</div>
+    <div class="modal-msg" id="modalMsg">Your submission was successful.</div>
+    <button class="modal-btn" id="modalOkBtn" onclick="window.location.href='/'">Okay</button>
+  </div>
+</div>
 </body>
 </html>
