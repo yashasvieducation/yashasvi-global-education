@@ -54,6 +54,15 @@
   .notice { background: #e8f0fe; border-radius: 8px; padding: 14px 16px; font-size: 14px; color: #1a73e8; display: flex; gap: 10px; margin-bottom: 20px; line-height: 1.5; }
   .notice span { font-size: 18px; flex-shrink: 0; }
   .selected-type-badge { display: inline-flex; align-items: center; gap: 8px; background: #e8f0fe; border-radius: 100px; padding: 6px 16px; font-size: 14px; color: #1a73e8; font-weight: 500; margin-bottom: 20px; font-family: 'Google Sans', Arial, sans-serif; }
+  /* Success Modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: #fff; border-radius: 12px; padding: 40px 32px; max-width: 440px; width: 100%; text-align: center; }
+  .modal-icon { font-size: 56px; margin-bottom: 16px; }
+  .modal-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 400; color: #202124; margin-bottom: 10px; }
+  .modal-msg { font-size: 15px; color: #5f6368; line-height: 1.6; margin-bottom: 28px; }
+  .modal-btn { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 13px 40px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .modal-btn:hover { background: #1765cc; }
 </style>
 </head>
 <body>
@@ -303,7 +312,6 @@ async function submitRegistration() {
       btn.disabled = false; btn.textContent = 'Submit registration →'; return;
     }
 
-    showMsg('success', '✅ Registration submitted successfully! Our team will verify your institution within 24-48 hours and send you an email with your dashboard access and referral codes.');
     btn.textContent = 'Submitted ✓';
 
     // Lock all form fields
@@ -317,7 +325,8 @@ async function submitRegistration() {
       c.style.opacity = '0.7';
     });
 
-    document.getElementById('formWrap').scrollIntoView({ behavior: 'smooth' });
+    // Show success modal
+    document.getElementById('successModal').classList.add('open');
 
   } catch (err) {
     showMsg('error', 'Network error: ' + err.message);
@@ -336,10 +345,24 @@ function togglePass(id, btn) {
   }
 }
 
+function goHome() {
+  window.location.href = '/';
+}
+
 function showMsg(type, text) {
   const m = document.getElementById('message');
   m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
 }
 </script>
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title">Registration Submitted!</div>
+    <div class="modal-msg">Our team will verify your institution within <strong>24-48 hours</strong> and send you an email with your dashboard access and referral codes.</div>
+    <button class="modal-btn" onclick="goHome()">Okay</button>
+  </div>
+</div>
+
 </body>
 </html>
