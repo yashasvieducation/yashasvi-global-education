@@ -175,26 +175,29 @@ async function doLogin() {
       return;
     }
 
-    // 3. Check Student
+    // 3. Check Student (regular)
     const stuRes = await fetch(BASE + "/students?select=*&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
     const stuData = await stuRes.json();
     if (Array.isArray(stuData) && stuData.length > 0) {
       const stu = stuData[0];
 
-      // Check student password (institution_students table)
-      const iStuRes = await fetch(BASE + "/institution_students?select=student_password&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
-      const iStuData = await iStuRes.json();
-
-      if (Array.isArray(iStuData) && iStuData.length > 0 && iStuData[0].student_password) {
-        // Institution student - check password
-        if (iStuData[0].student_password !== password) {
+      // Check password
+      if (stu.password) {
+        // Regular student with password
+        if (stu.password !== password) {
           hideLoading(); showMsg('error', 'Incorrect password. Please try again.');
           btn.disabled = false; btn.textContent = 'Sign in →'; return;
         }
       } else {
-        // Regular student - no password set yet, use email as verification
-        // For now allow login with any password if student exists
-        // TODO: Add password to regular students
+        // Check institution_students password
+        const iStuRes = await fetch(BASE + "/institution_students?select=student_password&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+        const iStuData = await iStuRes.json();
+        if (Array.isArray(iStuData) && iStuData.length > 0 && iStuData[0].student_password) {
+          if (iStuData[0].student_password !== password) {
+            hideLoading(); showMsg('error', 'Incorrect password. Please try again.');
+            btn.disabled = false; btn.textContent = 'Sign in →'; return;
+          }
+        }
       }
 
       showLoading('Welcome ' + stu.student_name + '! Redirecting…');

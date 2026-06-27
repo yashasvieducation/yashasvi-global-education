@@ -141,6 +141,26 @@
     </div>
   </div>
 
+  <div class="form-section-title">Access & Security</div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Set your password <span class="required">*</span></label>
+      <div style="position:relative;">
+        <input type="password" id="studentPassword" placeholder="Minimum 8 characters" autocomplete="new-password" style="padding-right:44px;">
+        <button type="button" onclick="togglePass('studentPassword', this)" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#5f6368;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div style="font-size:12px; color:#80868b; margin-top:4px;">You will use this to login to your dashboard</div>
+    </div>
+    <div class="field">
+      <label>Referral code <span style="color:#80868b; font-weight:400;">(optional)</span></label>
+      <input type="text" id="referralCode" placeholder="Enter code if given by your school/college" autocomplete="off" style="text-transform:uppercase;">
+      <div style="font-size:12px; color:#80868b; margin-top:4px;">Leave blank if you don't have one</div>
+    </div>
+  </div>
+
   <button class="btn-submit" id="submitBtn">Submit application →</button>
   <div id="message"></div>
 
