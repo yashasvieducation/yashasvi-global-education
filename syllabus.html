@@ -207,8 +207,8 @@
   <a class="nav-logo" href="/"><img src="/logo.svg" alt="Yashasvi Global Education" style="height:36px;"></a>
   <div class="nav-right">
     <button class="request-btn" onclick="openRequest()">✨ Request a Course</button>
-    <button class="nav-icon-btn" onclick="openNotesModal()">📝 My Notes</button>
-    <button class="nav-icon-btn" onclick="openCoursesModal()">🗂 My Courses</button>
+    <button class="nav-icon-btn" onclick="window.location.href='/my-notes.html?email='+encodeURIComponent(studentEmail)">📝 My Notes</button>
+    <button class="nav-icon-btn" onclick="window.location.href='/my-courses.html?email='+encodeURIComponent(studentEmail)">🗂 My Courses</button>
     <span class="nav-user" id="navUser"></span>
     <button class="bell-btn" id="bellBtn">🔔<span class="bell-badge" id="bellBadge"></span></button>
   </div>

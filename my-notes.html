@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — My Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+  .back-btn { display: flex; align-items: center; gap: 6px; color: #5f6368; font-size: 14px; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.15s; }
+  .back-btn:hover { background: #f1f3f4; color: #202124; }
+  .nav-user { font-size: 13px; color: #5f6368; }
+  .hero { padding: 40px 24px 28px; max-width: 860px; margin: 0 auto; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #202124; margin-bottom: 6px; }
+  .hero p { font-size: 14px; color: #5f6368; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px 60px; }
+  .empty-state { text-align: center; padding: 60px 24px; }
+  .empty-state .e-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 20px; font-weight: 400; margin-bottom: 8px; color: #202124; }
+  .empty-state p { font-size: 14px; color: #5f6368; }
+  .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .note-card { background: #fff; border: 1px solid #e8eaed; border-radius: 12px; padding: 20px; transition: all 0.15s; position: relative; }
+  .note-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: #1a73e8; }
+  .note-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 12px 12px 0 0; background: linear-gradient(90deg, #1a73e8, #34a853); }
+  .note-module-tag { display: inline-block; background: #e8f0fe; color: #1a73e8; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 500; margin-bottom: 10px; }
+  .note-lesson-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; color: #202124; margin-bottom: 10px; line-height: 1.4; }
+  .note-content { font-size: 13px; color: #5f6368; line-height: 1.7; white-space: pre-wrap; max-height: 120px; overflow: hidden; position: relative; }
+  .note-content.expanded { max-height: none; }
+  .note-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: linear-gradient(transparent, #fff); pointer-events: none; }
+  .note-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f3f4; }
+  .note-lesson-btn { font-size: 12px; color: #1a73e8; background: none; border: none; cursor: pointer; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; }
+  .note-lesson-btn:hover { text-decoration: underline; }
+  .expand-btn { font-size: 12px; color: #5f6368; background: none; border: none; cursor: pointer; }
+  .loading { text-align: center; padding: 60px 24px; color: #5f6368; }
+  .spin { font-size: 32px; animation: spin 1s linear infinite; display: block; margin-bottom: 12px; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @media (max-width: 600px) { .notes-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-left">
+    <a class="back-btn" href="/syllabus.html">← Back to Course</a>
+    <img src="/logo.svg" alt="YGE" style="height:32px;">
+  </div>
+  <span class="nav-user" id="navUser"></span>
+</nav>
+
+<div class="hero">
+  <h1>📝 My Notes</h1>
+  <p id="notesCount">Loading your notes…</p>
+</div>
+
+<div class="wrap">
+  <div id="notesArea"><div class="loading"><span class="spin">⏳</span>Loading…</div></div>
+</div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY };
+
+const urlParams = new URLSearchParams(window.location.search);
+const email = urlParams.get('email') || localStorage.getItem('yge_email') || '';
+
+async function loadNotes() {
+  if (!email) { document.getElementById('notesArea').innerHTML = '<div class="empty-state"><div class="e-icon">📝</div><h3>Please login first</h3><p><a href="/syllabus.html">Go to course</a></p></div>'; return; }
+  document.getElementById('navUser').textContent = email;
+  try {
+    // Get progress with notes
+    const pRes = await fetch(BASE + "/syllabus_progress?select=notes,department&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const pData = await pRes.json();
+    if (!Array.isArray(pData) || pData.length === 0 || !pData[0].notes) { showEmpty(); return; }
+    const notes = pData[0].notes;
+    const courseName = pData[0].department;
+    const noteEntries = Object.entries(notes).filter(([k, v]) => v && v.trim());
+    if (noteEntries.length === 0) { showEmpty(); return; }
+
+    // Get course modules
+    const cRes = await fetch(BASE + "/courses?select=id&name=ilike." + encodeURIComponent(courseName), { method: "GET", headers: HEADERS });
+    const cData = await cRes.json();
+    let modules = [];
+    if (Array.isArray(cData) && cData.length > 0) {
+      const mRes = await fetch(BASE + "/course_modules?select=*&course_id=eq." + cData[0].id + "&order=module_index.asc", { method: "GET", headers: HEADERS });
+      modules = await mRes.json();
+    }
+
+    document.getElementById('notesCount').textContent = noteEntries.length + ' note' + (noteEntries.length > 1 ? 's' : '') + ' · ' + courseName;
+
+    document.getElementById('notesArea').innerHTML = '<div class="notes-grid">' + noteEntries.map(([key, text]) => {
+      const [mi, li] = key.split('-').map(Number);
+      const mod = Array.isArray(modules) ? modules[mi] : null;
+      const lesson = mod?.lessons?.[li];
+      const lessonTitle = lesson?.title || 'Lesson ' + (li+1);
+      const modTitle = mod?.module_title || 'Module ' + (mi+1);
+      const isLong = text.trim().length > 200;
+      return `<div class="note-card" id="card-${key}">
+        <span class="note-module-tag">${modTitle}</span>
+        <div class="note-lesson-title">${lessonTitle}</div>
+        <div class="note-content" id="content-${key}">${text.trim()}<div class="note-fade" id="fade-${key}" style="${isLong?'':'display:none;'}"></div></div>
+        <div class="note-footer">
+          <button class="note-lesson-btn" onclick="goToLesson(${mi},${li})">Go to lesson →</button>
+          ${isLong ? `<button class="expand-btn" id="exp-${key}" onclick="toggleExpand('${key}')">Show more</button>` : ''}
+        </div>
+      </div>`;
+    }).join('') + '</div>';
+  } catch(e) { document.getElementById('notesArea').innerHTML = '<div class="empty-state"><div class="e-icon">⚠️</div><h3>Error loading notes</h3><p>' + e.message + '</p></div>'; }
+}
+
+function showEmpty() {
+  document.getElementById('notesCount').textContent = 'No notes yet';
+  document.getElementById('notesArea').innerHTML = '<div class="empty-state"><div class="e-icon">📝</div><h3>No notes yet</h3><p>Start writing notes while studying a lesson — they will appear here.</p><br><a href="/syllabus.html?email=' + encodeURIComponent(email) + '" style="color:#1a73e8;">Go to my course →</a></div>';
+}
+
+function toggleExpand(key) {
+  const el = document.getElementById('content-' + key);
+  const fade = document.getElementById('fade-' + key);
+  const btn = document.getElementById('exp-' + key);
+  if (el.classList.contains('expanded')) { el.classList.remove('expanded'); fade.style.display='block'; btn.textContent='Show more'; }
+  else { el.classList.add('expanded'); fade.style.display='none'; btn.textContent='Show less'; }
+}
+
+function goToLesson(mi, li) {
+  window.location.href = '/syllabus.html?email=' + encodeURIComponent(email) + '&mod=' + mi + '&lesson=' + li;
+}
+
+loadNotes();
+</script>
+</body>
+</html>

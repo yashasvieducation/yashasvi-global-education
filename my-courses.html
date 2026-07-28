@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — My Courses</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+  .back-btn { display: flex; align-items: center; gap: 6px; color: #5f6368; font-size: 14px; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.15s; }
+  .back-btn:hover { background: #f1f3f4; color: #202124; }
+  .nav-user { font-size: 13px; color: #5f6368; }
+  .hero { padding: 40px 24px 28px; max-width: 960px; margin: 0 auto; }
+  .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #202124; margin-bottom: 6px; }
+  .hero p { font-size: 14px; color: #5f6368; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px 60px; }
+
+  /* Search */
+  .search-section { margin-bottom: 32px; }
+  .search-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 400; color: #202124; margin-bottom: 16px; }
+  .search-wrap { position: relative; margin-bottom: 16px; }
+  .search-input { width: 100%; padding: 14px 20px 14px 48px; border: 1.5px solid #dadce0; border-radius: 100px; font-size: 15px; font-family: 'Roboto', Arial, sans-serif; outline: none; background: #fff; transition: all 0.15s; }
+  .search-input:focus { border-color: #1a73e8; box-shadow: 0 2px 8px rgba(26,115,232,0.12); }
+  .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #5f6368; pointer-events: none; }
+  .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { padding: 7px 16px; border-radius: 100px; border: 1.5px solid #dadce0; font-size: 13px; color: #5f6368; cursor: pointer; transition: all 0.15s; background: #fff; font-family: 'Google Sans', Arial, sans-serif; }
+  .chip:hover { border-color: #1a73e8; color: #1a73e8; }
+  .chip.active { background: #1a73e8; color: #fff; border-color: #1a73e8; }
+
+  /* My Course */
+  .section-label { font-size: 12px; font-weight: 500; color: #5f6368; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+  .my-course-card { background: #fff; border: 2px solid #1a73e8; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; }
+  .mc-icon { font-size: 36px; flex-shrink: 0; }
+  .mc-info { flex: 1; }
+  .mc-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 17px; font-weight: 500; color: #202124; margin-bottom: 6px; }
+  .mc-meta { font-size: 13px; color: #5f6368; margin-bottom: 10px; }
+  .mc-progress-bg { background: #f1f3f4; border-radius: 100px; height: 6px; margin-bottom: 6px; }
+  .mc-progress-fill { background: #1a73e8; height: 6px; border-radius: 100px; }
+  .mc-progress-label { font-size: 12px; color: #5f6368; display: flex; justify-content: space-between; }
+  .mc-action { flex-shrink: 0; }
+  .btn-continue { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; }
+  .btn-continue:hover { background: #1765cc; }
+
+  /* All Courses Grid */
+  .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .course-card { background: #fff; border: 1px solid #e8eaed; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+  .course-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); transform: translateY(-2px); border-color: #1a73e8; }
+  .course-card.enrolled { border-color: #1a73e8; }
+  .course-icon { font-size: 32px; margin-bottom: 12px; }
+  .course-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; color: #202124; margin-bottom: 6px; line-height: 1.4; }
+  .course-desc { font-size: 13px; color: #5f6368; line-height: 1.5; margin-bottom: 12px; }
+  .course-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .course-tag { background: #f1f3f4; color: #5f6368; border-radius: 100px; padding: 2px 8px; font-size: 11px; }
+  .course-footer { display: flex; align-items: center; justify-content: space-between; }
+  .course-badge { display: inline-block; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 500; }
+  .badge-free { background: #e6f4ea; color: #137333; }
+  .badge-paid { background: #e8f0fe; color: #1a73e8; }
+  .badge-enrolled { background: #1a73e8; color: #fff; }
+  .add-btn { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 7px 14px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .add-btn:hover { background: #1765cc; }
+  .add-btn.added { background: #34a853; cursor: default; }
+  .no-results { text-align: center; padding: 40px; color: #5f6368; }
+  .no-results .nr-icon { font-size: 36px; margin-bottom: 12px; }
+  .loading { text-align: center; padding: 40px; color: #5f6368; }
+  .spin { font-size: 28px; animation: spin 1s linear infinite; display: block; margin-bottom: 8px; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @media (max-width: 600px) { .my-course-card { flex-direction: column; } .courses-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-left">
+    <a class="back-btn" href="/syllabus.html">← Back to Course</a>
+    <img src="/logo.svg" alt="YGE" style="height:32px;">
+  </div>
+  <span class="nav-user" id="navUser"></span>
+</nav>
+
+<div class="hero">
+  <h1>🗂 My Courses</h1>
+  <p>Your enrolled courses and explore new ones to add to your learning journey.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- My Current Course -->
+  <div class="section-label">Currently Enrolled</div>
+  <div id="myCourseArea"><div class="loading"><span class="spin">⏳</span>Loading…</div></div>
+
+  <!-- Search & Browse -->
+  <div class="search-section" style="margin-top:36px;">
+    <div class="search-title">Explore All Courses</div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" type="text" id="searchInput" placeholder="Search courses — e.g. Python, Business, Design…" oninput="filterCourses()">
+    </div>
+    <div class="filter-chips">
+      <div class="chip active" onclick="setFilter('all', this)">All</div>
+      <div class="chip" onclick="setFilter('Technology', this)">💻 Technology</div>
+      <div class="chip" onclick="setFilter('School', this)">📚 School</div>
+      <div class="chip" onclick="setFilter('Business', this)">🚀 Business</div>
+      <div class="chip" onclick="setFilter('Design', this)">🎨 Design</div>
+      <div class="chip" onclick="setFilter('Corporate', this)">🏢 Corporate</div>
+      <div class="chip" onclick="setFilter('free', this)">✅ Free</div>
+    </div>
+  </div>
+
+  <div id="allCoursesArea"><div class="loading"><span class="spin">⏳</span>Loading courses…</div></div>
+
+</div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+
+const urlParams = new URLSearchParams(window.location.search);
+const email = urlParams.get('email') || '';
+let allCourses = [], currentFilter = 'all', enrolledCourse = '', completedCount = 0, totalLessons = 0;
+
+const deptIcons = { Technology: '💻', School: '📚', Business: '🚀', Design: '🎨', Corporate: '🏢', Other: '📖' };
+
+async function init() {
+  if (!email) return;
+  document.getElementById('navUser').textContent = email;
+  await Promise.all([loadMyCourse(), loadAllCourses()]);
+}
+
+async function loadMyCourse() {
+  try {
+    const sRes = await fetch(BASE + "/students?select=selected_course&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const sData = await sRes.json();
+    if (!Array.isArray(sData) || !sData[0]?.selected_course) { document.getElementById('myCourseArea').innerHTML = '<p style="color:#5f6368; font-size:14px; margin-bottom:8px;">No course enrolled yet.</p>'; return; }
+    enrolledCourse = sData[0].selected_course;
+
+    const pRes = await fetch(BASE + "/syllabus_progress?select=completed_lessons,total_lessons&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
+    const pData = await pRes.json();
+    const completed = Array.isArray(pData) && pData[0]?.completed_lessons ? (Array.isArray(pData[0].completed_lessons) ? pData[0].completed_lessons.length : Object.keys(pData[0].completed_lessons).length) : 0;
+    const total = pData[0]?.total_lessons || 12;
+    completedCount = completed; totalLessons = total;
+    const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+    const icon = deptIcons[Object.keys(deptIcons).find(k => enrolledCourse.includes(k))] || '📖';
+
+    document.getElementById('myCourseArea').innerHTML = `
+      <div class="my-course-card">
+        <div class="mc-icon">${icon}</div>
+        <div class="mc-info">
+          <div class="mc-name">${enrolledCourse}</div>
+          <div class="mc-meta">${completed} of ${total} lessons completed · ⏱ ${(total-completed)*15} min remaining</div>
+          <div class="mc-progress-bg"><div class="mc-progress-fill" style="width:${pct}%"></div></div>
+          <div class="mc-progress-label"><span>${pct}% complete</span><span>${completed}/${total} lessons</span></div>
+        </div>
+        <div class="mc-action">
+          <a class="btn-continue" href="/syllabus.html?email=${encodeURIComponent(email)}">Continue →</a>
+        </div>
+      </div>`;
+  } catch(e) { console.error(e); }
+}
+
+async function loadAllCourses() {
+  try {
+    const res = await fetch(BASE + "/courses?select=*&is_active=eq.true&order=department.asc", { method: "GET", headers: HEADERS });
+    allCourses = await res.json();
+    renderCourses();
+  } catch(e) { document.getElementById('allCoursesArea').innerHTML = '<div class="no-results"><div class="nr-icon">⚠️</div><p>Error loading courses.</p></div>'; }
+}
+
+function renderCourses() {
+  const search = document.getElementById('searchInput').value.toLowerCase().trim();
+  let filtered = allCourses.filter(c => {
+    const matchSearch = !search || c.name.toLowerCase().includes(search) || (c.description||'').toLowerCase().includes(search) || (c.tags||[]).some(t => t.includes(search));
+    const matchFilter = currentFilter === 'all' || (currentFilter === 'free' ? c.is_free : c.department === currentFilter);
+    return matchSearch && matchFilter;
+  });
+
+  if (filtered.length === 0) {
+    document.getElementById('allCoursesArea').innerHTML = `
+      <div class="no-results">
+        <div class="nr-icon">🔍</div>
+        <p>No courses found for "${search}"</p>
+        <p style="margin-top:8px; font-size:13px; color:#80868b;">Can't find what you need? <a href="#" onclick="requestCourse('${search}')" style="color:#1a73e8;">Request this course →</a></p>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('allCoursesArea').innerHTML = '<div class="courses-grid">' + filtered.map(c => {
+    const isEnrolled = c.name === enrolledCourse;
+    const icon = deptIcons[c.department] || '📖';
+    const tags = (c.tags || []).slice(0, 3);
+    return `<div class="course-card ${isEnrolled?'enrolled':''}">
+      <div class="course-icon">${icon}</div>
+      <div class="course-name">${c.name}</div>
+      <div class="course-desc">${(c.description||'').substring(0,80)}${(c.description||'').length>80?'…':''}</div>
+      ${tags.length > 0 ? '<div class="course-tags">' + tags.map(t=>`<span class="course-tag">${t}</span>`).join('') + '</div>' : ''}
+      <div class="course-footer">
+        <span class="course-badge ${isEnrolled?'badge-enrolled':c.is_free?'badge-free':'badge-paid'}">${isEnrolled?'✅ Enrolled':c.is_free?'Free':'$99 USDT'}</span>
+        ${isEnrolled
+          ? `<a class="add-btn added" href="/syllabus.html?email=${encodeURIComponent(email)}" style="text-decoration:none;">Continue →</a>`
+          : `<button class="add-btn" onclick="addCourse('${c.name}', this)">+ Add</button>`}
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function filterCourses() { renderCourses(); }
+
+function setFilter(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderCourses();
+}
+
+async function addCourse(courseName, btn) {
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(email), {
+      method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({ selected_course: courseName, track: courseName })
+    });
+    enrolledCourse = courseName;
+    btn.textContent = '✅ Added!'; btn.classList.add('added');
+    setTimeout(() => { loadMyCourse(); renderCourses(); }, 800);
+  } catch(e) { btn.disabled = false; btn.textContent = '+ Add'; }
+}
+
+async function requestCourse(name) {
+  const courseName = name || prompt('What course do you want?');
+  if (!courseName) return;
+  await fetch(BASE + "/course_requests", {
+    method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
+    body: JSON.stringify({ student_email: email, student_name: email, requested_course: courseName })
+  });
+  alert('✅ Request sent! Our AI will build "' + courseName + '" within 24 hours.');
+}
+
+init();
+</script>
+</body>
+</html>
