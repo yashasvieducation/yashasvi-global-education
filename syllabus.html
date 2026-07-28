@@ -8,65 +8,118 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
-  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
-  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; text-decoration: none; }
-  .nav-logo span { color: #1a73e8; }
-  .nav-right { display: flex; align-items: center; gap: 16px; }
-  .nav-user { font-size: 13px; color: #5f6368; }
-  .bell-btn { position: relative; background: none; border: none; font-size: 20px; cursor: pointer; }
-  .bell-badge { position: absolute; top: -4px; right: -4px; background: #c5221f; color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; display: none; }
 
-  .layout { display: grid; grid-template-columns: 280px 1fr 340px; min-height: calc(100vh - 64px); }
-  @media (max-width: 1100px) { .layout { grid-template-columns: 240px 1fr; } .chat-panel { display: none; } }
-  @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
+  /* NAV */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 60px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
+  .nav-logo img { height: 36px; width: auto; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-user { font-size: 14px; font-weight: 500; color: #202124; }
+  .request-btn { display: flex; align-items: center; gap: 6px; background: #e8f0fe; color: #1a73e8; border: none; border-radius: 20px; padding: 7px 14px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+  .request-btn:hover { background: #1a73e8; color: #fff; }
+  .bell-btn { position: relative; background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px; }
+  .bell-badge { position: absolute; top: 0; right: 0; background: #c5221f; color: #fff; border-radius: 50%; width: 14px; height: 14px; font-size: 9px; display: none; align-items: center; justify-content: center; }
 
-  /* Sidebar */
-  .sidebar { background: #fff; border-right: 1px solid #e8eaed; overflow-y: auto; padding: 16px 0; }
-  .sidebar-header { padding: 0 16px 16px; border-bottom: 1px solid #e8eaed; margin-bottom: 12px; }
-  .course-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #202124; margin-bottom: 8px; }
-  .progress-wrap { }
-  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #5f6368; margin-bottom: 4px; }
-  .progress-bg { background: #f1f3f4; border-radius: 100px; height: 6px; }
+  /* LAYOUT */
+  .layout { display: grid; grid-template-columns: 280px 1fr 320px; height: calc(100vh - 60px); overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar { background: #fff; border-right: 1px solid #e8eaed; overflow-y: auto; display: flex; flex-direction: column; }
+  .sidebar-tabs { display: flex; border-bottom: 1px solid #e8eaed; }
+  .stab { flex: 1; padding: 10px 0; text-align: center; font-size: 12px; font-weight: 500; color: #5f6368; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+  .stab.active { color: #1a73e8; border-bottom-color: #1a73e8; }
+  .stab-panel { display: none; padding: 12px 0; flex: 1; }
+  .stab-panel.active { display: block; }
+
+  /* Course info */
+  .course-info-wrap { padding: 14px 16px; border-bottom: 1px solid #e8eaed; }
+  .course-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 13px; font-weight: 500; color: #202124; margin-bottom: 10px; }
+  .progress-row { display: flex; justify-content: space-between; font-size: 11px; color: #5f6368; margin-bottom: 4px; }
+  .progress-bg { background: #f1f3f4; border-radius: 100px; height: 6px; margin-bottom: 10px; }
   .progress-fill { background: #1a73e8; height: 6px; border-radius: 100px; transition: width 0.4s; }
-  .module-header { display: flex; align-items: center; gap: 8px; padding: 10px 16px; cursor: pointer; font-size: 14px; font-weight: 500; color: #202124; transition: background 0.15s; }
+  .time-remaining { font-size: 12px; color: #5f6368; display: flex; align-items: center; gap: 4px; }
+
+  /* Module nav */
+  .module-header { display: flex; align-items: center; gap: 8px; padding: 9px 16px; cursor: pointer; font-size: 13px; font-weight: 500; color: #202124; transition: background 0.15s; user-select: none; }
   .module-header:hover { background: #f1f3f4; }
   .module-header.active { color: #1a73e8; }
-  .module-icon { font-size: 16px; }
+  .module-pct { font-size: 11px; color: #80868b; margin-left: auto; }
   .module-lessons { display: none; }
   .module.open .module-lessons { display: block; }
-  .lesson-item { display: flex; align-items: center; gap: 8px; padding: 8px 16px 8px 36px; font-size: 13px; color: #5f6368; cursor: pointer; transition: background 0.15s; }
-  .lesson-item:hover { background: #f1f3f4; color: #202124; }
+  .lesson-item { display: flex; align-items: center; gap: 8px; padding: 7px 16px 7px 32px; font-size: 12px; color: #5f6368; cursor: pointer; transition: background 0.15s; }
+  .lesson-item:hover { background: #f1f3f4; }
   .lesson-item.active { color: #1a73e8; background: #e8f0fe; font-weight: 500; }
   .lesson-item.completed { color: #137333; }
   .lesson-dot { width: 8px; height: 8px; border-radius: 50%; background: #dadce0; flex-shrink: 0; }
   .lesson-item.completed .lesson-dot { background: #34a853; }
   .lesson-item.active .lesson-dot { background: #1a73e8; }
+  .bookmark-icon { margin-left: auto; font-size: 11px; display: none; }
+  .lesson-item:hover .bookmark-icon { display: block; }
 
-  /* Main */
-  .main { overflow-y: auto; padding: 28px; }
-  .lesson-breadcrumb { font-size: 12px; color: #5f6368; margin-bottom: 8px; }
-  .lesson-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #202124; margin-bottom: 10px; }
-  .lesson-meta { font-size: 13px; color: #5f6368; display: flex; gap: 16px; margin-bottom: 20px; }
+  /* Badges */
+  .badges-wrap { padding: 12px 16px; }
+  .badge-title { font-size: 11px; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+  .badge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .badge-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 10px 8px; text-align: center; }
+  .badge-item.earned { border-color: #34a853; background: #e6f4ea; }
+  .badge-item.locked { opacity: 0.4; }
+  .badge-emoji { font-size: 22px; margin-bottom: 4px; }
+  .badge-name { font-size: 10px; color: #5f6368; line-height: 1.3; }
+  .badge-item.earned .badge-name { color: #137333; font-weight: 500; }
+
+  /* Bookmarks */
+  .bookmarks-wrap { padding: 12px 16px; }
+  .bookmark-empty { font-size: 13px; color: #80868b; text-align: center; padding: 20px 0; }
+
+  /* My Courses */
+  .my-courses-wrap { padding: 12px 16px; }
+  .my-course-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 12px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; }
+  .my-course-card:hover { border-color: #1a73e8; background: #f8f9ff; }
+  .my-course-card.active { border-color: #1a73e8; background: #e8f0fe; }
+  .mc-name { font-size: 13px; font-weight: 500; color: #202124; margin-bottom: 4px; }
+  .mc-progress { font-size: 11px; color: #5f6368; }
+  .mc-bar { background: #f1f3f4; border-radius: 100px; height: 3px; margin-top: 6px; }
+  .mc-fill { background: #1a73e8; height: 3px; border-radius: 100px; }
+
+  /* MAIN */
+  .main { overflow-y: auto; padding: 24px 28px; background: #f8f9fa; }
+  .lesson-breadcrumb { font-size: 12px; color: #80868b; margin-bottom: 6px; }
+  .lesson-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+  .lesson-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 26px; font-weight: 400; color: #202124; }
+  .bookmark-btn { background: none; border: 1px solid #dadce0; border-radius: 4px; padding: 6px 12px; font-size: 13px; cursor: pointer; color: #5f6368; white-space: nowrap; transition: all 0.15s; flex-shrink: 0; }
+  .bookmark-btn:hover { border-color: #1a73e8; color: #1a73e8; }
+  .bookmark-btn.bookmarked { background: #e8f0fe; border-color: #1a73e8; color: #1a73e8; }
+  .lesson-meta { font-size: 13px; color: #5f6368; display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
   .lesson-body { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; margin-bottom: 16px; font-size: 15px; line-height: 1.75; color: #3c4043; }
-  .lesson-body h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 17px; font-weight: 500; color: #202124; margin: 18px 0 8px; }
-  .lesson-body h3:first-child { margin-top: 0; }
-  .highlight { background: #e8f0fe; border-left: 3px solid #1a73e8; padding: 10px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; color: #1a73e8; }
-  .project-box { background: #e6f4ea; border-left: 3px solid #34a853; padding: 12px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; color: #137333; }
-  .project-box strong { display: block; margin-bottom: 4px; }
+  .lesson-body p { margin-bottom: 12px; }
+  .lesson-body p:last-child { margin-bottom: 0; }
+  .project-box { background: #e6f4ea; border-left: 3px solid #34a853; padding: 12px 16px; border-radius: 0 6px 6px 0; margin-top: 16px; }
+  .project-box strong { display: block; color: #137333; margin-bottom: 4px; font-size: 13px; }
+  .project-box p { font-size: 14px; color: #137333; margin: 0; }
+
+  /* Notes */
+  .notes-section { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 18px; margin-bottom: 16px; }
+  .notes-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .notes-title { font-size: 14px; font-weight: 500; color: #202124; display: flex; align-items: center; gap: 6px; }
+  .notes-save { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; cursor: pointer; }
+  .notes-save:hover { background: #1765cc; }
+  .notes-textarea { width: 100%; border: 1px solid #dadce0; border-radius: 4px; padding: 10px 12px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; resize: vertical; min-height: 80px; outline: none; color: #202124; line-height: 1.5; }
+  .notes-textarea:focus { border-color: #1a73e8; }
+  .notes-saved-msg { font-size: 12px; color: #137333; display: none; margin-top: 4px; }
 
   /* MCQ */
   .mcq-section { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
-  .mcq-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; margin-bottom: 16px; color: #202124; }
+  .mcq-title { font-size: 14px; font-weight: 500; color: #202124; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
   .mcq-q { font-size: 14px; color: #202124; margin-bottom: 10px; font-weight: 500; }
   .mcq-opts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-  .mcq-opt { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1.5px solid #dadce0; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.15s; }
+  .mcq-opt { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1.5px solid #dadce0; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.15s; user-select: none; }
   .mcq-opt:hover { border-color: #1a73e8; background: #f8f9ff; }
   .mcq-opt.correct { border-color: #34a853; background: #e6f4ea; color: #137333; }
   .mcq-opt.wrong { border-color: #c5221f; background: #fce8e6; color: #c5221f; }
   .mcq-opt.show-correct { border-color: #34a853; background: #e6f4ea; color: #137333; }
 
-  .lesson-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-  .btn { border: none; border-radius: 4px; padding: 10px 24px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+  /* Lesson nav */
+  .lesson-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; gap: 12px; }
+  .btn { border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
   .btn-primary { background: #1a73e8; color: #fff; }
   .btn-primary:hover { background: #1765cc; }
   .btn-secondary { background: #f1f3f4; color: #202124; }
@@ -75,25 +128,25 @@
   .btn-complete:hover { background: #2d9142; }
   .btn:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
 
-  /* Chat */
-  .chat-panel { background: #fff; border-left: 1px solid #e8eaed; display: flex; flex-direction: column; height: calc(100vh - 64px); position: sticky; top: 64px; }
+  /* AI CHAT */
+  .chat-panel { background: #fff; border-left: 1px solid #e8eaed; display: flex; flex-direction: column; height: calc(100vh - 60px); }
   .chat-header { padding: 14px 16px; border-bottom: 1px solid #e8eaed; }
-  .chat-header h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; }
-  .chat-header p { font-size: 12px; color: #5f6368; margin-top: 2px; }
-  .chat-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .chat-header h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+  .chat-header p { font-size: 11px; color: #5f6368; }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
   .chat-msg { max-width: 85%; }
   .chat-msg.user { align-self: flex-end; }
   .chat-msg.ai { align-self: flex-start; }
-  .chat-bubble { padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+  .chat-bubble { padding: 9px 13px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
   .chat-msg.user .chat-bubble { background: #1a73e8; color: #fff; border-radius: 12px 12px 2px 12px; }
   .chat-msg.ai .chat-bubble { background: #f1f3f4; color: #202124; border-radius: 12px 12px 12px 2px; }
-  .chat-name { font-size: 10px; color: #80868b; margin-bottom: 3px; }
+  .chat-name { font-size: 10px; color: #80868b; margin-bottom: 2px; }
   .chat-msg.user .chat-name { text-align: right; }
-  .typing { font-size: 12px; color: #5f6368; padding: 4px 14px; display: none; }
-  .chat-input-wrap { padding: 10px 14px; border-top: 1px solid #e8eaed; display: flex; gap: 8px; }
-  .chat-input { flex: 1; padding: 8px 14px; border: 1px solid #dadce0; border-radius: 20px; font-size: 13px; font-family: 'Roboto', Arial, sans-serif; outline: none; resize: none; }
+  .typing { font-size: 11px; color: #5f6368; padding: 2px 12px; display: none; }
+  .chat-input-wrap { padding: 10px 12px; border-top: 1px solid #e8eaed; display: flex; gap: 6px; }
+  .chat-input { flex: 1; padding: 8px 12px; border: 1px solid #dadce0; border-radius: 20px; font-size: 13px; font-family: 'Roboto', Arial, sans-serif; outline: none; resize: none; }
   .chat-input:focus { border-color: #1a73e8; }
-  .chat-send { background: #1a73e8; color: #fff; border: none; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; font-size: 14px; flex-shrink: 0; align-self: flex-end; }
+  .chat-send { background: #1a73e8; color: #fff; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 13px; flex-shrink: 0; align-self: flex-end; }
   .chat-send:disabled { background: #dadce0; cursor: not-allowed; }
 
   /* Login */
@@ -103,125 +156,107 @@
   .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
   .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; outline: none; }
   .field input:focus { border-color: #1a73e8; }
+  .field { margin-bottom: 16px; }
   #loginMsg { margin-top: 12px; padding: 10px; border-radius: 4px; font-size: 14px; display: none; }
   .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
 
   /* Loading */
-  .loading { text-align: center; padding: 60px 24px; color: #5f6368; font-size: 15px; }
-  .loading-spinner { font-size: 32px; animation: spin 1s linear infinite; display: block; margin-bottom: 12px; }
+  .loading { text-align: center; padding: 40px 20px; color: #5f6368; font-size: 14px; }
+  .spin { font-size: 28px; animation: spin 1s linear infinite; display: block; margin-bottom: 8px; }
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-  /* Copy Protection */
-  .lesson-body { user-select: none; -webkit-user-select: none; -moz-user-select: none; }
-  .mcq-section { user-select: none; -webkit-user-select: none; }
+  /* Request modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: #fff; border-radius: 12px; padding: 28px; max-width: 480px; width: 100%; }
+  .modal-box h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 20px; font-weight: 400; margin-bottom: 8px; }
+  .modal-box p { font-size: 14px; color: #5f6368; margin-bottom: 16px; line-height: 1.5; }
+  .modal-textarea { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; outline: none; resize: vertical; min-height: 80px; margin-bottom: 12px; }
+  .modal-textarea:focus { border-color: #1a73e8; }
+  .modal-actions { display: flex; gap: 10px; }
+  .copy-toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #c5221f; color: #fff; padding: 8px 18px; border-radius: 8px; font-size: 13px; z-index: 500; display: none; }
 
-  /* Course Suggestion Popup */
-  .suggest-fab { position: fixed; bottom: 24px; right: 24px; background: #1a73e8; color: #fff; border: none; border-radius: 50px; padding: 14px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; box-shadow: 0 4px 16px rgba(26,115,232,0.4); z-index: 200; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
-  .suggest-fab:hover { background: #1765cc; box-shadow: 0 6px 20px rgba(26,115,232,0.5); transform: translateY(-2px); }
-  .suggest-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; }
-  .suggest-modal.open { display: flex; }
-  .suggest-box { background: #fff; border-radius: 12px; padding: 28px; max-width: 480px; width: 100%; max-height: 80vh; overflow-y: auto; }
-  .suggest-box h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 20px; font-weight: 400; margin-bottom: 8px; }
-  .suggest-box p { font-size: 14px; color: #5f6368; margin-bottom: 20px; line-height: 1.5; }
-  .suggest-input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; outline: none; margin-bottom: 12px; resize: vertical; min-height: 80px; }
-  .suggest-input:focus { border-color: #1a73e8; }
-  .suggest-actions { display: flex; gap: 10px; }
-  .suggest-submit { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 10px 24px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; flex: 1; }
-  .suggest-submit:hover { background: #1765cc; }
-  .suggest-cancel { background: #f1f3f4; color: #202124; border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; cursor: pointer; }
-  .copy-toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: #c5221f; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; z-index: 500; display: none; }
-
-  /* ===== MOBILE RESPONSIVE ===== */
-  @media (max-width: 768px) {
-    .nav { padding: 0 16px; }
-    .nav-links { display: none; }
-    .hero { padding: 32px 16px 24px; }
-    .hero h1 { font-size: 26px !important; }
-    .hero p { font-size: 14px !important; }
-    .wrap, .form-wrap { padding: 0 16px 60px !important; }
-    .field-row { grid-template-columns: 1fr !important; }
-    .stats-grid { grid-template-columns: 1fr 1fr !important; }
-    .layout { grid-template-columns: 1fr !important; }
-    .sidebar { display: none !important; }
-    .chat-panel { display: none !important; }
-    .dash-grid { grid-template-columns: 1fr !important; }
-    .plans-grid { grid-template-columns: 1fr !important; }
-    .type-grid { grid-template-columns: 1fr !important; }
-    .difficulty-grid { grid-template-columns: 1fr !important; }
-    .attempts-grid { grid-template-columns: 1fr !important; }
-    .score-grid { grid-template-columns: 1fr !important; }
-    .exam-info-grid { grid-template-columns: 1fr !important; }
-    .detail-grid { grid-template-columns: 1fr !important; }
-    .seat-flow { grid-template-columns: 1fr 1fr !important; }
-    .form-row { grid-template-columns: 1fr !important; }
-    .quick-links { grid-template-columns: 1fr 1fr !important; }
-    .course-cards { grid-template-columns: 1fr !important; }
-    .register-links { gap: 8px; }
-    .login-card { padding: 28px 20px !important; }
-    table { font-size: 12px !important; }
-    th, td { padding: 8px 10px !important; }
-    .btn-hero, .btn-hero-outline { padding: 12px 20px !important; font-size: 14px !important; }
-    .hero-btns { flex-direction: column; align-items: center; }
-    .unique-banner { flex-direction: column; }
-    .renewal-section { flex-direction: column; }
-    .cert-actions { flex-direction: column; align-items: stretch; }
-    .cert-actions a, .cert-actions button { text-align: center; }
-    #certificate { width: 100% !important; height: auto !important; }
-    .referral-code-card { flex-direction: column; }
-    .request-card { flex-direction: column; }
-    .chat-input-wrap { padding: 10px; }
-    .admin-panel .layout { grid-template-columns: 1fr !important; }
-  }
-  @media (max-width: 480px) {
-    .hero h1 { font-size: 22px !important; }
-    .stat-num { font-size: 22px !important; }
-    .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-    .quick-links { grid-template-columns: 1fr !important; }
-    .nav-logo { font-size: 15px; }
-  }
+  @media (max-width: 1100px) { .layout { grid-template-columns: 260px 1fr; } .chat-panel { display: none; } }
+  @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 16px; } }
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <a class="nav-logo" href="/"><img src="/logo.svg" alt="Yashasvi Global Education" style="height:36px; width:auto; display:block;"></a>
+  <a class="nav-logo" href="/"><img src="/logo.svg" alt="Yashasvi Global Education" style="height:36px;"></a>
   <div class="nav-right">
+    <button class="request-btn" onclick="openRequest()">✨ Request a Course</button>
     <span class="nav-user" id="navUser"></span>
-    <button class="bell-btn" onclick="checkNotifications()" title="Notifications">
-      🔔<span class="bell-badge" id="bellBadge"></span>
-    </button>
+    <button class="bell-btn" id="bellBtn">🔔<span class="bell-badge" id="bellBadge"></span></button>
   </div>
 </nav>
 
 <!-- Login -->
 <div id="loginWrap">
   <h2>My Course</h2>
-  <p>Enter your email to access your personalised course and AI teacher.</p>
+  <p>Enter your email to access your course and AI teacher.</p>
   <div class="field">
     <label>Student email</label>
-    <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+    <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="off">
   </div>
-  <button class="btn btn-primary" id="loginBtn" style="margin-top:16px; width:100%; padding:12px;" onclick="doLogin()">Access my course →</button>
+  <button class="btn btn-primary" id="loginBtn" style="width:100%; padding:12px;" onclick="doLogin()">Access my course →</button>
   <div id="loginMsg"></div>
 </div>
 
 <!-- Main Layout -->
 <div class="layout" id="mainLayout" style="display:none;">
+
+  <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="sidebar-header">
-      <div class="course-name" id="courseName">Loading…</div>
-      <div class="progress-wrap">
-        <div class="progress-label"><span>Progress</span><span id="progressPct">0%</span></div>
-        <div class="progress-bg"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="sidebar-tabs">
+      <div class="stab active" onclick="switchTab('course')" id="stab-course">📖 Course</div>
+      <div class="stab" onclick="switchTab('courses')" id="stab-courses">🗂 My Courses</div>
+      <div class="stab" onclick="switchTab('badges')" id="stab-badges">🏆 Badges</div>
+      <div class="stab" onclick="switchTab('bookmarks')" id="stab-bookmarks">🔖 Saved</div>
+    </div>
+
+    <!-- Course Tab -->
+    <div class="stab-panel active" id="panel-course">
+      <div class="course-info-wrap">
+        <div class="course-title" id="sidebarCourse">Loading…</div>
+        <div class="progress-row"><span id="sidebarLessons">0 lessons done</span><span id="sidebarPct">0%</span></div>
+        <div class="progress-bg"><div class="progress-fill" id="sidebarProgress" style="width:0%"></div></div>
+        <div class="time-remaining">⏱ <span id="timeRemaining">Calculating…</span></div>
+      </div>
+      <div id="syllabusNav"><div class="loading"><span class="spin">⏳</span>Loading…</div></div>
+    </div>
+
+    <!-- My Courses Tab -->
+    <div class="stab-panel" id="panel-courses">
+      <div class="my-courses-wrap">
+        <div id="myCoursesPanel"><div class="loading">Loading courses…</div></div>
       </div>
     </div>
-    <div id="syllabusNav"><div class="loading"><span class="loading-spinner">⏳</span>Loading modules…</div></div>
+
+    <!-- Badges Tab -->
+    <div class="stab-panel" id="panel-badges">
+      <div class="badges-wrap">
+        <div class="badge-title">Your Achievements</div>
+        <div class="badge-grid" id="badgeGrid"></div>
+      </div>
+    </div>
+
+    <!-- Bookmarks Tab -->
+    <div class="stab-panel" id="panel-bookmarks">
+      <div class="bookmarks-wrap">
+        <div class="badge-title">Saved Lessons</div>
+        <div id="bookmarksList"><div class="bookmark-empty">No bookmarks yet.<br>Click 🔖 on any lesson to save it.</div></div>
+      </div>
+    </div>
+
   </div>
 
+  <!-- MAIN CONTENT -->
   <div class="main" id="mainContent">
-    <div class="loading"><span class="loading-spinner">⏳</span>Loading your course…</div>
+    <div class="loading"><span class="spin">⏳</span>Loading your course…</div>
   </div>
 
+  <!-- AI CHAT -->
   <div class="chat-panel">
     <div class="chat-header">
       <h3>🤖 AI Teacher</h3>
@@ -230,7 +265,7 @@
     <div class="chat-messages" id="chatMessages">
       <div class="chat-msg ai">
         <div class="chat-name">AI Teacher</div>
-        <div class="chat-bubble">Hello! I'm your personal AI teacher. Ask me anything about your current lesson or course. 😊</div>
+        <div class="chat-bubble">Hello! I'm your personal AI teacher. Ask me anything about your current lesson. 😊</div>
       </div>
     </div>
     <div class="typing" id="typingIndicator">AI Teacher is typing…</div>
@@ -241,6 +276,23 @@
   </div>
 </div>
 
+<!-- Request Modal -->
+<div class="modal-overlay" id="requestModal">
+  <div class="modal-box">
+    <h3>✨ Request a new course</h3>
+    <p>Tell us what you want to learn — our AI will build it for you within 24 hours!</p>
+    <textarea class="modal-textarea" id="requestText" placeholder="e.g. I want to learn Cyber Security…"></textarea>
+    <div id="requestMsg" style="font-size:13px; color:#137333; display:none; margin-bottom:10px;"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="submitRequest()" style="flex:1;">Send Request →</button>
+      <button class="btn btn-secondary" onclick="closeRequest()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Copy blocked toast -->
+<div class="copy-toast" id="copyToast">⛔ Copying is not allowed</div>
+
 <script>
 const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
@@ -250,11 +302,20 @@ const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
 let studentEmail = "", studentName = "", currentCourse = null;
 let modules = [], currentMod = 0, currentLesson = 0;
 let completedLessons = new Set(), progressId = null;
-let chatHistory = [], mcqAnswered = {};
+let bookmarks = new Set(), notes = {}, mcqAnswered = {}, chatHistory = [];
 
-// Auto-fill from URL
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.get('email')) document.getElementById('loginEmail').value = urlParams.get('email');
+
+// BADGES config
+const BADGES = [
+  { id: 'first_lesson', emoji: '🌱', name: 'First Step', desc: 'Complete first lesson', req: 1 },
+  { id: 'five_lessons', emoji: '⚡', name: 'On a Roll', desc: 'Complete 5 lessons', req: 5 },
+  { id: 'ten_lessons', emoji: '🔥', name: 'Unstoppable', desc: 'Complete 10 lessons', req: 10 },
+  { id: 'first_module', emoji: '📖', name: 'Module 1 Done', desc: 'Complete first module', req: 'module' },
+  { id: 'half_course', emoji: '🎯', name: 'Halfway There', desc: 'Complete 50% of course', req: 50 },
+  { id: 'full_course', emoji: '🏆', name: 'Course Complete', desc: 'Complete entire course', req: 100 },
+];
 
 async function doLogin() {
   const email = document.getElementById('loginEmail').value.trim().toLowerCase();
@@ -264,52 +325,31 @@ async function doLogin() {
   try {
     const res = await fetch(BASE + "/students?select=student_name,admission_status,selected_course,fee_paid&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
     const data = await res.json();
-    if (!Array.isArray(data) || data.length === 0) {
-      showLoginMsg('No application found. Please complete the admission process first.');
-      btn.disabled = false; btn.textContent = 'Access my course →'; return;
-    }
+    if (!Array.isArray(data) || data.length === 0) { showLoginMsg('No account found.'); btn.disabled = false; btn.textContent = 'Access my course →'; return; }
     const s = data[0];
-    if (!['admitted','final_exam_passed','internship_passed','certified'].includes(s.admission_status)) {
-      showLoginMsg('Please complete all admission steps first.');
-      btn.disabled = false; btn.textContent = 'Access my course →'; return;
-    }
-    studentEmail = email;
-    studentName = s.student_name;
+    if (!['admitted','final_exam_passed','internship_passed','certified','quarterly_passed'].includes(s.admission_status)) { showLoginMsg('Please complete enrollment first.'); btn.disabled = false; btn.textContent = 'Access my course →'; return; }
+    studentEmail = email; studentName = s.student_name;
     document.getElementById('navUser').textContent = studentName;
     document.getElementById('loginWrap').style.display = 'none';
     document.getElementById('mainLayout').style.display = 'grid';
     await loadCourse(s.selected_course);
     await loadProgress();
+    loadMyCoursesPanel();
     checkNotifications();
-  } catch (err) {
-    showLoginMsg('Error: ' + err.message);
-    btn.disabled = false; btn.textContent = 'Access my course →';
-  }
+  } catch (err) { showLoginMsg('Error: ' + err.message); btn.disabled = false; btn.textContent = 'Access my course →'; }
 }
 
 async function loadCourse(courseName) {
   try {
-    // Get course
-    const cRes = await fetch(BASE + "/courses?select=id,name,department&name=eq." + encodeURIComponent(courseName) + "&is_active=eq.true", { method: "GET", headers: HEADERS });
+    const cRes = await fetch(BASE + "/courses?select=id,name,department&name=ilike." + encodeURIComponent(courseName) + "&is_active=eq.true", { method: "GET", headers: HEADERS });
     const courses = await cRes.json();
-    if (!Array.isArray(courses) || courses.length === 0) {
-      document.getElementById('mainContent').innerHTML = '<div class="loading">Course content is being prepared. Please check back soon!</div>';
-      return;
-    }
+    if (!Array.isArray(courses) || courses.length === 0) { document.getElementById('mainContent').innerHTML = '<div class="loading">Course content being prepared. Refresh soon!</div>'; return; }
     currentCourse = courses[0];
-    document.getElementById('courseName').textContent = currentCourse.name;
-
-    // Get modules
+    document.getElementById('sidebarCourse').textContent = currentCourse.name;
     const mRes = await fetch(BASE + "/course_modules?select=*&course_id=eq." + currentCourse.id + "&order=module_index.asc", { method: "GET", headers: HEADERS });
     modules = await mRes.json();
-
-    if (!Array.isArray(modules) || modules.length === 0) {
-      document.getElementById('mainContent').innerHTML = '<div class="loading">Course content is being generated by AI. Please refresh in a moment!</div>';
-      return;
-    }
-
-    buildNav();
-    loadLesson(0, 0);
+    if (!Array.isArray(modules) || modules.length === 0) { document.getElementById('mainContent').innerHTML = '<div class="loading">Course content being generated. Refresh in a moment!</div>'; return; }
+    buildNav(); loadLesson(0, 0);
   } catch (e) { console.error(e); }
 }
 
@@ -322,301 +362,288 @@ async function loadProgress() {
       currentMod = data[0].module_index || 0;
       currentLesson = data[0].lesson_index || 0;
       completedLessons = new Set(data[0].completed_lessons || []);
+      bookmarks = new Set(data[0].bookmarks || []);
+      notes = data[0].notes || {};
       loadLesson(currentMod, currentLesson);
     } else {
-      const res2 = await fetch(BASE + "/syllabus_progress", {
-        method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
-        body: JSON.stringify({ student_email: studentEmail, department: currentCourse?.name || '', module_index: 0, lesson_index: 0, completed_lessons: [], total_lessons: modules.reduce((s,m) => s + (m.lessons?.length || 0), 0) })
-      });
+      const res2 = await fetch(BASE + "/syllabus_progress", { method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" }, body: JSON.stringify({ student_email: studentEmail, department: currentCourse?.name || '', module_index: 0, lesson_index: 0, completed_lessons: [], total_lessons: modules.reduce((s,m) => s + (m.lessons?.length || 0), 0) }) });
       const d2 = await res2.json();
       if (Array.isArray(d2) && d2.length > 0) progressId = d2[0].id;
     }
-    updateProgress();
-    buildNav();
+    updateProgress(); buildNav(); updateBadges();
   } catch (e) { console.error(e); }
 }
 
 async function saveProgress() {
   if (!progressId) return;
-  await fetch(BASE + "/syllabus_progress?id=eq." + progressId, {
-    method: "PATCH", headers: HEADERS,
-    body: JSON.stringify({ module_index: currentMod, lesson_index: currentLesson, completed_lessons: [...completedLessons], last_active: new Date().toISOString() })
-  });
+  await fetch(BASE + "/syllabus_progress?id=eq." + progressId, { method: "PATCH", headers: HEADERS, body: JSON.stringify({ module_index: currentMod, lesson_index: currentLesson, completed_lessons: [...completedLessons], bookmarks: [...bookmarks], notes, last_active: new Date().toISOString() }) });
 }
 
 function buildNav() {
   const nav = document.getElementById('syllabusNav');
-  nav.innerHTML = modules.map((mod, mi) => `
-    <div class="module ${mi === currentMod ? 'open' : ''}" id="mod-${mi}">
-      <div class="module-header ${mi === currentMod ? 'active' : ''}" onclick="toggleMod(${mi})">
-        <span class="module-icon">📖</span>
-        <span>${mod.module_title}</span>
+  nav.innerHTML = modules.map((mod, mi) => {
+    const modLessons = mod.lessons || [];
+    const modCompleted = modLessons.filter((_, li) => completedLessons.has(mi+'-'+li)).length;
+    const modPct = modLessons.length > 0 ? Math.round(modCompleted/modLessons.length*100) : 0;
+    return `<div class="module ${mi===currentMod?'open':''}" id="mod-${mi}">
+      <div class="module-header ${mi===currentMod?'active':''}" onclick="toggleMod(${mi})">
+        <span style="font-size:14px;">${modCompleted===modLessons.length && modLessons.length>0?'✅':'📖'}</span>
+        <span style="flex:1; font-size:13px;">${mod.module_title}</span>
+        <span class="module-pct">${modPct}%</span>
       </div>
       <div class="module-lessons">
-        ${(mod.lessons || []).map((l, li) => {
-          const key = mi + '-' + li;
-          return `<div class="lesson-item ${completedLessons.has(key) ? 'completed' : ''} ${mi===currentMod && li===currentLesson ? 'active' : ''}" onclick="loadLesson(${mi},${li})">
-            <span class="lesson-dot"></span>${l.title}
+        ${modLessons.map((l,li) => {
+          const key = mi+'-'+li;
+          const isBookmarked = bookmarks.has(key);
+          return `<div class="lesson-item ${completedLessons.has(key)?'completed':''} ${mi===currentMod&&li===currentLesson?'active':''}" onclick="loadLesson(${mi},${li})">
+            <span class="lesson-dot"></span>
+            <span style="flex:1; font-size:12px;">${l.title}</span>
+            ${isBookmarked?'<span style="font-size:11px;">🔖</span>':''}
           </div>`;
         }).join('')}
       </div>
-    </div>`).join('');
-  updateProgress();
+    </div>`;
+  }).join('');
+  updateTimeRemaining();
 }
 
-function toggleMod(mi) {
-  document.querySelectorAll('.module').forEach((m,i) => { if (i===mi) m.classList.toggle('open'); else m.classList.remove('open'); });
-}
+function toggleMod(mi) { document.querySelectorAll('.module').forEach((m,i) => { if(i===mi) m.classList.toggle('open'); else m.classList.remove('open'); }); }
 
 function loadLesson(mi, li) {
   currentMod = mi; currentLesson = li;
-  const mod = modules[mi];
-  if (!mod) return;
-  const lesson = (mod.lessons || [])[li];
-  if (!lesson) return;
-
+  const mod = modules[mi]; if (!mod) return;
+  const lesson = (mod.lessons||[])[li]; if (!lesson) return;
   mcqAnswered = {};
-  const key = mi + '-' + li;
-  const isDone = completedLessons.has(key);
+  const key = mi+'-'+li;
+  const isBookmarked = bookmarks.has(key);
+  const savedNote = notes[key] || '';
 
   document.getElementById('mainContent').innerHTML = `
-    <div class="lesson-breadcrumb">${mod.module_title} · Lesson ${li + 1}</div>
-    <div class="lesson-title">${lesson.title}</div>
+    <div class="lesson-breadcrumb">${mod.module_title} · Lesson ${li+1} of ${mod.lessons?.length || 0}</div>
+    <div class="lesson-title-row">
+      <div class="lesson-title">${lesson.title}</div>
+      <button class="bookmark-btn ${isBookmarked?'bookmarked':''}" id="bookmarkBtn" onclick="toggleBookmark('${key}')">
+        ${isBookmarked?'🔖 Saved':'🔖 Save'}
+      </button>
+    </div>
     <div class="lesson-meta">
-      <span>⏱ ${lesson.duration || '15 min'}</span>
+      <span>⏱ ${lesson.duration||'15 min'}</span>
       <span>📖 Core Lesson</span>
+      ${completedLessons.has(key)?'<span style="color:#137333;">✅ Completed</span>':''}
     </div>
-    <div class="lesson-body">
-      ${lesson.content ? lesson.content.split('\n').filter(p=>p.trim()).map(p => `<p>${p}</p>`).join('') : '<p>Content loading…</p>'}
-      ${lesson.project ? `<div class="project-box"><strong>🛠 Practical Assignment</strong>${lesson.project}</div>` : ''}
+    <div class="lesson-body" id="lessonBody">
+      ${lesson.content ? lesson.content.split('\n').filter(p=>p.trim()).map(p=>`<p>${p}</p>`).join('') : '<p>Content loading…</p>'}
+      ${lesson.project ? `<div class="project-box"><strong>🛠 Practical Assignment</strong><p>${lesson.project}</p></div>` : ''}
     </div>
+
+    <div class="notes-section">
+      <div class="notes-header">
+        <div class="notes-title">📝 My Notes</div>
+        <button class="notes-save" onclick="saveNote('${key}')">Save Notes</button>
+      </div>
+      <textarea class="notes-textarea" id="notesArea" placeholder="Write your notes for this lesson here…">${savedNote}</textarea>
+      <div class="notes-saved-msg" id="notesSaved">✅ Notes saved!</div>
+    </div>
+
     ${lesson.mcq && lesson.mcq.length > 0 ? `
     <div class="mcq-section">
       <div class="mcq-title">📝 Quick Check — Test your understanding</div>
-      ${lesson.mcq.map((q, qi) => `
+      ${lesson.mcq.map((q,qi) => `
         <div class="mcq-q">Q${qi+1}. ${q.question}</div>
         <div class="mcq-opts" id="mcq-${qi}">
-          ${(q.options || []).map((opt, oi) => `
-            <div class="mcq-opt" onclick="answerMCQ(${qi}, '${opt}', '${q.correct}', this, ${oi})">${opt}</div>
-          `).join('')}
+          ${(q.options||[]).map(opt => `<div class="mcq-opt" onclick="answerMCQ(${qi},'${opt.replace(/'/g,"\\'")}','${q.correct.replace(/'/g,"\\'")}',this)">${opt}</div>`).join('')}
         </div>`).join('')}
     </div>` : ''}
+
     <div class="lesson-nav">
-      <button class="btn btn-secondary" onclick="navigate(-1)" ${mi===0 && li===0 ? 'disabled' : ''}>← Previous</button>
-      <button class="btn btn-complete" onclick="completeLesson()">${isDone ? '✓ Completed' : 'Mark complete ✓'}</button>
-      <button class="btn btn-primary" onclick="navigate(1)" ${mi===modules.length-1 && li===(modules[mi].lessons||[]).length-1 ? 'disabled' : ''}>Next →</button>
+      <button class="btn btn-secondary" onclick="navigate(-1)" ${mi===0&&li===0?'disabled':''}>← Previous</button>
+      <button class="btn btn-complete" onclick="completeLesson()">${completedLessons.has(key)?'✓ Completed':'Mark complete ✓'}</button>
+      <button class="btn btn-primary" onclick="navigate(1)" ${mi===modules.length-1&&li===(modules[mi].lessons||[]).length-1?'disabled':''}>Next →</button>
     </div>`;
 
-  buildNav();
-  saveProgress();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  buildNav(); saveProgress(); window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function answerMCQ(qi, selected, correct, el, oi) {
+function answerMCQ(qi, selected, correct, el) {
   if (mcqAnswered[qi]) return;
   mcqAnswered[qi] = true;
   const opts = document.querySelectorAll(`#mcq-${qi} .mcq-opt`);
-  opts.forEach(o => {
-    if (o.textContent.trim() === correct) o.classList.add('show-correct');
-  });
-  if (selected === correct) el.classList.add('correct');
-  else el.classList.add('wrong');
+  opts.forEach(o => { if (o.textContent.trim() === correct) o.classList.add('show-correct'); });
+  el.classList.add(selected===correct?'correct':'wrong');
 }
 
 function navigate(dir) {
-  let mi = currentMod, li = currentLesson;
-  if (dir === 1) {
-    if (li < (modules[mi].lessons||[]).length - 1) li++;
-    else if (mi < modules.length - 1) { mi++; li = 0; }
-  } else {
-    if (li > 0) li--;
-    else if (mi > 0) { mi--; li = (modules[mi].lessons||[]).length - 1; }
-  }
-  loadLesson(mi, li);
+  let mi=currentMod, li=currentLesson;
+  if (dir===1) { if (li<(modules[mi].lessons||[]).length-1) li++; else if (mi<modules.length-1) { mi++; li=0; } }
+  else { if (li>0) li--; else if (mi>0) { mi--; li=(modules[mi].lessons||[]).length-1; } }
+  loadLesson(mi,li);
 }
 
 async function completeLesson() {
-  const key = currentMod + '-' + currentLesson;
+  const key=currentMod+'-'+currentLesson;
   completedLessons.add(key);
-  updateProgress();
-  buildNav();
+  updateProgress(); updateBadges(); buildNav();
   await saveProgress();
-  setTimeout(() => navigate(1), 500);
+  setTimeout(()=>navigate(1),400);
+}
+
+async function saveNote(key) {
+  const val = document.getElementById('notesArea')?.value || '';
+  notes[key] = val;
+  await saveProgress();
+  const msg = document.getElementById('notesSaved');
+  if (msg) { msg.style.display='block'; setTimeout(()=>msg.style.display='none',2000); }
+}
+
+async function toggleBookmark(key) {
+  if (bookmarks.has(key)) bookmarks.delete(key); else bookmarks.add(key);
+  await saveProgress(); buildNav();
+  const btn = document.getElementById('bookmarkBtn');
+  if (btn) { btn.className='bookmark-btn'+(bookmarks.has(key)?' bookmarked':''); btn.textContent=bookmarks.has(key)?'🔖 Saved':'🔖 Save'; }
+  updateBookmarksList();
+}
+
+function updateBookmarksList() {
+  const el = document.getElementById('bookmarksList');
+  if (!el) return;
+  if (bookmarks.size===0) { el.innerHTML='<div class="bookmark-empty">No bookmarks yet.</div>'; return; }
+  el.innerHTML=[...bookmarks].map(key => {
+    const [mi,li] = key.split('-').map(Number);
+    const lesson = modules[mi]?.lessons?.[li];
+    if (!lesson) return '';
+    return `<div style="padding:8px 0; border-bottom:1px solid #f1f3f4; cursor:pointer;" onclick="loadLesson(${mi},${li})">
+      <div style="font-size:13px; font-weight:500; color:#1a73e8;">${lesson.title}</div>
+      <div style="font-size:11px; color:#5f6368;">${modules[mi]?.module_title}</div>
+    </div>`;
+  }).join('');
 }
 
 function updateProgress() {
-  const total = modules.reduce((s,m) => s + (m.lessons?.length || 0), 0);
-  const pct = total > 0 ? Math.round((completedLessons.size / total) * 100) : 0;
-  document.getElementById('progressPct').textContent = pct + '%';
-  document.getElementById('progressFill').style.width = pct + '%';
+  const total = modules.reduce((s,m)=>s+(m.lessons?.length||0),0);
+  const pct = total>0?Math.round((completedLessons.size/total)*100):0;
+  document.getElementById('sidebarPct').textContent=pct+'%';
+  document.getElementById('sidebarProgress').style.width=pct+'%';
+  document.getElementById('sidebarLessons').textContent=completedLessons.size+' of '+total+' lessons';
 }
 
-// AI Teacher Chat
-document.getElementById('chatInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-});
+function updateTimeRemaining() {
+  const total = modules.reduce((s,m)=>s+(m.lessons?.length||0),0);
+  const remaining = total - completedLessons.size;
+  const mins = remaining * 15;
+  const hours = Math.floor(mins/60); const min = mins%60;
+  document.getElementById('timeRemaining').textContent = remaining===0?'Course complete! 🎉':(hours>0?hours+'h ':'')+min+'min remaining';
+}
+
+function updateBadges() {
+  const total = modules.reduce((s,m)=>s+(m.lessons?.length||0),0);
+  const done = completedLessons.size;
+  const pct = total>0?Math.round((done/total)*100):0;
+  const grid = document.getElementById('badgeGrid');
+  if (!grid) return;
+  grid.innerHTML = BADGES.map(b => {
+    let earned = false;
+    if (typeof b.req==='number' && b.req<=10) earned=done>=b.req;
+    else if (b.req===50) earned=pct>=50;
+    else if (b.req===100) earned=pct>=100;
+    else if (b.req==='module') earned=modules.some((m,mi)=>m.lessons?.every((_,li)=>completedLessons.has(mi+'-'+li)));
+    return `<div class="badge-item ${earned?'earned':'locked'}">
+      <div class="badge-emoji">${b.emoji}</div>
+      <div class="badge-name">${b.name}</div>
+    </div>`;
+  }).join('');
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.stab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('stab-'+name).classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  if(name==='bookmarks') updateBookmarksList();
+  if(name==='badges') updateBadges();
+}
+
+async function loadMyCoursesPanel() {
+  const el = document.getElementById('myCoursesPanel');
+  try {
+    const res = await fetch(BASE + "/students?select=selected_course,track&student_email=ilike."+encodeURIComponent(studentEmail), {method:"GET",headers:HEADERS});
+    const data = await res.json();
+    if (!Array.isArray(data)||data.length===0) { el.innerHTML='<div class="bookmark-empty">No courses yet.</div>'; return; }
+    const s = data[0];
+    const course = s.selected_course;
+    const total = modules.reduce((s,m)=>s+(m.lessons?.length||0),0);
+    const pct = total>0?Math.round((completedLessons.size/total)*100):0;
+    el.innerHTML=`<div class="my-course-card active">
+      <div class="mc-name">${course||'—'}</div>
+      <div class="mc-progress">${completedLessons.size} of ${total} lessons · ${pct}%</div>
+      <div class="mc-bar"><div class="mc-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div style="font-size:12px; color:#80868b; margin-top:12px; text-align:center;">More courses coming soon…</div>`;
+  } catch(e) { el.innerHTML='<div class="bookmark-empty">Error loading.</div>'; }
+}
+
+// AI Chat
+document.getElementById('chatInput').addEventListener('keydown', e => { if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); sendMessage(); } });
 
 async function sendMessage() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  addBubble('user', text, studentName);
-  document.getElementById('sendBtn').disabled = true;
-  document.getElementById('typingIndicator').style.display = 'block';
-  chatHistory.push({ role: 'user', content: text });
-
-  const currentLessonTitle = modules[currentMod]?.lessons?.[currentLesson]?.title || 'current lesson';
-  const systemPrompt = `You are a personal AI teacher at Yashasvi Global Education. The student ${studentName} is studying "${currentCourse?.name}". Current lesson: "${currentLessonTitle}". Be encouraging, clear, and use practical Indian examples. Keep answers concise (2-3 paragraphs max).`;
-
+  const input=document.getElementById('chatInput'); const text=input.value.trim(); if(!text) return;
+  input.value=''; addBubble('user',text,studentName);
+  document.getElementById('sendBtn').disabled=true; document.getElementById('typingIndicator').style.display='block';
+  chatHistory.push({role:'user',content:text});
+  const lesson=modules[currentMod]?.lessons?.[currentLesson];
+  const sys=`You are a personal AI teacher at Yashasvi Global Education. Student: ${studentName}. Course: ${currentCourse?.name}. Current lesson: "${lesson?.title}". Be encouraging, clear, use practical examples. Max 3 paragraphs.`;
   try {
-    const res = await fetch(EDGE, {
-      method: "POST",
-      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: chatHistory.slice(-8), systemPrompt })
-    });
-    const data = await res.json();
-    const reply = data.reply || "Sorry, I couldn't process that. Please try again.";
-    chatHistory.push({ role: 'assistant', content: reply });
-    addBubble('ai', reply, 'AI Teacher');
-
-    await fetch(BASE + "/ai_chat_history", {
-      method: "POST", headers: HEADERS,
-      body: JSON.stringify({ student_email: studentEmail, role: 'user', content: text })
-    });
-    await fetch(BASE + "/ai_chat_history", {
-      method: "POST", headers: HEADERS,
-      body: JSON.stringify({ student_email: studentEmail, role: 'assistant', content: reply })
-    });
-  } catch (e) {
-    addBubble('ai', 'Sorry, connection issue. Please try again.', 'AI Teacher');
-  }
-  document.getElementById('sendBtn').disabled = false;
-  document.getElementById('typingIndicator').style.display = 'none';
+    const res=await fetch(EDGE,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify({messages:chatHistory.slice(-8),systemPrompt:sys})});
+    const data=await res.json(); const reply=data.reply||"Sorry, try again.";
+    chatHistory.push({role:'assistant',content:reply}); addBubble('ai',reply,'AI Teacher');
+  } catch(e) { addBubble('ai','Connection issue. Try again.','AI Teacher'); }
+  document.getElementById('sendBtn').disabled=false; document.getElementById('typingIndicator').style.display='none';
 }
 
-function addBubble(role, text, name) {
-  const msgs = document.getElementById('chatMessages');
-  const div = document.createElement('div');
-  div.className = 'chat-msg ' + role;
-  div.innerHTML = `<div class="chat-name">${name}</div><div class="chat-bubble">${text.replace(/\n/g, '<br>')}</div>`;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
+function addBubble(role,text,name) {
+  const msgs=document.getElementById('chatMessages');
+  const div=document.createElement('div'); div.className='chat-msg '+role;
+  div.innerHTML=`<div class="chat-name">${name}</div><div class="chat-bubble">${text.replace(/\n/g,'<br>')}</div>`;
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight; document.getElementById('typingIndicator').style.display='none';
 }
+
+// Request Course
+function openRequest() { document.getElementById('requestModal').classList.add('open'); }
+function closeRequest() { document.getElementById('requestModal').classList.remove('open'); }
+async function submitRequest() {
+  const text=document.getElementById('requestText').value.trim(); if(!text) return;
+  const btn=document.querySelector('#requestModal .btn-primary'); btn.disabled=true; btn.textContent='Sending…';
+  try {
+    await fetch(BASE+"/course_requests",{method:"POST",headers:{...HEADERS,"Prefer":"return=representation"},body:JSON.stringify({student_email:studentEmail,student_name:studentName,requested_course:text})});
+    document.getElementById('requestMsg').textContent='✅ Request sent! AI will build this course within 24 hours.'; document.getElementById('requestMsg').style.display='block';
+    document.getElementById('requestText').value=''; btn.textContent='Sent ✓';
+    setTimeout(()=>closeRequest(),2000);
+  } catch(e) { btn.disabled=false; btn.textContent='Send Request →'; }
+}
+document.getElementById('requestModal').addEventListener('click',e=>{if(e.target===document.getElementById('requestModal'))closeRequest();});
 
 // Notifications
 async function checkNotifications() {
-  if (!studentEmail) return;
+  if(!studentEmail) return;
   try {
-    const res = await fetch(BASE + "/notifications?select=*&student_email=ilike." + encodeURIComponent(studentEmail) + "&is_read=eq.false", { method: "GET", headers: HEADERS });
-    const data = await res.json();
-    if (Array.isArray(data) && data.length > 0) {
-      document.getElementById('bellBadge').textContent = data.length;
-      document.getElementById('bellBadge').style.display = 'flex';
-      const n = data[0];
-      if (confirm(`🔔 ${n.title}\n\n${n.message}\n\nClick OK to add this course to your syllabus!`)) {
-        await fetch(BASE + "/notifications?id=eq." + n.id, { method: "PATCH", headers: HEADERS, body: JSON.stringify({ is_read: true }) });
-        if (n.course_id) {
-          const cRes = await fetch(BASE + "/courses?select=name&id=eq." + n.course_id, { method: "GET", headers: HEADERS });
-          const cData = await cRes.json();
-          if (Array.isArray(cData) && cData.length > 0) {
-            await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(studentEmail), {
-              method: "PATCH", headers: HEADERS,
-              body: JSON.stringify({ selected_course: cData[0].name, track: cData[0].name })
-            });
-            alert('Course added to your syllabus! Refreshing…');
-            location.reload();
-          }
-        }
-        document.getElementById('bellBadge').style.display = 'none';
-      }
+    const res=await fetch(BASE+"/notifications?select=*&student_email=ilike."+encodeURIComponent(studentEmail)+"&is_read=eq.false",{method:"GET",headers:HEADERS});
+    const data=await res.json();
+    if(Array.isArray(data)&&data.length>0){
+      document.getElementById('bellBadge').textContent=data.length; document.getElementById('bellBadge').style.display='flex';
     }
-  } catch (e) { console.error(e); }
+  } catch(e){}
 }
 
-document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('loginEmail').addEventListener('keydown', e=>{if(e.key==='Enter')doLogin();});
 
-function showLoginMsg(text) {
-  const m = document.getElementById('loginMsg');
-  m.className = 'msg-error'; m.textContent = text; m.style.display = 'block';
-}
-</script>
-<!-- Course Suggestion FAB -->
-<button class="suggest-fab" onclick="openSuggest()">
-  ✨ Request a Course
-</button>
-
-<!-- Copy blocked toast -->
-<div class="copy-toast" id="copyToast">⛔ Copying is not allowed on this platform</div>
-
-<!-- Course Suggestion Modal -->
-<div class="suggest-modal" id="suggestModal">
-  <div class="suggest-box">
-    <h3>✨ Request a new course</h3>
-    <p>Can't find a course you need? Tell us what you want to learn — our AI will build it for you within 24 hours!</p>
-    <textarea class="suggest-input" id="suggestText" placeholder="e.g. I want to learn Cyber Security, or I need a course on Stock Market Basics…"></textarea>
-    <div id="suggestMsg" style="font-size:13px; margin-bottom:10px; display:none;"></div>
-    <div class="suggest-actions">
-      <button class="suggest-submit" onclick="submitSuggestion()">Request course →</button>
-      <button class="suggest-cancel" onclick="closeSuggest()">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<script>
 // Copy Protection
-document.addEventListener('copy', function(e) {
-  e.preventDefault();
-  const toast = document.getElementById('copyToast');
-  toast.style.display = 'block';
-  setTimeout(() => toast.style.display = 'none', 2500);
-});
-document.addEventListener('cut', function(e) { e.preventDefault(); });
-document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-document.addEventListener('keydown', function(e) {
-  // Block Ctrl+C, Ctrl+U, Ctrl+S, F12, Ctrl+Shift+I
-  if ((e.ctrlKey && ['c','u','s','a','p'].includes(e.key.toLowerCase())) ||
-      e.key === 'F12' ||
-      (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase())) ||
-      (e.ctrlKey && e.key === 'p')) {
-    e.preventDefault();
-    const toast = document.getElementById('copyToast');
-    if (toast) { toast.style.display = 'block'; setTimeout(() => toast.style.display = 'none', 2500); }
-  }
+document.addEventListener('copy',e=>{e.preventDefault();const t=document.getElementById('copyToast');t.style.display='block';setTimeout(()=>t.style.display='none',2500);});
+document.addEventListener('cut',e=>e.preventDefault());
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey&&['c','u','s','a','p'].includes(e.key.toLowerCase()))||e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(e.key.toLowerCase()))){e.preventDefault();const t=document.getElementById('copyToast');if(t){t.style.display='block';setTimeout(()=>t.style.display='none',2500);}}
 });
 
-// Course Suggestion
-function openSuggest() { document.getElementById('suggestModal').classList.add('open'); }
-function closeSuggest() { document.getElementById('suggestModal').classList.remove('open'); }
-
-async function submitSuggestion() {
-  const text = document.getElementById('suggestText').value.trim();
-  if (!text) return;
-  const btn = document.querySelector('.suggest-submit');
-  btn.disabled = true; btn.textContent = 'Sending…';
-  const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
-  const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
-  try {
-    await fetch(BASE + "/course_requests", {
-      method: "POST",
-      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ student_email: studentEmail || 'unknown', student_name: studentName || 'Student', requested_course: text })
-    });
-    const msg = document.getElementById('suggestMsg');
-    msg.style.color = '#137333'; msg.textContent = '✅ Request sent! Our AI will build this course within 24 hours.'; msg.style.display = 'block';
-    document.getElementById('suggestText').value = '';
-    btn.textContent = 'Sent ✓';
-    setTimeout(() => closeSuggest(), 2500);
-  } catch(e) {
-    btn.disabled = false; btn.textContent = 'Request course →';
-  }
-}
-
-// Close modal on outside click
-document.getElementById('suggestModal').addEventListener('click', function(e) {
-  if (e.target === this) closeSuggest();
-});
+function showLoginMsg(text){const m=document.getElementById('loginMsg');m.className='msg-error';m.textContent=text;m.style.display='block';}
 </script>
-
 </body>
 </html>
