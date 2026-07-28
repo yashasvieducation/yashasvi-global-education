@@ -216,7 +216,7 @@
 <nav class="nav">
   <a class="nav-logo" href="/"><img src="/logo.svg" alt="Yashasvi Global Education" style="height:36px;"></a>
   <div class="nav-right">
-    <span class="nav-user" id="navUser"></span>
+    <a id="navUser" href="/profile.html" style="font-size:13px; font-weight:500; color:#202124; background:#f1f3f4; border-radius:100px; padding:6px 14px; text-decoration:none; cursor:pointer;"></a>
     <button class="nav-icon-btn" onclick="window.location.href='/my-notes.html?email='+encodeURIComponent(studentEmail)">My Notes</button>
     <button class="nav-icon-btn" onclick="window.location.href='/my-courses.html?email='+encodeURIComponent(studentEmail)">My Courses</button>
     <button class="request-btn" onclick="openRequest()">+ Request a Course</button>
@@ -387,7 +387,9 @@ async function doLogin() {
     if (!['admitted','final_exam_passed','internship_passed','certified','quarterly_passed'].includes(s.admission_status)) { showLoginMsg('Please complete enrollment first.'); btn.disabled = false; btn.textContent = 'Access my course →'; return; }
     studentEmail = email; studentName = s.student_name;
     localStorage.setItem('yge_email', email);
-    document.getElementById('navUser').textContent = studentName;
+    const navUser = document.getElementById('navUser');
+    navUser.textContent = studentName;
+    navUser.href = '/profile.html?email=' + encodeURIComponent(email);
     document.getElementById('loginWrap').style.display = 'none';
     document.getElementById('mainLayout').style.display = 'grid';
     await loadCourse(s.selected_course);
