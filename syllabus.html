@@ -346,7 +346,11 @@ let completedLessons = new Set(), progressId = null;
 let bookmarks = new Set(), notes = {}, mcqAnswered = {}, chatHistory = [];
 
 const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('email')) document.getElementById('loginEmail').value = urlParams.get('email');
+if (urlParams.get('email')) {
+  document.getElementById('loginEmail').value = urlParams.get('email');
+  // Auto-login if email in URL
+  setTimeout(() => doLogin(), 300);
+}
 
 // BADGES config
 const BADGES = [

@@ -232,7 +232,10 @@ let studentEmail = "";
 
 // Auto-fill from URL
 const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('email')) document.getElementById('loginEmail').value = urlParams.get('email');
+if (urlParams.get('email')) {
+  document.getElementById('loginEmail').value = urlParams.get('email');
+  setTimeout(() => doLogin(), 300);
+}
 
 // Greeting
 const hour = new Date().getHours();
