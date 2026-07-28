@@ -95,11 +95,15 @@
     .quick-links { grid-template-columns: 1fr !important; }
     .nav-logo { font-size: 15px; }
   }
+
+  .nav-back { display: flex; align-items: center; gap: 8px; color: #1a73e8; font-size: 14px; text-decoration: none; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; padding: 8px 16px; border: 1.5px solid #1a73e8; border-radius: 4px; transition: all 0.15s; }
+  .nav-back:hover { background: #e8f0fe; }
 </style>
 </head>
 <body>
 
 <nav class="nav">
+  <a class="nav-back" id="backBtn" href="/dashboard.html">← Back to Dashboard</a>
   <a class="nav-logo" href="/"><img src="/logo.svg" alt="Yashasvi Global Education" style="height:36px; width:auto; display:block;"></a>
 </nav>
 
@@ -378,6 +382,15 @@ function showMsg(type, text) {
   const m = document.getElementById('message');
   m.className = 'msg-' + type; m.textContent = text; m.style.display = 'block';
 }
+</script>
+
+<script>
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  const e = p.get('email') || localStorage.getItem('yge_email') || '';
+  const btn = document.getElementById('backBtn');
+  if (btn && e) btn.href = '/dashboard.html?email=' + encodeURIComponent(e);
+})();
 </script>
 </body>
 </html>

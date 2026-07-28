@@ -108,11 +108,15 @@
     .quick-links { grid-template-columns: 1fr !important; }
     .nav-logo { font-size: 15px; }
   }
+
+  .nav-back { display: flex; align-items: center; gap: 8px; color: #1a73e8; font-size: 14px; text-decoration: none; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; padding: 8px 16px; border: 1.5px solid #1a73e8; border-radius: 4px; transition: all 0.15s; }
+  .nav-back:hover { background: #e8f0fe; }
 </style>
 </head>
 <body>
 
 <nav class="nav">
+  <a class="nav-back" id="backBtn" href="/dashboard.html">← Back to Dashboard</a>
   <a class="nav-logo" href="/"><img src="/logo.svg" alt="Yashasvi Global Education" style="height:36px; width:auto; display:block;"></a>
   <div class="nav-timer" id="navTimer">45:00</div>
 </nav>
@@ -379,6 +383,15 @@ document.querySelectorAll('.q-text, .opt-btn, .options').forEach(el => {
   el.style.userSelect = 'none';
   el.style.webkitUserSelect = 'none';
 });
+</script>
+
+<script>
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  const e = p.get('email') || localStorage.getItem('yge_email') || '';
+  const btn = document.getElementById('backBtn');
+  if (btn && e) btn.href = '/dashboard.html?email=' + encodeURIComponent(e);
+})();
 </script>
 </body>
 </html>
