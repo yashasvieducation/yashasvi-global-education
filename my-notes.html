@@ -9,10 +9,11 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
   .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
-  .nav-left { display: flex; align-items: center; gap: 16px; }
-  .back-btn { display: flex; align-items: center; gap: 6px; color: #5f6368; font-size: 14px; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background 0.15s; }
-  .back-btn:hover { background: #f1f3f4; color: #202124; }
-  .nav-user { font-size: 13px; color: #5f6368; }
+  .nav-logo { text-decoration: none; }
+  .nav-center { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; color: #202124; }
+  .nav-back { display: flex; align-items: center; gap: 8px; color: #1a73e8; font-size: 14px; text-decoration: none; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; padding: 8px 16px; border: 1.5px solid #1a73e8; border-radius: 4px; transition: all 0.15s; }
+  .nav-back:hover { background: #e8f0fe; }
+  .nav-user { font-size: 13px; font-weight: 500; color: #202124; background: #f1f3f4; border-radius: 100px; padding: 6px 14px; }
   .hero { padding: 40px 24px 28px; max-width: 860px; margin: 0 auto; }
   .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #202124; margin-bottom: 6px; }
   .hero p { font-size: 14px; color: #5f6368; }
@@ -42,10 +43,8 @@
 </head>
 <body>
 <nav class="nav">
-  <div class="nav-left">
-    <a class="back-btn" id="backBtn" href="/syllabus.html">← Back to Course</a>
-    <img src="/logo.svg" alt="YGE" style="height:32px;">
-  </div>
+  <a class="nav-back" id="backBtn" href="/syllabus.html">← Back to Course</a>
+  <a class="nav-logo" href="/"><img src="/logo.svg" alt="YGE" style="height:36px;"></a>
   <span class="nav-user" id="navUser"></span>
 </nav>
 
@@ -72,7 +71,7 @@ if (email) {
 
 async function loadNotes() {
   if (!email) { document.getElementById('notesArea').innerHTML = '<div class="empty-state"><div class="e-icon">📝</div><h3>Please login first</h3><p><a href="/syllabus.html">Go to course</a></p></div>'; return; }
-  document.getElementById('navUser').textContent = email;
+  if (email) { document.getElementById('navUser').textContent = email.split('@')[0]; }
   try {
     // Get progress with notes
     const pRes = await fetch(BASE + "/syllabus_progress?select=notes,department&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });

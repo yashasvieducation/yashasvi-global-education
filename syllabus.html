@@ -12,11 +12,11 @@
   /* NAV */
   .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 60px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
   .nav-logo img { height: 36px; width: auto; }
-  .nav-right { display: flex; align-items: center; gap: 10px; }
-  .nav-user { font-size: 14px; font-weight: 500; color: #202124; }
-  .request-btn { display: flex; align-items: center; gap: 6px; background: #e8f0fe; color: #1a73e8; border: none; border-radius: 20px; padding: 7px 14px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; }
-  .request-btn:hover { background: #1a73e8; color: #fff; }
-  .nav-icon-btn { display: flex; align-items: center; gap: 5px; background: none; border: 1px solid #e8eaed; border-radius: 20px; padding: 6px 12px; font-size: 13px; color: #5f6368; cursor: pointer; transition: all 0.15s; font-family: 'Google Sans', Arial, sans-serif; }
+  .nav-right { display: flex; align-items: center; gap: 8px; }
+  .nav-user { font-size: 13px; font-weight: 500; color: #202124; background: #f1f3f4; border-radius: 100px; padding: 6px 14px; }
+  .request-btn { display: flex; align-items: center; gap: 6px; background: #1a73e8; color: #fff; border: none; border-radius: 20px; padding: 8px 16px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+  .request-btn:hover { background: #1765cc; }
+  .nav-icon-btn { display: flex; align-items: center; gap: 5px; background: none; border: 1px solid #dadce0; border-radius: 20px; padding: 7px 14px; font-size: 13px; color: #5f6368; cursor: pointer; transition: all 0.15s; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; }
   .nav-icon-btn:hover { border-color: #1a73e8; color: #1a73e8; background: #f8f9ff; }
 
   /* Notes Modal */
@@ -206,10 +206,10 @@
 <nav class="nav">
   <a class="nav-logo" href="/"><img src="/logo.svg" alt="Yashasvi Global Education" style="height:36px;"></a>
   <div class="nav-right">
-    <button class="request-btn" onclick="openRequest()">✨ Request a Course</button>
-    <button class="nav-icon-btn" onclick="window.location.href='/my-notes.html?email='+encodeURIComponent(studentEmail)">📝 My Notes</button>
-    <button class="nav-icon-btn" onclick="window.location.href='/my-courses.html?email='+encodeURIComponent(studentEmail)">🗂 My Courses</button>
     <span class="nav-user" id="navUser"></span>
+    <button class="nav-icon-btn" onclick="window.location.href='/my-notes.html?email='+encodeURIComponent(studentEmail)">My Notes</button>
+    <button class="nav-icon-btn" onclick="window.location.href='/my-courses.html?email='+encodeURIComponent(studentEmail)">My Courses</button>
+    <button class="request-btn" onclick="openRequest()">+ Request a Course</button>
     <button class="bell-btn" id="bellBtn">🔔<span class="bell-badge" id="bellBadge"></span></button>
   </div>
 </nav>
