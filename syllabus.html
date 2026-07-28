@@ -346,9 +346,9 @@ let completedLessons = new Set(), progressId = null;
 let bookmarks = new Set(), notes = {}, mcqAnswered = {}, chatHistory = [];
 
 const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('email')) {
-  document.getElementById('loginEmail').value = urlParams.get('email');
-  // Auto-login if email in URL
+const savedEmail = urlParams.get('email') || localStorage.getItem('yge_email') || '';
+if (savedEmail) {
+  document.getElementById('loginEmail').value = savedEmail;
   setTimeout(() => doLogin(), 300);
 }
 
@@ -374,6 +374,7 @@ async function doLogin() {
     const s = data[0];
     if (!['admitted','final_exam_passed','internship_passed','certified','quarterly_passed'].includes(s.admission_status)) { showLoginMsg('Please complete enrollment first.'); btn.disabled = false; btn.textContent = 'Access my course →'; return; }
     studentEmail = email; studentName = s.student_name;
+    localStorage.setItem('yge_email', email);
     document.getElementById('navUser').textContent = studentName;
     document.getElementById('loginWrap').style.display = 'none';
     document.getElementById('mainLayout').style.display = 'grid';
