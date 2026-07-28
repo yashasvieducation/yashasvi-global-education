@@ -197,6 +197,16 @@
   .modal-actions { display: flex; gap: 10px; }
   .copy-toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #c5221f; color: #fff; padding: 8px 18px; border-radius: 8px; font-size: 13px; z-index: 500; display: none; }
 
+  /* Voice Teacher */
+  .voice-bar { background: #fff; border-top: 1px solid #e8eaed; padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+  .voice-btn { display: flex; align-items: center; gap: 6px; border: none; border-radius: 20px; padding: 8px 16px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+  .voice-read { background: #e8f0fe; color: #1a73e8; }
+  .voice-read:hover { background: #1a73e8; color: #fff; }
+  .voice-stop { background: #fce8e6; color: #c5221f; }
+  .voice-stop:hover { background: #c5221f; color: #fff; }
+  .voice-speed { border: 1px solid #dadce0; border-radius: 4px; padding: 6px 10px; font-size: 13px; outline: none; }
+  .voice-status { font-size: 12px; color: #5f6368; flex: 1; }
+
   @media (max-width: 1100px) { .layout { grid-template-columns: 260px 1fr; } .chat-panel { display: none; } }
   @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 16px; } }
 </style>
@@ -315,6 +325,21 @@
       <div class="note-empty">Loading…</div>
     </div>
   </div>
+</div>
+
+<!-- Voice Teacher Bar (Fixed Bottom) -->
+<div id="voiceBar" style="position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:2px solid #1a73e8; padding:10px 20px; display:none; align-items:center; gap:12px; z-index:200; box-shadow:0 -2px 12px rgba(0,0,0,0.08);">
+  <div style="font-size:18px;">🔊</div>
+  <div style="font-size:13px; font-weight:500; color:#1a73e8; font-family:'Google Sans',Arial,sans-serif;">AI Voice Teacher</div>
+  <button class="voice-btn voice-read" id="voicePlayBtn" onclick="toggleVoice()">▶ Read Lesson</button>
+  <button class="voice-btn voice-stop" id="voiceStopBtn" onclick="stopVoice()" style="display:none;">⏹ Stop</button>
+  <select class="voice-speed" id="voiceSpeed" onchange="updateSpeed()">
+    <option value="0.8">🐢 Slow</option>
+    <option value="1" selected>Normal</option>
+    <option value="1.3">🐇 Fast</option>
+  </select>
+  <span class="voice-status" id="voiceStatus">Click "Read Lesson" to hear the lesson content</span>
+  <button onclick="document.getElementById('voiceBar').style.display='none'; stopVoice();" style="background:none; border:none; font-size:18px; cursor:pointer; color:#80868b; margin-left:auto;">✕</button>
 </div>
 
 <!-- Request Modal -->
@@ -468,9 +493,12 @@ function loadLesson(mi, li) {
     <div class="lesson-breadcrumb">${mod.module_title} · Lesson ${li+1} of ${mod.lessons?.length || 0}</div>
     <div class="lesson-title-row">
       <div class="lesson-title">${lesson.title}</div>
-      <button class="bookmark-btn ${isBookmarked?'bookmarked':''}" id="bookmarkBtn" onclick="toggleBookmark('${key}')">
-        ${isBookmarked?'🔖 Saved':'🔖 Save'}
-      </button>
+      <div style="display:flex; gap:8px;">
+        <button onclick="showVoiceBar()" style="background:#e8f0fe; color:#1a73e8; border:none; border-radius:4px; padding:7px 14px; font-size:13px; cursor:pointer; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">🔊 Listen</button>
+        <button class="bookmark-btn ${isBookmarked?'bookmarked':''}" id="bookmarkBtn" onclick="toggleBookmark('${key}')">
+          ${isBookmarked?'🔖 Saved':'🔖 Save'}
+        </button>
+      </div>
     </div>
     <div class="lesson-meta">
       <span>⏱ ${lesson.duration||'15 min'}</span>
@@ -726,6 +754,93 @@ function openCoursesModal() {
 }
 function closeCoursesModal() { document.getElementById('coursesModal').classList.remove('open'); }
 document.getElementById('coursesModal').addEventListener('click', e => { if(e.target===document.getElementById('coursesModal')) closeCoursesModal(); });
+
+// Voice Teacher
+let speechSynth = window.speechSynthesis;
+let currentUtterance = null;
+let isSpeaking = false;
+
+function showVoiceBar() {
+  document.getElementById('voiceBar').style.display = 'flex';
+}
+
+function getPageText() {
+  const lessonBody = document.getElementById('lessonBody');
+  if (!lessonBody) return 'No lesson content found.';
+  return lessonBody.innerText.replace(/[\n]+/g, ' ').trim();
+}
+
+function toggleVoice() {
+  if (isSpeaking) {
+    pauseVoice();
+  } else {
+    readLesson();
+  }
+}
+
+function readLesson() {
+  stopVoice();
+  const text = getPageText();
+  if (!text) return;
+  
+  currentUtterance = new SpeechSynthesisUtterance(text);
+  currentUtterance.rate = parseFloat(document.getElementById('voiceSpeed').value);
+  currentUtterance.pitch = 1;
+  currentUtterance.lang = 'en-IN';
+  
+  // Try to use a good voice
+  const voices = speechSynth.getVoices();
+  const preferred = voices.find(v => v.lang.includes('en') && v.name.includes('Google')) || 
+                    voices.find(v => v.lang.includes('en-IN')) ||
+                    voices.find(v => v.lang.includes('en'));
+  if (preferred) currentUtterance.voice = preferred;
+  
+  currentUtterance.onstart = () => {
+    isSpeaking = true;
+    document.getElementById('voicePlayBtn').textContent = '⏸ Pause';
+    document.getElementById('voiceStopBtn').style.display = 'flex';
+    document.getElementById('voiceStatus').textContent = 'Reading lesson aloud…';
+  };
+  currentUtterance.onend = () => {
+    isSpeaking = false;
+    document.getElementById('voicePlayBtn').textContent = '▶ Read Lesson';
+    document.getElementById('voiceStopBtn').style.display = 'none';
+    document.getElementById('voiceStatus').textContent = 'Lesson reading complete ✓';
+  };
+  currentUtterance.onerror = () => {
+    isSpeaking = false;
+    document.getElementById('voiceStatus').textContent = 'Voice not supported on this browser.';
+  };
+  
+  speechSynth.speak(currentUtterance);
+}
+
+function pauseVoice() {
+  if (speechSynth.speaking) {
+    speechSynth.pause();
+    isSpeaking = false;
+    document.getElementById('voicePlayBtn').textContent = '▶ Resume';
+  } else if (speechSynth.paused) {
+    speechSynth.resume();
+    isSpeaking = true;
+    document.getElementById('voicePlayBtn').textContent = '⏸ Pause';
+  }
+}
+
+function stopVoice() {
+  speechSynth.cancel();
+  isSpeaking = false;
+  if (document.getElementById('voicePlayBtn')) document.getElementById('voicePlayBtn').textContent = '▶ Read Lesson';
+  if (document.getElementById('voiceStopBtn')) document.getElementById('voiceStopBtn').style.display = 'none';
+  if (document.getElementById('voiceStatus')) document.getElementById('voiceStatus').textContent = 'Click "Read Lesson" to hear the lesson content';
+}
+
+function updateSpeed() {
+  if (isSpeaking) { stopVoice(); setTimeout(readLesson, 200); }
+}
+
+// Stop voice when lesson changes
+window.addEventListener('beforeunload', stopVoice);
 
 // Copy Protection
 document.addEventListener('copy',e=>{e.preventDefault();const t=document.getElementById('copyToast');t.style.display='block';setTimeout(()=>t.style.display='none',2500);});
