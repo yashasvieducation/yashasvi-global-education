@@ -11,8 +11,10 @@
   .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
   .nav-logo { text-decoration: none; }
   .nav-center { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; color: #202124; }
-  .nav-back { display: flex; align-items: center; gap: 8px; color: #1a73e8; font-size: 14px; text-decoration: none; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; padding: 8px 16px; border: 1.5px solid #1a73e8; border-radius: 4px; transition: all 0.15s; }
+  .nav { position: relative; }
+  .nav-back { display: flex; align-items: center; gap: 8px; color: #1a73e8; font-size: 14px; text-decoration: none; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; padding: 8px 16px; border: 1.5px solid #1a73e8; border-radius: 4px; transition: all 0.15s; z-index: 1; }
   .nav-back:hover { background: #e8f0fe; }
+  .nav-logo { position: absolute; left: 50%; transform: translateX(-50%); }
   .nav-user { font-size: 13px; font-weight: 500; color: #202124; background: #f1f3f4; border-radius: 100px; padding: 6px 14px; }
   .hero { padding: 40px 24px 28px; max-width: 960px; margin: 0 auto; }
   .hero h1 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #202124; margin-bottom: 6px; }

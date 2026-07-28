@@ -109,8 +109,10 @@
     .nav-logo { font-size: 15px; }
   }
 
-  .nav-back { display: flex; align-items: center; gap: 8px; color: #1a73e8; font-size: 14px; text-decoration: none; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; padding: 8px 16px; border: 1.5px solid #1a73e8; border-radius: 4px; transition: all 0.15s; }
+  .nav { position: relative; }
+  .nav-back { display: flex; align-items: center; gap: 8px; color: #1a73e8; font-size: 14px; text-decoration: none; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; padding: 8px 16px; border: 1.5px solid #1a73e8; border-radius: 4px; transition: all 0.15s; z-index: 1; }
   .nav-back:hover { background: #e8f0fe; }
+  .nav-logo { position: absolute; left: 50%; transform: translateX(-50%); }
 </style>
 </head>
 <body>
