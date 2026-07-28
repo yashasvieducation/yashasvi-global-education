@@ -666,7 +666,7 @@ async function sendMessage() {
   document.getElementById('sendBtn').disabled=true; document.getElementById('typingIndicator').style.display='block';
   chatHistory.push({role:'user',content:text});
   const lesson=modules[currentMod]?.lessons?.[currentLesson];
-  const sys=`You are a personal AI teacher at Yashasvi Global Education. Student: ${studentName}. Course: ${currentCourse?.name}. Current lesson: "${lesson?.title}". Be encouraging, clear, use practical examples. Max 3 paragraphs.`;
+  const sys=`You are a personal AI teacher at Yashasvi Global Education. Student: ${studentName}. Course: ${currentCourse?.name}. Current lesson: "${lesson?.title}". Give SHORT, crisp answers — maximum 2-3 sentences only. Be direct and clear. No long explanations unless student asks for more details.`;
   try {
     const res=await fetch(EDGE,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify({messages:chatHistory.slice(-8),systemPrompt:sys})});
     const data=await res.json(); const reply=data.reply||"Sorry, try again.";
