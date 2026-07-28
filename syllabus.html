@@ -327,20 +327,7 @@
   </div>
 </div>
 
-<!-- Voice Teacher Bar (Fixed Bottom) -->
-<div id="voiceBar" style="position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:2px solid #1a73e8; padding:10px 20px; display:none; align-items:center; gap:12px; z-index:200; box-shadow:0 -2px 12px rgba(0,0,0,0.08);">
-  <div style="font-size:18px;">🔊</div>
-  <div style="font-size:13px; font-weight:500; color:#1a73e8; font-family:'Google Sans',Arial,sans-serif;">AI Voice Teacher</div>
-  <button class="voice-btn voice-read" id="voicePlayBtn" onclick="toggleVoice()">▶ Read Lesson</button>
-  <button class="voice-btn voice-stop" id="voiceStopBtn" onclick="stopVoice()" style="display:none;">⏹ Stop</button>
-  <select class="voice-speed" id="voiceSpeed" onchange="updateSpeed()">
-    <option value="0.8">🐢 Slow</option>
-    <option value="1" selected>Normal</option>
-    <option value="1.3">🐇 Fast</option>
-  </select>
-  <span class="voice-status" id="voiceStatus">Click "Read Lesson" to hear the lesson content</span>
-  <button onclick="document.getElementById('voiceBar').style.display='none'; stopVoice();" style="background:none; border:none; font-size:18px; cursor:pointer; color:#80868b; margin-left:auto;">✕</button>
-</div>
+
 
 <!-- Request Modal -->
 <div class="modal-overlay" id="requestModal">
@@ -494,7 +481,7 @@ function loadLesson(mi, li) {
     <div class="lesson-title-row">
       <div class="lesson-title">${lesson.title}</div>
       <div style="display:flex; gap:8px;">
-        <button onclick="showVoiceBar()" style="background:#e8f0fe; color:#1a73e8; border:none; border-radius:4px; padding:7px 14px; font-size:13px; cursor:pointer; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">🔊 Listen</button>
+        <button onclick="readLesson(this)" id="listenBtn" style="background:#e8f0fe; color:#1a73e8; border:none; border-radius:4px; padding:7px 14px; font-size:13px; cursor:pointer; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">🔊 Listen</button>
         <button class="bookmark-btn ${isBookmarked?'bookmarked':''}" id="bookmarkBtn" onclick="toggleBookmark('${key}')">
           ${isBookmarked?'🔖 Saved':'🔖 Save'}
         </button>
@@ -508,6 +495,20 @@ function loadLesson(mi, li) {
     <div class="lesson-body" id="lessonBody">
       ${lesson.content ? lesson.content.split('\n').filter(p=>p.trim()).map(p=>`<p>${p}</p>`).join('') : '<p>Content loading…</p>'}
       ${lesson.project ? `<div class="project-box"><strong>🛠 Practical Assignment</strong><p>${lesson.project}</p></div>` : ''}
+    </div>
+
+    <!-- Inline Voice Controls -->
+    <div id="voiceControls" style="background:#e8f0fe; border-radius:8px; padding:12px 16px; margin-bottom:16px; display:none; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-size:14px; color:#1a73e8; font-weight:500; font-family:'Google Sans',Arial,sans-serif;">🔊 AI Voice Teacher</span>
+      <button id="voicePlayBtn" onclick="toggleVoice()" style="background:#1a73e8; color:#fff; border:none; border-radius:4px; padding:7px 16px; font-size:13px; cursor:pointer; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">▶ Play</button>
+      <button id="voiceStopBtn" onclick="stopVoice()" style="background:#fce8e6; color:#c5221f; border:none; border-radius:4px; padding:7px 12px; font-size:13px; cursor:pointer; display:none;">⏹ Stop</button>
+      <select id="voiceSpeed" onchange="updateSpeed()" style="border:1px solid #dadce0; border-radius:4px; padding:6px 10px; font-size:13px; outline:none;">
+        <option value="0.8">🐢 Slow</option>
+        <option value="1" selected>Normal</option>
+        <option value="1.3">🐇 Fast</option>
+      </select>
+      <span id="voiceStatus" style="font-size:12px; color:#5f6368; flex:1;">Press Play to hear this lesson</span>
+      <button onclick="document.getElementById('voiceControls').style.display='none'; stopVoice();" style="background:none; border:none; color:#5f6368; cursor:pointer; font-size:16px; padding:4px;">✕</button>
     </div>
 
     <div class="notes-section">
@@ -760,10 +761,6 @@ let speechSynth = window.speechSynthesis;
 let currentUtterance = null;
 let isSpeaking = false;
 
-function showVoiceBar() {
-  document.getElementById('voiceBar').style.display = 'flex';
-}
-
 function getPageText() {
   const lessonBody = document.getElementById('lessonBody');
   if (!lessonBody) return 'No lesson content found.';
@@ -778,7 +775,10 @@ function toggleVoice() {
   }
 }
 
-function readLesson() {
+function readLesson(btn) {
+  // Show inline voice controls
+  const ctrl = document.getElementById('voiceControls');
+  if (ctrl) ctrl.style.display = 'flex';
   stopVoice();
   const text = getPageText();
   if (!text) return;
