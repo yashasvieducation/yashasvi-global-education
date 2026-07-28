@@ -43,7 +43,7 @@
 <body>
 <nav class="nav">
   <div class="nav-left">
-    <a class="back-btn" href="/syllabus.html">← Back to Course</a>
+    <a class="back-btn" id="backBtn" href="/syllabus.html">← Back to Course</a>
     <img src="/logo.svg" alt="YGE" style="height:32px;">
   </div>
   <span class="nav-user" id="navUser"></span>
@@ -65,6 +65,10 @@ const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY };
 
 const urlParams = new URLSearchParams(window.location.search);
 const email = urlParams.get('email') || localStorage.getItem('yge_email') || '';
+if (email) {
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) backBtn.href = '/syllabus.html?email=' + encodeURIComponent(email);
+}
 
 async function loadNotes() {
   if (!email) { document.getElementById('notesArea').innerHTML = '<div class="empty-state"><div class="e-icon">📝</div><h3>Please login first</h3><p><a href="/syllabus.html">Go to course</a></p></div>'; return; }
