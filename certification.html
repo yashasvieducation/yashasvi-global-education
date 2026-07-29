@@ -92,9 +92,38 @@
     .badge-grid { grid-template-columns: 1fr 1fr !important; }
   }
 
-  </style>
+  
+  /* Mobile App UI */
+  .mobile-top-bar { display: none; position: sticky; top: 0; z-index: 200; background: #fff; border-bottom: 1px solid #e8eaed; padding: 10px 20px; text-align: center; }
+  .mobile-bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e8eaed; z-index: 999; padding: 8px 0 12px; box-shadow: 0 -4px 16px rgba(0,0,0,0.08); }
+  .mobile-bottom-nav .bnav-items { display: flex; justify-content: space-around; align-items: center; }
+  .bnav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: #5f6368; font-size: 10px; font-family: 'Google Sans', Arial, sans-serif; padding: 4px 8px; min-width: 52px; }
+  .bnav-item .bi { font-size: 22px; line-height: 1; }
+  .bnav-item.active { color: #1a73e8; }
+  .bnav-center { background: #1a73e8; color: #fff !important; border-radius: 50%; width: 54px; height: 54px; margin-top: -18px; box-shadow: 0 4px 16px rgba(26,115,232,0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; font-weight: 500; text-decoration: none; }
+  .bnav-center .bi { font-size: 22px; }
+  @media (max-width: 768px) {
+    .mobile-top-bar { display: block; }
+    .mobile-bottom-nav { display: block; }
+    .nav { display: none !important; }
+    body { padding-bottom: 80px; }
+  }
+</style>
 </head>
 <body>
+<!-- Mobile Top Bar -->
+<div class="mobile-top-bar"><a href="/"><img src="/logo.svg" alt="YGE" style="height:34px;"></a></div>
+<!-- Mobile Bottom Nav -->
+<div class="mobile-bottom-nav">
+  <div class="bnav-items">
+    <a class="bnav-item" href="/dashboard.html"><span class="bi">🏠</span><span>Home</span></a>
+    <a class="bnav-item" href="/my-courses.html"><span class="bi">📚</span><span>Courses</span></a>
+    <a class="bnav-center" href="/syllabus.html"><span class="bi">📖</span><span>Study</span></a>
+    <a class="bnav-item" href="/profile.html"><span class="bi">👤</span><span>Profile</span></a>
+    <a class="bnav-item" href="/certification.html"><span class="bi">🎓</span><span>Cert</span></a>
+  </div>
+</div>
+
 
 <nav class="nav">
   <a class="nav-back" id="backBtn" href="/dashboard.html">← Back to Dashboard</a>
