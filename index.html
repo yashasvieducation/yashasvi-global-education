@@ -138,6 +138,10 @@
     .nav { padding: 0 16px; }
     .hamburger { display: flex; }
     .nav-links { display: none !important; }
+    .tracks-grid { flex-direction: column !important; gap: 14px !important; }
+    .track-card { min-width: unset !important; padding: 24px 20px !important; }
+    .track-card.popular { transform: none !important; }
+    .track-popular-badge { top: -10px !important; }
     .hero-banner { padding: 24px 20px; flex-direction: column; text-align: center; gap: 16px; }
     .hero-emoji { font-size: 48px; }
     .hero-btns { justify-content: center; }
@@ -186,6 +190,9 @@
 <!-- NAV -->
 <nav class="nav">
   <a class="nav-logo" href="/"><img src="/logo.svg" alt="Yashasvi Global Education" style="height:36px; width:auto; display:block;"></a>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu" id="hamburgerBtn">
+    <span></span><span></span><span></span>
+  </button>
   <div class="nav-links" style="display:flex; align-items:center; gap:16px;">
     <a class="nav-link" href="#how">How it works</a>
     <a class="nav-link" href="/corporate-plans.html">Corporate</a>
