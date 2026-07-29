@@ -8,6 +8,21 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { overflow-x: hidden; max-width: 100%; }
+  .tracks-section { background:#f8f9fa; border-top:1px solid #e8eaed; border-bottom:1px solid #e8eaed; padding:64px 32px; }
+  .tracks-inner { max-width:860px; margin:0 auto; }
+  .section-label { font-size:12px; font-weight:500; color:#1a73e8; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:12px; text-align:center; }
+  .section-title-lg { font-family:'Google Sans',Arial,sans-serif; font-size:36px; font-weight:400; color:#202124; margin-bottom:12px; text-align:center; }
+  .section-sub { font-size:16px; color:#5f6368; margin-bottom:40px; line-height:1.6; text-align:center; max-width:560px; margin-left:auto; margin-right:auto; }
+  .tracks-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .tcard { background:#fff; border:1px solid #e8eaed; border-radius:12px; padding:28px 24px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:0; position:relative; }
+  .tcard-popular { border:2px solid #1a73e8; }
+  .tcard-popular-badge { position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:#1a73e8; color:#fff; border-radius:100px; padding:5px 16px; font-size:12px; font-weight:500; white-space:nowrap; }
+  .tcard-icon { font-size:40px; margin-bottom:14px; margin-top:8px; }
+  .tcard-name { font-family:'Google Sans',Arial,sans-serif; font-size:18px; font-weight:500; margin-bottom:10px; color:#202124; }
+  .tcard-desc { font-size:14px; color:#5f6368; line-height:1.6; margin-bottom:16px; flex:1; }
+  .tcard-badge { font-size:12px; border-radius:100px; padding:4px 14px; display:inline-block; margin-bottom:16px; }
+  .tcard-btn { display:inline-block; background:#1a73e8; color:#fff; text-decoration:none; border-radius:4px; padding:10px 24px; font-size:14px; font-family:'Google Sans',Arial,sans-serif; font-weight:500; transition:background 0.15s; }
+  .tcard-btn:hover { background:#1765cc; }
   body { font-family: 'Roboto', Arial, sans-serif; background: #fff; color: #202124; }
 
   /* NAV */
@@ -139,9 +154,12 @@
     .nav { padding: 0 16px; }
     .hamburger { display: flex; }
     .nav-links { display: none !important; }
-    .tracks-grid { flex-direction: column !important; gap: 14px !important; overflow: hidden !important; }
-    .track-card { min-width: unset !important; width: 100% !important; padding: 24px 20px !important; }
-    .track-card.popular { transform: none !important; margin: 0 !important; }
+    .tracks-section { padding: 40px 16px !important; }
+    .tracks-grid-3 { grid-template-columns: 1fr !important; }
+    .tcard { padding: 24px 20px !important; }
+    .tcard-popular { margin-top: 14px !important; }
+    .section-title-lg { font-size: 26px !important; }
+    .section-sub { font-size: 14px !important; margin-bottom: 24px !important; }
     .track-popular-badge { top: -10px !important; }
     .hero-banner { padding: 24px 20px; flex-direction: column; text-align: center; gap: 16px; }
     .hero-emoji { font-size: 48px; }
@@ -368,36 +386,33 @@
 </div>
 
 <!-- WHO IS THIS FOR -->
-<div style="background:#f8f9fa; border-top:1px solid #e8eaed; border-bottom:1px solid #e8eaed; padding:64px 32px;">
-  <div style="max-width:860px; margin:0 auto;">
-    <div style="font-size:12px; font-weight:500; color:#1a73e8; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:12px; text-align:center;">Who is this for?</div>
-    <div style="font-family:'Google Sans',Arial,sans-serif; font-size:36px; font-weight:400; color:#202124; margin-bottom:12px; text-align:center;">One platform, three tracks</div>
-    <div style="font-size:16px; color:#5f6368; margin-bottom:40px; line-height:1.6; text-align:center; max-width:560px; margin-left:auto; margin-right:auto;">Whether you are a student, a school, or a company — we have a dedicated track built for you.</div>
-    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;">
-      <div style="background:#fff; border:1px solid #e8eaed; border-radius:12px; padding:28px 24px; text-align:center;">
-        <div style="font-size:40px; margin-bottom:14px;">👤</div>
-        <div style="font-family:'Google Sans',Arial,sans-serif; font-size:18px; font-weight:500; margin-bottom:8px;">Individual</div>
-        <div style="font-size:14px; color:#5f6368; line-height:1.6; margin-bottom:20px;">Apply for free, take the AI entrance exam, and get your personalised course. Our AI teacher guides you every step of the way.</div>
-        <div style="font-size:12px; background:#e6f4ea; color:#137333; border-radius:100px; padding:4px 14px; display:inline-block; margin-bottom:16px;">Free to apply · Merit-based</div>
-        <br>
-        <a href="/admission-form.html" style="display:inline-block; background:#1a73e8; color:#fff; text-decoration:none; border-radius:4px; padding:10px 24px; font-size:14px; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">Apply now →</a>
+<div class="tracks-section">
+  <div class="tracks-inner">
+    <div class="section-label">Who is this for?</div>
+    <div class="section-title-lg">One platform, three tracks</div>
+    <div class="section-sub">Whether you are a student, a school, or a company — we have a dedicated track built for you.</div>
+    <div class="tracks-grid-3">
+      <div class="tcard">
+        <div class="tcard-icon">👤</div>
+        <div class="tcard-name">Individual</div>
+        <div class="tcard-desc">Apply for free, take the AI entrance exam, and get your personalised course. Our AI teacher guides you every step of the way.</div>
+        <span class="tcard-badge" style="background:#e6f4ea; color:#137333;">Free to apply · Merit-based</span>
+        <a href="/admission-form.html" class="tcard-btn">Apply now →</a>
       </div>
-      <div style="background:#fff; border:2px solid #1a73e8; border-radius:12px; padding:28px 24px; text-align:center; position:relative;">
-        <div style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:#1a73e8; color:#fff; border-radius:100px; padding:4px 16px; font-size:12px; font-weight:500; white-space:nowrap;">Most Popular</div>
-        <div style="font-size:40px; margin-bottom:14px;">🏫</div>
-        <div style="font-family:'Google Sans',Arial,sans-serif; font-size:18px; font-weight:500; margin-bottom:8px;">School / College</div>
-        <div style="font-size:14px; color:#5f6368; line-height:1.6; margin-bottom:20px;">Partner with us to give your students access to AI-powered courses and globally verified certifications — completely free for students.</div>
-        <div style="font-size:12px; background:#e6f4ea; color:#137333; border-radius:100px; padding:4px 14px; display:inline-block; margin-bottom:16px;">Free for students</div>
-        <br>
-        <a href="/institution-register.html" style="display:inline-block; background:#1a73e8; color:#fff; text-decoration:none; border-radius:4px; padding:10px 24px; font-size:14px; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">Partner with us →</a>
+      <div class="tcard tcard-popular">
+        <div class="tcard-popular-badge">⭐ Most Popular</div>
+        <div class="tcard-icon">🏫</div>
+        <div class="tcard-name">School / College</div>
+        <div class="tcard-desc">Partner with us to give your students access to AI-powered courses and globally verified certifications — completely free for students.</div>
+        <span class="tcard-badge" style="background:#e6f4ea; color:#137333;">Free for students</span>
+        <a href="/institution-register.html" class="tcard-btn">Partner with us →</a>
       </div>
-      <div style="background:#fff; border:1px solid #e8eaed; border-radius:12px; padding:28px 24px; text-align:center;">
-        <div style="font-size:40px; margin-bottom:14px;">🏢</div>
-        <div style="font-family:'Google Sans',Arial,sans-serif; font-size:18px; font-weight:500; margin-bottom:8px;">Corporate</div>
-        <div style="font-size:14px; color:#5f6368; line-height:1.6; margin-bottom:20px;">Upskill your team with AI-generated courses, batch management, and our unique Dynamic Seat System — pay once, train all year.</div>
-        <div style="font-size:12px; background:#e8f0fe; color:#1a73e8; border-radius:100px; padding:4px 14px; display:inline-block; margin-bottom:16px;">From $99/year · Annual plan</div>
-        <br>
-        <a href="/corporate-plans.html" style="display:inline-block; background:#1a73e8; color:#fff; text-decoration:none; border-radius:4px; padding:10px 24px; font-size:14px; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">View plans →</a>
+      <div class="tcard">
+        <div class="tcard-icon">🏢</div>
+        <div class="tcard-name">Corporate</div>
+        <div class="tcard-desc">Upskill your team with AI-generated courses, batch management, and our unique Dynamic Seat System — pay once, train all year.</div>
+        <span class="tcard-badge" style="background:#e8f0fe; color:#1a73e8;">From $99/year · Annual plan</span>
+        <a href="/corporate-plans.html" class="tcard-btn">View plans →</a>
       </div>
     </div>
   </div>
