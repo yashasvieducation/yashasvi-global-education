@@ -209,6 +209,53 @@
 
   @media (max-width: 1100px) { .layout { grid-template-columns: 260px 1fr; } .chat-panel { display: none; } }
   @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 16px; } }
+
+  /* ===== GLOBAL MOBILE RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .nav { padding: 0 14px !important; height: 56px !important; }
+    .hero-banner { padding: 24px 20px !important; flex-direction: column !important; gap: 16px !important; text-align: center; }
+    .hero-text h2 { font-size: 20px !important; }
+    .hero-emoji { font-size: 48px !important; }
+    .hero-btns { justify-content: center; }
+    .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+    .main-grid { grid-template-columns: 1fr !important; }
+    .quick-grid { grid-template-columns: 1fr 1fr !important; }
+    .grid-2 { grid-template-columns: 1fr !important; }
+    .layout { grid-template-columns: 1fr !important; }
+    .sidebar { display: none !important; }
+    .chat-panel { display: none !important; }
+    .field-row { grid-template-columns: 1fr !important; }
+    .plans-grid { grid-template-columns: 1fr !important; }
+    .type-grid { grid-template-columns: 1fr !important; }
+    .difficulty-grid { grid-template-columns: 1fr !important; }
+    .score-grid { grid-template-columns: 1fr !important; }
+    .exam-info-grid { grid-template-columns: 1fr !important; }
+    .form-row { grid-template-columns: 1fr !important; }
+    .badges-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    .notes-grid { grid-template-columns: 1fr !important; }
+    .courses-grid { grid-template-columns: 1fr !important; }
+    .cert-actions { flex-direction: column !important; }
+    .profile-header { flex-direction: column !important; align-items: center !important; text-align: center !important; }
+    .my-course-card { flex-direction: column !important; }
+    .renewal-section { flex-direction: column !important; }
+    .wrap, .form-wrap { padding-left: 16px !important; padding-right: 16px !important; }
+    #dashWrap { padding: 16px 14px 40px !important; }
+    .hero { padding: 28px 16px 20px !important; }
+    .hero h1 { font-size: 24px !important; }
+    table { font-size: 12px !important; display: block; overflow-x: auto; }
+    .card { padding: 16px !important; }
+    .stat-num { font-size: 22px !important; }
+    .btn-hero, .btn-hero-outline { padding: 9px 16px !important; font-size: 13px !important; }
+    #loginWrap { padding: 24px 20px !important; margin: 20px auto !important; }
+    .quick-link { padding: 11px 12px !important; font-size: 13px !important; }
+  }
+  @media (max-width: 480px) {
+    .hero-text h2 { font-size: 18px !important; }
+    .stat-num { font-size: 20px !important; }
+    .hero-btns { flex-direction: column !important; align-items: stretch !important; }
+  }
+  /* ===== END MOBILE ===== */
+
 </style>
 </head>
 <body>

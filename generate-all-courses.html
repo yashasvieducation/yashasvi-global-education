@@ -27,6 +27,50 @@
   .log { background: #202124; color: #e8eaed; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 13px; line-height: 1.6; max-height: 200px; overflow-y: auto; display: none; margin-top: 16px; }
   .progress-bar-wrap { background: #f1f3f4; border-radius: 100px; height: 8px; margin-bottom: 20px; }
   .progress-bar { background: #1a73e8; height: 8px; border-radius: 100px; transition: width 0.4s; width: 0%; }
+
+  /* ===== MOBILE RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .nav { padding: 0 16px; }
+    .hero-banner { padding: 24px 20px; flex-direction: column; text-align: center; gap: 16px; }
+    .hero-emoji { font-size: 48px; }
+    .hero-btns { justify-content: center; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .main-grid { grid-template-columns: 1fr; }
+    .quick-grid { grid-template-columns: 1fr 1fr; }
+    .layout { grid-template-columns: 1fr !important; }
+    .sidebar { display: none !important; }
+    .chat-panel { display: none !important; }
+    .plans-grid { grid-template-columns: 1fr !important; }
+    .type-grid { grid-template-columns: 1fr !important; }
+    .field-row { grid-template-columns: 1fr !important; }
+    .difficulty-grid { grid-template-columns: 1fr !important; }
+    .score-grid { grid-template-columns: 1fr !important; }
+    .exam-info-grid { grid-template-columns: 1fr !important; }
+    .grid-2 { grid-template-columns: 1fr !important; }
+    .badges-grid { grid-template-columns: 1fr 1fr 1fr !important; }
+    .form-row { grid-template-columns: 1fr !important; }
+    .cert-actions { flex-direction: column !important; }
+    .my-course-card { flex-direction: column !important; }
+    .hero h1 { font-size: 26px !important; }
+    .wrap, .form-wrap { padding: 0 16px 60px !important; }
+    .main { padding: 16px !important; }
+    .seat-flow { grid-template-columns: 1fr 1fr !important; }
+    .notes-grid { grid-template-columns: 1fr !important; }
+    .courses-grid { grid-template-columns: 1fr !important; }
+    .profile-header { flex-direction: column !important; text-align: center !important; }
+    table { font-size: 12px !important; }
+    th, td { padding: 8px !important; }
+    #certificate { transform: scale(0.5); transform-origin: top left; width: 200% !important; }
+    .nav-name { display: none; }
+    .unique-banner { flex-direction: column !important; }
+  }
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr 1fr !important; }
+    .quick-grid { grid-template-columns: 1fr !important; }
+    .hero-text h2 { font-size: 22px !important; }
+    .stat-num { font-size: 22px !important; }
+    .badge-grid { grid-template-columns: 1fr 1fr !important; }
+  }
 </style>
 </head>
 <body>

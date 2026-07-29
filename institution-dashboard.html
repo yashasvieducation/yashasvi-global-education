@@ -89,55 +89,52 @@
   .notice.blue { background: #e8f0fe; color: #1a73e8; }
   .notice span { font-size: 16px; flex-shrink: 0; }
 
+  
   /* ===== MOBILE RESPONSIVE ===== */
   @media (max-width: 768px) {
     .nav { padding: 0 16px; }
-    .nav-links { display: none; }
-    .hero { padding: 32px 16px 24px; }
-    .hero h1 { font-size: 26px !important; }
-    .hero p { font-size: 14px !important; }
-    .wrap, .form-wrap { padding: 0 16px 60px !important; }
-    .field-row { grid-template-columns: 1fr !important; }
-    .stats-grid { grid-template-columns: 1fr 1fr !important; }
+    .hero-banner { padding: 24px 20px; flex-direction: column; text-align: center; gap: 16px; }
+    .hero-emoji { font-size: 48px; }
+    .hero-btns { justify-content: center; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .main-grid { grid-template-columns: 1fr; }
+    .quick-grid { grid-template-columns: 1fr 1fr; }
     .layout { grid-template-columns: 1fr !important; }
     .sidebar { display: none !important; }
     .chat-panel { display: none !important; }
-    .dash-grid { grid-template-columns: 1fr !important; }
     .plans-grid { grid-template-columns: 1fr !important; }
     .type-grid { grid-template-columns: 1fr !important; }
+    .field-row { grid-template-columns: 1fr !important; }
     .difficulty-grid { grid-template-columns: 1fr !important; }
-    .attempts-grid { grid-template-columns: 1fr !important; }
     .score-grid { grid-template-columns: 1fr !important; }
     .exam-info-grid { grid-template-columns: 1fr !important; }
-    .detail-grid { grid-template-columns: 1fr !important; }
-    .seat-flow { grid-template-columns: 1fr 1fr !important; }
+    .grid-2 { grid-template-columns: 1fr !important; }
+    .badges-grid { grid-template-columns: 1fr 1fr 1fr !important; }
     .form-row { grid-template-columns: 1fr !important; }
-    .quick-links { grid-template-columns: 1fr 1fr !important; }
-    .course-cards { grid-template-columns: 1fr !important; }
-    .register-links { gap: 8px; }
-    .login-card { padding: 28px 20px !important; }
+    .cert-actions { flex-direction: column !important; }
+    .my-course-card { flex-direction: column !important; }
+    .hero h1 { font-size: 26px !important; }
+    .wrap, .form-wrap { padding: 0 16px 60px !important; }
+    .main { padding: 16px !important; }
+    .seat-flow { grid-template-columns: 1fr 1fr !important; }
+    .notes-grid { grid-template-columns: 1fr !important; }
+    .courses-grid { grid-template-columns: 1fr !important; }
+    .profile-header { flex-direction: column !important; text-align: center !important; }
     table { font-size: 12px !important; }
-    th, td { padding: 8px 10px !important; }
-    .btn-hero, .btn-hero-outline { padding: 12px 20px !important; font-size: 14px !important; }
-    .hero-btns { flex-direction: column; align-items: center; }
-    .unique-banner { flex-direction: column; }
-    .renewal-section { flex-direction: column; }
-    .cert-actions { flex-direction: column; align-items: stretch; }
-    .cert-actions a, .cert-actions button { text-align: center; }
-    #certificate { width: 100% !important; height: auto !important; }
-    .referral-code-card { flex-direction: column; }
-    .request-card { flex-direction: column; }
-    .chat-input-wrap { padding: 10px; }
-    .admin-panel .layout { grid-template-columns: 1fr !important; }
+    th, td { padding: 8px !important; }
+    #certificate { transform: scale(0.5); transform-origin: top left; width: 200% !important; }
+    .nav-name { display: none; }
+    .unique-banner { flex-direction: column !important; }
   }
   @media (max-width: 480px) {
-    .hero h1 { font-size: 22px !important; }
+    .stats-grid { grid-template-columns: 1fr 1fr !important; }
+    .quick-grid { grid-template-columns: 1fr !important; }
+    .hero-text h2 { font-size: 22px !important; }
     .stat-num { font-size: 22px !important; }
-    .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-    .quick-links { grid-template-columns: 1fr !important; }
-    .nav-logo { font-size: 15px; }
+    .badge-grid { grid-template-columns: 1fr 1fr !important; }
   }
-</style>
+
+  </style>
 </head>
 <body>
 
