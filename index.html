@@ -43,7 +43,7 @@
   .tcard { background:#fff; border:1px solid #e8eaed; border-radius:12px; padding:28px 24px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:0; position:relative; }
   .tcard-popular { border:2px solid #1a73e8; }
   .tcard-popular-badge { position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:#1a73e8; color:#fff; border-radius:100px; padding:5px 16px; font-size:12px; font-weight:500; white-space:nowrap; }
-  .tcard-icon { font-size:40px; margin-bottom:14px; margin-top:8px; }
+  .tcard-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; margin-top: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
   .tcard-name { font-family:'Google Sans',Arial,sans-serif; font-size:18px; font-weight:500; margin-bottom:10px; color:#202124; }
   .tcard-desc { font-size:14px; color:#5f6368; line-height:1.6; margin-bottom:16px; flex:1; }
   .tcard-badge { font-size:12px; border-radius:100px; padding:4px 14px; display:inline-block; margin-bottom:16px; }
@@ -105,7 +105,7 @@
   @media (max-width: 700px) { .steps-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 36px; } }
   .step-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; }
   .step-num { font-size: 11px; font-weight: 500; color: #1a73e8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-  .step-icon { font-size: 28px; margin-bottom: 10px; }
+  .step-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
   .step-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 6px; }
   .step-desc { font-size: 13px; color: #5f6368; line-height: 1.6; }
 
@@ -337,37 +337,37 @@
   <div class="steps-grid">
     <div class="step-card">
       <div class="step-num">Step 1</div>
-      <div class="step-icon">📋</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#4285f4,#1a73e8)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
       <div class="step-title">Apply for free</div>
       <div class="step-desc">Fill the admission form and choose your department. No fees, no documents needed.</div>
     </div>
     <div class="step-card">
       <div class="step-num">Step 2</div>
-      <div class="step-icon">🧠</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#9c27b0,#7b1fa2)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0112 4.5v15a2.5 2.5 0 01-4.96-.44 2.5 2.5 0 01-2.96-3.08 3 3 0 01-.34-5.58 2.5 2.5 0 013.77-3.41z"/><path d="M14.5 2A2.5 2.5 0 0112 4.5v15a2.5 2.5 0 004.96-.44 2.5 2.5 0 002.96-3.08 3 3 0 00.34-5.58 2.5 2.5 0 00-3.77-3.41z"/></svg></div>
       <div class="step-title">IQ Profiling</div>
       <div class="step-desc">A short game that helps us understand how you think. No pass/fail — just personalisation.</div>
     </div>
     <div class="step-card">
       <div class="step-num">Step 3</div>
-      <div class="step-icon">✏️</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#ff9800,#f57c00)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
       <div class="step-title">Entrance Exam</div>
       <div class="step-desc">MCQ + Subjective exam, AI graded. Score 70% or above to qualify for admission.</div>
     </div>
     <div class="step-card">
       <div class="step-num">Step 4</div>
-      <div class="step-icon">✅</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#34a853,#0d9e4f)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="step-title">Guardian Approval + Fee</div>
       <div class="step-desc">Parent verifies enrollment. Pay $99 USDT course fee to confirm your seat.</div>
     </div>
     <div class="step-card">
       <div class="step-num">Step 5</div>
-      <div class="step-icon">🎓</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#00bcd4,#0097a7)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
       <div class="step-title">Learn with AI Teacher</div>
       <div class="step-desc">1 student — 1 personal AI teacher. Study at your pace. Quarterly + Final exams.</div>
     </div>
     <div class="step-card">
       <div class="step-num">Step 6</div>
-      <div class="step-icon">🏆</div>
+      <div class="step-icon" style="background:linear-gradient(135deg,#ea4335,#c5221f)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
       <div class="step-title">Internship + Certification</div>
       <div class="step-desc">Build a real business plan. Get AI evaluated. Earn a globally verifiable certificate.</div>
     </div>
@@ -481,7 +481,7 @@
     <div class="section-sub">Whether you are a student, a school, or a company — we have a dedicated track built for you.</div>
     <div class="tracks-grid-3">
       <div class="tcard">
-        <div class="tcard-icon">👤</div>
+        <div class="tcard-icon" style="background:linear-gradient(135deg,#4285f4,#1a73e8)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <div class="tcard-name">Individual</div>
         <div class="tcard-desc">Apply for free, take the AI entrance exam, and get your personalised course. Our AI teacher guides you every step of the way.</div>
         <span class="tcard-badge" style="background:#e6f4ea; color:#137333;">Free to apply · Merit-based</span>
@@ -489,14 +489,14 @@
       </div>
       <div class="tcard tcard-popular">
         <div class="tcard-popular-badge">⭐ Most Popular</div>
-        <div class="tcard-icon">🏫</div>
+        <div class="tcard-icon" style="background:linear-gradient(135deg,#34a853,#0d9e4f)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
         <div class="tcard-name">School / College</div>
         <div class="tcard-desc">Partner with us to give your students access to AI-powered courses and globally verified certifications — completely free for students.</div>
         <span class="tcard-badge" style="background:#e6f4ea; color:#137333;">Free for students</span>
         <a href="/institution-register.html" class="tcard-btn">Partner with us →</a>
       </div>
       <div class="tcard">
-        <div class="tcard-icon">🏢</div>
+        <div class="tcard-icon" style="background:linear-gradient(135deg,#607d8b,#455a64)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
         <div class="tcard-name">Corporate</div>
         <div class="tcard-desc">Upskill your team with AI-generated courses, batch management, and our unique Dynamic Seat System — pay once, train all year.</div>
         <span class="tcard-badge" style="background:#e8f0fe; color:#1a73e8;">From $99/year · Annual plan</span>
@@ -556,13 +556,13 @@
     </div>
     <div style="text-align:center;margin-top:32px;">
       <div style="display:inline-flex;align-items:center;gap:24px;background:#f8f9fa;border-radius:100px;padding:14px 28px;flex-wrap:wrap;justify-content:center;">
-        <span style="font-size:14px;color:#5f6368;">📚 43 Courses</span>
+        <span style="font-size:14px;color:#5f6368;display:flex;align-items:center;gap:6px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> 43 Courses</span>
         <span style="color:#dadce0">|</span>
-        <span style="font-size:14px;color:#5f6368;">🎓 8th to 12th + Open</span>
+        <span style="font-size:14px;color:#5f6368;display:flex;align-items:center;gap:6px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> 8th to 12th + Open</span>
         <span style="color:#dadce0">|</span>
-        <span style="font-size:14px;color:#5f6368;">🌍 Globally Verified</span>
+        <span style="font-size:14px;color:#5f6368;display:flex;align-items:center;gap:6px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> Globally Verified</span>
         <span style="color:#dadce0">|</span>
-        <span style="font-size:14px;color:#5f6368;">🆓 Free to Apply</span>
+        <span style="font-size:14px;color:#5f6368;display:flex;align-items:center;gap:6px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Free to Apply</span>
       </div>
     </div>
   </div>
@@ -582,11 +582,11 @@
         </div>
         <div style="display:flex; gap:12px; align-items:flex-start;">
           <span style="font-size:20px;">🏢</span>
-          <div><strong style="font-size:14px;">Corporate Teams</strong><div style="font-size:13px; color:#5f6368;">Annual plans with revolving seats. Batch assignments. Progress reports. Certificates.</div></div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="display:inline-flex;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#607d8b,#455a64);align-items:center;justify-content:center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></span><strong style="font-size:14px;">Corporate Teams</strong></div><div<div style="font-size:13px; color:#5f6368;">Annual plans with revolving seats. Batch assignments. Progress reports. Certificates.</div></div>
         </div>
         <div style="display:flex; gap:12px; align-items:flex-start;">
           <span style="font-size:20px;">⚡</span>
-          <div><strong style="font-size:14px;">Quick Setup</strong><div style="font-size:13px; color:#5f6368;">Register in 5 minutes. Verified within 24-48 hours. Dashboard ready immediately.</div></div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="display:inline-flex;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#ff9800,#f57c00);align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><strong style="font-size:14px;">Quick Setup</strong></div><div<div style="font-size:13px; color:#5f6368;">Register in 5 minutes. Verified within 24-48 hours. Dashboard ready immediately.</div></div>
         </div>
       </div>
       <a href="/institution-register.html" style="display:inline-block; background:#1a73e8; color:#fff; text-decoration:none; border-radius:4px; padding:13px 32px; font-size:15px; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">Register your institution →</a>
