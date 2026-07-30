@@ -239,14 +239,19 @@ const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZi
 const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
 
 const urlParams = new URLSearchParams(window.location.search);
-const email = urlParams.get('email') || '';
+const email = urlParams.get('email') || localStorage.getItem('yge_email') || '';
+// Update back button with email
+if (email) {
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) backBtn.href = '/syllabus.html?email=' + encodeURIComponent(email);
+}
 let allCourses = [], currentFilter = 'all', enrolledCourse = '', completedCount = 0, totalLessons = 0;
 
 const deptIcons = { Technology: '💻', School: '📚', Business: '🚀', Design: '🎨', Corporate: '🏢', Other: '📖' };
 
 async function init() {
   if (!email) return;
-  if (email) { document.getElementById('navUser').textContent = email.split('@')[0]; }
+  if (email) { const nu = document.getElementById('navUser'); if(nu) nu.textContent = email.split('@')[0]; }
   await Promise.all([loadMyCourse(), loadAllCourses()]);
 }
 
