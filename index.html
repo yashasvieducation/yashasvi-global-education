@@ -50,9 +50,10 @@
   .tcard-btn { display:inline-block; background:#1a73e8; color:#fff; text-decoration:none; border-radius:4px; padding:10px 24px; font-size:14px; font-family:'Google Sans',Arial,sans-serif; font-weight:500; transition:background 0.15s; }
   .tcard-btn:hover { background:#1765cc; }
   .features-grid-main { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .feat-card { padding: 20px; border: 1px solid #e8eaed; border-radius: 12px; transition: all 0.2s; }
+  .feat-card { padding: 22px; border: 1px solid #e8eaed; border-radius: 16px; transition: all 0.2s; background: #fff; }
   .feat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
-  .feat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px; }
+  .feat-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.10); }
+  .feat-icon svg { filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)); }
   .feat-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #202124; margin-bottom: 6px; }
   .feat-desc { font-size: 13px; color: #5f6368; line-height: 1.5; }
   @media (max-width: 768px) { .features-grid-main { grid-template-columns: 1fr 1fr !important; } }
@@ -136,7 +137,7 @@
   .dept-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
   @media (max-width: 600px) { .dept-grid { grid-template-columns: 1fr; } }
   .dept-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; display: flex; align-items: flex-start; gap: 14px; }
-  .dept-icon { font-size: 28px; flex-shrink: 0; }
+  .dept-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.10); }
   .dept-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 15px; font-weight: 500; margin-bottom: 4px; }
   .dept-desc { font-size: 13px; color: #5f6368; line-height: 1.5; }
   .dept-badge { display: inline-block; background: #e6f4ea; color: #137333; border-radius: 100px; padding: 2px 10px; font-size: 11px; font-weight: 500; margin-top: 6px; }
@@ -381,7 +382,7 @@
   <div class="section-sub">From 8th Standard to advanced professional courses — find your path.</div>
   <div class="dept-grid">
     <div class="dept-card">
-      <div class="dept-icon">📚</div>
+      <div class="dept-icon" style="background:linear-gradient(135deg, #34a853, #0d9e4f)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
       <div>
         <div class="dept-name">School Track</div>
         <div class="dept-desc">Foundation courses for 8th–12th students. Math, Science, English, Digital Literacy and more.</div>
@@ -389,7 +390,7 @@
       </div>
     </div>
     <div class="dept-card">
-      <div class="dept-icon">💻</div>
+      <div class="dept-icon" style="background:linear-gradient(135deg, #4285f4, #1a73e8)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
       <div>
         <div class="dept-name">Technology</div>
         <div class="dept-desc">Coding, AI & ML, Cybersecurity, Cloud Computing, Robotics and more.</div>
@@ -397,7 +398,7 @@
       </div>
     </div>
     <div class="dept-card">
-      <div class="dept-icon">🚀</div>
+      <div class="dept-icon" style="background:linear-gradient(135deg, #ff9800, #f57c00)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
       <div>
         <div class="dept-name">Business</div>
         <div class="dept-desc">Entrepreneurship, Commerce & Finance, Business Management and Startup courses.</div>
@@ -405,7 +406,7 @@
       </div>
     </div>
     <div class="dept-card">
-      <div class="dept-icon">🎨</div>
+      <div class="dept-icon" style="background:linear-gradient(135deg, #9c27b0, #7b1fa2)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>
       <div>
         <div class="dept-name">Design</div>
         <div class="dept-desc">Art Fundamentals, UI/UX, Graphic Design, Branding and Creative Tech.</div>
@@ -413,7 +414,7 @@
       </div>
     </div>
     <div class="dept-card">
-      <div class="dept-icon">🏢</div>
+      <div class="dept-icon" style="background:linear-gradient(135deg, #607d8b, #455a64)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
       <div>
         <div class="dept-name">Corporate</div>
         <div class="dept-desc">Leadership, Team Management, Professional Skills and Business Operations for teams.</div>
@@ -513,42 +514,42 @@
     <div style="font-size:15px;color:#5f6368;margin-bottom:40px;text-align:center;">43 courses. AI-powered. Globally verified certificates.</div>
     <div class="features-grid-main">
       <div class="feat-card">
-        <div class="feat-icon" style="background:#e8f0fe">🤖</div>
+        <div class="feat-icon" style="background:linear-gradient(135deg, #4285f4, #1a73e8)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="15" x2="8" y2="15"/><line x1="16" y1="15" x2="16" y2="15"/></svg></div>
         <div class="feat-name">Personal AI Teacher</div>
         <div class="feat-desc">1-on-1 AI teacher for every student. Ask anything, get instant answers.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon" style="background:#e6f4ea">🔊</div>
+        <div class="feat-icon" style="background:linear-gradient(135deg, #34a853, #0d9e4f)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg></div>
         <div class="feat-name">Voice Teacher</div>
         <div class="feat-desc">Lessons read aloud for you. Perfect for visual learners and accessibility.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon" style="background:#fef7e0">💻</div>
+        <div class="feat-icon" style="background:linear-gradient(135deg, #f29900, #e37400)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
         <div class="feat-name">Live Code Editor</div>
         <div class="feat-desc">Write and run code directly in the browser. JavaScript, HTML and more.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon" style="background:#fce8e6">🎥</div>
+        <div class="feat-icon" style="background:linear-gradient(135deg, #ea4335, #c5221f)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
         <div class="feat-name">Video Resources</div>
         <div class="feat-desc">Curated YouTube videos from MIT, Stanford, Khan Academy and more.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon" style="background:#f3e8fd">📄</div>
+        <div class="feat-icon" style="background:linear-gradient(135deg, #9c27b0, #7b1fa2)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
         <div class="feat-name">PDF & Docs</div>
         <div class="feat-desc">Official documentation, NCERT books, and professional guides.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon" style="background:#e8f0fe">📝</div>
+        <div class="feat-icon" style="background:linear-gradient(135deg, #00bcd4, #0097a7)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
         <div class="feat-name">Notes & Bookmarks</div>
         <div class="feat-desc">Save notes per lesson. Bookmark important lessons. Review anytime.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon" style="background:#e6f4ea">🏆</div>
+        <div class="feat-icon" style="background:linear-gradient(135deg, #ff9800, #f57c00)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
         <div class="feat-name">Blockchain Certificate</div>
         <div class="feat-desc">Globally verified, tamper-proof certificate with unique blockchain ID.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon" style="background:#fef7e0">📱</div>
+        <div class="feat-icon" style="background:linear-gradient(135deg, #607d8b, #455a64)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
         <div class="feat-name">Mobile App UI</div>
         <div class="feat-desc">Full mobile experience with bottom navigation. Learn anywhere.</div>
       </div>
