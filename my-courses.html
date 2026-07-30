@@ -67,6 +67,36 @@
   .add-btn.added { background: #34a853; cursor: default; }
   .no-results { text-align: center; padding: 40px; color: #5f6368; }
   .no-results .nr-icon { font-size: 36px; margin-bottom: 12px; }
+  /* Course Preview Modal */
+  .course-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .course-modal-overlay.open { display: flex; }
+  .course-modal { background: #fff; border-radius: 16px; width: 100%; max-width: 540px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+  .course-modal-header { padding: 24px 24px 0; }
+  .course-modal-icon { font-size: 40px; margin-bottom: 12px; }
+  .course-modal-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 500; color: #202124; margin-bottom: 8px; }
+  .course-modal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .course-modal-tag { background: #f1f3f4; color: #5f6368; border-radius: 100px; padding: 4px 12px; font-size: 12px; font-weight: 500; }
+  .course-modal-tag.blue { background: #e8f0fe; color: #1a73e8; }
+  .course-modal-tag.green { background: #e6f4ea; color: #137333; }
+  .course-modal-tag.red { background: #fce8e6; color: #c5221f; }
+  .course-modal-desc { font-size: 14px; color: #5f6368; line-height: 1.6; padding: 0 24px; margin-bottom: 16px; }
+  .course-modal-divider { height: 1px; background: #f1f3f4; margin: 0 24px; }
+  .course-modal-section { padding: 16px 24px; }
+  .course-modal-section-title { font-size: 13px; font-weight: 500; color: #202124; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
+  .module-preview-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f8f9fa; }
+  .module-preview-item:last-child { border-bottom: none; }
+  .module-num { width: 28px; height: 28px; border-radius: 50%; background: #e8f0fe; color: #1a73e8; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+  .module-name { font-size: 14px; color: #202124; flex: 1; }
+  .module-lessons-count { font-size: 12px; color: #80868b; }
+  .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .feature-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5f6368; }
+  .feature-icon { font-size: 16px; }
+  .course-modal-footer { padding: 16px 24px 24px; display: flex; gap: 10px; }
+  .btn-enroll { flex: 1; background: #1a73e8; color: #fff; border: none; border-radius: 8px; padding: 13px; font-size: 15px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .btn-enroll:hover { background: #1765cc; }
+  .btn-enroll.enrolled { background: #34a853; cursor: default; }
+  .btn-close-modal { background: #f1f3f4; color: #202124; border: none; border-radius: 8px; padding: 13px 20px; font-size: 15px; cursor: pointer; }
+
   .loading { text-align: center; padding: 40px; color: #5f6368; }
   .spin { font-size: 28px; animation: spin 1s linear infinite; display: block; margin-bottom: 8px; }
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -335,7 +365,7 @@ function renderCourses() {
     const diffColor = c.difficulty === 'Beginner' ? '#137333' : c.difficulty === 'Intermediate' ? '#b06000' : '#c5221f';
     const diffBg = c.difficulty === 'Beginner' ? '#e6f4ea' : c.difficulty === 'Intermediate' ? '#fef7e0' : '#fce8e6';
     const levelBadge = c.level && c.level !== 'Any' ? `<span style="background:#e8f0fe;color:#1a73e8;border-radius:100px;padding:2px 8px;font-size:11px;font-weight:500;">🎒 ${c.level} Std</span>` : `<span style="background:#f1f3f4;color:#5f6368;border-radius:100px;padding:2px 8px;font-size:11px;">🌐 Open to All</span>`;
-    return `<div class="course-card ${isEnrolled?'enrolled':''}">
+    return `<div class="course-card ${isEnrolled?'enrolled':''}" onclick="openCoursePreview('${c.id}')" style="cursor:pointer;">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
         <div class="course-icon" style="margin:0;">${icon}</div>
         ${levelBadge}
@@ -350,8 +380,8 @@ function renderCourses() {
       <div class="course-footer">
         <span class="course-badge ${isEnrolled?'badge-enrolled':c.is_free?'badge-free':'badge-paid'}">${isEnrolled?'✅ Enrolled':c.is_free?'Free':'$99 USDT'}</span>
         ${isEnrolled
-          ? `<a class="add-btn added" href="/syllabus.html?email=${encodeURIComponent(email)}" style="text-decoration:none;">Continue →</a>`
-          : `<button class="add-btn" onclick="addCourse('${c.name}', this)">+ Add</button>`}
+          ? `<a class="add-btn added" href="/syllabus.html?email=${encodeURIComponent(email)}" style="text-decoration:none;" onclick="event.stopPropagation()">Continue</a>`
+          : `<button class="add-btn" onclick="event.stopPropagation();addCourse('${c.name}', this)">+ Add</button>`}
       </div>
     </div>`;
   }).join('') + '</div>';
@@ -414,10 +444,103 @@ async function requestCourse(name) {
 
 init();
 
+async function openCoursePreview(courseId) {
+  document.getElementById('courseModal').classList.add('open');
+  document.getElementById('courseModalContent').innerHTML = '<div class="loading" style="padding:40px;text-align:center">Loading course details...</div>';
+
+  try {
+    // Get course details
+    const course = allCourses.find(c => c.id === courseId);
+    if (!course) return;
+
+    // Get modules
+    const mRes = await fetch(BASE + "/course_modules?select=module_title,lessons&course_id=eq." + courseId + "&order=module_index.asc", { headers: HEADERS });
+    const modules = await mRes.json();
+    const isEnrolled = course.name === enrolledCourse;
+    const icon = deptIcons[course.department] || '📖';
+    const diffColor = course.difficulty === 'Beginner' ? '#137333' : course.difficulty === 'Intermediate' ? '#b06000' : '#c5221f';
+    const diffBg = course.difficulty === 'Beginner' ? '#e6f4ea' : course.difficulty === 'Intermediate' ? '#fef7e0' : '#fce8e6';
+    const isTech = ['Technology'].includes(course.department);
+    const totalLessons = Array.isArray(modules) ? modules.reduce((s,m) => s + (m.lessons ? m.lessons.length : 0), 0) : 0;
+
+    document.getElementById('courseModalContent').innerHTML = `
+      <div class="course-modal-header">
+        <div class="course-modal-icon">${icon}</div>
+        <div class="course-modal-name">${course.name}</div>
+        <div class="course-modal-tags">
+          ${course.level && course.level !== 'Any' ? `<span class="course-modal-tag blue">🎒 ${course.level} Standard</span>` : '<span class="course-modal-tag">🌐 Open to All</span>'}
+          <span class="course-modal-tag" style="background:${diffBg};color:${diffColor}">${course.difficulty || 'Beginner'}</span>
+          <span class="course-modal-tag">⏱ ${course.duration_hours || 12}h</span>
+          <span class="course-modal-tag ${course.is_free ? 'green' : 'blue'}">${course.is_free ? '✅ Free' : '$99 USDT'}</span>
+        </div>
+      </div>
+      <p class="course-modal-desc">${course.description || ''}</p>
+      <div class="course-modal-divider"></div>
+
+      <div class="course-modal-section">
+        <div class="course-modal-section-title">📖 What you will learn</div>
+        ${Array.isArray(modules) && modules.length > 0 ? modules.map((m, i) => `
+          <div class="module-preview-item">
+            <div class="module-num">${i+1}</div>
+            <div class="module-name">${m.module_title}</div>
+            <div class="module-lessons-count">${m.lessons ? m.lessons.length : 0} lessons</div>
+          </div>`).join('') : '<p style="color:#5f6368;font-size:13px">Content being prepared...</p>'}
+      </div>
+      <div class="course-modal-divider"></div>
+
+      <div class="course-modal-section">
+        <div class="course-modal-section-title">✨ What is included</div>
+        <div class="features-grid">
+          <div class="feature-item"><span class="feature-icon">📚</span> ${totalLessons} lessons</div>
+          <div class="feature-item"><span class="feature-icon">🤖</span> AI Teacher</div>
+          <div class="feature-item"><span class="feature-icon">🔊</span> Voice Teacher</div>
+          <div class="feature-item"><span class="feature-icon">📝</span> Notes & Bookmarks</div>
+          <div class="feature-item"><span class="feature-icon">🎥</span> Video Resources</div>
+          <div class="feature-item"><span class="feature-icon">📄</span> PDF Resources</div>
+          ${isTech ? '<div class="feature-item"><span class="feature-icon">💻</span> Code Editor</div>' : ''}
+          <div class="feature-item"><span class="feature-icon">🏆</span> Certificate</div>
+        </div>
+      </div>
+
+      <div class="course-modal-footer">
+        ${isEnrolled
+          ? `<a href="/syllabus.html?email=${encodeURIComponent(email)}" class="btn-enroll enrolled" style="text-decoration:none;text-align:center;">✅ Continue Learning</a>`
+          : `<button class="btn-enroll" id="enrollBtn" onclick="addCourseFromModal('${course.name}')">+ Enroll in this course</button>`}
+        <button class="btn-close-modal" onclick="closeCoursePreview()">Close</button>
+      </div>`;
+  } catch(e) {
+    document.getElementById('courseModalContent').innerHTML = '<div style="padding:24px;color:#c5221f">Error loading course details.</div>';
+  }
+}
+
+async function addCourseFromModal(courseName) {
+  const btn = document.getElementById('enrollBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Enrolling...'; }
+  await addCourse(courseName, btn);
+  if (btn) { btn.textContent = '✅ Enrolled!'; btn.classList.add('enrolled'); }
+  setTimeout(closeCoursePreview, 1500);
+}
+
+function closeCoursePreview() {
+  document.getElementById('courseModal').classList.remove('open');
+}
+
+document.getElementById('courseModal').addEventListener('click', function(e) {
+  if (e.target === this) closeCoursePreview();
+});
+
 function logout() {
   localStorage.removeItem('yge_email');
   window.location.href = '/login.html';
 }
 </script>
+<!-- Course Preview Modal -->
+<div class="course-modal-overlay" id="courseModal">
+  <div class="course-modal" id="courseModalBox">
+    <div style="display:flex;justify-content:flex-end;padding:16px 16px 0;"><button onclick="closeCoursePreview()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#5f6368;">&#10005;</button></div>
+    <div id="courseModalContent"><div class="loading"><span class="spin" style="font-size:24px;animation:spin 1s linear infinite;display:inline-block">&#9203;</span> Loading...</div></div>
+  </div>
+</div>
+
 </body>
 </html>

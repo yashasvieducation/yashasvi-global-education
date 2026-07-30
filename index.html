@@ -49,6 +49,14 @@
   .tcard-badge { font-size:12px; border-radius:100px; padding:4px 14px; display:inline-block; margin-bottom:16px; }
   .tcard-btn { display:inline-block; background:#1a73e8; color:#fff; text-decoration:none; border-radius:4px; padding:10px 24px; font-size:14px; font-family:'Google Sans',Arial,sans-serif; font-weight:500; transition:background 0.15s; }
   .tcard-btn:hover { background:#1765cc; }
+  .features-grid-main { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .feat-card { padding: 20px; border: 1px solid #e8eaed; border-radius: 12px; transition: all 0.2s; }
+  .feat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
+  .feat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px; }
+  .feat-name { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #202124; margin-bottom: 6px; }
+  .feat-desc { font-size: 13px; color: #5f6368; line-height: 1.5; }
+  @media (max-width: 768px) { .features-grid-main { grid-template-columns: 1fr 1fr !important; } }
+  @media (max-width: 480px) { .features-grid-main { grid-template-columns: 1fr !important; } }
   .partner-section { max-width:860px; margin:0 auto; padding:64px 32px; }
   .partner-inner { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
   @media (max-width: 768px) {
@@ -481,6 +489,68 @@
         <div class="tcard-desc">Upskill your team with AI-generated courses, batch management, and our unique Dynamic Seat System — pay once, train all year.</div>
         <span class="tcard-badge" style="background:#e8f0fe; color:#1a73e8;">From $99/year · Annual plan</span>
         <a href="/corporate-plans.html" class="tcard-btn">View plans →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES SECTION -->
+<div style="background:#fff;padding:64px 32px;border-top:1px solid #e8eaed;">
+  <div style="max-width:860px;margin:0 auto;">
+    <div style="font-size:12px;font-weight:500;color:#1a73e8;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;text-align:center;">PLATFORM FEATURES</div>
+    <div style="font-family:'Google Sans',Arial,sans-serif;font-size:32px;font-weight:400;color:#202124;margin-bottom:8px;text-align:center;">Everything you need to learn</div>
+    <div style="font-size:15px;color:#5f6368;margin-bottom:40px;text-align:center;">43 courses. AI-powered. Globally verified certificates.</div>
+    <div class="features-grid-main">
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#e8f0fe">🤖</div>
+        <div class="feat-name">Personal AI Teacher</div>
+        <div class="feat-desc">1-on-1 AI teacher for every student. Ask anything, get instant answers.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#e6f4ea">🔊</div>
+        <div class="feat-name">Voice Teacher</div>
+        <div class="feat-desc">Lessons read aloud for you. Perfect for visual learners and accessibility.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#fef7e0">💻</div>
+        <div class="feat-name">Live Code Editor</div>
+        <div class="feat-desc">Write and run code directly in the browser. JavaScript, HTML and more.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#fce8e6">🎥</div>
+        <div class="feat-name">Video Resources</div>
+        <div class="feat-desc">Curated YouTube videos from MIT, Stanford, Khan Academy and more.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#f3e8fd">📄</div>
+        <div class="feat-name">PDF & Docs</div>
+        <div class="feat-desc">Official documentation, NCERT books, and professional guides.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#e8f0fe">📝</div>
+        <div class="feat-name">Notes & Bookmarks</div>
+        <div class="feat-desc">Save notes per lesson. Bookmark important lessons. Review anytime.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#e6f4ea">🏆</div>
+        <div class="feat-name">Blockchain Certificate</div>
+        <div class="feat-desc">Globally verified, tamper-proof certificate with unique blockchain ID.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#fef7e0">📱</div>
+        <div class="feat-name">Mobile App UI</div>
+        <div class="feat-desc">Full mobile experience with bottom navigation. Learn anywhere.</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:32px;">
+      <div style="display:inline-flex;align-items:center;gap:24px;background:#f8f9fa;border-radius:100px;padding:14px 28px;flex-wrap:wrap;justify-content:center;">
+        <span style="font-size:14px;color:#5f6368;">📚 43 Courses</span>
+        <span style="color:#dadce0">|</span>
+        <span style="font-size:14px;color:#5f6368;">🎓 8th to 12th + Open</span>
+        <span style="color:#dadce0">|</span>
+        <span style="font-size:14px;color:#5f6368;">🌍 Globally Verified</span>
+        <span style="color:#dadce0">|</span>
+        <span style="font-size:14px;color:#5f6368;">🆓 Free to Apply</span>
       </div>
     </div>
   </div>
