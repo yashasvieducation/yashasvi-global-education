@@ -123,7 +123,7 @@
   .notes-title { font-size: 14px; font-weight: 500; color: #202124; display: flex; align-items: center; gap: 6px; }
   .notes-save { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; cursor: pointer; }
   .notes-save:hover { background: #1765cc; }
-  .notes-textarea { width: 100%; border: 1px solid #dadce0; border-radius: 4px; padding: 10px 12px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; resize: vertical; min-height: 80px; outline: none; color: #202124; line-height: 1.5; }
+  .notes-textarea { width: 100%; border: 1px solid #dadce0; border-radius: 4px; padding: 10px 12px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; resize: vertical; min-height: 80px; outline: none; color: #202124; line-height: 1.5; user-select: text; -webkit-user-select: text; }
   .notes-textarea:focus { border-color: #1a73e8; }
   .notes-saved-msg { font-size: 12px; color: #137333; display: none; margin-top: 4px; }
 
@@ -965,12 +965,35 @@ function updateSpeed() {
 // Stop voice when lesson changes
 window.addEventListener('beforeunload', stopVoice);
 
-// Copy Protection
-document.addEventListener('copy',e=>{e.preventDefault();const t=document.getElementById('copyToast');t.style.display='block';setTimeout(()=>t.style.display='none',2500);});
-document.addEventListener('cut',e=>e.preventDefault());
-document.addEventListener('contextmenu',e=>e.preventDefault());
-document.addEventListener('keydown',e=>{
-  if((e.ctrlKey&&['c','u','s','a','p'].includes(e.key.toLowerCase()))||e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(e.key.toLowerCase()))){e.preventDefault();const t=document.getElementById('copyToast');if(t){t.style.display='block';setTimeout(()=>t.style.display='none',2500);}}
+// Copy Protection - only on lesson content, not on notes/chat/request
+document.addEventListener('copy', e => {
+  const allowed = ['notes-textarea', 'chat-input', 'modal-textarea', 'requestText', 'chatInput', 'notesArea'];
+  const target = e.target;
+  const isAllowed = allowed.some(id => target.id === id) ||
+    target.closest('.chat-messages') ||
+    target.closest('.notes-section') ||
+    target.closest('.modal-box') ||
+    target.closest('#requestModal');
+  if (!isAllowed) {
+    e.preventDefault();
+    const t = document.getElementById('copyToast');
+    if (t) { t.style.display='block'; setTimeout(()=>t.style.display='none', 2500); }
+  }
+});
+document.addEventListener('contextmenu', e => {
+  const isAllowed = e.target.closest('.notes-section') ||
+    e.target.closest('.chat-messages') ||
+    e.target.closest('.chat-input-wrap') ||
+    e.target.closest('#requestModal');
+  if (!isAllowed) e.preventDefault();
+});
+document.addEventListener('keydown', e => {
+  const isAllowed = e.target.closest('.notes-section') ||
+    e.target.closest('.chat-input-wrap') ||
+    e.target.closest('#requestModal');
+  if (!isAllowed && (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase())))) {
+    e.preventDefault();
+  }
 });
 
 function logout() {
