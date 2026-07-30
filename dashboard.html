@@ -250,6 +250,7 @@
       <div class="nav-avatar" id="navAvatar">?</div>
       <span class="nav-name" id="navName"></span>
     </a>
+    <button onclick="logout()" style="background:none; border:1px solid #dadce0; border-radius:4px; padding:6px 14px; font-size:13px; color:#5f6368; cursor:pointer; font-family:'Google Sans',Arial,sans-serif;">↩ Logout</button>
     <button class="bell-btn" id="bellBtn">🔔<span class="bell-badge" id="bellBadge"></span></button>
   </div>
 </nav>
@@ -510,6 +511,11 @@ async function loadNotifications() {
 }
 
 document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function logout() {
+  localStorage.removeItem('yge_email');
+  window.location.href = '/login.html';
+}
 
 function showLoginMsg(text) {
   const m = document.getElementById('loginMsg');

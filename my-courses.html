@@ -402,6 +402,11 @@ async function requestCourse(name) {
 }
 
 init();
+
+function logout() {
+  localStorage.removeItem('yge_email');
+  window.location.href = '/login.html';
+}
 </script>
 </body>
 </html>

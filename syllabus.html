@@ -340,6 +340,7 @@
     <button class="nav-icon-btn" onclick="window.location.href='/my-notes.html?email='+encodeURIComponent(studentEmail)">My Notes</button>
     <button class="nav-icon-btn" onclick="window.location.href='/my-courses.html?email='+encodeURIComponent(studentEmail)">My Courses</button>
     <button class="request-btn" onclick="openRequest()">+ Request a Course</button>
+    <button onclick="logout()" style="background:none; border:1px solid #dadce0; border-radius:4px; padding:6px 14px; font-size:13px; color:#5f6368; cursor:pointer; font-family:'Google Sans',Arial,sans-serif;">↩ Logout</button>
     <button class="bell-btn" id="bellBtn">🔔<span class="bell-badge" id="bellBadge"></span></button>
   </div>
 </nav>
@@ -971,6 +972,11 @@ document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('keydown',e=>{
   if((e.ctrlKey&&['c','u','s','a','p'].includes(e.key.toLowerCase()))||e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(e.key.toLowerCase()))){e.preventDefault();const t=document.getElementById('copyToast');if(t){t.style.display='block';setTimeout(()=>t.style.display='none',2500);}}
 });
+
+function logout() {
+  localStorage.removeItem('yge_email');
+  window.location.href = '/login.html';
+}
 
 function showLoginMsg(text){const m=document.getElementById('loginMsg');m.className='msg-error';m.textContent=text;m.style.display='block';}
 </script>
