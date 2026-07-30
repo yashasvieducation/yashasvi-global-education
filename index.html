@@ -10,7 +10,7 @@
   html, body { overflow-x: hidden; max-width: 100%; }
 
   /* Mobile Bottom Nav */
-  .mobile-bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e8eaed; z-index: 999; padding: 8px 0 12px; box-shadow: 0 -4px 16px rgba(0,0,0,0.08); }
+  
   .mobile-bottom-nav .nav-items { display: flex; justify-content: space-around; align-items: center; }
   .mobile-nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: #5f6368; font-size: 10px; font-family: 'Google Sans', Arial, sans-serif; padding: 4px 12px; border-radius: 8px; transition: all 0.15s; min-width: 56px; }
   .mobile-nav-item:hover, .mobile-nav-item.active { color: #1a73e8; }
@@ -20,12 +20,12 @@
   .mobile-nav-item.apply-btn span { font-size: 10px; }
 
   /* Mobile top bar */
-  .mobile-top-bar { display: none; position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #e8eaed; padding: 12px 20px; text-align: center; }
+  
   .mobile-top-bar img { height: 36px; }
 
   @media (max-width: 768px) {
-    .mobile-bottom-nav { display: block; }
-    .mobile-top-bar { display: block; }
+    
+    
     .nav { display: none !important; }
     body { padding-bottom: 80px; }
     .tracks-section { padding: 40px 16px !important; }
@@ -235,40 +235,45 @@
     .badge-grid { grid-template-columns: 1fr 1fr !important; }
   }
 
-  </style>
+  
+  /* Mobile App Bottom Nav - Pill Style */
+  .mobile-top-bar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: #fff; border-bottom: 1px solid #e8eaed; padding: 10px 20px; text-align: center; }
+  .mobile-bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e8eaed; z-index: 999; padding: 10px 16px 16px; box-shadow: 0 -2px 20px rgba(0,0,0,0.06); }
+  .bnav-items { display: flex; justify-content: space-around; align-items: center; gap: 4px; }
+  .bnav-item { display: flex; flex-direction: row; align-items: center; gap: 6px; text-decoration: none; color: #5f6368; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; padding: 8px 10px; border-radius: 100px; transition: all 0.2s ease; white-space: nowrap; }
+  .bnav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .bnav-item .bnav-label { display: none; font-size: 13px; }
+  .bnav-item.active { background: #e8f0fe; color: #1a73e8; padding: 8px 16px; }
+  .bnav-item.active .bnav-label { display: inline; }
+  .bnav-item.active svg { stroke: #1a73e8; }
+  @media (max-width: 768px) {
+    .mobile-top-bar { display: block; }
+    .mobile-bottom-nav { display: block; }
+    .nav { display: none !important; }
+    body { padding-top: 60px; padding-bottom: 80px; }
+  }
+
+</style>
 </head>
 <body>
-
-<!-- NAV -->
 <!-- Mobile Top Bar -->
 <div class="mobile-top-bar">
-  <a href="/"><img src="/logo.svg" alt="YGE"></a>
+  <a href="/"><img src="/logo.svg" alt="YGE" style="height:34px;"></a>
 </div>
 
 <!-- Mobile Bottom Nav -->
 <div class="mobile-bottom-nav">
-  <div class="nav-items">
-    <a class="mobile-nav-item active" href="/">
-      <span class="nav-icon">🏠</span>
-      <span>Home</span>
-    </a>
-    <a class="mobile-nav-item" href="/my-courses.html">
-      <span class="nav-icon">📚</span>
-      <span>Courses</span>
-    </a>
-    <a class="mobile-nav-item apply-btn" href="/admission-form.html">
-      <span class="nav-icon">✏️</span>
-      <span>Apply</span>
-    </a>
-    <a class="mobile-nav-item" href="/login.html">
-      <span class="nav-icon">👤</span>
-      <span>Login</span>
-    </a>
-    <a class="mobile-nav-item" href="/institution-register.html">
-      <span class="nav-icon">🏫</span>
-      <span>Partner</span>
-    </a>
+  <div class="bnav-items">
+    <a class="bnav-item active" href="/"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg><span class="bnav-label">Home</span></a>
+    <a class="bnav-item" href="/my-courses.html"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="bnav-label">Courses</span></a>
+    <a class="bnav-item" href="/admission-form.html"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span class="bnav-label">Apply</span></a>
+    <a class="bnav-item" href="/login.html"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span class="bnav-label">Login</span></a>
+    <a class="bnav-item" href="/institution-register.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span class="bnav-label">Partner</span></a>
   </div>
+</div>
+
+
+<!-- NAV -->
 </div>
 
 <nav class="nav">
