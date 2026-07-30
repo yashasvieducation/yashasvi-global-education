@@ -531,12 +531,12 @@ async function doLogin() {
   try {
     const res = await fetch(BASE + "/students?select=student_name,admission_status,selected_course,fee_paid&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
     const data = await res.json();
-    if (!Array.isArray(data) || data.length === 0) { showLoginMsg('No account found.'); btn.disabled = false; btn.textContent = 'Access my course →'; return; }
+    if (!Array.isArray(data) || data.length === 0) { showLoginMsg('No account found.'); btn.disabled = false; btn.textContent = 'Access my course...'; return; }
     const s = data[0];
     console.log('Student status:', s.admission_status, 'Course:', s.selected_course);
     if (!s.admission_status || !['admitted','final_exam_passed','internship_passed','certified','quarterly_passed','fee_paid'].includes(s.admission_status)) { 
       showLoginMsg('Status: ' + s.admission_status + ' — Please complete enrollment first.'); 
-      btn.disabled = false; btn.textContent = 'Access my course →'; return; 
+      btn.disabled = false; btn.textContent = 'Access my course...'; return; 
     }
     // Allow access if certified, admitted, or fee_paid
     studentEmail = email; studentName = s.student_name;
@@ -550,7 +550,7 @@ async function doLogin() {
     await loadProgress();
     loadMyCoursesPanel();
     checkNotifications();
-  } catch (err) { showLoginMsg('Error: ' + err.message); btn.disabled = false; btn.textContent = 'Access my course →'; }
+  } catch (err) { showLoginMsg('Error: ' + err.message); btn.disabled = false; btn.textContent = 'Access my course...'; }
 }
 
 async function loadCourse(courseName) {
@@ -713,9 +713,9 @@ function loadLesson(mi, li) {
     </div>` : ''}
 
     <div class="lesson-nav">
-      <button class="btn btn-secondary" onclick="navigate(-1)" ${mi===0&&li===0?'disabled':''}>← Previous</button>
+      <button class="btn btn-secondary" onclick="navigate(-1)" ${mi===0&&li===0?'disabled':''}><- Previous</button>
       <button class="btn btn-complete" onclick="completeLesson()">${completedLessons.has(key)?'✓ Completed':'Mark complete ✓'}</button>
-      <button class="btn btn-primary" onclick="navigate(1)" ${mi===modules.length-1&&li===(modules[mi].lessons||[]).length-1?'disabled':''}>Next →</button>
+      <button class="btn btn-primary" onclick="navigate(1)" ${mi===modules.length-1&&li===(modules[mi].lessons||[]).length-1?'disabled':''}>Next -></button>
     </div>`;
 
   buildNav(); saveProgress(); window.scrollTo({top:0,behavior:'smooth'}); setTimeout(loadResources, 100);
@@ -894,12 +894,12 @@ async function submitRequest() {
     msg.textContent = '✅ Request sent! AI will build this course within 24 hours.';
     msg.style.display = 'block';
     document.getElementById('requestText').value = '';
-    btn.textContent = 'Sent ✓';
+    btn.textContent = 'Sent!';
     setTimeout(() => closeRequest(), 2000);
   } catch(e) {
     console.error('Request error:', e);
     btn.disabled = false;
-    btn.textContent = 'Send Request →';
+    btn.textContent = 'Send Request';
   }
 }
 document.getElementById('requestModal').addEventListener('click',e=>{if(e.target===document.getElementById('requestModal'))closeRequest();});
