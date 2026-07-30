@@ -19,7 +19,7 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .layout{display:grid;grid-template-columns:280px 1fr 300px;height:calc(100vh - 60px);overflow:hidden}
 .sidebar{background:#fff;border-right:1px solid #e8eaed;overflow-y:auto;display:flex;flex-direction:column}
 .sidebar-tabs{display:flex;border-bottom:1px solid #e8eaed}
-.stab{flex:1;padding:10px 0;text-align:center;font-size:12px;font-weight:500;color:#5f6368;cursor:pointer;border-bottom:2px solid transparent}
+.stab{flex:1;padding:10px 0;text-align:center;font-size:12px;font-weight:500;color:#5f6368;cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;justify-content:center;gap:5px}
 .stab.active{color:#1a73e8;border-bottom-color:#1a73e8}
 .stab-panel{display:none;padding:12px 0;flex:1}
 .stab-panel.active{display:block}
@@ -57,11 +57,11 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .lesson-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
 .lesson-title{font-family:'Google Sans',Arial,sans-serif;font-size:26px;font-weight:400;color:#202124}
 .lesson-actions{display:flex;gap:8px;flex-shrink:0}
-.bm-btn{background:none;border:1px solid #dadce0;border-radius:4px;padding:6px 12px;font-size:13px;cursor:pointer;color:#5f6368}
+.bm-btn{background:#f8f9fa;border:1px solid #e8eaed;border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer;color:#5f6368;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s}
 .bm-btn:hover,.bm-btn.bookmarked{border-color:#1a73e8;color:#1a73e8;background:#e8f0fe}
-.listen-btn{background:#e8f0fe;color:#1a73e8;border:none;border-radius:4px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:'Google Sans',Arial,sans-serif;font-weight:500}
+.listen-btn{background:#f8f9fa;color:#5f6368;border:1px solid #e8eaed;border-radius:6px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:'Google Sans',Arial,sans-serif;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:all 0.15s}.listen-btn:hover{border-color:#1a73e8;color:#1a73e8;background:#f0f4ff}
 .lesson-meta{font-size:13px;color:#5f6368;display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
-.lesson-body{background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:24px;margin-bottom:16px;font-size:15px;line-height:1.75;color:#3c4043;user-select:none}
+.lesson-body{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:28px;margin-bottom:16px;font-size:15px;line-height:1.85;color:#3c4043;user-select:none}
 .project-box{background:#e6f4ea;border-left:3px solid #34a853;padding:12px 16px;border-radius:0 6px 6px 0;margin-top:16px}
 .project-box strong{display:block;color:#137333;margin-bottom:4px;font-size:13px}
 .project-box p{font-size:14px;color:#137333;margin:0}
@@ -73,7 +73,7 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .v-stop{background:#fce8e6;color:#c5221f;display:none}
 .v-speed{border:1px solid #dadce0;border-radius:4px;padding:6px 8px;font-size:13px;outline:none}
 /* Resources */
-.resources-card{background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:18px;margin-bottom:16px}
+.resources-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:20px;margin-bottom:16px}
 .res-title{font-size:14px;font-weight:500;color:#202124;margin-bottom:12px}
 .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .res-link{border:1px solid #e8eaed;border-radius:8px;padding:10px 12px;text-decoration:none;color:#202124;display:flex;align-items:center;gap:8px;font-size:12px;transition:all 0.15s}
@@ -87,7 +87,7 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .code-textarea{width:100%;background:#1e1e1e;color:#d4d4d4;border:none;padding:16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.6;resize:vertical;min-height:140px;outline:none}
 .code-output{background:#0d1117;color:#58a6ff;padding:12px 16px;font-family:monospace;font-size:12px;min-height:40px;border-top:1px solid #333;white-space:pre-wrap}
 /* Notes */
-.notes-card{background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:18px;margin-bottom:16px}
+.notes-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:20px;margin-bottom:16px}
 .notes-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .notes-lbl{font-size:14px;font-weight:500;color:#202124}
 .notes-save{background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:6px 14px;font-size:13px;cursor:pointer}
@@ -95,7 +95,7 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .notes-ta:focus{border-color:#1a73e8}
 .notes-saved{font-size:12px;color:#137333;display:none;margin-top:4px}
 /* MCQ */
-.mcq-card{background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:20px;margin-bottom:16px}
+.mcq-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:22px;margin-bottom:16px}
 .mcq-title{font-size:14px;font-weight:500;color:#202124;margin-bottom:14px}
 .mcq-q{font-size:14px;color:#202124;margin-bottom:10px;font-weight:500}
 .mcq-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
@@ -192,7 +192,7 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
     <a class="nav-btn" id="notesNavBtn" href="/my-notes.html">My Notes</a>
     <a class="nav-btn" id="coursesNavBtn" href="/my-courses.html">My Courses</a>
     <button class="nav-btn-primary" onclick="openRequest()">+ Request a Course</button>
-    <button class="bell-btn" id="bellBtn">&#128276;</button>
+    <button class="bell-btn" id="bellBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></button>
     <button onclick="logout()" style="background:none;border:1px solid #dadce0;border-radius:4px;padding:6px 14px;font-size:13px;color:#5f6368;cursor:pointer">Logout</button>
   </div>
 </nav>
@@ -215,9 +215,18 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-tabs">
-      <div class="stab active" onclick="switchTab('course')" id="stab-course">Course</div>
-      <div class="stab" onclick="switchTab('badges')" id="stab-badges">Badges</div>
-      <div class="stab" onclick="switchTab('saved')" id="stab-saved">Saved</div>
+      <div class="stab active" onclick="switchTab('course')" id="stab-course">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Course
+      </div>
+      <div class="stab" onclick="switchTab('badges')" id="stab-badges">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        Badges
+      </div>
+      <div class="stab" onclick="switchTab('saved')" id="stab-saved">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        Saved
+      </div>
     </div>
     <div class="stab-panel active" id="panel-course">
       <div class="course-info">
@@ -489,8 +498,8 @@ function loadLesson(mi, li) {
   html += '<div class="lesson-title-row">';
   html += '<div class="lesson-title">'+lesson.title+'</div>';
   html += '<div class="lesson-actions">';
-  html += '<button class="listen-btn" onclick="startVoice()">&#128266; Listen</button>';
-  html += '<button class="bm-btn'+(isBm?' bookmarked':'')+'" id="bmBtn" onclick="toggleBm(\''+key+'\')">'+( isBm ? '&#128278; Saved' : '&#128278; Save')+'</button>';
+  html += '<button class="listen-btn" onclick="startVoice()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg> Listen</button>';
+  html += '<button class="bm-btn'+(isBm?' bookmarked':'')+'" id="bmBtn" onclick="toggleBm(\''+key+'\')">'+( isBm ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Saved' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save')+'</button>';
   html += '</div></div>';
   html += '<div class="lesson-meta">';
   html += '<span>&#9203; '+(lesson.duration||'15 min')+'</span>';
@@ -628,7 +637,7 @@ async function toggleBm(key) {
   var btn = document.getElementById('bmBtn');
   if (btn) { 
     btn.className = 'bm-btn' + (bookmarks.has(key) ? ' bookmarked' : '');
-    btn.innerHTML = bookmarks.has(key) ? '&#128278; Saved' : '&#128278; Save';
+    btn.innerHTML = bookmarks.has(key) ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Saved' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save';
   }
   updateBookmarks();
 }
@@ -713,20 +722,20 @@ function readLesson() {
   if (v) utterance.voice = v;
   utterance.onstart = function() {
     speaking = true;
-    var pb = document.getElementById('vPlayBtn'); if (pb) pb.innerHTML = '&#9208; Pause';
+    var pb = document.getElementById('vPlayBtn'); if (pb) pb.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
     var sb = document.getElementById('vStopBtn'); if (sb) sb.style.display = 'inline-block';
     var vs = document.getElementById('vStatus'); if (vs) vs.textContent = 'Reading lesson...';
   };
   utterance.onend = function() {
     speaking = false;
-    var pb = document.getElementById('vPlayBtn'); if (pb) pb.innerHTML = '&#9654; Play';
+    var pb = document.getElementById('vPlayBtn'); if (pb) pb.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Play';
     var sb = document.getElementById('vStopBtn'); if (sb) sb.style.display = 'none';
     var vs = document.getElementById('vStatus'); if (vs) vs.textContent = 'Lesson complete!';
   };
   synth.speak(utterance);
 }
-function toggleVoice() { if (speaking) pauseVoice(); else { if (synth.paused) { synth.resume(); speaking=true; var pb=document.getElementById('vPlayBtn');if(pb)pb.innerHTML='&#9208; Pause'; } else readLesson(); } }
-function pauseVoice() { synth.pause(); speaking=false; var pb=document.getElementById('vPlayBtn');if(pb)pb.innerHTML='&#9654; Resume'; }
+function toggleVoice() { if (speaking) pauseVoice(); else { if (synth.paused) { synth.resume(); speaking=true; var pb=document.getElementById('vPlayBtn');if(pb)pb.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause'; } else readLesson(); } }
+function pauseVoice() { synth.pause(); speaking=false; var pb=document.getElementById('vPlayBtn');if(pb)pb.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Resume'; }
 function stopVoice() { synth.cancel(); speaking=false; }
 function updateSpeed() { if (speaking) { stopVoice(); setTimeout(readLesson,200); } }
 
