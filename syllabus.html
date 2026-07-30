@@ -526,7 +526,12 @@ async function doLogin() {
     const data = await res.json();
     if (!Array.isArray(data) || data.length === 0) { showLoginMsg('No account found.'); btn.disabled = false; btn.textContent = 'Access my course →'; return; }
     const s = data[0];
-    if (!['admitted','final_exam_passed','internship_passed','certified','quarterly_passed'].includes(s.admission_status)) { showLoginMsg('Please complete enrollment first.'); btn.disabled = false; btn.textContent = 'Access my course →'; return; }
+    console.log('Student status:', s.admission_status, 'Course:', s.selected_course);
+    if (!s.admission_status || !['admitted','final_exam_passed','internship_passed','certified','quarterly_passed','fee_paid'].includes(s.admission_status)) { 
+      showLoginMsg('Status: ' + s.admission_status + ' — Please complete enrollment first.'); 
+      btn.disabled = false; btn.textContent = 'Access my course →'; return; 
+    }
+    // Allow access if certified, admitted, or fee_paid
     studentEmail = email; studentName = s.student_name;
     localStorage.setItem('yge_email', email);
     const navUser = document.getElementById('navUser');
