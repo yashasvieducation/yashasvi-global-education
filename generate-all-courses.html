@@ -81,28 +81,32 @@ async function loadCourses() {
 async function generateCourse(course) {
   log(`⚙️ Generating: ${course.name}...`, 'info');
 
-  const prompt = `Generate a course for "${course.name}" (Level: ${course.level}, Dept: ${course.department}).
-4 modules, 3 lessons each. Return ONLY compact JSON:
-{"modules":[{"module_title":"Title","lessons":[{"title":"Title","content":"2 paragraphs of educational content.","duration":"15 min","project":"Assignment","mcq":[{"question":"Q?","options":["A","B","C","D"],"correct":"A"}]}]}]}
-Keep content short but educational. Valid JSON only.`;
+  const prompt = `Create course content for "${course.name}" targeting ${course.level} level students.
+Return ONLY this JSON structure with 4 modules and 3 lessons each:
+{"modules":[{"module_title":"string","lessons":[{"title":"string","content":"string (2 sentences)","duration":"15 min","project":"string","mcq":[{"question":"string","options":["A","B","C","D"],"correct":"A"}]}]}]}
+Rules: valid JSON only, content max 2 sentences per lesson, no special characters in strings.`;
 
-  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+  const res = await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher", {
     method: "POST",
-    headers: { "Authorization": "Bearer " + GROQ, "Content-Type": "application/json" },
+    headers: { 
+      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE",
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE",
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      max_tokens: 8000,
-      temperature: 0.5,
-      messages: [
-        { role: "system", content: "You are a curriculum designer. Respond with valid compact JSON only. No markdown. No extra spaces. Keep content concise." },
-        { role: "user", content: prompt }
-      ]
+      messages: [{ role: "user", content: prompt }],
+      systemPrompt: "You are a curriculum designer. Return ONLY valid JSON. No markdown, no explanation, no extra text. Just the JSON object."
     })
   });
 
   const data = await res.json();
-  const text = data.choices?.[0]?.message?.content || '';
-  const clean = text.replace(/```json|```/g, '').trim();
+  let text = data.reply || '';
+  // Clean and extract JSON
+  text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+  const jsonStart = text.indexOf('{');
+  const jsonEnd = text.lastIndexOf('}');
+  if (jsonStart === -1 || jsonEnd === -1) throw new Error('No JSON found in response');
+  const clean = text.substring(jsonStart, jsonEnd + 1);
   const parsed = JSON.parse(clean);
 
   // Save modules to Supabase
