@@ -7,42 +7,40 @@
 <style>
   body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #f8f9fa; }
   h1 { color: #1a73e8; }
-  .btn { background: #1a73e8; color: #fff; border: none; padding: 14px 28px; border-radius: 8px; font-size: 16px; cursor: pointer; margin: 10px 0; }
+  .btn { background: #1a73e8; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; cursor: pointer; margin: 6px 4px; }
   .btn:disabled { background: #ccc; cursor: not-allowed; }
-  .log { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 16px; height: 400px; overflow-y: auto; font-family: monospace; font-size: 13px; margin-top: 16px; }
-  .success { color: #137333; }
-  .error { color: #c5221f; }
-  .info { color: #1a73e8; }
-  .progress-bar { background: #e8eaed; border-radius: 100px; height: 10px; margin: 10px 0; }
-  .progress-fill { background: #1a73e8; height: 10px; border-radius: 100px; transition: width 0.3s; }
-  .stat { display: inline-block; margin: 8px 16px 8px 0; font-size: 15px; font-weight: 500; }
+  .btn-green { background: #34a853; }
+  .btn-orange { background: #f29900; }
+  .log { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 16px; height: 420px; overflow-y: auto; font-family: monospace; font-size: 12px; margin-top: 16px; }
+  .success { color: #137333; } .error { color: #c5221f; } .info { color: #1a73e8; } .warn { color: #b06000; }
+  .progress-bar { background: #e8eaed; border-radius: 100px; height: 12px; margin: 10px 0; }
+  .progress-fill { background: linear-gradient(90deg, #1a73e8, #34a853); height: 12px; border-radius: 100px; transition: width 0.3s; }
+  .stats { display: flex; gap: 20px; margin: 10px 0; font-size: 15px; font-weight: 500; }
 </style>
 </head>
 <body>
-<h1>🤖 Generate All Course Content</h1>
-<p>Generates AI content for all courses without modules. Each course ~20 seconds.</p>
-
-<div>
-  <span class="stat" id="statTotal">Loading...</span>
-  <span class="stat" id="statDone" style="color:#137333;"></span>
-  <span class="stat" id="statFail" style="color:#c5221f;"></span>
+<h1>🤖 Course Content Generator</h1>
+<p>Generates AI content for courses without modules.</p>
+<div class="stats">
+  <span id="statTotal" style="color:#1a73e8;">Loading…</span>
+  <span id="statDone" style="color:#137333;"></span>
+  <span id="statFail" style="color:#c5221f;"></span>
 </div>
-
 <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-
-<button class="btn" id="genBtn" onclick="startGeneration()">🚀 Generate All Courses</button>
-<button class="btn" style="background:#34a853; margin-left:10px;" onclick="loadCourses()">🔄 Refresh List</button>
-<button class="btn" style="background:#f29900; margin-left:10px;" onclick="retryFailed()">🔁 Retry Failed</button>
-
+<div>
+  <button class="btn" id="genBtn" onclick="startGeneration()">🚀 Generate All</button>
+  <button class="btn btn-orange" onclick="retryFailed()">🔁 Retry Failed</button>
+  <button class="btn btn-green" onclick="loadCourses()">🔄 Refresh</button>
+</div>
 <div class="log" id="log"></div>
 
 <script>
 const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
 const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
-const GROQ = "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";
+const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
 
-let courses = [], done = 0, failed = 0;
+let courses = [], done = 0, failed = 0, failedList = [];
 
 function log(msg, type='info') {
   const el = document.getElementById('log');
@@ -53,117 +51,126 @@ function log(msg, type='info') {
   el.scrollTop = el.scrollHeight;
 }
 
-async function loadCourses() {
-  log('Loading courses without modules...', 'info');
-  try {
-    // Get all courses
-    const cRes = await fetch(BASE + "/courses?select=id,name,department,level&is_active=eq.true", { headers: HEADERS });
-    const allCourses = await cRes.json();
-
-    // Get courses that have modules
-    const mRes = await fetch(BASE + "/course_modules?select=course_id", { headers: HEADERS });
-    const modules = await mRes.json();
-    const withModules = new Set(modules.map(m => m.course_id));
-
-    // Filter courses without modules
-    courses = allCourses.filter(c => !withModules.has(c.id));
-
-    document.getElementById('statTotal').textContent = `📚 ${courses.length} courses to generate`;
-    document.getElementById('statDone').textContent = '';
-    document.getElementById('statFail').textContent = '';
-    log(`Found ${courses.length} courses needing content`, 'success');
-    courses.forEach((c,i) => log(`  ${i+1}. ${c.name} (${c.level} · ${c.department})`, 'info'));
-  } catch(e) {
-    log('Error loading courses: ' + e.message, 'error');
-  }
+async function callAI(prompt) {
+  const res = await fetch(EDGE, {
+    method: "POST",
+    headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messages: [{ role: "user", content: prompt }],
+      systemPrompt: "You are a curriculum designer. Return ONLY raw JSON. No markdown, no backticks, no explanation."
+    })
+  });
+  const data = await res.json();
+  return data.reply || '';
 }
 
 async function generateCourse(course) {
-  log(`⚙️ Generating: ${course.name}...`, 'info');
+  log(`⚙️ ${course.name}...`, 'info');
 
-  const prompt = `Create course content for "${course.name}" targeting ${course.level} level students.
-Return ONLY this JSON structure with 4 modules and 3 lessons each:
-{"modules":[{"module_title":"string","lessons":[{"title":"string","content":"string (2 sentences)","duration":"15 min","project":"string","mcq":[{"question":"string","options":["A","B","C","D"],"correct":"A"}]}]}]}
-Rules: valid JSON only, content max 2 sentences per lesson, no special characters in strings.`;
+  // Step 1: Get module titles only
+  const titlesPrompt = `List 4 module titles for a course called "${course.name}" for ${course.level} level.
+Return ONLY this JSON: {"modules":["Title 1","Title 2","Title 3","Title 4"]}`;
+  
+  const titlesReply = await callAI(titlesPrompt);
+  const titlesJson = titlesReply.substring(titlesReply.indexOf('{'), titlesReply.lastIndexOf('}')+1);
+  const titlesData = JSON.parse(titlesJson);
+  const moduleTitles = titlesData.modules;
 
-  const res = await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher", {
-    method: "POST",
-    headers: { 
-      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      messages: [{ role: "user", content: prompt }],
-      systemPrompt: "You are a curriculum designer. Return ONLY valid JSON. No markdown, no explanation, no extra text. Just the JSON object."
-    })
-  });
+  // Step 2: Generate each module separately
+  const allModules = [];
+  
+  for (let mi = 0; mi < moduleTitles.length; mi++) {
+    const modTitle = moduleTitles[mi];
+    
+    const modPrompt = `Create 3 lessons for the module "${modTitle}" in course "${course.name}".
+Return ONLY this JSON with no special characters in strings:
+{"lessons":[
+{"title":"Lesson Title","content":"Educational content here. Keep it simple and clear.","project":"Assignment description","mcq_q":"Question here?","mcq_a":["Option A","Option B","Option C","Option D"],"mcq_correct":"Option A"}
+]}
+Important: Use only plain text, no apostrophes, no quotes inside strings.`;
 
-  const data = await res.json();
-  let text = data.reply || '';
-  // Clean and extract JSON
-  text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-  const jsonStart = text.indexOf('{');
-  const jsonEnd = text.lastIndexOf('}');
-  if (jsonStart === -1 || jsonEnd === -1) throw new Error('No JSON found in response');
-  const clean = text.substring(jsonStart, jsonEnd + 1);
-  const parsed = JSON.parse(clean);
+    const modReply = await callAI(modPrompt);
+    const modJson = modReply.substring(modReply.indexOf('{'), modReply.lastIndexOf('}')+1);
+    const modData = JSON.parse(modJson);
+    
+    // Format lessons properly
+    const lessons = modData.lessons.map(l => ({
+      title: l.title,
+      content: l.content,
+      duration: "15 min",
+      project: l.project,
+      mcq: [{ question: l.mcq_q, options: l.mcq_a, correct: l.mcq_correct }]
+    }));
 
-  // Save modules to Supabase
-  for (let mi = 0; mi < parsed.modules.length; mi++) {
-    const mod = parsed.modules[mi];
+    allModules.push({ module_title: modTitle, lessons });
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  // Save to Supabase
+  for (let mi = 0; mi < allModules.length; mi++) {
     await fetch(BASE + "/course_modules", {
       method: "POST",
       headers: { ...HEADERS, "Prefer": "return=representation" },
       body: JSON.stringify({
         course_id: course.id,
         module_index: mi,
-        module_title: mod.module_title,
-        lessons: mod.lessons
+        module_title: allModules[mi].module_title,
+        lessons: allModules[mi].lessons
       })
     });
   }
-  log(`✅ Done: ${course.name} — ${parsed.modules.length} modules saved`, 'success');
+  
+  log(`✅ Done: ${course.name} — ${allModules.length} modules`, 'success');
+}
+
+async function loadCourses() {
+  log('Loading courses...', 'info');
+  try {
+    const cRes = await fetch(BASE + "/courses?select=id,name,department,level&is_active=eq.true", { headers: HEADERS });
+    const allCourses = await cRes.json();
+    const mRes = await fetch(BASE + "/course_modules?select=course_id", { headers: HEADERS });
+    const modules = await mRes.json();
+    const withModules = new Set(modules.map(m => m.course_id));
+    courses = allCourses.filter(c => !withModules.has(c.id));
+    document.getElementById('statTotal').textContent = `📚 ${courses.length} courses to generate`;
+    document.getElementById('statDone').textContent = '';
+    document.getElementById('statFail').textContent = '';
+    log(`Found ${courses.length} courses needing content`, 'success');
+    courses.forEach((c,i) => log(`  ${i+1}. ${c.name} (${c.level})`, 'info'));
+  } catch(e) { log('Error: ' + e.message, 'error'); }
+}
+
+async function startGeneration() {
+  if (courses.length === 0) { await loadCourses(); }
+  if (courses.length === 0) { log('No courses to generate!', 'warn'); return; }
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true; done = 0; failed = 0; failedList = [];
+
+  for (let i = 0; i < courses.length; i++) {
+    try {
+      await generateCourse(courses[i]);
+      done++;
+    } catch(e) {
+      log(`❌ Failed: ${courses[i].name} — ${e.message}`, 'error');
+      failed++;
+      failedList.push(courses[i]);
+    }
+    const pct = Math.round(((i+1)/courses.length)*100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('statDone').textContent = `✅ ${done}`;
+    document.getElementById('statFail').textContent = failed > 0 ? `❌ ${failed}` : '';
+    if (i < courses.length - 1) await new Promise(r => setTimeout(r, 2000));
+  }
+  btn.disabled = false;
+  log(`Complete! ${done} done, ${failed} failed.`, 'success');
 }
 
 async function retryFailed() {
   await loadCourses();
-  if (courses.length === 0) { log('No failed courses to retry!', 'success'); return; }
-  log(`Retrying ${courses.length} courses...`, 'info');
+  if (courses.length === 0) { log('All done!', 'success'); return; }
   await startGeneration();
 }
 
-async function startGeneration() {
-  if (courses.length === 0) { await loadCourses(); if (courses.length === 0) { log('No courses to generate!', 'error'); return; } }
-  
-  const btn = document.getElementById('genBtn');
-  btn.disabled = true; btn.textContent = '⏳ Generating...';
-  done = 0; failed = 0;
-
-  for (let i = 0; i < courses.length; i++) {
-    const course = courses[i];
-    try {
-      await generateCourse(course);
-      done++;
-    } catch(e) {
-      log(`❌ Failed: ${course.name} — ${e.message}`, 'error');
-      failed++;
-    }
-    // Update progress
-    const pct = Math.round(((i+1) / courses.length) * 100);
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('statDone').textContent = `✅ ${done} done`;
-    document.getElementById('statFail').textContent = failed > 0 ? `❌ ${failed} failed` : '';
-
-    // Wait between requests to avoid rate limit
-    if (i < courses.length - 1) await new Promise(r => setTimeout(r, 3000));
-  }
-
-  btn.disabled = false; btn.textContent = '🚀 Generate All Courses';
-  log(`\n🎉 Complete! ${done} generated, ${failed} failed.`, 'success');
-}
-
-// Auto load on page open
 loadCourses();
 </script>
 </body>
