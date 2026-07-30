@@ -74,11 +74,11 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .v-speed{border:1px solid #dadce0;border-radius:4px;padding:6px 8px;font-size:13px;outline:none}
 /* Resources */
 .resources-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:20px;margin-bottom:16px}
-.res-title{font-size:14px;font-weight:500;color:#202124;margin-bottom:12px}
+.res-title{font-size:13px;font-weight:500;color:#5f6368;margin-bottom:12px;display:flex;align-items:center;text-transform:uppercase;letter-spacing:0.5px}
 .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.res-link{border:1px solid #e8eaed;border-radius:8px;padding:10px 12px;text-decoration:none;color:#202124;display:flex;align-items:center;gap:8px;font-size:12px;transition:all 0.15s}
-.res-link:hover{border-color:#1a73e8;background:#f8f9ff}
-.res-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.res-link{border:1px solid #e8eaed;border-radius:8px;padding:12px 14px;text-decoration:none;color:#202124;display:flex;align-items:center;gap:12px;transition:all 0.15s;background:#fff}
+.res-link:hover{border-color:#1a73e8;background:#fafbff}
+.res-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 /* Code Editor */
 .code-card{background:#1e1e1e;border-radius:8px;margin-bottom:16px;overflow:hidden}
 .code-header{background:#2d2d2d;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
@@ -89,14 +89,14 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 /* Notes */
 .notes-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:20px;margin-bottom:16px}
 .notes-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.notes-lbl{font-size:14px;font-weight:500;color:#202124}
+.notes-lbl{font-size:13px;font-weight:500;color:#5f6368;display:flex;align-items:center;text-transform:uppercase;letter-spacing:0.5px}
 .notes-save{background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:6px 14px;font-size:13px;cursor:pointer}
 .notes-ta{width:100%;border:1px solid #dadce0;border-radius:4px;padding:10px 12px;font-size:14px;font-family:'Roboto',Arial,sans-serif;resize:vertical;min-height:80px;outline:none}
 .notes-ta:focus{border-color:#1a73e8}
 .notes-saved{font-size:12px;color:#137333;display:none;margin-top:4px}
 /* MCQ */
 .mcq-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:22px;margin-bottom:16px}
-.mcq-title{font-size:14px;font-weight:500;color:#202124;margin-bottom:14px}
+.mcq-title{font-size:13px;font-weight:500;color:#5f6368;margin-bottom:14px;display:flex;align-items:center;text-transform:uppercase;letter-spacing:0.5px}
 .mcq-q{font-size:14px;color:#202124;margin-bottom:10px;font-weight:500}
 .mcq-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
 .mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid #dadce0;border-radius:4px;cursor:pointer;font-size:14px;user-select:none}
@@ -307,36 +307,39 @@ const BADGES=[
   {emoji:"&#127942;",name:"Complete",req:100},
 ];
 
+const VIDEO_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>';
+const DOC_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>';
+
 const RESOURCES = {
   Technology:[
-    {name:"FreeCodeCamp",source:"youtube.com",url:"https://www.youtube.com/@freecodecamp",icon:"&#127909;",bg:"#fce8e6"},
-    {name:"MIT OpenCourseWare",source:"youtube.com",url:"https://www.youtube.com/@mitocw",icon:"&#127909;",bg:"#fce8e6"},
-    {name:"Python Docs",source:"python.org",url:"https://docs.python.org/3/",icon:"&#128196;",bg:"#e8f0fe"},
-    {name:"MDN Web Docs",source:"mozilla.org",url:"https://developer.mozilla.org/",icon:"&#128196;",bg:"#e8f0fe"},
+    {name:"FreeCodeCamp",source:"YouTube",url:"https://www.youtube.com/@freecodecamp",type:"video"},
+    {name:"MIT OpenCourseWare",source:"YouTube",url:"https://www.youtube.com/@mitocw",type:"video"},
+    {name:"Python Official Docs",source:"python.org",url:"https://docs.python.org/3/",type:"doc"},
+    {name:"MDN Web Docs",source:"mozilla.org",url:"https://developer.mozilla.org/",type:"doc"},
   ],
   Business:[
-    {name:"Harvard Business Review",source:"youtube.com",url:"https://www.youtube.com/@HarvardBusinessReview",icon:"&#127909;",bg:"#fce8e6"},
-    {name:"Stanford GSB",source:"youtube.com",url:"https://www.youtube.com/@stanfordgsb",icon:"&#127909;",bg:"#fce8e6"},
-    {name:"Investopedia",source:"investopedia.com",url:"https://www.investopedia.com/",icon:"&#128196;",bg:"#e8f0fe"},
-    {name:"SBA Business Guide",source:"sba.gov",url:"https://www.sba.gov/business-guide",icon:"&#128196;",bg:"#e8f0fe"},
+    {name:"Harvard Business Review",source:"YouTube",url:"https://www.youtube.com/@HarvardBusinessReview",type:"video"},
+    {name:"Stanford GSB",source:"YouTube",url:"https://www.youtube.com/@stanfordgsb",type:"video"},
+    {name:"Investopedia",source:"investopedia.com",url:"https://www.investopedia.com/",type:"doc"},
+    {name:"SBA Business Guide",source:"sba.gov",url:"https://www.sba.gov/business-guide",type:"doc"},
   ],
   Design:[
-    {name:"Google Design",source:"youtube.com",url:"https://www.youtube.com/@GoogleDesign",icon:"&#127909;",bg:"#fce8e6"},
-    {name:"Figma",source:"youtube.com",url:"https://www.youtube.com/@Figma",icon:"&#127909;",bg:"#fce8e6"},
-    {name:"Material Design",source:"material.io",url:"https://m3.material.io/",icon:"&#128196;",bg:"#e8f0fe"},
-    {name:"Canva Design School",source:"canva.com",url:"https://www.canva.com/learn/design/",icon:"&#128196;",bg:"#e8f0fe"},
+    {name:"Google Design",source:"YouTube",url:"https://www.youtube.com/@GoogleDesign",type:"video"},
+    {name:"Figma Tutorials",source:"YouTube",url:"https://www.youtube.com/@Figma",type:"video"},
+    {name:"Material Design",source:"material.io",url:"https://m3.material.io/",type:"doc"},
+    {name:"Canva Design School",source:"canva.com",url:"https://www.canva.com/learn/design/",type:"doc"},
   ],
   School:[
-    {name:"Khan Academy",source:"youtube.com",url:"https://www.youtube.com/@khanacademy",icon:"&#127909;",bg:"#fce8e6"},
-    {name:"CrashCourse",source:"youtube.com",url:"https://www.youtube.com/@crashcourse",icon:"&#127909;",bg:"#fce8e6"},
-    {name:"NCERT Books",source:"ncert.nic.in",url:"https://ncert.nic.in/textbook.php",icon:"&#128196;",bg:"#e8f0fe"},
-    {name:"Khan Academy",source:"khanacademy.org",url:"https://www.khanacademy.org/",icon:"&#128196;",bg:"#e8f0fe"},
+    {name:"Khan Academy",source:"YouTube",url:"https://www.youtube.com/@khanacademy",type:"video"},
+    {name:"CrashCourse",source:"YouTube",url:"https://www.youtube.com/@crashcourse",type:"video"},
+    {name:"NCERT Books",source:"ncert.nic.in",url:"https://ncert.nic.in/textbook.php",type:"doc"},
+    {name:"Khan Academy Docs",source:"khanacademy.org",url:"https://www.khanacademy.org/",type:"doc"},
   ],
   Corporate:[
-    {name:"LinkedIn Learning",source:"youtube.com",url:"https://www.youtube.com/@LinkedInLearning",icon:"&#127909;",bg:"#fce8e6"},
-    {name:"McKinsey",source:"youtube.com",url:"https://www.youtube.com/@McKinsey",icon:"&#127909;",bg:"#fce8e6"},
-    {name:"Deloitte Insights",source:"deloitte.com",url:"https://www2.deloitte.com/insights",icon:"&#128196;",bg:"#e8f0fe"},
-    {name:"Harvard ManageMentor",source:"hbsp.harvard.edu",url:"https://hbsp.harvard.edu/",icon:"&#128196;",bg:"#e8f0fe"},
+    {name:"LinkedIn Learning",source:"YouTube",url:"https://www.youtube.com/@LinkedInLearning",type:"video"},
+    {name:"McKinsey & Company",source:"YouTube",url:"https://www.youtube.com/@McKinsey",type:"video"},
+    {name:"Deloitte Insights",source:"deloitte.com",url:"https://www2.deloitte.com/insights",type:"doc"},
+    {name:"Harvard ManageMentor",source:"hbsp.harvard.edu",url:"https://hbsp.harvard.edu/",type:"doc"},
   ],
 };
 
@@ -525,18 +528,23 @@ function loadLesson(mi, li) {
     html += '<p>Content loading...</p>';
   }
   if (lesson.project) {
-    html += '<div class="project-box"><strong>&#128295; Practical Assignment</strong><p>'+lesson.project+'</p></div>';
+    html += '<div class="project-box"><strong>Practical Assignment</strong><p>'+lesson.project+'</p></div>';
   }
   html += '</div>';
 
   // Resources
   html += '<div class="resources-card">';
-  html += '<div class="res-title">&#128218; Learning Resources</div>';
+  html += '<div class="res-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:middle"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Learning Resources</div>';
   html += '<div class="res-grid">';
   res.forEach(function(r) {
+    var isVideo = r.type === 'video';
     html += '<a class="res-link" href="'+r.url+'" target="_blank" rel="noopener">';
-    html += '<div class="res-icon" style="background:'+r.bg+'">'+r.icon+'</div>';
-    html += '<div><div style="font-size:13px;font-weight:500">'+r.name+'</div><div style="font-size:11px;color:#5f6368">'+r.source+'</div></div>';
+    html += '<div class="res-icon" style="background:#f1f3f4;color:#5f6368;">'+(isVideo ? VIDEO_ICON : DOC_ICON)+'</div>';
+    html += '<div style="flex:1;min-width:0;">';
+    html += '<div style="font-size:13px;font-weight:500;color:#202124;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+r.name+'</div>';
+    html += '<div style="font-size:11px;color:#80868b;margin-top:2px;">'+r.source+(isVideo?' · Video':' · Document')+'</div>';
+    html += '</div>';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dadce0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>';
     html += '</a>';
   });
   html += '</div></div>';
@@ -545,7 +553,7 @@ function loadLesson(mi, li) {
   if (isTech) {
     html += '<div class="code-card">';
     html += '<div class="code-header">';
-    html += '<span class="code-title">&#128187; Code Editor - Try it yourself</span>';
+    html += '<span class="code-title">Code Editor</span>';
     html += '<div style="display:flex;gap:8px">';
     html += '<select id="langSel" onchange="changeLang()" style="background:#3d3d3d;color:#ccc;border:none;border-radius:4px;padding:4px 8px;font-size:12px"><option value="javascript">JavaScript</option><option value="html">HTML</option><option value="python">Python</option></select>';
     html += '<button class="code-run" onclick="runCode()">&#9654; Run</button>';
