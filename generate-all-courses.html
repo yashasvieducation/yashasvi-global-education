@@ -32,6 +32,7 @@
 
 <button class="btn" id="genBtn" onclick="startGeneration()">🚀 Generate All Courses</button>
 <button class="btn" style="background:#34a853; margin-left:10px;" onclick="loadCourses()">🔄 Refresh List</button>
+<button class="btn" style="background:#f29900; margin-left:10px;" onclick="retryFailed()">🔁 Retry Failed</button>
 
 <div class="log" id="log"></div>
 
@@ -80,39 +81,20 @@ async function loadCourses() {
 async function generateCourse(course) {
   log(`⚙️ Generating: ${course.name}...`, 'info');
 
-  const prompt = `Create a complete course structure for "${course.name}" (Level: ${course.level}, Department: ${course.department}).
-
-Generate exactly 4 modules with 3 lessons each. Each lesson needs real educational content.
-
-Respond ONLY in this JSON format:
-{
-  "modules": [
-    {
-      "module_title": "Module Title",
-      "lessons": [
-        {
-          "title": "Lesson Title",
-          "content": "3-4 paragraph detailed educational content about this topic. Write real content, not placeholders.",
-          "duration": "15 min",
-          "project": "Practical assignment description",
-          "mcq": [
-            {"question": "Question?", "options": ["A", "B", "C", "D"], "correct": "A"}
-          ]
-        }
-      ]
-    }
-  ]
-}`;
+  const prompt = `Generate a course for "${course.name}" (Level: ${course.level}, Dept: ${course.department}).
+4 modules, 3 lessons each. Return ONLY compact JSON:
+{"modules":[{"module_title":"Title","lessons":[{"title":"Title","content":"2 paragraphs of educational content.","duration":"15 min","project":"Assignment","mcq":[{"question":"Q?","options":["A","B","C","D"],"correct":"A"}]}]}]}
+Keep content short but educational. Valid JSON only.`;
 
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: { "Authorization": "Bearer " + GROQ, "Content-Type": "application/json" },
     body: JSON.stringify({
       model: "llama-3.3-70b-versatile",
-      max_tokens: 4000,
-      temperature: 0.7,
+      max_tokens: 8000,
+      temperature: 0.5,
       messages: [
-        { role: "system", content: "You are an expert curriculum designer. Always respond with valid JSON only, no markdown." },
+        { role: "system", content: "You are a curriculum designer. Respond with valid compact JSON only. No markdown. No extra spaces. Keep content concise." },
         { role: "user", content: prompt }
       ]
     })
@@ -138,6 +120,13 @@ Respond ONLY in this JSON format:
     });
   }
   log(`✅ Done: ${course.name} — ${parsed.modules.length} modules saved`, 'success');
+}
+
+async function retryFailed() {
+  await loadCourses();
+  if (courses.length === 0) { log('No failed courses to retry!', 'success'); return; }
+  log(`Retrying ${courses.length} courses...`, 'info');
+  await startGeneration();
 }
 
 async function startGeneration() {
