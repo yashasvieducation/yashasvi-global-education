@@ -218,14 +218,29 @@
       <span class="search-icon">🔍</span>
       <input class="search-input" type="text" id="searchInput" placeholder="Search courses — e.g. Python, Business, Design…" oninput="filterCourses()">
     </div>
-    <div class="filter-chips">
-      <div class="chip active" onclick="setFilter('all', this)">All</div>
-      <div class="chip" onclick="setFilter('Technology', this)">💻 Technology</div>
-      <div class="chip" onclick="setFilter('School', this)">📚 School</div>
-      <div class="chip" onclick="setFilter('Business', this)">🚀 Business</div>
-      <div class="chip" onclick="setFilter('Design', this)">🎨 Design</div>
-      <div class="chip" onclick="setFilter('Corporate', this)">🏢 Corporate</div>
-      <div class="chip" onclick="setFilter('free', this)">✅ Free</div>
+    <!-- Standard Filter -->
+    <div style="margin-bottom:10px;">
+      <div style="font-size:11px; font-weight:500; color:#80868b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">By Standard</div>
+      <div class="filter-chips" id="standardChips">
+        <div class="chip active" onclick="setStandard('all', this)">All</div>
+        <div class="chip" onclick="setStandard('8th', this)">🎒 8th</div>
+        <div class="chip" onclick="setStandard('10th', this)">📚 10th</div>
+        <div class="chip" onclick="setStandard('12th', this)">🎓 12th</div>
+        <div class="chip" onclick="setStandard('Any', this)">🌐 Open to All</div>
+      </div>
+    </div>
+    <!-- Department Filter -->
+    <div>
+      <div style="font-size:11px; font-weight:500; color:#80868b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">By Category</div>
+      <div class="filter-chips" id="deptChips">
+        <div class="chip active" onclick="setDept('all', this)">All</div>
+        <div class="chip" onclick="setDept('Technology', this)">💻 Tech</div>
+        <div class="chip" onclick="setDept('School', this)">📖 School</div>
+        <div class="chip" onclick="setDept('Business', this)">🚀 Business</div>
+        <div class="chip" onclick="setDept('Design', this)">🎨 Design</div>
+        <div class="chip" onclick="setDept('Corporate', this)">🏢 Corporate</div>
+        <div class="chip" onclick="setDept('free', this)">✅ Free</div>
+      </div>
     </div>
   </div>
 
@@ -245,7 +260,7 @@ if (email) {
   const backBtn = document.getElementById('backBtn');
   if (backBtn) backBtn.href = '/syllabus.html?email=' + encodeURIComponent(email);
 }
-let allCourses = [], currentFilter = 'all', enrolledCourse = '', completedCount = 0, totalLessons = 0;
+let allCourses = [], currentFilter = 'all', currentStandard = 'all', currentDept = 'all', enrolledCourse = '', completedCount = 0, totalLessons = 0;
 
 const deptIcons = { Technology: '💻', School: '📚', Business: '🚀', Design: '🎨', Corporate: '🏢', Other: '📖' };
 
@@ -298,8 +313,9 @@ function renderCourses() {
   const search = document.getElementById('searchInput').value.toLowerCase().trim();
   let filtered = allCourses.filter(c => {
     const matchSearch = !search || c.name.toLowerCase().includes(search) || (c.description||'').toLowerCase().includes(search) || (c.tags||[]).some(t => t.includes(search));
-    const matchFilter = currentFilter === 'all' || (currentFilter === 'free' ? c.is_free : c.department === currentFilter);
-    return matchSearch && matchFilter;
+    const matchStandard = currentStandard === 'all' || (c.level || 'Any') === currentStandard;
+    const matchDept = currentDept === 'all' || (currentDept === 'free' ? c.is_free : c.department === currentDept);
+    return matchSearch && matchStandard && matchDept;
   });
 
   if (filtered.length === 0) {
@@ -315,12 +331,22 @@ function renderCourses() {
   document.getElementById('allCoursesArea').innerHTML = '<div class="courses-grid">' + filtered.map(c => {
     const isEnrolled = c.name === enrolledCourse;
     const icon = deptIcons[c.department] || '📖';
-    const tags = (c.tags || []).slice(0, 3);
+    const tags = (c.tags || []).slice(0, 2);
+    const diffColor = c.difficulty === 'Beginner' ? '#137333' : c.difficulty === 'Intermediate' ? '#b06000' : '#c5221f';
+    const diffBg = c.difficulty === 'Beginner' ? '#e6f4ea' : c.difficulty === 'Intermediate' ? '#fef7e0' : '#fce8e6';
+    const levelBadge = c.level && c.level !== 'Any' ? `<span style="background:#e8f0fe;color:#1a73e8;border-radius:100px;padding:2px 8px;font-size:11px;font-weight:500;">🎒 ${c.level} Std</span>` : `<span style="background:#f1f3f4;color:#5f6368;border-radius:100px;padding:2px 8px;font-size:11px;">🌐 Open to All</span>`;
     return `<div class="course-card ${isEnrolled?'enrolled':''}">
-      <div class="course-icon">${icon}</div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+        <div class="course-icon" style="margin:0;">${icon}</div>
+        ${levelBadge}
+      </div>
       <div class="course-name">${c.name}</div>
-      <div class="course-desc">${(c.description||'').substring(0,80)}${(c.description||'').length>80?'…':''}</div>
-      ${tags.length > 0 ? '<div class="course-tags">' + tags.map(t=>`<span class="course-tag">${t}</span>`).join('') + '</div>' : ''}
+      <div class="course-desc">${(c.description||'').substring(0,75)}${(c.description||'').length>75?'…':''}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+        <span style="background:${diffBg};color:${diffColor};border-radius:100px;padding:2px 10px;font-size:11px;font-weight:500;">${c.difficulty||'Beginner'}</span>
+        <span style="background:#f1f3f4;color:#5f6368;border-radius:100px;padding:2px 10px;font-size:11px;">⏱ ${c.duration_hours||12}h</span>
+        ${tags.map(t=>`<span class="course-tag">${t}</span>`).join('')}
+      </div>
       <div class="course-footer">
         <span class="course-badge ${isEnrolled?'badge-enrolled':c.is_free?'badge-free':'badge-paid'}">${isEnrolled?'✅ Enrolled':c.is_free?'Free':'$99 USDT'}</span>
         ${isEnrolled
@@ -333,10 +359,22 @@ function renderCourses() {
 
 function filterCourses() { renderCourses(); }
 
+function setStandard(val, el) {
+  currentStandard = val;
+  document.querySelectorAll('#standardChips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderCourses();
+}
+
+function setDept(val, el) {
+  currentDept = val;
+  document.querySelectorAll('#deptChips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderCourses();
+}
+
 function setFilter(filter, el) {
   currentFilter = filter;
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
   renderCourses();
 }
 
