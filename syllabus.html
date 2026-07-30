@@ -809,14 +809,39 @@ function addBubble(role,text,name) {
 function openRequest() { document.getElementById('requestModal').classList.add('open'); }
 function closeRequest() { document.getElementById('requestModal').classList.remove('open'); }
 async function submitRequest() {
-  const text=document.getElementById('requestText').value.trim(); if(!text) return;
-  const btn=document.querySelector('#requestModal .btn-primary'); btn.disabled=true; btn.textContent='Sending…';
+  const text = document.getElementById('requestText').value.trim();
+  if (!text) return;
+  
+  // Get email from localStorage if studentEmail is empty
+  const reqEmail = studentEmail || localStorage.getItem('yge_email') || 'unknown@student.com';
+  const reqName = studentName || reqEmail.split('@')[0];
+  
+  const btn = document.querySelector('#requestModal .btn-primary');
+  btn.disabled = true; btn.textContent = 'Sending…';
   try {
-    await fetch(BASE+"/course_requests",{method:"POST",headers:{...HEADERS,"Prefer":"return=representation"},body:JSON.stringify({student_email:studentEmail,student_name:studentName,requested_course:text})});
-    document.getElementById('requestMsg').textContent='✅ Request sent! AI will build this course within 24 hours.'; document.getElementById('requestMsg').style.display='block';
-    document.getElementById('requestText').value=''; btn.textContent='Sent ✓';
-    setTimeout(()=>closeRequest(),2000);
-  } catch(e) { btn.disabled=false; btn.textContent='Send Request →'; }
+    const res = await fetch(BASE + "/course_requests", {
+      method: "POST",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({
+        student_email: reqEmail,
+        student_name: reqName,
+        requested_course: text,
+        created_at: new Date().toISOString()
+      })
+    });
+    const data = await res.json();
+    console.log('Request saved:', data);
+    const msg = document.getElementById('requestMsg');
+    msg.textContent = '✅ Request sent! AI will build this course within 24 hours.';
+    msg.style.display = 'block';
+    document.getElementById('requestText').value = '';
+    btn.textContent = 'Sent ✓';
+    setTimeout(() => closeRequest(), 2000);
+  } catch(e) {
+    console.error('Request error:', e);
+    btn.disabled = false;
+    btn.textContent = 'Send Request →';
+  }
 }
 document.getElementById('requestModal').addEventListener('click',e=>{if(e.target===document.getElementById('requestModal'))closeRequest();});
 

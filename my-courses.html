@@ -394,11 +394,22 @@ async function addCourse(courseName, btn) {
 async function requestCourse(name) {
   const courseName = name || prompt('What course do you want?');
   if (!courseName) return;
-  await fetch(BASE + "/course_requests", {
-    method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
-    body: JSON.stringify({ student_email: email, student_name: email, requested_course: courseName })
-  });
-  alert('✅ Request sent! Our AI will build "' + courseName + '" within 24 hours.');
+  const reqEmail = email || localStorage.getItem('yge_email') || 'unknown@student.com';
+  try {
+    await fetch(BASE + "/course_requests", {
+      method: "POST",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({
+        student_email: reqEmail,
+        student_name: reqEmail.split('@')[0],
+        requested_course: courseName,
+        created_at: new Date().toISOString()
+      })
+    });
+    alert('✅ Request sent! Our AI will build "' + courseName + '" within 24 hours.');
+  } catch(e) {
+    alert('Error sending request. Please try again.');
+  }
 }
 
 init();
