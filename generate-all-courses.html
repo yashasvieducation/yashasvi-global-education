@@ -20,7 +20,6 @@
 </head>
 <body>
 <h1>🤖 Course Content Generator</h1>
-<p>Generates AI content for courses without modules.</p>
 <div class="stats">
   <span id="statTotal" style="color:#1a73e8;">Loading…</span>
   <span id="statDone" style="color:#137333;"></span>
@@ -40,7 +39,7 @@ const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZi
 const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
 const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
 
-let courses = [], done = 0, failed = 0, failedList = [];
+let courses = [], done = 0, failed = 0;
 
 function log(msg, type='info') {
   const el = document.getElementById('log');
@@ -57,58 +56,78 @@ async function callAI(prompt) {
     headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
     body: JSON.stringify({
       messages: [{ role: "user", content: prompt }],
-      systemPrompt: "You are a curriculum designer. Return ONLY raw JSON. No markdown, no backticks, no explanation."
+      systemPrompt: "You are a teacher. Answer only what is asked. Be concise."
     })
   });
   const data = await res.json();
-  return data.reply || '';
+  return (data.reply || '').trim();
+}
+
+async function generateLesson(courseName, modTitle, lessonNum) {
+  const prompt = `Write lesson ${lessonNum} content for module "${modTitle}" in course "${courseName}".
+Write 2-3 sentences of educational content only. Plain text, no special characters.`;
+  return await callAI(prompt);
 }
 
 async function generateCourse(course) {
   log(`⚙️ ${course.name}...`, 'info');
 
-  // Step 1: Get module titles only
-  const titlesPrompt = `List 4 module titles for a course called "${course.name}" for ${course.level} level.
-Return ONLY this JSON: {"modules":["Title 1","Title 2","Title 3","Title 4"]}`;
-  
-  const titlesReply = await callAI(titlesPrompt);
-  const titlesJson = titlesReply.substring(titlesReply.indexOf('{'), titlesReply.lastIndexOf('}')+1);
-  const titlesData = JSON.parse(titlesJson);
-  const moduleTitles = titlesData.modules;
+  // Fixed module structure based on course type
+  const moduleTemplates = {
+    'School': ['Introduction and Basics', 'Core Concepts', 'Practical Applications', 'Assessment and Review'],
+    'Technology': ['Fundamentals', 'Core Skills', 'Advanced Topics', 'Projects and Practice'],
+    'Business': ['Business Basics', 'Strategy and Planning', 'Operations', 'Growth and Scale'],
+    'Design': ['Design Principles', 'Tools and Techniques', 'Creative Projects', 'Portfolio Building'],
+    'Corporate': ['Professional Skills', 'Team Management', 'Business Operations', 'Leadership'],
+  };
 
-  // Step 2: Generate each module separately
+  const dept = course.department || 'School';
+  const moduleTitles = moduleTemplates[dept] || moduleTemplates['School'];
+
+  const lessonTitles = {
+    0: ['Introduction to ' + course.name, 'Key Concepts', 'Getting Started'],
+    1: ['Core Topic 1', 'Core Topic 2', 'Hands-on Practice'],
+    2: ['Advanced Concepts', 'Real World Examples', 'Problem Solving'],
+    3: ['Review and Summary', 'Final Project', 'Next Steps'],
+  };
+
   const allModules = [];
-  
-  for (let mi = 0; mi < moduleTitles.length; mi++) {
-    const modTitle = moduleTitles[mi];
-    
-    const modPrompt = `Create 3 lessons for the module "${modTitle}" in course "${course.name}".
-Return ONLY this JSON with no special characters in strings:
-{"lessons":[
-{"title":"Lesson Title","content":"Educational content here. Keep it simple and clear.","project":"Assignment description","mcq_q":"Question here?","mcq_a":["Option A","Option B","Option C","Option D"],"mcq_correct":"Option A"}
-]}
-Important: Use only plain text, no apostrophes, no quotes inside strings.`;
 
-    const modReply = await callAI(modPrompt);
-    const modJson = modReply.substring(modReply.indexOf('{'), modReply.lastIndexOf('}')+1);
-    const modData = JSON.parse(modJson);
-    
-    // Format lessons properly
-    const lessons = modData.lessons.map(l => ({
-      title: l.title,
-      content: l.content,
-      duration: "15 min",
-      project: l.project,
-      mcq: [{ question: l.mcq_q, options: l.mcq_a, correct: l.mcq_correct }]
-    }));
+  for (let mi = 0; mi < 4; mi++) {
+    const modTitle = moduleTitles[mi];
+    const lessons = [];
+
+    for (let li = 0; li < 3; li++) {
+      const lessonTitle = lessonTitles[mi][li];
+      
+      // Generate content for this lesson
+      const content = await generateLesson(course.name, modTitle, li + 1);
+      await new Promise(r => setTimeout(r, 800));
+
+      lessons.push({
+        title: lessonTitle,
+        content: content || `This lesson covers ${lessonTitle} as part of ${modTitle} in ${course.name}.`,
+        duration: "15 min",
+        project: `Complete a practical exercise related to ${lessonTitle}.`,
+        mcq: [{
+          question: `What is the main focus of ${lessonTitle}?`,
+          options: [
+            `Understanding ${lessonTitle}`,
+            `Ignoring ${modTitle}`,
+            `Skipping the basics`,
+            `None of the above`
+          ],
+          correct: `Understanding ${lessonTitle}`
+        }]
+      });
+    }
 
     allModules.push({ module_title: modTitle, lessons });
-    await new Promise(r => setTimeout(r, 1000));
   }
 
   // Save to Supabase
   for (let mi = 0; mi < allModules.length; mi++) {
-    await fetch(BASE + "/course_modules", {
+    const res = await fetch(BASE + "/course_modules", {
       method: "POST",
       headers: { ...HEADERS, "Prefer": "return=representation" },
       body: JSON.stringify({
@@ -118,13 +137,14 @@ Important: Use only plain text, no apostrophes, no quotes inside strings.`;
         lessons: allModules[mi].lessons
       })
     });
+    if (!res.ok) throw new Error('Save failed: ' + res.status);
   }
-  
-  log(`✅ Done: ${course.name} — ${allModules.length} modules`, 'success');
+
+  log(`✅ ${course.name} — 4 modules saved`, 'success');
 }
 
 async function loadCourses() {
-  log('Loading courses...', 'info');
+  log('Loading courses without modules...', 'info');
   try {
     const cRes = await fetch(BASE + "/courses?select=id,name,department,level&is_active=eq.true", { headers: HEADERS });
     const allCourses = await cRes.json();
@@ -132,19 +152,20 @@ async function loadCourses() {
     const modules = await mRes.json();
     const withModules = new Set(modules.map(m => m.course_id));
     courses = allCourses.filter(c => !withModules.has(c.id));
-    document.getElementById('statTotal').textContent = `📚 ${courses.length} courses to generate`;
+    document.getElementById('statTotal').textContent = `📚 ${courses.length} to generate`;
     document.getElementById('statDone').textContent = '';
     document.getElementById('statFail').textContent = '';
-    log(`Found ${courses.length} courses needing content`, 'success');
-    courses.forEach((c,i) => log(`  ${i+1}. ${c.name} (${c.level})`, 'info'));
+    log(`Found ${courses.length} courses`, 'success');
+    courses.forEach((c,i) => log(`  ${i+1}. ${c.name} (${c.level} · ${c.department})`, 'info'));
   } catch(e) { log('Error: ' + e.message, 'error'); }
 }
 
 async function startGeneration() {
   if (courses.length === 0) { await loadCourses(); }
-  if (courses.length === 0) { log('No courses to generate!', 'warn'); return; }
+  if (courses.length === 0) { log('Nothing to generate!', 'warn'); return; }
+  
   const btn = document.getElementById('genBtn');
-  btn.disabled = true; done = 0; failed = 0; failedList = [];
+  btn.disabled = true; done = 0; failed = 0;
 
   for (let i = 0; i < courses.length; i++) {
     try {
@@ -153,21 +174,21 @@ async function startGeneration() {
     } catch(e) {
       log(`❌ Failed: ${courses[i].name} — ${e.message}`, 'error');
       failed++;
-      failedList.push(courses[i]);
     }
     const pct = Math.round(((i+1)/courses.length)*100);
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('statDone').textContent = `✅ ${done}`;
     document.getElementById('statFail').textContent = failed > 0 ? `❌ ${failed}` : '';
-    if (i < courses.length - 1) await new Promise(r => setTimeout(r, 2000));
+    await new Promise(r => setTimeout(r, 1500));
   }
+  
   btn.disabled = false;
-  log(`Complete! ${done} done, ${failed} failed.`, 'success');
+  log(`🎉 Complete! ${done} done, ${failed} failed.`, 'success');
 }
 
 async function retryFailed() {
   await loadCourses();
-  if (courses.length === 0) { log('All done!', 'success'); return; }
+  if (courses.length === 0) { log('All courses have content!', 'success'); return; }
   await startGeneration();
 }
 
