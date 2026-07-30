@@ -197,6 +197,27 @@
   .modal-actions { display: flex; gap: 10px; }
   .copy-toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #c5221f; color: #fff; padding: 8px 18px; border-radius: 8px; font-size: 13px; z-index: 500; display: none; }
 
+  /* Video Links */
+  .resources-section { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+  .resources-title { font-size: 14px; font-weight: 500; color: #202124; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 600px) { .resource-grid { grid-template-columns: 1fr; } }
+  .resource-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 12px; text-decoration: none; color: #202124; display: flex; align-items: center; gap: 10px; transition: all 0.15s; }
+  .resource-card:hover { border-color: #1a73e8; background: #f8f9ff; }
+  .resource-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .resource-name { font-size: 13px; font-weight: 500; color: #202124; margin-bottom: 2px; }
+  .resource-source { font-size: 11px; color: #5f6368; }
+
+  /* Code Editor */
+  .code-editor-section { background: #1e1e1e; border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
+  .code-editor-header { background: #2d2d2d; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .code-editor-title { color: #ccc; font-size: 13px; font-family: monospace; }
+  .code-run-btn { background: #34a853; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-size: 13px; cursor: pointer; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; }
+  .code-run-btn:hover { background: #2d9142; }
+  .code-textarea { width: 100%; background: #1e1e1e; color: #d4d4d4; border: none; padding: 16px; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; resize: vertical; min-height: 160px; outline: none; }
+  .code-output { background: #0d1117; color: #58a6ff; padding: 12px 16px; font-family: monospace; font-size: 12px; min-height: 48px; border-top: 1px solid #333; white-space: pre-wrap; }
+  .code-output.error { color: #f85149; }
+
   /* Voice Teacher */
   .voice-bar { background: #fff; border-top: 1px solid #e8eaed; padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
   .voice-btn { display: flex; align-items: center; gap: 6px; border: none; border-radius: 20px; padding: 8px 16px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; }
@@ -634,6 +655,32 @@ function loadLesson(mi, li) {
       <button onclick="document.getElementById('voiceControls').style.display='none'; stopVoice();" style="background:none; border:none; color:#5f6368; cursor:pointer; font-size:16px; padding:4px;">✕</button>
     </div>
 
+    <!-- Resources: Video + PDF -->
+    <div class="resources-section" id="resourcesSection">
+      <div class="resources-title">📚 Learning Resources</div>
+      <div class="resource-grid" id="resourceGrid">
+        <div style="color:#5f6368; font-size:13px;">Loading resources…</div>
+      </div>
+    </div>
+
+    <!-- Code Editor -->
+    <div class="code-editor-section" id="codeEditorSection" style="display:none;">
+      <div class="code-editor-header">
+        <span class="code-editor-title">💻 Code Editor — Try it yourself</span>
+        <div style="display:flex; gap:8px;">
+          <select id="langSelect" onchange="updateCodeTemplate()" style="background:#3d3d3d; color:#ccc; border:none; border-radius:4px; padding:4px 8px; font-size:12px;">
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+            <option value="html">HTML</option>
+          </select>
+          <button class="code-run-btn" onclick="runCode()">▶ Run</button>
+          <button onclick="resetCode()" style="background:#555; color:#ccc; border:none; border-radius:4px; padding:6px 10px; font-size:12px; cursor:pointer;">Reset</button>
+        </div>
+      </div>
+      <textarea class="code-textarea" id="codeTextarea" spellcheck="false"></textarea>
+      <div class="code-output" id="codeOutput">// Output will appear here…</div>
+    </div>
+
     <div class="notes-section">
       <div class="notes-header">
         <div class="notes-title">📝 My Notes</div>
@@ -659,7 +706,7 @@ function loadLesson(mi, li) {
       <button class="btn btn-primary" onclick="navigate(1)" ${mi===modules.length-1&&li===(modules[mi].lessons||[]).length-1?'disabled':''}>Next →</button>
     </div>`;
 
-  buildNav(); saveProgress(); window.scrollTo({top:0,behavior:'smooth'});
+  buildNav(); saveProgress(); window.scrollTo({top:0,behavior:'smooth'}); setTimeout(loadResources, 100);
 }
 
 function answerMCQ(qi, selected, correct, el) {
@@ -903,6 +950,147 @@ function openCoursesModal() {
 }
 function closeCoursesModal() { document.getElementById('coursesModal').classList.remove('open'); }
 document.getElementById('coursesModal').addEventListener('click', e => { if(e.target===document.getElementById('coursesModal')) closeCoursesModal(); });
+
+// Resources - Video + PDF
+const RESOURCES = {
+  'Technology': [
+    { type: 'video', name: 'FreeCodeCamp Tutorials', source: 'YouTube', url: 'https://www.youtube.com/@freecodecamp', icon: '🎥', bg: '#fce8e6' },
+    { type: 'video', name: 'MIT OpenCourseWare', source: 'YouTube', url: 'https://www.youtube.com/@mitocw', icon: '🎥', bg: '#fce8e6' },
+    { type: 'pdf', name: 'Python Official Docs', source: 'python.org', url: 'https://docs.python.org/3/', icon: '📄', bg: '#e8f0fe' },
+    { type: 'pdf', name: 'MDN Web Docs', source: 'mozilla.org', url: 'https://developer.mozilla.org/', icon: '📄', bg: '#e8f0fe' },
+  ],
+  'Business': [
+    { type: 'video', name: 'Harvard Business Review', source: 'YouTube', url: 'https://www.youtube.com/@HarvardBusinessReview', icon: '🎥', bg: '#fce8e6' },
+    { type: 'video', name: 'Stanford GSB', source: 'YouTube', url: 'https://www.youtube.com/@stanfordgsb', icon: '🎥', bg: '#fce8e6' },
+    { type: 'pdf', name: 'SBA Business Guide', source: 'sba.gov', url: 'https://www.sba.gov/business-guide', icon: '📄', bg: '#e8f0fe' },
+    { type: 'pdf', name: 'Investopedia', source: 'investopedia.com', url: 'https://www.investopedia.com/', icon: '📄', bg: '#e8f0fe' },
+  ],
+  'Design': [
+    { type: 'video', name: 'Google Design', source: 'YouTube', url: 'https://www.youtube.com/@GoogleDesign', icon: '🎥', bg: '#fce8e6' },
+    { type: 'video', name: 'Figma Tutorials', source: 'YouTube', url: 'https://www.youtube.com/@Figma', icon: '🎥', bg: '#fce8e6' },
+    { type: 'pdf', name: 'Material Design Docs', source: 'material.io', url: 'https://m3.material.io/', icon: '📄', bg: '#e8f0fe' },
+    { type: 'pdf', name: 'Canva Design School', source: 'canva.com', url: 'https://www.canva.com/learn/design/', icon: '📄', bg: '#e8f0fe' },
+  ],
+  'School': [
+    { type: 'video', name: 'Khan Academy', source: 'YouTube', url: 'https://www.youtube.com/@khanacademy', icon: '🎥', bg: '#fce8e6' },
+    { type: 'video', name: 'CrashCourse', source: 'YouTube', url: 'https://www.youtube.com/@crashcourse', icon: '🎥', bg: '#fce8e6' },
+    { type: 'pdf', name: 'NCERT Books', source: 'ncert.nic.in', url: 'https://ncert.nic.in/textbook.php', icon: '📄', bg: '#e8f0fe' },
+    { type: 'pdf', name: 'Khan Academy Docs', source: 'khanacademy.org', url: 'https://www.khanacademy.org/', icon: '📄', bg: '#e8f0fe' },
+  ],
+  'Corporate': [
+    { type: 'video', name: 'LinkedIn Learning', source: 'YouTube', url: 'https://www.youtube.com/@LinkedInLearning', icon: '🎥', bg: '#fce8e6' },
+    { type: 'video', name: 'McKinsey & Company', source: 'YouTube', url: 'https://www.youtube.com/@McKinsey', icon: '🎥', bg: '#fce8e6' },
+    { type: 'pdf', name: 'Harvard ManageMentor', source: 'hbsp.harvard.edu', url: 'https://hbsp.harvard.edu/', icon: '📄', bg: '#e8f0fe' },
+    { type: 'pdf', name: 'Deloitte Insights', source: 'deloitte.com', url: 'https://www2.deloitte.com/insights', icon: '📄', bg: '#e8f0fe' },
+  ],
+};
+
+function loadResources() {
+  const dept = currentCourse?.department || 'School';
+  const resources = RESOURCES[dept] || RESOURCES['School'];
+  const grid = document.getElementById('resourceGrid');
+  if (!grid) return;
+  grid.innerHTML = resources.map(r => `
+    <a class="resource-card" href="${r.url}" target="_blank" rel="noopener">
+      <div class="resource-icon" style="background:${r.bg};">${r.icon}</div>
+      <div>
+        <div class="resource-name">${r.name}</div>
+        <div class="resource-source">${r.source}</div>
+      </div>
+    </a>`).join('');
+
+  // Show code editor for Tech courses
+  const codeSection = document.getElementById('codeEditorSection');
+  if (codeSection) {
+    if (['Technology', 'School'].includes(dept)) {
+      codeSection.style.display = 'block';
+      updateCodeTemplate();
+    }
+  }
+}
+
+// Code Editor
+const CODE_TEMPLATES = {
+  python: `# Python Code Editor
+# Write your code here and click Run!
+
+name = "Student"
+print("Hello, " + name + "!")
+
+# Try a simple calculation
+result = 10 + 20
+print("10 + 20 =", result)`,
+  javascript: `// JavaScript Code Editor
+// Write your code here and click Run!
+
+const name = "Student";
+console.log("Hello, " + name + "!");
+
+// Try a simple calculation
+const result = 10 + 20;
+console.log("10 + 20 = " + result);`,
+  html: `<!-- HTML Code Editor -->
+<!-- Write your HTML here and click Run! -->
+
+<h1>Hello, Student!</h1>
+<p>Welcome to Yashasvi Global Education.</p>
+<button onclick="alert('Great job!')">Click Me!</button>`
+};
+
+function updateCodeTemplate() {
+  const lang = document.getElementById('langSelect')?.value || 'python';
+  const textarea = document.getElementById('codeTextarea');
+  if (textarea && !textarea.dataset.modified) {
+    textarea.value = CODE_TEMPLATES[lang];
+  }
+  document.getElementById('codeOutput').textContent = '// Output will appear here…';
+  document.getElementById('codeOutput').className = 'code-output';
+}
+
+function runCode() {
+  const lang = document.getElementById('langSelect')?.value;
+  const code = document.getElementById('codeTextarea')?.value || '';
+  const output = document.getElementById('codeOutput');
+  
+  if (lang === 'javascript') {
+    try {
+      const logs = [];
+      const origLog = console.log;
+      console.log = (...args) => logs.push(args.join(' '));
+      eval(code);
+      console.log = origLog;
+      output.textContent = logs.length > 0 ? logs.join('
+') : '// Code ran successfully (no output)';
+      output.className = 'code-output';
+    } catch(e) {
+      output.textContent = '❌ Error: ' + e.message;
+      output.className = 'code-output error';
+    }
+  } else if (lang === 'html') {
+    const win = window.open('', '_blank', 'width=600,height=400');
+    win.document.write(code);
+    win.document.close();
+    output.textContent = '✅ HTML opened in new tab!';
+    output.className = 'code-output';
+  } else {
+    output.textContent = '⚠️ Python runs on server — coming soon!
+For now, try JavaScript mode.';
+    output.className = 'code-output';
+  }
+}
+
+function resetCode() {
+  const lang = document.getElementById('langSelect')?.value || 'python';
+  const textarea = document.getElementById('codeTextarea');
+  if (textarea) { textarea.value = CODE_TEMPLATES[lang]; textarea.dataset.modified = ''; }
+  document.getElementById('codeOutput').textContent = '// Output will appear here…';
+  document.getElementById('codeOutput').className = 'code-output';
+}
+
+// Track code changes
+document.addEventListener('input', e => {
+  if (e.target.id === 'codeTextarea') e.target.dataset.modified = 'yes';
+});
 
 // Voice Teacher
 let speechSynth = window.speechSynthesis;
