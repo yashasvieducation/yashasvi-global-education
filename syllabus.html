@@ -501,10 +501,17 @@ let bookmarks = new Set(), notes = {}, mcqAnswered = {}, chatHistory = [];
 
 const urlParams = new URLSearchParams(window.location.search);
 const savedEmail = urlParams.get('email') || localStorage.getItem('yge_email') || '';
-if (savedEmail) {
-  document.getElementById('loginEmail').value = savedEmail;
-  setTimeout(() => doLogin(), 300);
-}
+
+// Auto-login on DOM ready
+window.addEventListener('DOMContentLoaded', () => {
+  if (savedEmail) {
+    const emailInput = document.getElementById('loginEmail');
+    if (emailInput) {
+      emailInput.value = savedEmail;
+      setTimeout(() => doLogin(), 500);
+    }
+  }
+});
 
 // BADGES config
 const BADGES = [
