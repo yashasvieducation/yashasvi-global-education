@@ -3,366 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yashasvi Global Education — My Course</title>
+<title>Yashasvi Global Education - My Course</title>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
-
-  /* NAV */
-  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 60px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
-  .nav-logo img { height: 36px; width: auto; }
-  .nav-right { display: flex; align-items: center; gap: 8px; }
-  .nav-user { font-size: 13px; font-weight: 500; color: #202124; background: #f1f3f4; border-radius: 100px; padding: 6px 14px; }
-  .request-btn { display: flex; align-items: center; gap: 6px; background: #1a73e8; color: #fff; border: none; border-radius: 20px; padding: 8px 16px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; }
-  .request-btn:hover { background: #1765cc; }
-  .nav-icon-btn { display: flex; align-items: center; gap: 5px; background: none; border: 1px solid #dadce0; border-radius: 20px; padding: 7px 14px; font-size: 13px; color: #5f6368; cursor: pointer; transition: all 0.15s; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; }
-  .nav-icon-btn:hover { border-color: #1a73e8; color: #1a73e8; background: #f8f9ff; }
-
-  /* Notes Modal */
-  .notes-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
-  .notes-modal.open { display: flex; }
-  .notes-modal-box { background: #fff; border-radius: 12px; width: 100%; max-width: 640px; max-height: 80vh; display: flex; flex-direction: column; }
-  .notes-modal-header { padding: 18px 20px; border-bottom: 1px solid #e8eaed; display: flex; align-items: center; justify-content: space-between; }
-  .notes-modal-header h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 400; }
-  .notes-modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #5f6368; }
-  .notes-modal-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
-  .note-entry { border: 1px solid #e8eaed; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
-  .note-lesson { font-size: 13px; font-weight: 500; color: #1a73e8; margin-bottom: 4px; }
-  .note-module { font-size: 11px; color: #80868b; margin-bottom: 8px; }
-  .note-content { font-size: 14px; color: #3c4043; line-height: 1.6; white-space: pre-wrap; }
-  .note-empty { text-align: center; padding: 32px; color: #80868b; font-size: 14px; }
-
-  /* Courses Modal */
-  .courses-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
-  .courses-modal.open { display: flex; }
-  .courses-modal-box { background: #fff; border-radius: 12px; width: 100%; max-width: 480px; max-height: 80vh; display: flex; flex-direction: column; }
-  .bell-btn { position: relative; background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px; }
-  .bell-badge { position: absolute; top: 0; right: 0; background: #c5221f; color: #fff; border-radius: 50%; width: 14px; height: 14px; font-size: 9px; display: none; align-items: center; justify-content: center; }
-
-  /* LAYOUT */
-  .layout { display: grid; grid-template-columns: 280px 1fr 320px; height: calc(100vh - 60px); overflow: hidden; }
-
-  /* SIDEBAR */
-  .sidebar { background: #fff; border-right: 1px solid #e8eaed; overflow-y: auto; display: flex; flex-direction: column; }
-  .sidebar-tabs { display: flex; border-bottom: 1px solid #e8eaed; }
-  .stab { flex: 1; padding: 10px 0; text-align: center; font-size: 12px; font-weight: 500; color: #5f6368; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
-  .stab.active { color: #1a73e8; border-bottom-color: #1a73e8; }
-  .stab-panel { display: none; padding: 12px 0; flex: 1; }
-  .stab-panel.active { display: block; }
-
-  /* Course info */
-  .course-info-wrap { padding: 14px 16px; border-bottom: 1px solid #e8eaed; }
-  .course-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 13px; font-weight: 500; color: #202124; margin-bottom: 10px; }
-  .progress-row { display: flex; justify-content: space-between; font-size: 11px; color: #5f6368; margin-bottom: 4px; }
-  .progress-bg { background: #f1f3f4; border-radius: 100px; height: 6px; margin-bottom: 10px; }
-  .progress-fill { background: #1a73e8; height: 6px; border-radius: 100px; transition: width 0.4s; }
-  .time-remaining { font-size: 12px; color: #5f6368; display: flex; align-items: center; gap: 4px; }
-
-  /* Module nav */
-  .module-header { display: flex; align-items: center; gap: 8px; padding: 9px 16px; cursor: pointer; font-size: 13px; font-weight: 500; color: #202124; transition: background 0.15s; user-select: none; }
-  .module-header:hover { background: #f1f3f4; }
-  .module-header.active { color: #1a73e8; }
-  .module-pct { font-size: 11px; color: #80868b; margin-left: auto; }
-  .module-lessons { display: none; }
-  .module.open .module-lessons { display: block; }
-  .lesson-item { display: flex; align-items: center; gap: 8px; padding: 7px 16px 7px 32px; font-size: 12px; color: #5f6368; cursor: pointer; transition: background 0.15s; }
-  .lesson-item:hover { background: #f1f3f4; }
-  .lesson-item.active { color: #1a73e8; background: #e8f0fe; font-weight: 500; }
-  .lesson-item.completed { color: #137333; }
-  .lesson-dot { width: 8px; height: 8px; border-radius: 50%; background: #dadce0; flex-shrink: 0; }
-  .lesson-item.completed .lesson-dot { background: #34a853; }
-  .lesson-item.active .lesson-dot { background: #1a73e8; }
-  .bookmark-icon { margin-left: auto; font-size: 11px; display: none; }
-  .lesson-item:hover .bookmark-icon { display: block; }
-
-  /* Badges */
-  .badges-wrap { padding: 12px 16px; }
-  .badge-title { font-size: 11px; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
-  .badge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .badge-item { border: 1px solid #e8eaed; border-radius: 8px; padding: 10px 8px; text-align: center; }
-  .badge-item.earned { border-color: #34a853; background: #e6f4ea; }
-  .badge-item.locked { opacity: 0.4; }
-  .badge-emoji { font-size: 22px; margin-bottom: 4px; }
-  .badge-name { font-size: 10px; color: #5f6368; line-height: 1.3; }
-  .badge-item.earned .badge-name { color: #137333; font-weight: 500; }
-
-  /* Bookmarks */
-  .bookmarks-wrap { padding: 12px 16px; }
-  .bookmark-empty { font-size: 13px; color: #80868b; text-align: center; padding: 20px 0; }
-
-  /* My Courses */
-  .my-courses-wrap { padding: 12px 16px; }
-  .my-course-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 12px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; }
-  .my-course-card:hover { border-color: #1a73e8; background: #f8f9ff; }
-  .my-course-card.active { border-color: #1a73e8; background: #e8f0fe; }
-  .mc-name { font-size: 13px; font-weight: 500; color: #202124; margin-bottom: 4px; }
-  .mc-progress { font-size: 11px; color: #5f6368; }
-  .mc-bar { background: #f1f3f4; border-radius: 100px; height: 3px; margin-top: 6px; }
-  .mc-fill { background: #1a73e8; height: 3px; border-radius: 100px; }
-
-  /* MAIN */
-  .main { overflow-y: auto; padding: 24px 28px; background: #f8f9fa; }
-  .lesson-breadcrumb { font-size: 12px; color: #80868b; margin-bottom: 6px; }
-  .lesson-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-  .lesson-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 26px; font-weight: 400; color: #202124; }
-  .bookmark-btn { background: none; border: 1px solid #dadce0; border-radius: 4px; padding: 6px 12px; font-size: 13px; cursor: pointer; color: #5f6368; white-space: nowrap; transition: all 0.15s; flex-shrink: 0; }
-  .bookmark-btn:hover { border-color: #1a73e8; color: #1a73e8; }
-  .bookmark-btn.bookmarked { background: #e8f0fe; border-color: #1a73e8; color: #1a73e8; }
-  .lesson-meta { font-size: 13px; color: #5f6368; display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
-  .lesson-body { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; margin-bottom: 16px; font-size: 15px; line-height: 1.75; color: #3c4043; }
-  .lesson-body p { margin-bottom: 12px; }
-  .lesson-body p:last-child { margin-bottom: 0; }
-  .project-box { background: #e6f4ea; border-left: 3px solid #34a853; padding: 12px 16px; border-radius: 0 6px 6px 0; margin-top: 16px; }
-  .project-box strong { display: block; color: #137333; margin-bottom: 4px; font-size: 13px; }
-  .project-box p { font-size: 14px; color: #137333; margin: 0; }
-
-  /* Notes */
-  .notes-section { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 18px; margin-bottom: 16px; }
-  .notes-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .notes-title { font-size: 14px; font-weight: 500; color: #202124; display: flex; align-items: center; gap: 6px; }
-  .notes-save { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; cursor: pointer; }
-  .notes-save:hover { background: #1765cc; }
-  .notes-textarea { width: 100%; border: 1px solid #dadce0; border-radius: 4px; padding: 10px 12px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; resize: vertical; min-height: 80px; outline: none; color: #202124; line-height: 1.5; user-select: text; -webkit-user-select: text; }
-  .notes-textarea:focus { border-color: #1a73e8; }
-  .notes-saved-msg { font-size: 12px; color: #137333; display: none; margin-top: 4px; }
-
-  /* MCQ */
-  .mcq-section { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
-  .mcq-title { font-size: 14px; font-weight: 500; color: #202124; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
-  .mcq-q { font-size: 14px; color: #202124; margin-bottom: 10px; font-weight: 500; }
-  .mcq-opts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-  .mcq-opt { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1.5px solid #dadce0; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.15s; user-select: none; }
-  .mcq-opt:hover { border-color: #1a73e8; background: #f8f9ff; }
-  .mcq-opt.correct { border-color: #34a853; background: #e6f4ea; color: #137333; }
-  .mcq-opt.wrong { border-color: #c5221f; background: #fce8e6; color: #c5221f; }
-  .mcq-opt.show-correct { border-color: #34a853; background: #e6f4ea; color: #137333; }
-
-  /* Lesson nav */
-  .lesson-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; gap: 12px; }
-  .btn { border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
-  .btn-primary { background: #1a73e8; color: #fff; }
-  .btn-primary:hover { background: #1765cc; }
-  .btn-secondary { background: #f1f3f4; color: #202124; }
-  .btn-secondary:hover { background: #e8eaed; }
-  .btn-complete { background: #34a853; color: #fff; }
-  .btn-complete:hover { background: #2d9142; }
-  .btn:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
-
-  /* AI CHAT */
-  .chat-panel { background: #fff; border-left: 1px solid #e8eaed; display: flex; flex-direction: column; height: calc(100vh - 60px); }
-  .chat-header { padding: 14px 16px; border-bottom: 1px solid #e8eaed; }
-  .chat-header h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 2px; }
-  .chat-header p { font-size: 11px; color: #5f6368; }
-  .chat-messages { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-  .chat-msg { max-width: 85%; }
-  .chat-msg.user { align-self: flex-end; }
-  .chat-msg.ai { align-self: flex-start; }
-  .chat-bubble { padding: 9px 13px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
-  .chat-msg.user .chat-bubble { background: #1a73e8; color: #fff; border-radius: 12px 12px 2px 12px; }
-  .chat-msg.ai .chat-bubble { background: #f1f3f4; color: #202124; border-radius: 12px 12px 12px 2px; }
-  .chat-name { font-size: 10px; color: #80868b; margin-bottom: 2px; }
-  .chat-msg.user .chat-name { text-align: right; }
-  .typing { font-size: 11px; color: #5f6368; padding: 2px 12px; display: none; }
-  .chat-input-wrap { padding: 10px 12px; border-top: 1px solid #e8eaed; display: flex; gap: 6px; }
-  .chat-input { flex: 1; padding: 8px 12px; border: 1px solid #dadce0; border-radius: 20px; font-size: 13px; font-family: 'Roboto', Arial, sans-serif; outline: none; resize: none; }
-  .chat-input:focus { border-color: #1a73e8; }
-  .chat-send { background: #1a73e8; color: #fff; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 13px; flex-shrink: 0; align-self: flex-end; }
-  .chat-send:disabled { background: #dadce0; cursor: not-allowed; }
-
-  /* Login */
-  #loginWrap { max-width: 480px; margin: 80px auto; padding: 0 24px; }
-  #loginWrap h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
-  #loginWrap p { font-size: 15px; color: #5f6368; margin-bottom: 24px; }
-  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
-  .field input { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 15px; outline: none; }
-  .field input:focus { border-color: #1a73e8; }
-  .field { margin-bottom: 16px; }
-  #loginMsg { margin-top: 12px; padding: 10px; border-radius: 4px; font-size: 14px; display: none; }
-  .msg-error { background: #fce8e6; color: #c5221f; display: block !important; }
-
-  /* Loading */
-  .loading { text-align: center; padding: 40px 20px; color: #5f6368; font-size: 14px; }
-  .spin { font-size: 28px; animation: spin 1s linear infinite; display: block; margin-bottom: 8px; }
-  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-  /* Request modal */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; }
-  .modal-overlay.open { display: flex; }
-  .modal-box { background: #fff; border-radius: 12px; padding: 28px; max-width: 480px; width: 100%; }
-  .modal-box h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 20px; font-weight: 400; margin-bottom: 8px; }
-  .modal-box p { font-size: 14px; color: #5f6368; margin-bottom: 16px; line-height: 1.5; }
-  .modal-textarea { width: 100%; padding: 12px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; outline: none; resize: vertical; min-height: 80px; margin-bottom: 12px; }
-  .modal-textarea:focus { border-color: #1a73e8; }
-  .modal-actions { display: flex; gap: 10px; }
-  .copy-toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #c5221f; color: #fff; padding: 8px 18px; border-radius: 8px; font-size: 13px; z-index: 500; display: none; }
-
-  /* Video Links */
-  .resources-section { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
-  .resources-title { font-size: 14px; font-weight: 500; color: #202124; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
-  .resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  @media (max-width: 600px) { .resource-grid { grid-template-columns: 1fr; } }
-  .resource-card { border: 1px solid #e8eaed; border-radius: 8px; padding: 12px; text-decoration: none; color: #202124; display: flex; align-items: center; gap: 10px; transition: all 0.15s; }
-  .resource-card:hover { border-color: #1a73e8; background: #f8f9ff; }
-  .resource-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-  .resource-name { font-size: 13px; font-weight: 500; color: #202124; margin-bottom: 2px; }
-  .resource-source { font-size: 11px; color: #5f6368; }
-
-  /* Code Editor */
-  .code-editor-section { background: #1e1e1e; border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
-  .code-editor-header { background: #2d2d2d; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
-  .code-editor-title { color: #ccc; font-size: 13px; font-family: monospace; }
-  .code-run-btn { background: #34a853; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-size: 13px; cursor: pointer; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; }
-  .code-run-btn:hover { background: #2d9142; }
-  .code-textarea { width: 100%; background: #1e1e1e; color: #d4d4d4; border: none; padding: 16px; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; resize: vertical; min-height: 160px; outline: none; }
-  .code-output { background: #0d1117; color: #58a6ff; padding: 12px 16px; font-family: monospace; font-size: 12px; min-height: 48px; border-top: 1px solid #333; white-space: pre-wrap; }
-  .code-output.error { color: #f85149; }
-
-  /* Voice Teacher */
-  .voice-bar { background: #fff; border-top: 1px solid #e8eaed; padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
-  .voice-btn { display: flex; align-items: center; gap: 6px; border: none; border-radius: 20px; padding: 8px 16px; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; }
-  .voice-read { background: #e8f0fe; color: #1a73e8; }
-  .voice-read:hover { background: #1a73e8; color: #fff; }
-  .voice-stop { background: #fce8e6; color: #c5221f; }
-  .voice-stop:hover { background: #c5221f; color: #fff; }
-  .voice-speed { border: 1px solid #dadce0; border-radius: 4px; padding: 6px 10px; font-size: 13px; outline: none; }
-  .voice-status { font-size: 12px; color: #5f6368; flex: 1; }
-
-  @media (max-width: 1100px) { .layout { grid-template-columns: 260px 1fr; } .chat-panel { display: none; } }
-  @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 16px; } }
-
-  /* ===== GLOBAL MOBILE RESPONSIVE ===== */
-  @media (max-width: 768px) {
-    .nav { padding: 0 14px !important; height: 56px !important; }
-    .hero-banner { padding: 24px 20px !important; flex-direction: column !important; gap: 16px !important; text-align: center; }
-    .hero-text h2 { font-size: 20px !important; }
-    .hero-emoji { font-size: 48px !important; }
-    .hero-btns { justify-content: center; }
-    .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-    .main-grid { grid-template-columns: 1fr !important; }
-    .quick-grid { grid-template-columns: 1fr 1fr !important; }
-    .grid-2 { grid-template-columns: 1fr !important; }
-    .layout { grid-template-columns: 1fr !important; }
-    .sidebar { display: none !important; }
-    .chat-panel { display: none !important; }
-    .field-row { grid-template-columns: 1fr !important; }
-    .plans-grid { grid-template-columns: 1fr !important; }
-    .type-grid { grid-template-columns: 1fr !important; }
-    .difficulty-grid { grid-template-columns: 1fr !important; }
-    .score-grid { grid-template-columns: 1fr !important; }
-    .exam-info-grid { grid-template-columns: 1fr !important; }
-    .form-row { grid-template-columns: 1fr !important; }
-    .badges-grid { grid-template-columns: repeat(3, 1fr) !important; }
-    .notes-grid { grid-template-columns: 1fr !important; }
-    .courses-grid { grid-template-columns: 1fr !important; }
-    .cert-actions { flex-direction: column !important; }
-    .profile-header { flex-direction: column !important; align-items: center !important; text-align: center !important; }
-    .my-course-card { flex-direction: column !important; }
-    .renewal-section { flex-direction: column !important; }
-    .wrap, .form-wrap { padding-left: 16px !important; padding-right: 16px !important; }
-    #dashWrap { padding: 16px 14px 40px !important; }
-    .hero { padding: 28px 16px 20px !important; }
-    .hero h1 { font-size: 24px !important; }
-    table { font-size: 12px !important; display: block; overflow-x: auto; }
-    .card { padding: 16px !important; }
-    .stat-num { font-size: 22px !important; }
-    .btn-hero, .btn-hero-outline { padding: 9px 16px !important; font-size: 13px !important; }
-    #loginWrap { padding: 24px 20px !important; margin: 20px auto !important; }
-    .quick-link { padding: 11px 12px !important; font-size: 13px !important; }
-  }
-  @media (max-width: 480px) {
-    .hero-text h2 { font-size: 18px !important; }
-    .stat-num { font-size: 20px !important; }
-    .hero-btns { flex-direction: column !important; align-items: stretch !important; }
-  }
-  /* ===== END MOBILE ===== */
-
-
-    
-  .mobile-bottom-nav 
-  
-  
-  
-  
-  
-  @media (max-width: 768px) {
-    
-    
-    .nav { display: none !important; }
-    body { padding-bottom: 80px; }
-  }
-
-  /* Mobile App UI - Pill Nav */
-  
-  .mobile-top-bar img { height: 34px; }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  @media (max-width: 768px) {
-    
-    
-    .nav { display: none !important; }
-    body { padding-top: 60px; padding-bottom: 88px; }
-  }
-
-  /* Mobile App Bottom Nav - Pill Style */
-  .mobile-top-bar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: #fff; border-bottom: 1px solid #e8eaed; padding: 10px 20px; text-align: center; }
-  .mobile-bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e8eaed; z-index: 999; padding: 10px 16px 16px; box-shadow: 0 -2px 20px rgba(0,0,0,0.06); }
-  .bnav-items { display: flex; justify-content: space-around; align-items: center; gap: 4px; }
-  .bnav-item { display: flex; flex-direction: row; align-items: center; gap: 6px; text-decoration: none; color: #5f6368; font-size: 13px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; padding: 8px 10px; border-radius: 100px; transition: all 0.2s ease; white-space: nowrap; }
-  .bnav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-  .bnav-item .bnav-label { display: none; font-size: 13px; }
-  .bnav-item.active { background: #e8f0fe; color: #1a73e8; padding: 8px 16px; }
-  .bnav-item.active .bnav-label { display: inline; }
-  .bnav-item.active svg { stroke: #1a73e8; }
-  @media (max-width: 768px) {
-    .mobile-top-bar { display: block; }
-    .mobile-bottom-nav { display: block; }
-    .nav { display: none !important; }
-    body { padding-top: 60px; padding-bottom: 80px; }
-  }
-
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-height:100vh}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:60px;border-bottom:1px solid #e8eaed;background:#fff;position:sticky;top:0;z-index:100}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-user{font-size:13px;font-weight:500;color:#202124;background:#f1f3f4;border-radius:100px;padding:6px 14px;text-decoration:none}
+.nav-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid #dadce0;border-radius:20px;padding:7px 14px;font-size:13px;color:#5f6368;cursor:pointer;font-family:'Google Sans',Arial,sans-serif;font-weight:500;text-decoration:none}
+.nav-btn:hover{border-color:#1a73e8;color:#1a73e8}
+.nav-btn-primary{background:#1a73e8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer}
+.nav-btn-primary:hover{background:#1765cc}
+.bell-btn{background:none;border:none;font-size:20px;cursor:pointer;padding:4px}
+.layout{display:grid;grid-template-columns:280px 1fr 300px;height:calc(100vh - 60px);overflow:hidden}
+.sidebar{background:#fff;border-right:1px solid #e8eaed;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-tabs{display:flex;border-bottom:1px solid #e8eaed}
+.stab{flex:1;padding:10px 0;text-align:center;font-size:12px;font-weight:500;color:#5f6368;cursor:pointer;border-bottom:2px solid transparent}
+.stab.active{color:#1a73e8;border-bottom-color:#1a73e8}
+.stab-panel{display:none;padding:12px 0;flex:1}
+.stab-panel.active{display:block}
+.course-info{padding:14px 16px;border-bottom:1px solid #e8eaed}
+.course-title-txt{font-family:'Google Sans',Arial,sans-serif;font-size:13px;font-weight:500;color:#202124;margin-bottom:10px}
+.prog-row{display:flex;justify-content:space-between;font-size:11px;color:#5f6368;margin-bottom:4px}
+.prog-bg{background:#f1f3f4;border-radius:100px;height:6px;margin-bottom:8px}
+.prog-fill{background:#1a73e8;height:6px;border-radius:100px;transition:width 0.4s}
+.time-left{font-size:12px;color:#5f6368}
+.mod-header{display:flex;align-items:center;gap:8px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:500;color:#202124}
+.mod-header:hover{background:#f1f3f4}
+.mod-lessons{display:none}
+.mod.open .mod-lessons{display:block}
+.lesson-item{display:flex;align-items:center;gap:8px;padding:7px 16px 7px 32px;font-size:12px;color:#5f6368;cursor:pointer}
+.lesson-item:hover{background:#f1f3f4}
+.lesson-item.active{color:#1a73e8;background:#e8f0fe;font-weight:500}
+.lesson-item.done{color:#137333}
+.ldot{width:8px;height:8px;border-radius:50%;background:#dadce0;flex-shrink:0}
+.lesson-item.done .ldot{background:#34a853}
+.lesson-item.active .ldot{background:#1a73e8}
+.badge-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px}
+.badge-item{border:1px solid #e8eaed;border-radius:8px;padding:10px 8px;text-align:center}
+.badge-item.earned{border-color:#34a853;background:#e6f4ea}
+.badge-item.locked{opacity:0.4}
+.badge-emoji{font-size:22px;margin-bottom:4px}
+.badge-name{font-size:10px;color:#5f6368}
+.badge-item.earned .badge-name{color:#137333;font-weight:500}
+.bm-wrap{padding:12px 16px}
+.bm-empty{font-size:13px;color:#80868b;text-align:center;padding:20px 0}
+.bm-item{padding:8px 0;border-bottom:1px solid #f1f3f4;cursor:pointer}
+.bm-lesson{font-size:13px;font-weight:500;color:#1a73e8}
+.bm-mod{font-size:11px;color:#5f6368}
+.main{overflow-y:auto;padding:24px 28px;background:#f8f9fa}
+.breadcrumb{font-size:12px;color:#80868b;margin-bottom:6px}
+.lesson-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.lesson-title{font-family:'Google Sans',Arial,sans-serif;font-size:26px;font-weight:400;color:#202124}
+.lesson-actions{display:flex;gap:8px;flex-shrink:0}
+.bm-btn{background:none;border:1px solid #dadce0;border-radius:4px;padding:6px 12px;font-size:13px;cursor:pointer;color:#5f6368}
+.bm-btn:hover,.bm-btn.bookmarked{border-color:#1a73e8;color:#1a73e8;background:#e8f0fe}
+.listen-btn{background:#e8f0fe;color:#1a73e8;border:none;border-radius:4px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:'Google Sans',Arial,sans-serif;font-weight:500}
+.lesson-meta{font-size:13px;color:#5f6368;display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.lesson-body{background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:24px;margin-bottom:16px;font-size:15px;line-height:1.75;color:#3c4043;user-select:none}
+.project-box{background:#e6f4ea;border-left:3px solid #34a853;padding:12px 16px;border-radius:0 6px 6px 0;margin-top:16px}
+.project-box strong{display:block;color:#137333;margin-bottom:4px;font-size:13px}
+.project-box p{font-size:14px;color:#137333;margin:0}
+/* Voice bar */
+.voice-bar{background:#e8f0fe;border-radius:8px;padding:12px 16px;margin-bottom:16px;display:none;align-items:center;gap:10px;flex-wrap:wrap}
+.voice-bar.show{display:flex}
+.v-btn{border:none;border-radius:4px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:'Google Sans',Arial,sans-serif;font-weight:500}
+.v-play{background:#1a73e8;color:#fff}
+.v-stop{background:#fce8e6;color:#c5221f;display:none}
+.v-speed{border:1px solid #dadce0;border-radius:4px;padding:6px 8px;font-size:13px;outline:none}
+/* Resources */
+.resources-card{background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:18px;margin-bottom:16px}
+.res-title{font-size:14px;font-weight:500;color:#202124;margin-bottom:12px}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.res-link{border:1px solid #e8eaed;border-radius:8px;padding:10px 12px;text-decoration:none;color:#202124;display:flex;align-items:center;gap:8px;font-size:12px;transition:all 0.15s}
+.res-link:hover{border-color:#1a73e8;background:#f8f9ff}
+.res-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+/* Code Editor */
+.code-card{background:#1e1e1e;border-radius:8px;margin-bottom:16px;overflow:hidden}
+.code-header{background:#2d2d2d;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.code-title{color:#ccc;font-size:13px;font-family:monospace}
+.code-run{background:#34a853;color:#fff;border:none;border-radius:4px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:500}
+.code-textarea{width:100%;background:#1e1e1e;color:#d4d4d4;border:none;padding:16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.6;resize:vertical;min-height:140px;outline:none}
+.code-output{background:#0d1117;color:#58a6ff;padding:12px 16px;font-family:monospace;font-size:12px;min-height:40px;border-top:1px solid #333;white-space:pre-wrap}
+/* Notes */
+.notes-card{background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:18px;margin-bottom:16px}
+.notes-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.notes-lbl{font-size:14px;font-weight:500;color:#202124}
+.notes-save{background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:6px 14px;font-size:13px;cursor:pointer}
+.notes-ta{width:100%;border:1px solid #dadce0;border-radius:4px;padding:10px 12px;font-size:14px;font-family:'Roboto',Arial,sans-serif;resize:vertical;min-height:80px;outline:none}
+.notes-ta:focus{border-color:#1a73e8}
+.notes-saved{font-size:12px;color:#137333;display:none;margin-top:4px}
+/* MCQ */
+.mcq-card{background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:20px;margin-bottom:16px}
+.mcq-title{font-size:14px;font-weight:500;color:#202124;margin-bottom:14px}
+.mcq-q{font-size:14px;color:#202124;margin-bottom:10px;font-weight:500}
+.mcq-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid #dadce0;border-radius:4px;cursor:pointer;font-size:14px;user-select:none}
+.mcq-opt:hover{border-color:#1a73e8;background:#f8f9ff}
+.mcq-opt.correct{border-color:#34a853;background:#e6f4ea;color:#137333}
+.mcq-opt.wrong{border-color:#c5221f;background:#fce8e6;color:#c5221f}
+.mcq-opt.show-correct{border-color:#34a853;background:#e6f4ea;color:#137333}
+/* Nav buttons */
+.lesson-nav{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:12px}
+.btn{border:none;border-radius:4px;padding:10px 20px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer}
+.btn-primary{background:#1a73e8;color:#fff}
+.btn-primary:hover{background:#1765cc}
+.btn-secondary{background:#f1f3f4;color:#202124}
+.btn-complete{background:#34a853;color:#fff}
+/* Chat */
+.chat-panel{background:#fff;border-left:1px solid #e8eaed;display:flex;flex-direction:column;height:calc(100vh - 60px)}
+.chat-hdr{padding:14px 16px;border-bottom:1px solid #e8eaed}
+.chat-hdr h3{font-family:'Google Sans',Arial,sans-serif;font-size:14px;font-weight:500;margin-bottom:2px}
+.chat-hdr p{font-size:11px;color:#5f6368}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.chat-msg{max-width:85%}
+.chat-msg.user{align-self:flex-end}
+.chat-msg.ai{align-self:flex-start}
+.chat-bubble{padding:9px 13px;border-radius:12px;font-size:13px;line-height:1.5}
+.chat-msg.user .chat-bubble{background:#1a73e8;color:#fff;border-radius:12px 12px 2px 12px}
+.chat-msg.ai .chat-bubble{background:#f1f3f4;color:#202124;border-radius:12px 12px 12px 2px}
+.chat-name{font-size:10px;color:#80868b;margin-bottom:2px}
+.chat-msg.user .chat-name{text-align:right}
+.typing{font-size:11px;color:#5f6368;padding:2px 12px;display:none}
+.chat-input-wrap{padding:10px 12px;border-top:1px solid #e8eaed;display:flex;gap:6px}
+.chat-input{flex:1;padding:8px 12px;border:1px solid #dadce0;border-radius:20px;font-size:13px;font-family:'Roboto',Arial,sans-serif;outline:none;resize:none}
+.chat-input:focus{border-color:#1a73e8}
+.chat-send{background:#1a73e8;color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:13px;flex-shrink:0;align-self:flex-end}
+/* Login */
+#loginWrap{max-width:480px;margin:80px auto;padding:0 24px}
+#loginWrap h2{font-family:'Google Sans',Arial,sans-serif;font-size:28px;font-weight:400;margin-bottom:8px}
+#loginWrap p{font-size:15px;color:#5f6368;margin-bottom:24px}
+.field label{display:block;font-size:13px;font-weight:500;color:#5f6368;margin-bottom:6px}
+.field input{width:100%;padding:12px 14px;border:1px solid #dadce0;border-radius:4px;font-size:15px;outline:none}
+.field input:focus{border-color:#1a73e8}
+.field{margin-bottom:16px}
+.login-btn{width:100%;background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:13px;font-size:15px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;margin-top:4px}
+.login-btn:hover{background:#1765cc}
+.login-btn:disabled{background:#dadce0;color:#80868b;cursor:not-allowed}
+#loginMsg{margin-top:12px;padding:10px;border-radius:4px;font-size:14px;display:none;background:#fce8e6;color:#c5221f}
+/* Request modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal-box{background:#fff;border-radius:12px;padding:28px;max-width:480px;width:100%}
+.modal-box h3{font-family:'Google Sans',Arial,sans-serif;font-size:20px;font-weight:400;margin-bottom:8px}
+.modal-box p{font-size:14px;color:#5f6368;margin-bottom:16px;line-height:1.5}
+.modal-ta{width:100%;padding:12px 14px;border:1px solid #dadce0;border-radius:4px;font-size:14px;font-family:'Roboto',Arial,sans-serif;outline:none;resize:vertical;min-height:80px;margin-bottom:12px}
+.modal-ta:focus{border-color:#1a73e8}
+.modal-actions{display:flex;gap:10px}
+.copy-toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#c5221f;color:#fff;padding:8px 18px;border-radius:8px;font-size:13px;z-index:500;display:none}
+.loading{text-align:center;padding:40px 20px;color:#5f6368;font-size:14px}
+.spin{font-size:28px;animation:spin 1s linear infinite;display:block;margin-bottom:8px}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+/* Mobile */
+.mobile-top-bar{display:none;position:fixed;top:0;left:0;right:0;z-index:200;background:#fff;border-bottom:1px solid #e8eaed;padding:10px 20px;text-align:center}
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8eaed;z-index:999;padding:8px 0 12px;box-shadow:0 -2px 20px rgba(0,0,0,0.06)}
+.bnav-items{display:flex;justify-content:space-around;align-items:center;gap:4px}
+.bnav-item{display:flex;flex-direction:row;align-items:center;gap:6px;text-decoration:none;color:#5f6368;font-size:10px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;padding:8px 10px;border-radius:100px;white-space:nowrap}
+.bnav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.bnav-item .bnav-label{display:none;font-size:13px}
+.bnav-item.active{background:#e8f0fe;color:#1a73e8;padding:8px 16px}
+.bnav-item.active .bnav-label{display:inline}
+.bnav-item.active svg{stroke:#1a73e8}
+@media(max-width:1100px){.layout{grid-template-columns:260px 1fr}.chat-panel{display:none}}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:16px}.mobile-top-bar{display:block}.mobile-bottom-nav{display:block}.nav{display:none!important}body{padding-top:60px;padding-bottom:80px}}
 </style>
 </head>
 <body>
+
 <!-- Mobile Top Bar -->
-<div class="mobile-top-bar">
-  <a href="/"><img src="/logo.svg" alt="YGE" style="height:34px;"></a>
-</div>
+<div class="mobile-top-bar"><a href="/"><img src="/logo.svg" alt="YGE" style="height:34px"></a></div>
 
 <!-- Mobile Bottom Nav -->
 <div class="mobile-bottom-nav">
   <div class="bnav-items">
     <a class="bnav-item" href="/dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="bnav-label">Home</span></a>
-    <a class="bnav-item" href="/my-notes.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg><span class="bnav-label">Notes</span></a>
+    <a class="bnav-item" href="/my-notes.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span class="bnav-label">Notes</span></a>
     <a class="bnav-item active" href="/syllabus.html"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span class="bnav-label">Study</span></a>
     <a class="bnav-item" href="/my-courses.html"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span class="bnav-label">Courses</span></a>
     <a class="bnav-item" href="/profile.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="bnav-label">Profile</span></a>
   </div>
 </div>
 
-<div class="mobile-top-bar"><a href="/"><img src="/logo.svg" alt="YGE" style="height:34px;"></a></div>
-<div class="mobile-bottom-nav"><div class="bnav-items"><a class="bnav-item" href="/dashboard.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a><a class="bnav-item" href="/my-notes.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg><span>Notes</span></a><a class="bnav-center" href="/syllabus.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></a><a class="bnav-item" href="/my-courses.html"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span>Courses</span></a><a class="bnav-item" href="/profile.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></a></div></div>
-
-</div>
-
-
 <nav class="nav">
-  <a class="nav-logo" href="/"><img src="/logo.svg" alt="Yashasvi Global Education" style="height:36px;"></a>
+  <a href="/"><img src="/logo.svg" alt="YGE" style="height:36px"></a>
   <div class="nav-right">
-    <a id="navUser" href="/profile.html" style="font-size:13px; font-weight:500; color:#202124; background:#f1f3f4; border-radius:100px; padding:6px 14px; text-decoration:none; cursor:pointer;"></a>
-    <button class="nav-icon-btn" onclick="window.location.href='/my-notes.html?email='+encodeURIComponent(studentEmail)">My Notes</button>
-    <button class="nav-icon-btn" onclick="window.location.href='/my-courses.html?email='+encodeURIComponent(studentEmail)">My Courses</button>
-    <button class="request-btn" onclick="openRequest()">+ Request a Course</button>
-    <button onclick="logout()" style="background:none; border:1px solid #dadce0; border-radius:4px; padding:6px 14px; font-size:13px; color:#5f6368; cursor:pointer; font-family:'Google Sans',Arial,sans-serif;">↩ Logout</button>
-    <button class="bell-btn" id="bellBtn">🔔<span class="bell-badge" id="bellBadge"></span></button>
+    <a id="navUser" class="nav-user" href="/profile.html"></a>
+    <a class="nav-btn" id="notesNavBtn" href="/my-notes.html">My Notes</a>
+    <a class="nav-btn" id="coursesNavBtn" href="/my-courses.html">My Courses</a>
+    <button class="nav-btn-primary" onclick="openRequest()">+ Request a Course</button>
+    <button class="bell-btn" id="bellBtn">&#128276;</button>
+    <button onclick="logout()" style="background:none;border:1px solid #dadce0;border-radius:4px;padding:6px 14px;font-size:13px;color:#5f6368;cursor:pointer">Logout</button>
   </div>
 </nav>
 
@@ -374,860 +205,639 @@
     <label>Student email</label>
     <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="off">
   </div>
-  <button class="btn btn-primary" id="loginBtn" style="width:100%; padding:12px;" onclick="doLogin()">Access my course →</button>
+  <button class="login-btn" id="loginBtn" onclick="doLogin()">Access my course</button>
   <div id="loginMsg"></div>
 </div>
 
 <!-- Main Layout -->
-<div class="layout" id="mainLayout" style="display:none;">
+<div class="layout" id="mainLayout" style="display:none">
 
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-tabs">
-      <div class="stab active" onclick="switchTab('course')" id="stab-course">📖 Course</div>
-      <div class="stab" onclick="switchTab('badges')" id="stab-badges">🏆 Badges</div>
-      <div class="stab" onclick="switchTab('bookmarks')" id="stab-bookmarks">🔖 Saved</div>
+      <div class="stab active" onclick="switchTab('course')" id="stab-course">Course</div>
+      <div class="stab" onclick="switchTab('badges')" id="stab-badges">Badges</div>
+      <div class="stab" onclick="switchTab('saved')" id="stab-saved">Saved</div>
     </div>
-
-    <!-- Course Tab -->
     <div class="stab-panel active" id="panel-course">
-      <div class="course-info-wrap">
-        <div class="course-title" id="sidebarCourse">Loading…</div>
-        <div class="progress-row"><span id="sidebarLessons">0 lessons done</span><span id="sidebarPct">0%</span></div>
-        <div class="progress-bg"><div class="progress-fill" id="sidebarProgress" style="width:0%"></div></div>
-        <div class="time-remaining">⏱ <span id="timeRemaining">Calculating…</span></div>
+      <div class="course-info">
+        <div class="course-title-txt" id="sidebarCourse">Loading...</div>
+        <div class="prog-row"><span id="sidebarLessons">0 lessons</span><span id="sidebarPct">0%</span></div>
+        <div class="prog-bg"><div class="prog-fill" id="sidebarProg" style="width:0%"></div></div>
+        <div class="time-left">&#9203; <span id="timeLeft">Calculating...</span></div>
       </div>
-      <div id="syllabusNav"><div class="loading"><span class="spin">⏳</span>Loading…</div></div>
+      <div id="syllabusNav"><div class="loading"><span class="spin">&#9203;</span>Loading...</div></div>
     </div>
-
-    <!-- Badges Tab -->
     <div class="stab-panel" id="panel-badges">
-      <div class="badges-wrap">
-        <div class="badge-title">Your Achievements</div>
-        <div class="badge-grid" id="badgeGrid"></div>
-      </div>
+      <div class="badge-grid" id="badgeGrid"></div>
     </div>
-
-    <!-- Bookmarks Tab -->
-    <div class="stab-panel" id="panel-bookmarks">
-      <div class="bookmarks-wrap">
-        <div class="badge-title">Saved Lessons</div>
-        <div id="bookmarksList"><div class="bookmark-empty">No bookmarks yet.<br>Click 🔖 on any lesson to save it.</div></div>
-      </div>
+    <div class="stab-panel" id="panel-saved">
+      <div class="bm-wrap"><div id="bmList"><div class="bm-empty">No saved lessons yet.</div></div></div>
     </div>
-
   </div>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <div class="main" id="mainContent">
-    <div class="loading"><span class="spin">⏳</span>Loading your course…</div>
+    <div class="loading"><span class="spin">&#9203;</span>Loading your course...</div>
   </div>
 
-  <!-- AI CHAT -->
+  <!-- CHAT -->
   <div class="chat-panel">
-    <div class="chat-header">
-      <h3>🤖 AI Teacher</h3>
+    <div class="chat-hdr">
+      <h3>&#129302; AI Teacher</h3>
       <p>Ask anything about this lesson</p>
     </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="chat-msg ai">
-        <div class="chat-name">AI Teacher</div>
-        <div class="chat-bubble">Hello! I'm your personal AI teacher. Ask me anything about your current lesson. 😊</div>
-      </div>
+    <div class="chat-msgs" id="chatMsgs">
+      <div class="chat-msg ai"><div class="chat-name">AI Teacher</div><div class="chat-bubble">Hello! I am your personal AI teacher. Ask me anything about your current lesson.</div></div>
     </div>
-    <div class="typing" id="typingIndicator">AI Teacher is typing…</div>
+    <div class="typing" id="typingIndicator">AI Teacher is typing...</div>
     <div class="chat-input-wrap">
-      <textarea class="chat-input" id="chatInput" placeholder="Ask your AI teacher…" rows="1"></textarea>
-      <button class="chat-send" id="sendBtn" onclick="sendMessage()">➤</button>
+      <textarea class="chat-input" id="chatInput" placeholder="Ask your AI teacher..." rows="1"></textarea>
+      <button class="chat-send" id="sendBtn" onclick="sendMessage()">&#10148;</button>
     </div>
   </div>
 </div>
-
-<!-- Notes Modal -->
-<div class="notes-modal" id="notesModal">
-  <div class="notes-modal-box">
-    <div class="notes-modal-header">
-      <h3>📝 My Notes</h3>
-      <button class="notes-modal-close" onclick="closeNotesModal()">✕</button>
-    </div>
-    <div class="notes-modal-body" id="notesModalBody">
-      <div class="note-empty">No notes yet. Start adding notes while studying!</div>
-    </div>
-  </div>
-</div>
-
-<!-- Courses Modal -->
-<div class="courses-modal" id="coursesModal">
-  <div class="courses-modal-box">
-    <div class="notes-modal-header">
-      <h3>🗂 My Courses</h3>
-      <button class="notes-modal-close" onclick="closeCoursesModal()">✕</button>
-    </div>
-    <div class="notes-modal-body" id="coursesModalBody">
-      <div class="note-empty">Loading…</div>
-    </div>
-  </div>
-</div>
-
-
 
 <!-- Request Modal -->
-<div class="modal-overlay" id="requestModal">
+<div class="modal" id="requestModal">
   <div class="modal-box">
-    <h3>✨ Request a new course</h3>
-    <p>Tell us what you want to learn — our AI will build it for you within 24 hours!</p>
-    <textarea class="modal-textarea" id="requestText" placeholder="e.g. I want to learn Cyber Security…"></textarea>
-    <div id="requestMsg" style="font-size:13px; color:#137333; display:none; margin-bottom:10px;"></div>
+    <h3>Request a new course</h3>
+    <p>Tell us what you want to learn - our AI will build it within 24 hours!</p>
+    <textarea class="modal-ta" id="requestText" placeholder="e.g. I want to learn Cyber Security..."></textarea>
+    <div id="requestMsg" style="font-size:13px;color:#137333;display:none;margin-bottom:10px"></div>
     <div class="modal-actions">
-      <button class="btn btn-primary" onclick="submitRequest()" style="flex:1;">Send Request →</button>
+      <button class="btn btn-primary" onclick="submitRequest()" style="flex:1">Send Request</button>
       <button class="btn btn-secondary" onclick="closeRequest()">Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- Copy blocked toast -->
-<div class="copy-toast" id="copyToast">⛔ Copying is not allowed</div>
+<!-- Copy toast -->
+<div class="copy-toast" id="copyToast">Copying is not allowed on this page</div>
+
+<!-- Voice bar -->
+<div id="voiceBarEl" style="display:none"></div>
 
 <script>
 const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
 const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
-const HEADERS = { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" };
+const H = {"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"};
 const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
 
-let studentEmail = "", studentName = "", currentCourse = null;
-let modules = [], currentMod = 0, currentLesson = 0;
-let completedLessons = new Set(), progressId = null;
-let bookmarks = new Set(), notes = {}, mcqAnswered = {}, chatHistory = [];
+let studentEmail="", studentName="", currentCourse=null;
+let modules=[], curMod=0, curLesson=0;
+let doneLessons=new Set(), progressId=null;
+let bookmarks=new Set(), notes={}, mcqDone={}, chatHistory=[];
 
-const urlParams = new URLSearchParams(window.location.search);
-const savedEmail = urlParams.get('email') || localStorage.getItem('yge_email') || '';
-
-// Auto-login on DOM ready
-window.addEventListener('DOMContentLoaded', () => {
-  if (savedEmail) {
-    const emailInput = document.getElementById('loginEmail');
-    if (emailInput) {
-      emailInput.value = savedEmail;
-      setTimeout(() => doLogin(), 500);
-    }
-  }
-});
-
-// BADGES config
-const BADGES = [
-  { id: 'first_lesson', emoji: '🌱', name: 'First Step', desc: 'Complete first lesson', req: 1 },
-  { id: 'five_lessons', emoji: '⚡', name: 'On a Roll', desc: 'Complete 5 lessons', req: 5 },
-  { id: 'ten_lessons', emoji: '🔥', name: 'Unstoppable', desc: 'Complete 10 lessons', req: 10 },
-  { id: 'first_module', emoji: '📖', name: 'Module 1 Done', desc: 'Complete first module', req: 'module' },
-  { id: 'half_course', emoji: '🎯', name: 'Halfway There', desc: 'Complete 50% of course', req: 50 },
-  { id: 'full_course', emoji: '🏆', name: 'Course Complete', desc: 'Complete entire course', req: 100 },
+const BADGES=[
+  {emoji:"&#127807;",name:"First Step",req:1},
+  {emoji:"&#9889;",name:"On a Roll",req:5},
+  {emoji:"&#128293;",name:"Unstoppable",req:10},
+  {emoji:"&#128218;",name:"Module Done",req:"module"},
+  {emoji:"&#127919;",name:"Halfway",req:50},
+  {emoji:"&#127942;",name:"Complete",req:100},
 ];
 
+const RESOURCES = {
+  Technology:[
+    {name:"FreeCodeCamp",source:"youtube.com",url:"https://www.youtube.com/@freecodecamp",icon:"&#127909;",bg:"#fce8e6"},
+    {name:"MIT OpenCourseWare",source:"youtube.com",url:"https://www.youtube.com/@mitocw",icon:"&#127909;",bg:"#fce8e6"},
+    {name:"Python Docs",source:"python.org",url:"https://docs.python.org/3/",icon:"&#128196;",bg:"#e8f0fe"},
+    {name:"MDN Web Docs",source:"mozilla.org",url:"https://developer.mozilla.org/",icon:"&#128196;",bg:"#e8f0fe"},
+  ],
+  Business:[
+    {name:"Harvard Business Review",source:"youtube.com",url:"https://www.youtube.com/@HarvardBusinessReview",icon:"&#127909;",bg:"#fce8e6"},
+    {name:"Stanford GSB",source:"youtube.com",url:"https://www.youtube.com/@stanfordgsb",icon:"&#127909;",bg:"#fce8e6"},
+    {name:"Investopedia",source:"investopedia.com",url:"https://www.investopedia.com/",icon:"&#128196;",bg:"#e8f0fe"},
+    {name:"SBA Business Guide",source:"sba.gov",url:"https://www.sba.gov/business-guide",icon:"&#128196;",bg:"#e8f0fe"},
+  ],
+  Design:[
+    {name:"Google Design",source:"youtube.com",url:"https://www.youtube.com/@GoogleDesign",icon:"&#127909;",bg:"#fce8e6"},
+    {name:"Figma",source:"youtube.com",url:"https://www.youtube.com/@Figma",icon:"&#127909;",bg:"#fce8e6"},
+    {name:"Material Design",source:"material.io",url:"https://m3.material.io/",icon:"&#128196;",bg:"#e8f0fe"},
+    {name:"Canva Design School",source:"canva.com",url:"https://www.canva.com/learn/design/",icon:"&#128196;",bg:"#e8f0fe"},
+  ],
+  School:[
+    {name:"Khan Academy",source:"youtube.com",url:"https://www.youtube.com/@khanacademy",icon:"&#127909;",bg:"#fce8e6"},
+    {name:"CrashCourse",source:"youtube.com",url:"https://www.youtube.com/@crashcourse",icon:"&#127909;",bg:"#fce8e6"},
+    {name:"NCERT Books",source:"ncert.nic.in",url:"https://ncert.nic.in/textbook.php",icon:"&#128196;",bg:"#e8f0fe"},
+    {name:"Khan Academy",source:"khanacademy.org",url:"https://www.khanacademy.org/",icon:"&#128196;",bg:"#e8f0fe"},
+  ],
+  Corporate:[
+    {name:"LinkedIn Learning",source:"youtube.com",url:"https://www.youtube.com/@LinkedInLearning",icon:"&#127909;",bg:"#fce8e6"},
+    {name:"McKinsey",source:"youtube.com",url:"https://www.youtube.com/@McKinsey",icon:"&#127909;",bg:"#fce8e6"},
+    {name:"Deloitte Insights",source:"deloitte.com",url:"https://www2.deloitte.com/insights",icon:"&#128196;",bg:"#e8f0fe"},
+    {name:"Harvard ManageMentor",source:"hbsp.harvard.edu",url:"https://hbsp.harvard.edu/",icon:"&#128196;",bg:"#e8f0fe"},
+  ],
+};
+
+const CODE_TEMPLATES = {
+  javascript:`// JavaScript Editor\nconst name = "Student";\nconsole.log("Hello, " + name + "!");\n\nconst result = 10 + 20;\nconsole.log("10 + 20 = " + result);`,
+  html:`<!-- HTML Editor -->\n<h1>Hello Student!</h1>\n<p>Welcome to Yashasvi Global Education.</p>\n<button onclick="alert('Great job!')">Click Me!</button>`,
+  python:`# Python Editor (coming soon)\n# Use JavaScript mode to run code now\nprint("Hello, Student!")`
+};
+
+// Auto-login
+window.addEventListener('DOMContentLoaded', function() {
+  const p = new URLSearchParams(window.location.search);
+  const e = p.get('email') || localStorage.getItem('yge_email') || '';
+  if (e) {
+    document.getElementById('loginEmail').value = e;
+    setTimeout(doLogin, 400);
+  }
+  document.getElementById('loginEmail').addEventListener('keydown', function(ev) {
+    if (ev.key === 'Enter') doLogin();
+  });
+  document.getElementById('chatInput').addEventListener('keydown', function(ev) {
+    if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); sendMessage(); }
+  });
+});
+
 async function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-  if (!email) { showLoginMsg('Please enter your email.'); return; }
-  const btn = document.getElementById('loginBtn');
-  btn.disabled = true; btn.textContent = 'Loading…';
+  var email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  if (!email) { showMsg('Please enter your email.'); return; }
+  var btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Loading...';
   try {
-    const res = await fetch(BASE + "/students?select=student_name,admission_status,selected_course,fee_paid&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
-    const data = await res.json();
-    if (!Array.isArray(data) || data.length === 0) { showLoginMsg('No account found.'); btn.disabled = false; btn.textContent = 'Access my course...'; return; }
-    const s = data[0];
-    console.log('Student status:', s.admission_status, 'Course:', s.selected_course);
-    if (!s.admission_status || !['admitted','final_exam_passed','internship_passed','certified','quarterly_passed','fee_paid'].includes(s.admission_status)) { 
-      showLoginMsg('Status: ' + s.admission_status + ' — Please complete enrollment first.'); 
-      btn.disabled = false; btn.textContent = 'Access my course...'; return; 
+    var res = await fetch(BASE + "/students?select=student_name,admission_status,selected_course,fee_paid&student_email=ilike." + encodeURIComponent(email), {method:"GET",headers:H});
+    var data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      showMsg('No account found. Please check your email.');
+      btn.disabled = false; btn.textContent = 'Access my course'; return;
     }
-    // Allow access if certified, admitted, or fee_paid
-    studentEmail = email; studentName = s.student_name;
+    var s = data[0];
+    var allowed = ['admitted','final_exam_passed','internship_passed','certified','quarterly_passed','fee_paid'];
+    if (!allowed.includes(s.admission_status)) {
+      showMsg('Please complete your enrollment first. Status: ' + s.admission_status);
+      btn.disabled = false; btn.textContent = 'Access my course'; return;
+    }
+    studentEmail = email;
+    studentName = s.student_name || email.split('@')[0];
     localStorage.setItem('yge_email', email);
-    const navUser = document.getElementById('navUser');
-    navUser.textContent = studentName;
-    navUser.href = '/profile.html?email=' + encodeURIComponent(email);
+    var nu = document.getElementById('navUser');
+    nu.textContent = studentName;
+    nu.href = '/profile.html?email=' + encodeURIComponent(email);
+    document.getElementById('notesNavBtn').href = '/my-notes.html?email=' + encodeURIComponent(email);
+    document.getElementById('coursesNavBtn').href = '/my-courses.html?email=' + encodeURIComponent(email);
     document.getElementById('loginWrap').style.display = 'none';
     document.getElementById('mainLayout').style.display = 'grid';
     await loadCourse(s.selected_course);
     await loadProgress();
-    loadMyCoursesPanel();
-    checkNotifications();
-  } catch (err) { showLoginMsg('Error: ' + err.message); btn.disabled = false; btn.textContent = 'Access my course...'; }
+  } catch(err) {
+    showMsg('Error: ' + err.message);
+    btn.disabled = false; btn.textContent = 'Access my course';
+  }
 }
 
 async function loadCourse(courseName) {
   try {
-    const cRes = await fetch(BASE + "/courses?select=id,name,department&name=ilike." + encodeURIComponent(courseName) + "&is_active=eq.true", { method: "GET", headers: HEADERS });
-    const courses = await cRes.json();
-    if (!Array.isArray(courses) || courses.length === 0) { document.getElementById('mainContent').innerHTML = '<div class="loading">Course content being prepared. Refresh soon!</div>'; return; }
+    var cRes = await fetch(BASE + "/courses?select=id,name,department&name=ilike." + encodeURIComponent(courseName) + "&is_active=eq.true", {method:"GET",headers:H});
+    var courses = await cRes.json();
+    if (!Array.isArray(courses) || courses.length === 0) {
+      document.getElementById('mainContent').innerHTML = '<div class="loading">Course content being prepared. Please refresh soon!</div>';
+      return;
+    }
     currentCourse = courses[0];
     document.getElementById('sidebarCourse').textContent = currentCourse.name;
-    const mRes = await fetch(BASE + "/course_modules?select=*&course_id=eq." + currentCourse.id + "&order=module_index.asc", { method: "GET", headers: HEADERS });
+    var mRes = await fetch(BASE + "/course_modules?select=*&course_id=eq." + currentCourse.id + "&order=module_index.asc", {method:"GET",headers:H});
     modules = await mRes.json();
-    if (!Array.isArray(modules) || modules.length === 0) { document.getElementById('mainContent').innerHTML = '<div class="loading">Course content being generated. Refresh in a moment!</div>'; return; }
+    if (!Array.isArray(modules) || modules.length === 0) {
+      document.getElementById('mainContent').innerHTML = '<div class="loading">Course content being generated. Please refresh in a moment!</div>';
+      return;
+    }
     buildNav(); loadLesson(0, 0);
-  } catch (e) { console.error(e); }
+  } catch(e) { console.error(e); }
 }
 
 async function loadProgress() {
   try {
-    const res = await fetch(BASE + "/syllabus_progress?select=*&student_email=ilike." + encodeURIComponent(studentEmail), { method: "GET", headers: HEADERS });
-    const data = await res.json();
+    var res = await fetch(BASE + "/syllabus_progress?select=*&student_email=ilike." + encodeURIComponent(studentEmail), {method:"GET",headers:H});
+    var data = await res.json();
     if (Array.isArray(data) && data.length > 0) {
       progressId = data[0].id;
-      currentMod = data[0].module_index || 0;
-      currentLesson = data[0].lesson_index || 0;
-      completedLessons = new Set(data[0].completed_lessons || []);
+      curMod = data[0].module_index || 0;
+      curLesson = data[0].lesson_index || 0;
+      doneLessons = new Set(data[0].completed_lessons || []);
       bookmarks = new Set(data[0].bookmarks || []);
       notes = data[0].notes || {};
-      loadLesson(currentMod, currentLesson);
+      loadLesson(curMod, curLesson);
     } else {
-      const res2 = await fetch(BASE + "/syllabus_progress", { method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" }, body: JSON.stringify({ student_email: studentEmail, department: currentCourse?.name || '', module_index: 0, lesson_index: 0, completed_lessons: [], total_lessons: modules.reduce((s,m) => s + (m.lessons?.length || 0), 0) }) });
-      const d2 = await res2.json();
+      var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0)},0);
+      var r2 = await fetch(BASE + "/syllabus_progress", {method:"POST",headers:Object.assign({},H,{"Prefer":"return=representation"}),body:JSON.stringify({student_email:studentEmail,department:currentCourse?currentCourse.name:'',module_index:0,lesson_index:0,completed_lessons:[],total_lessons:total})});
+      var d2 = await r2.json();
       if (Array.isArray(d2) && d2.length > 0) progressId = d2[0].id;
     }
     updateProgress(); buildNav(); updateBadges();
-  } catch (e) { console.error(e); }
+  } catch(e) { console.error(e); }
 }
 
 async function saveProgress() {
   if (!progressId) return;
-  await fetch(BASE + "/syllabus_progress?id=eq." + progressId, { method: "PATCH", headers: HEADERS, body: JSON.stringify({ module_index: currentMod, lesson_index: currentLesson, completed_lessons: [...completedLessons], bookmarks: [...bookmarks], notes, last_active: new Date().toISOString() }) });
+  try {
+    await fetch(BASE + "/syllabus_progress?id=eq." + progressId, {method:"PATCH",headers:H,body:JSON.stringify({module_index:curMod,lesson_index:curLesson,completed_lessons:Array.from(doneLessons),bookmarks:Array.from(bookmarks),notes:notes,last_active:new Date().toISOString()})});
+  } catch(e) {}
 }
 
 function buildNav() {
-  const nav = document.getElementById('syllabusNav');
-  nav.innerHTML = modules.map((mod, mi) => {
-    const modLessons = mod.lessons || [];
-    const modCompleted = modLessons.filter((_, li) => completedLessons.has(mi+'-'+li)).length;
-    const modPct = modLessons.length > 0 ? Math.round(modCompleted/modLessons.length*100) : 0;
-    return `<div class="module ${mi===currentMod?'open':''}" id="mod-${mi}">
-      <div class="module-header ${mi===currentMod?'active':''}" onclick="toggleMod(${mi})">
-        <span style="font-size:14px;">${modCompleted===modLessons.length && modLessons.length>0?'✅':'📖'}</span>
-        <span style="flex:1; font-size:13px;">${mod.module_title}</span>
-        <span class="module-pct">${modPct}%</span>
-      </div>
-      <div class="module-lessons">
-        ${modLessons.map((l,li) => {
-          const key = mi+'-'+li;
-          const isBookmarked = bookmarks.has(key);
-          return `<div class="lesson-item ${completedLessons.has(key)?'completed':''} ${mi===currentMod&&li===currentLesson?'active':''}" onclick="loadLesson(${mi},${li})">
-            <span class="lesson-dot"></span>
-            <span style="flex:1; font-size:12px;">${l.title}</span>
-            ${isBookmarked?'<span style="font-size:11px;">🔖</span>':''}
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`;
-  }).join('');
-  updateTimeRemaining();
+  var html = '';
+  modules.forEach(function(mod, mi) {
+    var ml = mod.lessons || [];
+    var mc = ml.filter(function(_,li){return doneLessons.has(mi+'-'+li)}).length;
+    var mp = ml.length > 0 ? Math.round(mc/ml.length*100) : 0;
+    html += '<div class="mod '+(mi===curMod?'open':'')+'" id="mod-'+mi+'">';
+    html += '<div class="mod-header '+(mi===curMod?'active':'')+'" onclick="toggleMod('+mi+')">';
+    html += '<span>'+(mc===ml.length&&ml.length>0?'&#9989;':'&#128218;')+'</span>';
+    html += '<span style="flex:1;font-size:13px">'+mod.module_title+'</span>';
+    html += '<span style="font-size:11px;color:#80868b">'+mp+'%</span></div>';
+    html += '<div class="mod-lessons">';
+    ml.forEach(function(l,li) {
+      var key = mi+'-'+li;
+      var cls = doneLessons.has(key)?'done':'';
+      if (mi===curMod && li===curLesson) cls = 'active';
+      html += '<div class="lesson-item '+cls+'" onclick="loadLesson('+mi+','+li+')">';
+      html += '<span class="ldot"></span>';
+      html += '<span style="flex:1;font-size:12px">'+l.title+'</span>';
+      if (bookmarks.has(key)) html += '<span style="font-size:11px">&#128278;</span>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('syllabusNav').innerHTML = html;
+  updateTimeLeft();
 }
 
-function toggleMod(mi) { document.querySelectorAll('.module').forEach((m,i) => { if(i===mi) m.classList.toggle('open'); else m.classList.remove('open'); }); }
+function toggleMod(mi) {
+  document.querySelectorAll('.mod').forEach(function(m,i){
+    if(i===mi) m.classList.toggle('open'); else m.classList.remove('open');
+  });
+}
 
 function loadLesson(mi, li) {
-  currentMod = mi; currentLesson = li;
-  const mod = modules[mi]; if (!mod) return;
-  const lesson = (mod.lessons||[])[li]; if (!lesson) return;
-  mcqAnswered = {};
-  const key = mi+'-'+li;
-  const isBookmarked = bookmarks.has(key);
-  const savedNote = notes[key] || '';
+  curMod = mi; curLesson = li;
+  var mod = modules[mi]; if (!mod) return;
+  var lesson = (mod.lessons||[])[li]; if (!lesson) return;
+  mcqDone = {};
+  var key = mi+'-'+li;
+  var isBm = bookmarks.has(key);
+  var savedNote = notes[key] || '';
+  var dept = currentCourse ? currentCourse.department : 'School';
+  var res = RESOURCES[dept] || RESOURCES.School;
+  var isTech = ['Technology','School'].includes(dept);
 
-  document.getElementById('mainContent').innerHTML = `
-    <div class="lesson-breadcrumb">${mod.module_title} · Lesson ${li+1} of ${mod.lessons?.length || 0}</div>
-    <div class="lesson-title-row">
-      <div class="lesson-title">${lesson.title}</div>
-      <div style="display:flex; gap:8px;">
-        <button onclick="readLesson(this)" id="listenBtn" style="background:#e8f0fe; color:#1a73e8; border:none; border-radius:4px; padding:7px 14px; font-size:13px; cursor:pointer; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">🔊 Listen</button>
-        <button class="bookmark-btn ${isBookmarked?'bookmarked':''}" id="bookmarkBtn" onclick="toggleBookmark('${key}')">
-          ${isBookmarked?'🔖 Saved':'🔖 Save'}
-        </button>
-      </div>
-    </div>
-    <div class="lesson-meta">
-      <span>⏱ ${lesson.duration||'15 min'}</span>
-      <span>📖 Core Lesson</span>
-      ${completedLessons.has(key)?'<span style="color:#137333;">✅ Completed</span>':''}
-    </div>
-    <div class="lesson-body" id="lessonBody">
-      ${lesson.content ? lesson.content.split('\n').filter(p=>p.trim()).map(p=>`<p>${p}</p>`).join('') : '<p>Content loading…</p>'}
-      ${lesson.project ? `<div class="project-box"><strong>🛠 Practical Assignment</strong><p>${lesson.project}</p></div>` : ''}
-    </div>
+  var html = '';
+  html += '<div class="breadcrumb">'+mod.module_title+' &middot; Lesson '+(li+1)+' of '+(mod.lessons?mod.lessons.length:0)+'</div>';
+  html += '<div class="lesson-title-row">';
+  html += '<div class="lesson-title">'+lesson.title+'</div>';
+  html += '<div class="lesson-actions">';
+  html += '<button class="listen-btn" onclick="startVoice()">&#128266; Listen</button>';
+  html += '<button class="bm-btn'+(isBm?' bookmarked':'')+'" id="bmBtn" onclick="toggleBm(\''+key+'\')">'+( isBm ? '&#128278; Saved' : '&#128278; Save')+'</button>';
+  html += '</div></div>';
+  html += '<div class="lesson-meta">';
+  html += '<span>&#9203; '+(lesson.duration||'15 min')+'</span>';
+  html += '<span>&#128218; Core Lesson</span>';
+  if (doneLessons.has(key)) html += '<span style="color:#137333">&#9989; Completed</span>';
+  html += '</div>';
 
-    <!-- Inline Voice Controls -->
-    <div id="voiceControls" style="background:#e8f0fe; border-radius:8px; padding:12px 16px; margin-bottom:16px; display:none; align-items:center; gap:10px; flex-wrap:wrap;">
-      <span style="font-size:14px; color:#1a73e8; font-weight:500; font-family:'Google Sans',Arial,sans-serif;">🔊 AI Voice Teacher</span>
-      <button id="voicePlayBtn" onclick="toggleVoice()" style="background:#1a73e8; color:#fff; border:none; border-radius:4px; padding:7px 16px; font-size:13px; cursor:pointer; font-family:'Google Sans',Arial,sans-serif; font-weight:500;">▶ Play</button>
-      <button id="voiceStopBtn" onclick="stopVoice()" style="background:#fce8e6; color:#c5221f; border:none; border-radius:4px; padding:7px 12px; font-size:13px; cursor:pointer; display:none;">⏹ Stop</button>
-      <select id="voiceSpeed" onchange="updateSpeed()" style="border:1px solid #dadce0; border-radius:4px; padding:6px 10px; font-size:13px; outline:none;">
-        <option value="0.8">🐢 Slow</option>
-        <option value="1" selected>Normal</option>
-        <option value="1.3">🐇 Fast</option>
-      </select>
-      <span id="voiceStatus" style="font-size:12px; color:#5f6368; flex:1;">Press Play to hear this lesson</span>
-      <button onclick="document.getElementById('voiceControls').style.display='none'; stopVoice();" style="background:none; border:none; color:#5f6368; cursor:pointer; font-size:16px; padding:4px;">✕</button>
-    </div>
+  // Voice bar
+  html += '<div class="voice-bar" id="voiceBar">';
+  html += '<span style="font-size:14px;font-weight:500;color:#1a73e8;font-family:Google Sans,Arial,sans-serif">&#128266; AI Voice Teacher</span>';
+  html += '<button class="v-btn v-play" id="vPlayBtn" onclick="toggleVoice()">&#9654; Play</button>';
+  html += '<button class="v-btn v-stop" id="vStopBtn" onclick="stopVoice()">&#9209; Stop</button>';
+  html += '<select class="v-speed" id="vSpeed" onchange="updateSpeed()"><option value="0.8">Slow</option><option value="1" selected>Normal</option><option value="1.3">Fast</option></select>';
+  html += '<span id="vStatus" style="font-size:12px;color:#5f6368;flex:1">Press Play to hear this lesson</span>';
+  html += '<button onclick="document.getElementById(\'voiceBar\').classList.remove(\'show\');stopVoice();" style="background:none;border:none;color:#5f6368;cursor:pointer;font-size:16px">&#10005;</button>';
+  html += '</div>';
 
-    <!-- Resources: Video + PDF -->
-    <div class="resources-section" id="resourcesSection">
-      <div class="resources-title">📚 Learning Resources</div>
-      <div class="resource-grid" id="resourceGrid">
-        <div style="color:#5f6368; font-size:13px;">Loading resources…</div>
-      </div>
-    </div>
+  // Lesson body
+  html += '<div class="lesson-body" id="lessonBody">';
+  if (lesson.content) {
+    lesson.content.split('\n').filter(function(p){return p.trim()}).forEach(function(p){html+='<p>'+p+'</p>'});
+  } else {
+    html += '<p>Content loading...</p>';
+  }
+  if (lesson.project) {
+    html += '<div class="project-box"><strong>&#128295; Practical Assignment</strong><p>'+lesson.project+'</p></div>';
+  }
+  html += '</div>';
 
-    <!-- Code Editor -->
-    <div class="code-editor-section" id="codeEditorSection" style="display:none;">
-      <div class="code-editor-header">
-        <span class="code-editor-title">💻 Code Editor — Try it yourself</span>
-        <div style="display:flex; gap:8px;">
-          <select id="langSelect" onchange="updateCodeTemplate()" style="background:#3d3d3d; color:#ccc; border:none; border-radius:4px; padding:4px 8px; font-size:12px;">
-            <option value="python">Python</option>
-            <option value="javascript">JavaScript</option>
-            <option value="html">HTML</option>
-          </select>
-          <button class="code-run-btn" onclick="runCode()">▶ Run</button>
-          <button onclick="resetCode()" style="background:#555; color:#ccc; border:none; border-radius:4px; padding:6px 10px; font-size:12px; cursor:pointer;">Reset</button>
-        </div>
-      </div>
-      <textarea class="code-textarea" id="codeTextarea" spellcheck="false"></textarea>
-      <div class="code-output" id="codeOutput">// Output will appear here…</div>
-    </div>
+  // Resources
+  html += '<div class="resources-card">';
+  html += '<div class="res-title">&#128218; Learning Resources</div>';
+  html += '<div class="res-grid">';
+  res.forEach(function(r) {
+    html += '<a class="res-link" href="'+r.url+'" target="_blank" rel="noopener">';
+    html += '<div class="res-icon" style="background:'+r.bg+'">'+r.icon+'</div>';
+    html += '<div><div style="font-size:13px;font-weight:500">'+r.name+'</div><div style="font-size:11px;color:#5f6368">'+r.source+'</div></div>';
+    html += '</a>';
+  });
+  html += '</div></div>';
 
-    <div class="notes-section">
-      <div class="notes-header">
-        <div class="notes-title">📝 My Notes</div>
-        <button class="notes-save" onclick="saveNote('${key}')">Save Notes</button>
-      </div>
-      <textarea class="notes-textarea" id="notesArea" placeholder="Write your notes for this lesson here…">${savedNote}</textarea>
-      <div class="notes-saved-msg" id="notesSaved">✅ Notes saved!</div>
-    </div>
+  // Code editor (tech only)
+  if (isTech) {
+    html += '<div class="code-card">';
+    html += '<div class="code-header">';
+    html += '<span class="code-title">&#128187; Code Editor - Try it yourself</span>';
+    html += '<div style="display:flex;gap:8px">';
+    html += '<select id="langSel" onchange="changeLang()" style="background:#3d3d3d;color:#ccc;border:none;border-radius:4px;padding:4px 8px;font-size:12px"><option value="javascript">JavaScript</option><option value="html">HTML</option><option value="python">Python</option></select>';
+    html += '<button class="code-run" onclick="runCode()">&#9654; Run</button>';
+    html += '<button onclick="resetCode()" style="background:#555;color:#ccc;border:none;border-radius:4px;padding:6px 10px;font-size:12px;cursor:pointer">Reset</button>';
+    html += '</div></div>';
+    html += '<textarea class="code-textarea" id="codeEd" spellcheck="false">'+CODE_TEMPLATES.javascript+'</textarea>';
+    html += '<div class="code-output" id="codeOut">// Output will appear here...</div>';
+    html += '</div>';
+  }
 
-    ${lesson.mcq && lesson.mcq.length > 0 ? `
-    <div class="mcq-section">
-      <div class="mcq-title">📝 Quick Check — Test your understanding</div>
-      ${lesson.mcq.map((q,qi) => `
-        <div class="mcq-q">Q${qi+1}. ${q.question}</div>
-        <div class="mcq-opts" id="mcq-${qi}">
-          ${(q.options||[]).map(opt => `<div class="mcq-opt" onclick="answerMCQ(${qi},'${opt.replace(/'/g,"\\'")}','${q.correct.replace(/'/g,"\\'")}',this)">${opt}</div>`).join('')}
-        </div>`).join('')}
-    </div>` : ''}
+  // Notes
+  html += '<div class="notes-card">';
+  html += '<div class="notes-hdr"><span class="notes-lbl">&#128221; My Notes</span><button class="notes-save" onclick="saveNote(\''+key+'\')">Save</button></div>';
+  html += '<textarea class="notes-ta" id="notesArea" placeholder="Write your notes for this lesson...">'+savedNote+'</textarea>';
+  html += '<div class="notes-saved" id="notesSaved">Notes saved!</div>';
+  html += '</div>';
 
-    <div class="lesson-nav">
-      <button class="btn btn-secondary" onclick="navigate(-1)" ${mi===0&&li===0?'disabled':''}><- Previous</button>
-      <button class="btn btn-complete" onclick="completeLesson()">${completedLessons.has(key)?'✓ Completed':'Mark complete ✓'}</button>
-      <button class="btn btn-primary" onclick="navigate(1)" ${mi===modules.length-1&&li===(modules[mi].lessons||[]).length-1?'disabled':''}>Next -></button>
-    </div>`;
+  // MCQ
+  if (lesson.mcq && lesson.mcq.length > 0) {
+    html += '<div class="mcq-card"><div class="mcq-title">&#128221; Quick Check</div>';
+    lesson.mcq.forEach(function(q, qi) {
+      html += '<div class="mcq-q">Q'+(qi+1)+'. '+q.question+'</div>';
+      html += '<div class="mcq-opts" id="mcq-'+qi+'" data-correct="'+q.correct+'">';
+      (q.options||[]).forEach(function(opt) {
+        html += '<div class="mcq-opt" onclick="answerMCQ('+qi+',\''+opt.replace(/'/g,"\\'")+'\')">' + opt + '</div>';
+      });
+      html += '</div>';
+    });
+    html += '</div>';
+  }
 
-  buildNav(); saveProgress(); window.scrollTo({top:0,behavior:'smooth'}); setTimeout(loadResources, 100);
+  // Nav
+  html += '<div class="lesson-nav">';
+  html += '<button class="btn btn-secondary" onclick="navigate(-1)"'+(mi===0&&li===0?' disabled':'')+'>Previous</button>';
+  html += '<button class="btn btn-complete" onclick="completeLesson()">Mark complete</button>';
+  html += '<button class="btn btn-primary" onclick="navigate(1)"'+(mi===modules.length-1&&li===(modules[mi]?modules[mi].lessons||[]:[] ).length-1?' disabled':'')+'>Next</button>';
+  html += '</div>';
+
+  document.getElementById('mainContent').innerHTML = html;
+  buildNav(); saveProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function answerMCQ(qi, selected, correct, el) {
-  if (mcqAnswered[qi]) return;
-  mcqAnswered[qi] = true;
-  const opts = document.querySelectorAll(`#mcq-${qi} .mcq-opt`);
-  opts.forEach(o => { if (o.textContent.trim() === correct) o.classList.add('show-correct'); });
-  el.classList.add(selected===correct?'correct':'wrong');
+function answerMCQ(qi, selected) {
+  if (mcqDone[qi]) return;
+  mcqDone[qi] = true;
+  var group = document.getElementById('mcq-'+qi);
+  var correct = group.getAttribute('data-correct');
+  group.querySelectorAll('.mcq-opt').forEach(function(o) {
+    if (o.textContent.trim() === correct) o.classList.add('show-correct');
+  });
+  var opts = group.querySelectorAll('.mcq-opt');
+  opts.forEach(function(o) {
+    if (o.textContent.trim() === selected) o.classList.add(selected===correct?'correct':'wrong');
+  });
 }
 
 function navigate(dir) {
-  let mi=currentMod, li=currentLesson;
-  if (dir===1) { if (li<(modules[mi].lessons||[]).length-1) li++; else if (mi<modules.length-1) { mi++; li=0; } }
-  else { if (li>0) li--; else if (mi>0) { mi--; li=(modules[mi].lessons||[]).length-1; } }
+  var mi=curMod, li=curLesson;
+  if (dir===1) {
+    if (li<(modules[mi].lessons||[]).length-1) li++;
+    else if (mi<modules.length-1) { mi++; li=0; }
+  } else {
+    if (li>0) li--;
+    else if (mi>0) { mi--; li=(modules[mi].lessons||[]).length-1; }
+  }
   loadLesson(mi,li);
 }
 
 async function completeLesson() {
-  const key=currentMod+'-'+currentLesson;
-  completedLessons.add(key);
+  var key=curMod+'-'+curLesson;
+  doneLessons.add(key);
   updateProgress(); updateBadges(); buildNav();
   await saveProgress();
-  setTimeout(()=>navigate(1),400);
+  setTimeout(function(){navigate(1)},400);
 }
 
 async function saveNote(key) {
-  const val = document.getElementById('notesArea')?.value || '';
+  var val = document.getElementById('notesArea') ? document.getElementById('notesArea').value : '';
   notes[key] = val;
   await saveProgress();
-  const msg = document.getElementById('notesSaved');
-  if (msg) { msg.style.display='block'; setTimeout(()=>msg.style.display='none',2000); }
+  var msg = document.getElementById('notesSaved');
+  if (msg) { msg.style.display='block'; setTimeout(function(){msg.style.display='none'},2000); }
 }
 
-async function toggleBookmark(key) {
+async function toggleBm(key) {
   if (bookmarks.has(key)) bookmarks.delete(key); else bookmarks.add(key);
   await saveProgress(); buildNav();
-  const btn = document.getElementById('bookmarkBtn');
-  if (btn) { btn.className='bookmark-btn'+(bookmarks.has(key)?' bookmarked':''); btn.textContent=bookmarks.has(key)?'🔖 Saved':'🔖 Save'; }
-  updateBookmarksList();
+  var btn = document.getElementById('bmBtn');
+  if (btn) { 
+    btn.className = 'bm-btn' + (bookmarks.has(key) ? ' bookmarked' : '');
+    btn.innerHTML = bookmarks.has(key) ? '&#128278; Saved' : '&#128278; Save';
+  }
+  updateBookmarks();
 }
 
-function updateBookmarksList() {
-  const el = document.getElementById('bookmarksList');
-  if (!el) return;
-  if (bookmarks.size===0) { el.innerHTML='<div class="bookmark-empty">No bookmarks yet.</div>'; return; }
-  el.innerHTML=[...bookmarks].map(key => {
-    const [mi,li] = key.split('-').map(Number);
-    const lesson = modules[mi]?.lessons?.[li];
-    if (!lesson) return '';
-    return `<div style="padding:8px 0; border-bottom:1px solid #f1f3f4; cursor:pointer;" onclick="loadLesson(${mi},${li})">
-      <div style="font-size:13px; font-weight:500; color:#1a73e8;">${lesson.title}</div>
-      <div style="font-size:11px; color:#5f6368;">${modules[mi]?.module_title}</div>
-    </div>`;
-  }).join('');
+function updateBookmarks() {
+  var el = document.getElementById('bmList'); if (!el) return;
+  if (bookmarks.size === 0) { el.innerHTML = '<div class="bm-empty">No saved lessons yet.</div>'; return; }
+  var html = '';
+  bookmarks.forEach(function(key) {
+    var parts = key.split('-');
+    var mi = parseInt(parts[0]), li = parseInt(parts[1]);
+    var lesson = modules[mi] ? (modules[mi].lessons||[])[li] : null;
+    if (!lesson) return;
+    html += '<div class="bm-item" onclick="loadLesson('+mi+','+li+')">';
+    html += '<div class="bm-lesson">'+lesson.title+'</div>';
+    html += '<div class="bm-mod">'+(modules[mi]?modules[mi].module_title:'')+'</div>';
+    html += '</div>';
+  });
+  el.innerHTML = html || '<div class="bm-empty">No saved lessons yet.</div>';
 }
 
 function updateProgress() {
-  const total = modules.reduce((s,m)=>s+(m.lessons?.length||0),0);
-  const pct = total>0?Math.round((completedLessons.size/total)*100):0;
-  document.getElementById('sidebarPct').textContent=pct+'%';
-  document.getElementById('sidebarProgress').style.width=pct+'%';
-  document.getElementById('sidebarLessons').textContent=completedLessons.size+' of '+total+' lessons';
+  var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0)},0);
+  var pct = total > 0 ? Math.round((doneLessons.size/total)*100) : 0;
+  document.getElementById('sidebarPct').textContent = pct+'%';
+  document.getElementById('sidebarProg').style.width = pct+'%';
+  document.getElementById('sidebarLessons').textContent = doneLessons.size+' of '+total+' lessons';
 }
 
-function updateTimeRemaining() {
-  const total = modules.reduce((s,m)=>s+(m.lessons?.length||0),0);
-  const remaining = total - completedLessons.size;
-  const mins = remaining * 15;
-  const hours = Math.floor(mins/60); const min = mins%60;
-  document.getElementById('timeRemaining').textContent = remaining===0?'Course complete! 🎉':(hours>0?hours+'h ':'')+min+'min remaining';
+function updateTimeLeft() {
+  var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0)},0);
+  var rem = total - doneLessons.size;
+  var mins = rem * 15;
+  var h = Math.floor(mins/60), m = mins%60;
+  document.getElementById('timeLeft').textContent = rem===0 ? 'Course complete!' : (h>0?h+'h ':'')+m+'min remaining';
 }
 
 function updateBadges() {
-  const total = modules.reduce((s,m)=>s+(m.lessons?.length||0),0);
-  const done = completedLessons.size;
-  const pct = total>0?Math.round((done/total)*100):0;
-  const grid = document.getElementById('badgeGrid');
-  if (!grid) return;
-  grid.innerHTML = BADGES.map(b => {
-    let earned = false;
-    if (typeof b.req==='number' && b.req<=10) earned=done>=b.req;
-    else if (b.req===50) earned=pct>=50;
-    else if (b.req===100) earned=pct>=100;
-    else if (b.req==='module') earned=modules.some((m,mi)=>m.lessons?.every((_,li)=>completedLessons.has(mi+'-'+li)));
-    return `<div class="badge-item ${earned?'earned':'locked'}">
-      <div class="badge-emoji">${b.emoji}</div>
-      <div class="badge-name">${b.name}</div>
-    </div>`;
-  }).join('');
+  var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0)},0);
+  var done = doneLessons.size;
+  var pct = total > 0 ? Math.round((done/total)*100) : 0;
+  var html = '';
+  BADGES.forEach(function(b) {
+    var earned = false;
+    if (typeof b.req === 'number' && b.req <= 10) earned = done >= b.req;
+    else if (b.req === 50) earned = pct >= 50;
+    else if (b.req === 100) earned = pct >= 100;
+    else if (b.req === 'module') earned = modules.some(function(m,mi){return (m.lessons||[]).every(function(_,li){return doneLessons.has(mi+'-'+li)})});
+    html += '<div class="badge-item '+(earned?'earned':'locked')+'">';
+    html += '<div class="badge-emoji">'+b.emoji+'</div>';
+    html += '<div class="badge-name">'+b.name+'</div></div>';
+  });
+  var g = document.getElementById('badgeGrid'); if (g) g.innerHTML = html;
 }
 
 function switchTab(name) {
-  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.stab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.stab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.stab-panel').forEach(function(p){p.classList.remove('active')});
   document.getElementById('stab-'+name).classList.add('active');
   document.getElementById('panel-'+name).classList.add('active');
-  if(name==='bookmarks') updateBookmarksList();
-  if(name==='badges') updateBadges();
-  if(name==='courses') loadMyCoursesPanel();
+  if (name==='saved') updateBookmarks();
+  if (name==='badges') updateBadges();
 }
 
-async function loadMyCoursesPanel() {
-  const el = document.getElementById('myCoursesPanel');
-  try {
-    const res = await fetch(BASE + "/students?select=selected_course,track&student_email=ilike."+encodeURIComponent(studentEmail), {method:"GET",headers:HEADERS});
-    const data = await res.json();
-    if (!Array.isArray(data)||data.length===0) { el.innerHTML='<div class="bookmark-empty">No courses yet.</div>'; return; }
-    const s = data[0];
-    const course = s.selected_course;
-    const total = modules.reduce((s,m)=>s+(m.lessons?.length||0),0);
-    const pct = total>0?Math.round((completedLessons.size/total)*100):0;
-    el.innerHTML=`<div class="my-course-card active">
-      <div class="mc-name">${course||'—'}</div>
-      <div class="mc-progress">${completedLessons.size} of ${total} lessons · ${pct}%</div>
-      <div class="mc-bar"><div class="mc-fill" style="width:${pct}%"></div></div>
-    </div>
-    <div style="font-size:12px; color:#80868b; margin-top:12px; text-align:center;">More courses coming soon…</div>`;
-  } catch(e) { el.innerHTML='<div class="bookmark-empty">Error loading.</div>'; }
+// Voice
+var synth = window.speechSynthesis, utterance = null, speaking = false;
+function startVoice() {
+  var vb = document.getElementById('voiceBar');
+  if (vb) vb.classList.add('show');
+  readLesson();
+}
+function readLesson() {
+  stopVoice();
+  var body = document.getElementById('lessonBody');
+  var text = body ? body.innerText.replace(/\n+/g,' ').trim() : '';
+  if (!text) return;
+  utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = parseFloat(document.getElementById('vSpeed') ? document.getElementById('vSpeed').value : '1');
+  utterance.lang = 'en-IN';
+  var voices = synth.getVoices();
+  var v = voices.find(function(v){return v.lang.includes('en')&&v.name.includes('Google')}) || voices.find(function(v){return v.lang.includes('en-IN')}) || voices.find(function(v){return v.lang.includes('en')});
+  if (v) utterance.voice = v;
+  utterance.onstart = function() {
+    speaking = true;
+    var pb = document.getElementById('vPlayBtn'); if (pb) pb.innerHTML = '&#9208; Pause';
+    var sb = document.getElementById('vStopBtn'); if (sb) sb.style.display = 'inline-block';
+    var vs = document.getElementById('vStatus'); if (vs) vs.textContent = 'Reading lesson...';
+  };
+  utterance.onend = function() {
+    speaking = false;
+    var pb = document.getElementById('vPlayBtn'); if (pb) pb.innerHTML = '&#9654; Play';
+    var sb = document.getElementById('vStopBtn'); if (sb) sb.style.display = 'none';
+    var vs = document.getElementById('vStatus'); if (vs) vs.textContent = 'Lesson complete!';
+  };
+  synth.speak(utterance);
+}
+function toggleVoice() { if (speaking) pauseVoice(); else { if (synth.paused) { synth.resume(); speaking=true; var pb=document.getElementById('vPlayBtn');if(pb)pb.innerHTML='&#9208; Pause'; } else readLesson(); } }
+function pauseVoice() { synth.pause(); speaking=false; var pb=document.getElementById('vPlayBtn');if(pb)pb.innerHTML='&#9654; Resume'; }
+function stopVoice() { synth.cancel(); speaking=false; }
+function updateSpeed() { if (speaking) { stopVoice(); setTimeout(readLesson,200); } }
+
+// Code Editor
+function changeLang() {
+  var lang = document.getElementById('langSel') ? document.getElementById('langSel').value : 'javascript';
+  var ed = document.getElementById('codeEd'); if (ed) ed.value = CODE_TEMPLATES[lang] || '';
+  var out = document.getElementById('codeOut'); if (out) out.textContent = '// Output will appear here...';
+}
+function runCode() {
+  var lang = document.getElementById('langSel') ? document.getElementById('langSel').value : 'javascript';
+  var code = document.getElementById('codeEd') ? document.getElementById('codeEd').value : '';
+  var out = document.getElementById('codeOut');
+  if (!out) return;
+  if (lang === 'javascript') {
+    try {
+      var logs = [];
+      var orig = console.log;
+      console.log = function() { logs.push(Array.prototype.join.call(arguments,' ')); };
+      eval(code);
+      console.log = orig;
+      out.textContent = logs.length > 0 ? logs.join('\n') : 'Code ran successfully (no output)';
+      out.style.color = '#58a6ff';
+    } catch(e) { out.textContent = 'Error: ' + e.message; out.style.color = '#f85149'; }
+  } else if (lang === 'html') {
+    var w = window.open('','_blank','width=600,height=400');
+    w.document.write(code); w.document.close();
+    out.textContent = 'HTML opened in new tab!';
+  } else {
+    out.textContent = 'Python coming soon! Try JavaScript mode.';
+  }
+}
+function resetCode() {
+  var lang = document.getElementById('langSel') ? document.getElementById('langSel').value : 'javascript';
+  var ed = document.getElementById('codeEd'); if (ed) ed.value = CODE_TEMPLATES[lang] || '';
+  var out = document.getElementById('codeOut'); if (out) { out.textContent = '// Output will appear here...'; out.style.color = '#58a6ff'; }
 }
 
 // AI Chat
-document.getElementById('chatInput').addEventListener('keydown', e => { if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); sendMessage(); } });
-
 async function sendMessage() {
-  const input=document.getElementById('chatInput'); const text=input.value.trim(); if(!text) return;
-  input.value=''; addBubble('user',text,studentName);
-  document.getElementById('sendBtn').disabled=true; document.getElementById('typingIndicator').style.display='block';
+  var input = document.getElementById('chatInput');
+  var text = input.value.trim(); if (!text) return;
+  input.value = '';
+  addBubble('user', text, studentName);
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('typingIndicator').style.display = 'block';
   chatHistory.push({role:'user',content:text});
-  const lesson=modules[currentMod]?.lessons?.[currentLesson];
-  const sys=`You are a personal AI teacher at Yashasvi Global Education. Student: ${studentName}. Course: ${currentCourse?.name}. Current lesson: "${lesson?.title}". Give SHORT, crisp answers — maximum 2-3 sentences only. Be direct and clear. No long explanations unless student asks for more details.`;
+  var lesson = modules[curMod] ? (modules[curMod].lessons||[])[curLesson] : null;
+  var sys = 'You are a personal AI teacher at Yashasvi Global Education. Student: '+studentName+'. Course: '+(currentCourse?currentCourse.name:'')+'. Current lesson: "'+(lesson?lesson.title:'')+'" Give SHORT answers - max 2-3 sentences. Be clear and encouraging.';
   try {
-    const res=await fetch(EDGE,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify({messages:chatHistory.slice(-8),systemPrompt:sys})});
-    const data=await res.json(); const reply=data.reply||"Sorry, try again.";
-    chatHistory.push({role:'assistant',content:reply}); addBubble('ai',reply,'AI Teacher');
+    var res = await fetch(EDGE,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify({messages:chatHistory.slice(-6),systemPrompt:sys})});
+    var data = await res.json();
+    var reply = data.reply || 'Sorry, try again.';
+    chatHistory.push({role:'assistant',content:reply});
+    addBubble('ai', reply, 'AI Teacher');
   } catch(e) { addBubble('ai','Connection issue. Try again.','AI Teacher'); }
-  document.getElementById('sendBtn').disabled=false; document.getElementById('typingIndicator').style.display='none';
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('typingIndicator').style.display = 'none';
 }
-
-function addBubble(role,text,name) {
-  const msgs=document.getElementById('chatMessages');
-  const div=document.createElement('div'); div.className='chat-msg '+role;
-  div.innerHTML=`<div class="chat-name">${name}</div><div class="chat-bubble">${text.replace(/\n/g,'<br>')}</div>`;
-  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight; document.getElementById('typingIndicator').style.display='none';
+function addBubble(role, text, name) {
+  var msgs = document.getElementById('chatMsgs');
+  var d = document.createElement('div'); d.className = 'chat-msg '+role;
+  d.innerHTML = '<div class="chat-name">'+name+'</div><div class="chat-bubble">'+text.replace(/\n/g,'<br>')+'</div>';
+  msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
+  document.getElementById('typingIndicator').style.display = 'none';
 }
 
 // Request Course
 function openRequest() { document.getElementById('requestModal').classList.add('open'); }
 function closeRequest() { document.getElementById('requestModal').classList.remove('open'); }
 async function submitRequest() {
-  const text = document.getElementById('requestText').value.trim();
-  if (!text) return;
-  
-  // Get email from localStorage if studentEmail is empty
-  const reqEmail = studentEmail || localStorage.getItem('yge_email') || 'unknown@student.com';
-  const reqName = studentName || reqEmail.split('@')[0];
-  
-  const btn = document.querySelector('#requestModal .btn-primary');
-  btn.disabled = true; btn.textContent = 'Sending…';
+  var text = document.getElementById('requestText').value.trim(); if (!text) return;
+  var email2 = studentEmail || localStorage.getItem('yge_email') || 'unknown@student.com';
+  var btn = document.querySelector('#requestModal .btn-primary');
+  btn.disabled = true; btn.textContent = 'Sending...';
   try {
-    const res = await fetch(BASE + "/course_requests", {
-      method: "POST",
-      headers: { ...HEADERS, "Prefer": "return=representation" },
-      body: JSON.stringify({
-        student_email: reqEmail,
-        student_name: reqName,
-        requested_course: text,
-        created_at: new Date().toISOString()
-      })
-    });
-    const data = await res.json();
-    console.log('Request saved:', data);
-    const msg = document.getElementById('requestMsg');
-    msg.textContent = '✅ Request sent! AI will build this course within 24 hours.';
+    await fetch(BASE+"/course_requests",{method:"POST",headers:Object.assign({},H,{"Prefer":"return=representation"}),body:JSON.stringify({student_email:email2,student_name:studentName||email2.split('@')[0],requested_course:text,created_at:new Date().toISOString()})});
+    var msg = document.getElementById('requestMsg');
+    msg.textContent = 'Request sent! AI will build this course within 24 hours.';
     msg.style.display = 'block';
     document.getElementById('requestText').value = '';
     btn.textContent = 'Sent!';
-    setTimeout(() => closeRequest(), 2000);
-  } catch(e) {
-    console.error('Request error:', e);
-    btn.disabled = false;
-    btn.textContent = 'Send Request';
-  }
+    setTimeout(closeRequest, 2000);
+  } catch(e) { btn.disabled=false; btn.textContent='Send Request'; }
 }
-document.getElementById('requestModal').addEventListener('click',e=>{if(e.target===document.getElementById('requestModal'))closeRequest();});
+document.getElementById('requestModal').addEventListener('click', function(e) { if(e.target===this) closeRequest(); });
 
-// Notifications
-async function checkNotifications() {
-  if(!studentEmail) return;
-  try {
-    const res=await fetch(BASE+"/notifications?select=*&student_email=ilike."+encodeURIComponent(studentEmail)+"&is_read=eq.false",{method:"GET",headers:HEADERS});
-    const data=await res.json();
-    if(Array.isArray(data)&&data.length>0){
-      document.getElementById('bellBadge').textContent=data.length; document.getElementById('bellBadge').style.display='flex';
-    }
-  } catch(e){}
-}
-
-document.getElementById('loginEmail').addEventListener('keydown', e=>{if(e.key==='Enter')doLogin();});
-
-// Notes Modal
-function openNotesModal() {
-  const modal = document.getElementById('notesModal');
-  modal.classList.add('open');
-  const body = document.getElementById('notesModalBody');
-  if (!notes || Object.keys(notes).length === 0) {
-    body.innerHTML = '<div class="note-empty">No notes yet. Start adding notes while studying!</div>';
-    return;
-  }
-  body.innerHTML = Object.entries(notes).map(([key, text]) => {
-    if (!text || !text.trim()) return '';
-    const [mi, li] = key.split('-').map(Number);
-    const lesson = modules[mi]?.lessons?.[li];
-    const mod = modules[mi];
-    if (!lesson) return '';
-    return `<div class="note-entry">
-      <div class="note-lesson">${lesson.title}</div>
-      <div class="note-module">${mod?.module_title}</div>
-      <div class="note-content">${text.trim()}</div>
-    </div>`;
-  }).filter(Boolean).join('') || '<div class="note-empty">No notes yet.</div>';
-}
-function closeNotesModal() { document.getElementById('notesModal').classList.remove('open'); }
-document.getElementById('notesModal').addEventListener('click', e => { if(e.target===document.getElementById('notesModal')) closeNotesModal(); });
-
-// Courses Modal
-function openCoursesModal() {
-  document.getElementById('coursesModal').classList.add('open');
-  const body = document.getElementById('coursesModalBody');
-  const total = modules.reduce((s,m)=>s+(m.lessons?.length||0),0);
-  const pct = total>0?Math.round((completedLessons.size/total)*100):0;
-  body.innerHTML = `
-    <div class="my-course-card active" style="border:1px solid #1a73e8; border-radius:8px; padding:16px; background:#e8f0fe; margin-bottom:12px;">
-      <div style="font-size:15px; font-weight:500; color:#1a73e8; margin-bottom:6px;">${currentCourse?.name || '—'}</div>
-      <div style="font-size:13px; color:#5f6368; margin-bottom:8px;">${completedLessons.size} of ${total} lessons completed · ${pct}%</div>
-      <div style="background:#fff; border-radius:100px; height:6px;"><div style="background:#1a73e8; height:6px; border-radius:100px; width:${pct}%;"></div></div>
-      <div style="font-size:12px; color:#5f6368; margin-top:8px;">⏱ ${(total-completedLessons.size)*15} min remaining</div>
-    </div>
-    <div style="text-align:center; font-size:13px; color:#80868b; padding:12px;">
-      🚀 More courses available — <a href="#" onclick="closeCoursesModal();openRequest();" style="color:#1a73e8; text-decoration:none;">Request a new course</a>
-    </div>`;
-}
-function closeCoursesModal() { document.getElementById('coursesModal').classList.remove('open'); }
-document.getElementById('coursesModal').addEventListener('click', e => { if(e.target===document.getElementById('coursesModal')) closeCoursesModal(); });
-
-// Resources - Video + PDF
-const RESOURCES = {
-  'Technology': [
-    { type: 'video', name: 'FreeCodeCamp Tutorials', source: 'YouTube', url: 'https://www.youtube.com/@freecodecamp', icon: '🎥', bg: '#fce8e6' },
-    { type: 'video', name: 'MIT OpenCourseWare', source: 'YouTube', url: 'https://www.youtube.com/@mitocw', icon: '🎥', bg: '#fce8e6' },
-    { type: 'pdf', name: 'Python Official Docs', source: 'python.org', url: 'https://docs.python.org/3/', icon: '📄', bg: '#e8f0fe' },
-    { type: 'pdf', name: 'MDN Web Docs', source: 'mozilla.org', url: 'https://developer.mozilla.org/', icon: '📄', bg: '#e8f0fe' },
-  ],
-  'Business': [
-    { type: 'video', name: 'Harvard Business Review', source: 'YouTube', url: 'https://www.youtube.com/@HarvardBusinessReview', icon: '🎥', bg: '#fce8e6' },
-    { type: 'video', name: 'Stanford GSB', source: 'YouTube', url: 'https://www.youtube.com/@stanfordgsb', icon: '🎥', bg: '#fce8e6' },
-    { type: 'pdf', name: 'SBA Business Guide', source: 'sba.gov', url: 'https://www.sba.gov/business-guide', icon: '📄', bg: '#e8f0fe' },
-    { type: 'pdf', name: 'Investopedia', source: 'investopedia.com', url: 'https://www.investopedia.com/', icon: '📄', bg: '#e8f0fe' },
-  ],
-  'Design': [
-    { type: 'video', name: 'Google Design', source: 'YouTube', url: 'https://www.youtube.com/@GoogleDesign', icon: '🎥', bg: '#fce8e6' },
-    { type: 'video', name: 'Figma Tutorials', source: 'YouTube', url: 'https://www.youtube.com/@Figma', icon: '🎥', bg: '#fce8e6' },
-    { type: 'pdf', name: 'Material Design Docs', source: 'material.io', url: 'https://m3.material.io/', icon: '📄', bg: '#e8f0fe' },
-    { type: 'pdf', name: 'Canva Design School', source: 'canva.com', url: 'https://www.canva.com/learn/design/', icon: '📄', bg: '#e8f0fe' },
-  ],
-  'School': [
-    { type: 'video', name: 'Khan Academy', source: 'YouTube', url: 'https://www.youtube.com/@khanacademy', icon: '🎥', bg: '#fce8e6' },
-    { type: 'video', name: 'CrashCourse', source: 'YouTube', url: 'https://www.youtube.com/@crashcourse', icon: '🎥', bg: '#fce8e6' },
-    { type: 'pdf', name: 'NCERT Books', source: 'ncert.nic.in', url: 'https://ncert.nic.in/textbook.php', icon: '📄', bg: '#e8f0fe' },
-    { type: 'pdf', name: 'Khan Academy Docs', source: 'khanacademy.org', url: 'https://www.khanacademy.org/', icon: '📄', bg: '#e8f0fe' },
-  ],
-  'Corporate': [
-    { type: 'video', name: 'LinkedIn Learning', source: 'YouTube', url: 'https://www.youtube.com/@LinkedInLearning', icon: '🎥', bg: '#fce8e6' },
-    { type: 'video', name: 'McKinsey & Company', source: 'YouTube', url: 'https://www.youtube.com/@McKinsey', icon: '🎥', bg: '#fce8e6' },
-    { type: 'pdf', name: 'Harvard ManageMentor', source: 'hbsp.harvard.edu', url: 'https://hbsp.harvard.edu/', icon: '📄', bg: '#e8f0fe' },
-    { type: 'pdf', name: 'Deloitte Insights', source: 'deloitte.com', url: 'https://www2.deloitte.com/insights', icon: '📄', bg: '#e8f0fe' },
-  ],
-};
-
-function loadResources() {
-  const dept = currentCourse?.department || 'School';
-  const resources = RESOURCES[dept] || RESOURCES['School'];
-  const grid = document.getElementById('resourceGrid');
-  if (!grid) return;
-  grid.innerHTML = resources.map(r => `
-    <a class="resource-card" href="${r.url}" target="_blank" rel="noopener">
-      <div class="resource-icon" style="background:${r.bg};">${r.icon}</div>
-      <div>
-        <div class="resource-name">${r.name}</div>
-        <div class="resource-source">${r.source}</div>
-      </div>
-    </a>`).join('');
-
-  // Show code editor for Tech courses
-  const codeSection = document.getElementById('codeEditorSection');
-  if (codeSection) {
-    if (['Technology', 'School'].includes(dept)) {
-      codeSection.style.display = 'block';
-      updateCodeTemplate();
-    }
-  }
-}
-
-// Code Editor
-const CODE_TEMPLATES = {
-  python: `# Python Code Editor
-# Write your code here and click Run!
-
-name = "Student"
-print("Hello, " + name + "!")
-
-# Try a simple calculation
-result = 10 + 20
-print("10 + 20 =", result)`,
-  javascript: `// JavaScript Code Editor
-// Write your code here and click Run!
-
-const name = "Student";
-console.log("Hello, " + name + "!");
-
-// Try a simple calculation
-const result = 10 + 20;
-console.log("10 + 20 = " + result);`,
-  html: `<!-- HTML Code Editor -->
-<!-- Write your HTML here and click Run! -->
-
-<h1>Hello, Student!</h1>
-<p>Welcome to Yashasvi Global Education.</p>
-<button onclick="alert('Great job!')">Click Me!</button>`
-};
-
-function updateCodeTemplate() {
-  const lang = document.getElementById('langSelect')?.value || 'python';
-  const textarea = document.getElementById('codeTextarea');
-  if (textarea && !textarea.dataset.modified) {
-    textarea.value = CODE_TEMPLATES[lang];
-  }
-  document.getElementById('codeOutput').textContent = '// Output will appear here…';
-  document.getElementById('codeOutput').className = 'code-output';
-}
-
-function runCode() {
-  const lang = document.getElementById('langSelect')?.value;
-  const code = document.getElementById('codeTextarea')?.value || '';
-  const output = document.getElementById('codeOutput');
-  
-  if (lang === 'javascript') {
-    try {
-      const logs = [];
-      const origLog = console.log;
-      console.log = (...args) => logs.push(args.join(' '));
-      eval(code);
-      console.log = origLog;
-      output.textContent = logs.length > 0 ? logs.join('
-') : '// Code ran successfully (no output)';
-      output.className = 'code-output';
-    } catch(e) {
-      output.textContent = '❌ Error: ' + e.message;
-      output.className = 'code-output error';
-    }
-  } else if (lang === 'html') {
-    const win = window.open('', '_blank', 'width=600,height=400');
-    win.document.write(code);
-    win.document.close();
-    output.textContent = '✅ HTML opened in new tab!';
-    output.className = 'code-output';
-  } else {
-    output.textContent = '⚠️ Python runs on server — coming soon!
-For now, try JavaScript mode.';
-    output.className = 'code-output';
-  }
-}
-
-function resetCode() {
-  const lang = document.getElementById('langSelect')?.value || 'python';
-  const textarea = document.getElementById('codeTextarea');
-  if (textarea) { textarea.value = CODE_TEMPLATES[lang]; textarea.dataset.modified = ''; }
-  document.getElementById('codeOutput').textContent = '// Output will appear here…';
-  document.getElementById('codeOutput').className = 'code-output';
-}
-
-// Track code changes
-document.addEventListener('input', e => {
-  if (e.target.id === 'codeTextarea') e.target.dataset.modified = 'yes';
-});
-
-// Voice Teacher
-let speechSynth = window.speechSynthesis;
-let currentUtterance = null;
-let isSpeaking = false;
-
-function getPageText() {
-  const lessonBody = document.getElementById('lessonBody');
-  if (!lessonBody) return 'No lesson content found.';
-  return lessonBody.innerText.replace(/[\n]+/g, ' ').trim();
-}
-
-function toggleVoice() {
-  if (isSpeaking) {
-    pauseVoice();
-  } else {
-    readLesson();
-  }
-}
-
-function readLesson(btn) {
-  // Show inline voice controls
-  const ctrl = document.getElementById('voiceControls');
-  if (ctrl) ctrl.style.display = 'flex';
-  stopVoice();
-  const text = getPageText();
-  if (!text) return;
-  
-  currentUtterance = new SpeechSynthesisUtterance(text);
-  currentUtterance.rate = parseFloat(document.getElementById('voiceSpeed').value);
-  currentUtterance.pitch = 1;
-  currentUtterance.lang = 'en-IN';
-  
-  // Try to use a good voice
-  const voices = speechSynth.getVoices();
-  const preferred = voices.find(v => v.lang.includes('en') && v.name.includes('Google')) || 
-                    voices.find(v => v.lang.includes('en-IN')) ||
-                    voices.find(v => v.lang.includes('en'));
-  if (preferred) currentUtterance.voice = preferred;
-  
-  currentUtterance.onstart = () => {
-    isSpeaking = true;
-    document.getElementById('voicePlayBtn').textContent = '⏸ Pause';
-    document.getElementById('voiceStopBtn').style.display = 'flex';
-    document.getElementById('voiceStatus').textContent = 'Reading lesson aloud…';
-  };
-  currentUtterance.onend = () => {
-    isSpeaking = false;
-    document.getElementById('voicePlayBtn').textContent = '▶ Read Lesson';
-    document.getElementById('voiceStopBtn').style.display = 'none';
-    document.getElementById('voiceStatus').textContent = 'Lesson reading complete ✓';
-  };
-  currentUtterance.onerror = () => {
-    isSpeaking = false;
-    document.getElementById('voiceStatus').textContent = 'Voice not supported on this browser.';
-  };
-  
-  speechSynth.speak(currentUtterance);
-}
-
-function pauseVoice() {
-  if (speechSynth.speaking) {
-    speechSynth.pause();
-    isSpeaking = false;
-    document.getElementById('voicePlayBtn').textContent = '▶ Resume';
-  } else if (speechSynth.paused) {
-    speechSynth.resume();
-    isSpeaking = true;
-    document.getElementById('voicePlayBtn').textContent = '⏸ Pause';
-  }
-}
-
-function stopVoice() {
-  speechSynth.cancel();
-  isSpeaking = false;
-  if (document.getElementById('voicePlayBtn')) document.getElementById('voicePlayBtn').textContent = '▶ Read Lesson';
-  if (document.getElementById('voiceStopBtn')) document.getElementById('voiceStopBtn').style.display = 'none';
-  if (document.getElementById('voiceStatus')) document.getElementById('voiceStatus').textContent = 'Click "Read Lesson" to hear the lesson content';
-}
-
-function updateSpeed() {
-  if (isSpeaking) { stopVoice(); setTimeout(readLesson, 200); }
-}
-
-// Stop voice when lesson changes
-window.addEventListener('beforeunload', stopVoice);
-
-// Copy Protection - only on lesson content, not on notes/chat/request
-document.addEventListener('copy', e => {
-  const allowed = ['notes-textarea', 'chat-input', 'modal-textarea', 'requestText', 'chatInput', 'notesArea'];
-  const target = e.target;
-  const isAllowed = allowed.some(id => target.id === id) ||
-    target.closest('.chat-messages') ||
-    target.closest('.notes-section') ||
-    target.closest('.modal-box') ||
-    target.closest('#requestModal');
-  if (!isAllowed) {
-    e.preventDefault();
-    const t = document.getElementById('copyToast');
-    if (t) { t.style.display='block'; setTimeout(()=>t.style.display='none', 2500); }
-  }
-});
-document.addEventListener('contextmenu', e => {
-  const isAllowed = e.target.closest('.notes-section') ||
-    e.target.closest('.chat-messages') ||
-    e.target.closest('.chat-input-wrap') ||
-    e.target.closest('#requestModal');
-  if (!isAllowed) e.preventDefault();
-});
-document.addEventListener('keydown', e => {
-  const isAllowed = e.target.closest('.notes-section') ||
-    e.target.closest('.chat-input-wrap') ||
-    e.target.closest('#requestModal');
-  if (!isAllowed && (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase())))) {
-    e.preventDefault();
-  }
-});
-
+// Logout
 function logout() {
   localStorage.removeItem('yge_email');
   window.location.href = '/login.html';
 }
 
-function showLoginMsg(text){const m=document.getElementById('loginMsg');m.className='msg-error';m.textContent=text;m.style.display='block';}
+function showMsg(text) {
+  var m = document.getElementById('loginMsg');
+  m.textContent = text; m.style.display = 'block';
+}
+
+// Copy protection - only on lesson body
+document.addEventListener('copy', function(e) {
+  var allowed = e.target.closest('.notes-ta') || e.target.closest('.chat-msgs') || e.target.closest('.modal-ta') || e.target.closest('.code-textarea');
+  if (!allowed) {
+    e.preventDefault();
+    var t = document.getElementById('copyToast');
+    if (t) { t.style.display='block'; setTimeout(function(){t.style.display='none'},2500); }
+  }
+});
+document.addEventListener('contextmenu', function(e) {
+  var allowed = e.target.closest('.notes-ta') || e.target.closest('.chat-msgs') || e.target.closest('.modal-ta') || e.target.closest('.code-textarea');
+  if (!allowed) e.preventDefault();
+});
 </script>
 </body>
 </html>
- 
