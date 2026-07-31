@@ -357,10 +357,13 @@ async function loadMyCourse() {
 
 async function loadAllCourses() {
   try {
-    const res = await fetch(BASE + "/courses?select=*&is_active=eq.true&order=department.asc", { method: "GET", headers: HEADERS });
+    const res = await fetch(BASE + "/courses?select=id,name,department,level,difficulty,duration_hours,duration_months,is_free,program_type,price_usdt,description,tags&is_active=eq.true&order=name.asc", { method: "GET", headers: HEADERS });
     allCourses = await res.json();
     renderCourses();
-  } catch(e) { document.getElementById('allCoursesArea').innerHTML = '<div class="no-results"><div class="nr-icon">⚠️</div><p>Error loading courses.</p></div>'; }
+  } catch(e) { 
+    console.error('loadAllCourses error:', e);
+    document.getElementById('allCoursesArea').innerHTML = '<div class="no-results"><div class="nr-icon" style="font-size:32px">⚠️</div><p>Error: ' + e.message + '</p></div>'; 
+  }
 }
 
 function renderCourses() {
