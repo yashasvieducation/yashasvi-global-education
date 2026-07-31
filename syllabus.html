@@ -528,7 +528,7 @@ function loadLesson(mi, li) {
   var isBm = bookmarks.has(key);
   var savedNote = notes[key] || '';
   var dept = currentCourse ? currentCourse.department : 'School';
-  var res = RESOURCES[dept] || RESOURCES.School;
+  var res = getResources(dept, courseName);
   var isTech = ['Technology','School'].includes(dept);
 
   var html = '';
