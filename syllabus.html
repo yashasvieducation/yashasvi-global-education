@@ -435,7 +435,7 @@ async function loadCourse(courseName) {
       document.getElementById('mainContent').innerHTML = '<div class="loading">Course content being generated. Please refresh in a moment!</div>';
       return;
     }
-    buildNav(); loadLesson(0, 0);
+    buildNav();
   } catch(e) { console.error(e); }
 }
 
@@ -450,6 +450,7 @@ async function loadProgress() {
       doneLessons = new Set(data[0].completed_lessons || []);
       bookmarks = new Set(data[0].bookmarks || []);
       notes = data[0].notes || {};
+      updateProgress(); updateBadges(); buildNav();
       loadLesson(curMod, curLesson);
     } else {
       var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0)},0);
