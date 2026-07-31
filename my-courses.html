@@ -217,6 +217,8 @@
     body { padding-top: 60px; padding-bottom: 80px; }
   }
 
+
+  html, body { overflow-x: hidden; max-width: 100%; }
 </style>
 </head>
 <body>
@@ -248,7 +250,7 @@
 </nav>
 
 <div class="hero">
-  <h1>🗂 My Courses</h1>
+  <h1>My Courses</h1>
   <p>Your enrolled courses and explore new ones to add to your learning journey.</p>
 </div>
 
@@ -389,7 +391,7 @@ function renderCourses() {
 
   document.getElementById('allCoursesArea').innerHTML = '<div class="courses-grid">' + filtered.map(c => {
     const isEnrolled = c.name === enrolledCourse;
-    const icon = deptIcons[c.department] || '📖';
+    const icon = deptIcons[c.department] || deptIcons.Other;
     const tags = (c.tags || []).slice(0, 2);
     const diffColor = c.difficulty === 'Beginner' ? '#137333' : c.difficulty === 'Intermediate' ? '#b06000' : '#c5221f';
     const diffBg = c.difficulty === 'Beginner' ? '#e6f4ea' : c.difficulty === 'Intermediate' ? '#fef7e0' : '#fce8e6';

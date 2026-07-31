@@ -131,7 +131,9 @@
     .badge-grid { grid-template-columns: 1fr 1fr !important; }
   }
 
-  </style>
+  
+  html, body { overflow-x: hidden; max-width: 100%; }
+</style>
 </head>
 <body>
 
@@ -160,11 +162,11 @@
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <div class="sidebar-item active" onclick="switchPanel('dashboard')" id="tab-dashboard"><span class="s-icon">📊</span> Dashboard</div>
-    <div class="sidebar-item" onclick="switchPanel('students')" id="tab-students"><span class="s-icon">👥</span> Students</div>
-    <div class="sidebar-item" onclick="switchPanel('courses')" id="tab-courses"><span class="s-icon">📚</span> Courses</div>
-    <div class="sidebar-item" onclick="switchPanel('requests')" id="tab-requests"><span class="s-icon">🔔</span> Course Requests</div>
-    <div class="sidebar-item" onclick="switchPanel('monitoring')" id="tab-monitoring"><span class="s-icon">📡</span> Monitoring</div>
+    <div class="sidebar-item active" onclick="switchPanel('dashboard')" id="tab-dashboard"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> Dashboard</div>
+    <div class="sidebar-item" onclick="switchPanel('students')" id="tab-students"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span> Students</div>
+    <div class="sidebar-item" onclick="switchPanel('courses')" id="tab-courses"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></span> Courses</div>
+    <div class="sidebar-item" onclick="switchPanel('requests')" id="tab-requests"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></span> Course Requests</div>
+    <div class="sidebar-item" onclick="switchPanel('monitoring')" id="tab-monitoring"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l11 6 11-6"/><path d="M1 12l11 6 11-6"/></svg></span> Monitoring</div>
     <div class="sidebar-item" onclick="switchPanel('payments')" id="tab-payments"><span class="s-icon">💰</span> Payments</div>
     <div class="sidebar-item" onclick="switchPanel('institutions')" id="tab-institutions"><span class="s-icon">🏫</span> Institutions</div>
   </div>

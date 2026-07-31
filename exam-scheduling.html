@@ -103,7 +103,9 @@
     .badge-grid { grid-template-columns: 1fr 1fr !important; }
   }
 
-  </style>
+  
+  html, body { overflow-x: hidden; max-width: 100%; }
+</style>
 </head>
 <body>
 
@@ -139,19 +141,19 @@
     <div class="section-title">Select exam difficulty</div>
     <div class="difficulty-grid">
       <div class="diff-card" id="diff-basic" onclick="selectDiff('basic')">
-        <div class="diff-icon">🌱</div>
+        <div class="diff-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#34a853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M5 12a7 7 0 0014 0"/><path d="M12 2C6.5 2 5 7 5 12"/><path d="M12 2c5.5 0 7 5 7 10"/></svg></div>
         <div class="diff-name">Basic</div>
         <div class="diff-desc">Fundamental concepts, simple questions. Best for beginners or younger students.</div>
         <span class="diff-tag tag-basic">Beginner friendly</span>
       </div>
       <div class="diff-card" id="diff-normal" onclick="selectDiff('normal')">
-        <div class="diff-icon">⚡</div>
+        <div class="diff-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f57c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <div class="diff-name">Normal</div>
         <div class="diff-desc">Standard difficulty. Mix of conceptual and applied questions.</div>
         <span class="diff-tag tag-normal">Recommended</span>
       </div>
       <div class="diff-card" id="diff-extreme" onclick="selectDiff('extreme')">
-        <div class="diff-icon">🔥</div>
+        <div class="diff-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c5221f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c0 6-6 8-6 14a6 6 0 0012 0c0-6-6-8-6-14z"/><path d="M12 12c0 3-2 4-2 6a2 2 0 004 0c0-2-2-3-2-6z"/></svg></div>
         <div class="diff-name">Extreme</div>
         <div class="diff-desc">Advanced questions. For experienced learners who want a real challenge.</div>
         <span class="diff-tag tag-extreme">Advanced</span>
