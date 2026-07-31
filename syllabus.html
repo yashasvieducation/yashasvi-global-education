@@ -194,7 +194,7 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
     <a class="nav-btn" id="notesNavBtn" href="/my-notes.html">My Notes</a>
     <a class="nav-btn" id="coursesNavBtn" href="/my-courses.html">My Courses</a>
     <button class="nav-btn-primary" onclick="openRequest()">+ Request a Course</button>
-    <button class="bell-btn" id="bellBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></button>
+    <button class="bell-btn" id="bellBtn" onclick="toggleNotif()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="bell-badge" id="bellBadge" style="display:none;"></span></button>
     <button onclick="logout()" style="background:none;border:1px solid #dadce0;border-radius:4px;padding:6px 14px;font-size:13px;color:#5f6368;cursor:pointer">Logout</button>
   </div>
 </nav>
@@ -280,6 +280,17 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
       <button class="btn btn-primary" onclick="submitRequest()" style="flex:1">Send Request</button>
       <button class="btn btn-secondary" onclick="closeRequest()">Cancel</button>
     </div>
+  </div>
+</div>
+
+<!-- Notification Panel -->
+<div id="notifPanel" style="display:none;position:fixed;top:64px;right:16px;width:320px;background:#fff;border:1px solid #e8eaed;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);z-index:500;max-height:400px;overflow-y:auto;">
+  <div style="padding:14px 16px;border-bottom:1px solid #e8eaed;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;">
+    <span style="font-family:'Google Sans',Arial,sans-serif;font-size:15px;font-weight:500;">Notifications</span>
+    <button onclick="document.getElementById('notifPanel').style.display='none'" style="background:none;border:none;color:#5f6368;cursor:pointer;font-size:18px;">&#10005;</button>
+  </div>
+  <div id="notifPanelList" style="padding:8px 0;">
+    <div style="padding:20px;text-align:center;color:#80868b;font-size:13px;">Loading...</div>
   </div>
 </div>
 
