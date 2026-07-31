@@ -331,28 +331,35 @@ async function loadMyCourse() {
   try {
     const sRes = await fetch(BASE + "/students?select=selected_course&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
     const sData = await sRes.json();
-    if (!Array.isArray(sData) || !sData[0]?.selected_course) { document.getElementById('myCourseArea').innerHTML = '<p style="color:#5f6368; font-size:14px; margin-bottom:8px;">No course enrolled yet.</p>'; return; }
+    if (!Array.isArray(sData) || !sData[0]?.selected_course) {
+      document.getElementById('myCourseArea').innerHTML = '<div style="text-align:center;padding:20px;color:#5f6368;font-size:14px;">No course enrolled yet.<br><br><a href="/my-courses.html?email='+encodeURIComponent(email)+'" style="color:#1a73e8;font-weight:500;">Browse courses to enroll</a></div>';
+      return;
+    }
     enrolledCourse = sData[0].selected_course;
 
     const pRes = await fetch(BASE + "/syllabus_progress?select=completed_lessons,total_lessons&student_email=ilike." + encodeURIComponent(email), { method: "GET", headers: HEADERS });
     const pData = await pRes.json();
-    const completed = Array.isArray(pData) && pData[0]?.completed_lessons ? (Array.isArray(pData[0].completed_lessons) ? pData[0].completed_lessons.length : Object.keys(pData[0].completed_lessons).length) : 0;
+    const completed = Array.isArray(pData) && pData[0]?.completed_lessons ? pData[0].completed_lessons.length : 0;
     const total = pData[0]?.total_lessons || 12;
     completedCount = completed; totalLessons = total;
     const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
-    const icon = deptIcons[Object.keys(deptIcons).find(k => enrolledCourse.includes(k))] || deptIcons.Other;
+    const dept = Object.keys(deptIcons).find(k => enrolledCourse.includes(k));
+    const icon = deptIcons[dept] || deptIcons.Other;
 
     document.getElementById('myCourseArea').innerHTML = `
-      <div class="my-course-card">
+      <div class="my-course-card" onclick="window.location.href='/syllabus.html?email=${encodeURIComponent(email)}'" style="cursor:pointer;">
         <div style="width:48px;height:48px;border-radius:12px;background:#e8f0fe;display:flex;align-items:center;justify-content:center;color:#1a73e8;flex-shrink:0;">${icon}</div>
         <div class="mc-info">
           <div class="mc-name">${enrolledCourse}</div>
-          <div class="mc-meta">${completed} of ${total} lessons completed · ⏱ ${(total-completed)*15} min remaining</div>
+          <div class="mc-meta" style="display:flex;align-items:center;gap:6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${completed} of ${total} lessons · ${(total-completed)*15} min remaining
+          </div>
           <div class="mc-progress-bg"><div class="mc-progress-fill" style="width:${pct}%"></div></div>
           <div class="mc-progress-label"><span>${pct}% complete</span><span>${completed}/${total} lessons</span></div>
         </div>
         <div class="mc-action">
-          <a class="btn-continue" href="/syllabus.html?email=${encodeURIComponent(email)}">Continue →</a>
+          <a class="btn-continue" href="/syllabus.html?email=${encodeURIComponent(email)}" onclick="event.stopPropagation()">Continue</a>
         </div>
       </div>`;
   } catch(e) { console.error(e); }
