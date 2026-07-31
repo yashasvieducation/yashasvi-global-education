@@ -164,6 +164,7 @@
     <div class="sidebar-item" onclick="switchPanel('students')" id="tab-students"><span class="s-icon">👥</span> Students</div>
     <div class="sidebar-item" onclick="switchPanel('courses')" id="tab-courses"><span class="s-icon">📚</span> Courses</div>
     <div class="sidebar-item" onclick="switchPanel('requests')" id="tab-requests"><span class="s-icon">🔔</span> Course Requests</div>
+    <div class="sidebar-item" onclick="switchPanel('monitoring')" id="tab-monitoring"><span class="s-icon">📡</span> Monitoring</div>
     <div class="sidebar-item" onclick="switchPanel('payments')" id="tab-payments"><span class="s-icon">💰</span> Payments</div>
     <div class="sidebar-item" onclick="switchPanel('institutions')" id="tab-institutions"><span class="s-icon">🏫</span> Institutions</div>
   </div>
@@ -263,6 +264,45 @@
           <thead><tr><th>Course Name</th><th>Department</th><th>Level</th><th>Fee</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody id="coursesList"><tr><td colspan="6" style="text-align:center; color:#5f6368; padding:24px;">Loading…</td></tr></tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Monitoring Panel -->
+    <div class="panel" id="panel-monitoring" style="display:none;">
+      <div class="panel-title">📡 Platform Monitoring</div>
+      
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;" id="monStats">
+        <div class="stat-card"><div class="stat-num" id="mon-errors">—</div><div class="stat-label">Errors today</div></div>
+        <div class="stat-card"><div class="stat-num" id="mon-stuck">—</div><div class="stat-label">Students stuck</div></div>
+        <div class="stat-card"><div class="stat-num" id="mon-active">—</div><div class="stat-label">Active today</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#34a853">Live</div><div class="stat-label">Platform status</div></div>
+      </div>
+
+      <!-- Error Logs -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h3 style="font-family:'Google Sans',Arial,sans-serif;font-size:16px;font-weight:500;">Recent Errors</h3>
+        <button onclick="loadMonitoring()" style="background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:7px 16px;font-size:13px;cursor:pointer;">Refresh</button>
+      </div>
+      <div id="errorLogsTable" style="background:#fff;border:1px solid #e8eaed;border-radius:8px;overflow:hidden;">
+        <div style="padding:24px;text-align:center;color:#5f6368;">Loading...</div>
+      </div>
+
+      <!-- New Course Notifications -->
+      <div style="margin-top:24px;">
+        <h3 style="font-family:'Google Sans',Arial,sans-serif;font-size:16px;font-weight:500;margin-bottom:12px;">Send Course Notification to All Students</h3>
+        <div style="background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:20px;">
+          <div style="margin-bottom:12px;">
+            <label style="font-size:13px;color:#5f6368;display:block;margin-bottom:6px;">Course Name</label>
+            <input id="notifCourse" type="text" placeholder="e.g. AI & Machine Learning Fundamentals" style="width:100%;padding:10px 12px;border:1px solid #dadce0;border-radius:4px;font-size:14px;outline:none;">
+          </div>
+          <div style="margin-bottom:16px;">
+            <label style="font-size:13px;color:#5f6368;display:block;margin-bottom:6px;">Message</label>
+            <textarea id="notifMsg" placeholder="New course is now available! Enroll now..." style="width:100%;padding:10px 12px;border:1px solid #dadce0;border-radius:4px;font-size:14px;outline:none;resize:vertical;min-height:80px;font-family:'Roboto',Arial,sans-serif;"></textarea>
+          </div>
+          <button onclick="sendBulkNotification()" style="background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:10px 24px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">Send to All Students</button>
+          <div id="notifResult" style="margin-top:10px;font-size:13px;display:none;"></div>
+        </div>
       </div>
     </div>
 
@@ -486,6 +526,116 @@ async function toggleCourse(id, active) {
     body: JSON.stringify({ is_active: active })
   });
   loadCourses();
+}
+
+// Monitoring
+async function loadMonitoring() {
+  try {
+    // Load error logs
+    const errRes = await fetch(BASE + "/error_logs?select=*&order=created_at.desc&limit=50", { method: "GET", headers: HEADERS });
+    const errors = await errRes.json();
+    
+    // Today's errors
+    const today = new Date().toISOString().split('T')[0];
+    const todayErrors = errors.filter(e => e.created_at && e.created_at.startsWith(today));
+    const stuckErrors = errors.filter(e => e.error_type === 'access_blocked');
+    
+    document.getElementById('mon-errors').textContent = todayErrors.length;
+    document.getElementById('mon-stuck').textContent = stuckErrors.length;
+
+    // Active students today
+    const actRes = await fetch(BASE + "/syllabus_progress?select=student_email&last_active=gte." + today + "T00:00:00", { method: "GET", headers: HEADERS });
+    const active = await actRes.json();
+    document.getElementById('mon-active').textContent = Array.isArray(active) ? active.length : 0;
+    
+    // Error logs table
+    if (!Array.isArray(errors) || errors.length === 0) {
+      document.getElementById('errorLogsTable').innerHTML = '<div style="padding:24px;text-align:center;color:#5f6368;">No errors logged. Platform running smoothly!</div>';
+      return;
+    }
+    
+    const rows = errors.map(e => `
+      <tr style="border-bottom:1px solid #f1f3f4;">
+        <td style="padding:10px 14px;font-size:13px;color:${e.error_type==='access_blocked'?'#b06000':'#c5221f'}">${e.error_type||'unknown'}</td>
+        <td style="padding:10px 14px;font-size:13px;color:#5f6368">${e.student_email||'—'}</td>
+        <td style="padding:10px 14px;font-size:12px;color:#5f6368;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.error_message||'—'}</td>
+        <td style="padding:10px 14px;font-size:12px;color:#80868b">${e.created_at ? new Date(e.created_at).toLocaleString('en-IN') : '—'}</td>
+      </tr>`).join('');
+    
+    document.getElementById('errorLogsTable').innerHTML = `
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="background:#f8f9fa;border-bottom:1px solid #e8eaed;">
+          <th style="padding:10px 14px;font-size:12px;font-weight:500;color:#5f6368;text-align:left;">Error Type</th>
+          <th style="padding:10px 14px;font-size:12px;font-weight:500;color:#5f6368;text-align:left;">Student</th>
+          <th style="padding:10px 14px;font-size:12px;font-weight:500;color:#5f6368;text-align:left;">Message</th>
+          <th style="padding:10px 14px;font-size:12px;font-weight:500;color:#5f6368;text-align:left;">Time</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  } catch(e) {
+    document.getElementById('errorLogsTable').innerHTML = '<div style="padding:16px;color:#c5221f;">Error loading logs: ' + e.message + '</div>';
+  }
+}
+
+async function sendBulkNotification() {
+  const course = document.getElementById('notifCourse').value.trim();
+  const msg = document.getElementById('notifMsg').value.trim();
+  if (!course || !msg) { alert('Please fill course name and message.'); return; }
+  
+  const btn = event.target;
+  btn.disabled = true; btn.textContent = 'Sending...';
+  
+  try {
+    // Get all students
+    const res = await fetch(BASE + "/students?select=student_email,student_name&admission_status=in.(admitted,certified,fee_paid,final_exam_passed)", { method: "GET", headers: HEADERS });
+    const students = await res.json();
+    
+    if (!Array.isArray(students) || students.length === 0) {
+      document.getElementById('notifResult').textContent = 'No students found.';
+      document.getElementById('notifResult').style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Send to All Students';
+      return;
+    }
+    
+    // Insert notifications for all students
+    const notifications = students.map(s => ({
+      student_email: s.student_email,
+      title: 'New Course: ' + course,
+      message: msg,
+      type: 'new_course',
+      is_read: false
+    }));
+    
+    await fetch(BASE + "/notifications", {
+      method: "POST",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify(notifications)
+    });
+    
+    // Send email to admin
+    await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/send-verification-email", {
+      method: "POST",
+      headers: HEADERS,
+      body: JSON.stringify({
+        type: 'course_request',
+        to: 'yashasvieducation@gmail.com',
+        studentName: 'Admin',
+        requestedCourse: 'Bulk notification sent for: ' + course + ' to ' + students.length + ' students'
+      })
+    });
+    
+    const result = document.getElementById('notifResult');
+    result.style.color = '#137333';
+    result.textContent = 'Notification sent to ' + students.length + ' students!';
+    result.style.display = 'block';
+    document.getElementById('notifCourse').value = '';
+    document.getElementById('notifMsg').value = '';
+  } catch(e) {
+    document.getElementById('notifResult').style.color = '#c5221f';
+    document.getElementById('notifResult').textContent = 'Error: ' + e.message;
+    document.getElementById('notifResult').style.display = 'block';
+  }
+  btn.disabled = false; btn.textContent = 'Send to All Students';
 }
 
 // Course Requests
