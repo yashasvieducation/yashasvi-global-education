@@ -505,9 +505,24 @@ function toggleMod(mi) {
 }
 
 function loadLesson(mi, li) {
+  // Safety: find valid module
+  if (!modules || modules.length === 0) {
+    document.getElementById('mainContent').innerHTML = '<div class="loading">Course content loading...</div>';
+    return;
+  }
+  // Clamp to valid range
+  mi = Math.max(0, Math.min(mi, modules.length - 1));
+  var mod = modules[mi];
+  if (!mod) { mi = 0; mod = modules[0]; }
+  var lessons = mod.lessons || [];
+  li = Math.max(0, Math.min(li, lessons.length - 1));
+  var lesson = lessons[li];
+  if (!lesson && lessons.length > 0) { li = 0; lesson = lessons[0]; }
+  if (!lesson) {
+    document.getElementById('mainContent').innerHTML = '<div class="loading">Lesson content not found. <a href="javascript:location.reload()" style="color:#1a73e8;">Refresh</a></div>';
+    return;
+  }
   curMod = mi; curLesson = li;
-  var mod = modules[mi]; if (!mod) return;
-  var lesson = (mod.lessons||[])[li]; if (!lesson) return;
   mcqDone = {};
   var key = mi+'-'+li;
   var isBm = bookmarks.has(key);
