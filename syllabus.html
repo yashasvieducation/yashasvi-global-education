@@ -407,7 +407,6 @@ async function doLogin() {
     document.getElementById('loginWrap').style.display = 'none';
     document.getElementById('mainLayout').style.display = 'grid';
     await loadCourse(s.selected_course);
-    await loadProgress();
   } catch(err) {
     showMsg('Error: ' + err.message);
     btn.disabled = false; btn.textContent = 'Access my course';
@@ -436,6 +435,7 @@ async function loadCourse(courseName) {
       return;
     }
     buildNav();
+    await loadProgress();
   } catch(e) { console.error(e); }
 }
 
