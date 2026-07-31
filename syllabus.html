@@ -169,6 +169,13 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 @media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:16px}.mobile-top-bar{display:block}.mobile-bottom-nav{display:block}.nav{display:none!important}body{padding-top:60px;padding-bottom:80px}}
 
   html, body { overflow-x: hidden; max-width: 100%; }
+
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr !important; }
+  .sidebar { display: none !important; }
+  .chat-panel { display: none !important; }
+  #notifPanel { width: calc(100vw - 32px) !important; right: 16px !important; }
+}
 </style>
 </head>
 <body>
@@ -933,6 +940,51 @@ document.addEventListener('contextmenu', function(e) {
   var allowed = e.target.closest('.notes-ta') || e.target.closest('.chat-msgs') || e.target.closest('.modal-ta') || e.target.closest('.code-textarea');
   if (!allowed) e.preventDefault();
 });
+
+// ===== NOTIFICATION PANEL =====
+function toggleNotif() {
+  var panel = document.getElementById('notifPanel');
+  if (!panel) return;
+  var isOpen = panel.style.display === 'block';
+  panel.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) loadNotifPanel();
+}
+
+async function loadNotifPanel() {
+  var list = document.getElementById('notifPanelList');
+  if (!list) return;
+  list.innerHTML = '<div style="padding:16px;text-align:center;color:#5f6368;font-size:13px;">Loading...</div>';
+  try {
+    var em = studentEmail || localStorage.getItem('yge_email') || '';
+    if (!em) { list.innerHTML = '<div style="padding:16px;text-align:center;color:#80868b;font-size:13px;">Please login</div>'; return; }
+    var res = await fetch(BASE + "/notifications?select=*&student_email=ilike." + encodeURIComponent(em) + "&order=created_at.desc&limit=10", {method:"GET",headers:H});
+    var data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      list.innerHTML = '<div style="padding:24px;text-align:center;color:#80868b;font-size:13px;">No notifications yet</div>'; return;
+    }
+    list.innerHTML = data.map(function(n) {
+      var link = '/syllabus.html?email=' + encodeURIComponent(em);
+      if (n.type === 'new_course') link = '/my-courses.html?email=' + encodeURIComponent(em);
+      if (n.type === 'certificate') link = '/certification.html?email=' + encodeURIComponent(em);
+      if (n.type === 'exam_result') link = '/quarterly-exam.html?email=' + encodeURIComponent(em);
+      return '<div onclick="window.location.href='' + link + ''" style="padding:12px 16px;border-bottom:1px solid #f1f3f4;display:flex;gap:10px;cursor:pointer;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='#fff'">' +
+        '<div style="width:8px;height:8px;border-radius:50%;background:' + (n.is_read ? '#dadce0' : '#1a73e8') + ';flex-shrink:0;margin-top:5px;"></div>' +
+        '<div><div style="font-size:13px;font-weight:500;color:#202124;">' + (n.title||'') + '</div>' +
+        '<div style="font-size:12px;color:#5f6368;margin-top:2px;">' + (n.message||'').substring(0,60) + '</div>' +
+        '<div style="font-size:11px;color:#80868b;margin-top:2px;">' + (n.created_at ? new Date(n.created_at).toLocaleDateString('en-IN') : '') + '</div></div></div>';
+    }).join('');
+    await fetch(BASE + "/notifications?student_email=ilike." + encodeURIComponent(em), {method:"PATCH",headers:H,body:JSON.stringify({is_read:true})});
+    var badge = document.getElementById('bellBadge');
+    if (badge) badge.style.display = 'none';
+  } catch(e) { list.innerHTML = '<div style="padding:16px;color:#c5221f;font-size:13px;">Error loading</div>'; }
+}
+
+document.addEventListener('click', function(e) {
+  var panel = document.getElementById('notifPanel');
+  var btn = document.getElementById('bellBtn');
+  if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) panel.style.display = 'none';
+});
+// ===== END NOTIFICATION PANEL =====
 </script>
 </body>
 </html>
