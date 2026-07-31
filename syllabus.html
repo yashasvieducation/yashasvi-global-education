@@ -528,6 +528,7 @@ function loadLesson(mi, li) {
   var isBm = bookmarks.has(key);
   var savedNote = notes[key] || '';
   var dept = currentCourse ? currentCourse.department : 'School';
+  var courseName = currentCourse ? currentCourse.name : 'this topic';
   var res = getResources(dept, courseName);
   var isTech = ['Technology','School'].includes(dept);
 
