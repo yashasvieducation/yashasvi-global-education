@@ -307,7 +307,7 @@ if (email) {
   const backBtn = document.getElementById('backBtn');
   if (backBtn) backBtn.href = '/syllabus.html?email=' + encodeURIComponent(email);
 }
-let allCourses = [], currentFilter = 'all', currentStandard = 'all', currentDept = 'all', enrolledCourse = '', completedCount = 0, totalLessons = 0;
+let allCourses = [], currentFilter = 'all', currentStandard = 'all', currentDept = 'all', currentView = 'grid', enrolledCourse = '', completedCount = 0, totalLessons = 0;
 
 const deptIcons = {
   Technology: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
@@ -557,7 +557,6 @@ document.getElementById('courseModal').addEventListener('click', function(e) {
 });
 
 // View Toggle
-let currentView = 'grid';
 function setView(view) {
   currentView = view;
   document.getElementById('viewGrid').style.background = view === 'grid' ? '#e8f0fe' : '#fff';
