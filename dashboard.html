@@ -483,11 +483,16 @@ async function loadNotifPanel() {
       list.innerHTML = '<div style="padding:24px;text-align:center;color:#80868b;font-size:13px;">No notifications yet</div>'; return;
     }
     list.innerHTML = data.map(function(n) {
-      return '<div style="padding:12px 16px;border-bottom:1px solid #f1f3f4;display:flex;gap:10px;align-items:flex-start;">' +
+      var link = '/syllabus.html?email=' + encodeURIComponent(studentEmail);
+      if (n.type === 'new_course') link = '/my-courses.html?email=' + encodeURIComponent(studentEmail);
+      if (n.type === 'certificate') link = '/certification.html?email=' + encodeURIComponent(studentEmail);
+      if (n.type === 'exam_result') link = '/quarterly-exam.html?email=' + encodeURIComponent(studentEmail);
+      return '<div onclick="window.location.href=''+link+''" style="padding:12px 16px;border-bottom:1px solid #f1f3f4;display:flex;gap:10px;align-items:flex-start;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">' +
         '<div style="width:8px;height:8px;border-radius:50%;background:'+(n.is_read?'#dadce0':'#1a73e8')+';flex-shrink:0;margin-top:5px;"></div>' +
-        '<div><div style="font-size:13px;font-weight:500;color:#202124;">'+(n.title||'')+'</div>' +
-        '<div style="font-size:12px;color:#5f6368;margin-top:2px;">'+(n.message||'')+'</div>' +
-        '<div style="font-size:11px;color:#80868b;margin-top:3px;">'+(n.created_at?new Date(n.created_at).toLocaleDateString('en-IN'):'')+'</div></div></div>';
+        '<div style="flex:1;"><div style="font-size:13px;font-weight:500;color:#202124;">'+(n.title||'Notification')+'</div>' +
+        '<div style="font-size:12px;color:#5f6368;margin-top:2px;">'+(n.message||'').substring(0,80)+'</div>' +
+        '<div style="font-size:11px;color:#80868b;margin-top:3px;">'+(n.created_at?new Date(n.created_at).toLocaleDateString('en-IN'):'')+'</div></div>' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dadce0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>';
     }).join('');
     // Mark read
     await fetch(BASE + "/notifications?student_email=ilike." + encodeURIComponent(studentEmail), {method:"PATCH",headers:H,body:JSON.stringify({is_read:true})});

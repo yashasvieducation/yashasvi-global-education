@@ -415,11 +415,16 @@ async function doLogin() {
 }
 
 async function loadCourse(courseName) {
+  if (!courseName) {
+    document.getElementById('mainContent').innerHTML = '<div class="loading">No course enrolled. <a href="/my-courses.html?email='+studentEmail+'" style="color:#1a73e8;">Browse courses</a></div>';
+    return;
+  }
+  document.getElementById('mainContent').innerHTML = '<div class="loading"><span class="spin">&#9203;</span>Loading course...</div>';
   try {
     var cRes = await fetch(BASE + "/courses?select=id,name,department&name=ilike." + encodeURIComponent(courseName) + "&is_active=eq.true", {method:"GET",headers:H});
     var courses = await cRes.json();
     if (!Array.isArray(courses) || courses.length === 0) {
-      document.getElementById('mainContent').innerHTML = '<div class="loading">Course content being prepared. Please refresh soon!</div>';
+      document.getElementById('mainContent').innerHTML = '<div class="loading">Course not found. <a href="/my-courses.html?email='+studentEmail+'" style="color:#1a73e8;">Browse courses</a></div>';
       return;
     }
     currentCourse = courses[0];
