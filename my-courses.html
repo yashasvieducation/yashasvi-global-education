@@ -29,7 +29,7 @@
   .search-input:focus { border-color: #1a73e8; box-shadow: 0 2px 8px rgba(26,115,232,0.12); }
   .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #5f6368; pointer-events: none; }
   .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-  .chip { padding: 7px 16px; border-radius: 100px; border: 1.5px solid #dadce0; font-size: 13px; color: #5f6368; cursor: pointer; transition: all 0.15s; background: #fff; font-family: 'Google Sans', Arial, sans-serif; }
+  .chip { padding: 6px 16px; border-radius: 100px; border: 1px solid #e8eaed; font-size: 13px; color: #5f6368; cursor: pointer; transition: all 0.15s; background: #fff; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; }
   .chip:hover { border-color: #1a73e8; color: #1a73e8; }
   .chip.active { background: #1a73e8; color: #fff; border-color: #1a73e8; }
 
@@ -269,10 +269,10 @@
       <div style="font-size:11px; font-weight:500; color:#80868b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">By Standard</div>
       <div class="filter-chips" id="standardChips">
         <div class="chip active" onclick="setStandard('all', this)">All</div>
-        <div class="chip" onclick="setStandard('8th', this)">🎒 8th</div>
-        <div class="chip" onclick="setStandard('10th', this)">📚 10th</div>
-        <div class="chip" onclick="setStandard('12th', this)">🎓 12th</div>
-        <div class="chip" onclick="setStandard('Any', this)">🌐 Open to All</div>
+        <div class="chip" onclick="setStandard('8th', this)">8th Standard</div>
+        <div class="chip" onclick="setStandard('10th', this)">10th Standard</div>
+        <div class="chip" onclick="setStandard('12th', this)">12th Standard</div>
+        <div class="chip" onclick="setStandard('Any', this)">Open to All</div>
       </div>
     </div>
     <!-- Department Filter -->
@@ -280,12 +280,13 @@
       <div style="font-size:11px; font-weight:500; color:#80868b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">By Category</div>
       <div class="filter-chips" id="deptChips">
         <div class="chip active" onclick="setDept('all', this)">All</div>
-        <div class="chip" onclick="setDept('Technology', this)">💻 Tech</div>
-        <div class="chip" onclick="setDept('School', this)">📖 School</div>
-        <div class="chip" onclick="setDept('Business', this)">🚀 Business</div>
-        <div class="chip" onclick="setDept('Design', this)">🎨 Design</div>
-        <div class="chip" onclick="setDept('Corporate', this)">🏢 Corporate</div>
-        <div class="chip" onclick="setDept('free', this)">✅ Free</div>
+        <div class="chip" onclick="setDept('Technology', this)">Technology</div>
+        <div class="chip" onclick="setDept('School', this)">School</div>
+        <div class="chip" onclick="setDept('Business', this)">Business</div>
+        <div class="chip" onclick="setDept('Design', this)">Design</div>
+        <div class="chip" onclick="setDept('Corporate', this)">Corporate</div>
+        <div class="chip" onclick="setDept('mastery', this)">Mastery</div>
+        <div class="chip" onclick="setDept('free', this)">Free</div>
       </div>
     </div>
   </div>
@@ -340,7 +341,7 @@ async function loadMyCourse() {
 
     document.getElementById('myCourseArea').innerHTML = `
       <div class="my-course-card">
-        <div class="mc-icon" style="width:48px;height:48px;border-radius:12px;background:#e8f0fe;display:flex;align-items:center;justify-content:center;color:#1a73e8;">${icon}</div>
+        <div style="width:48px;height:48px;border-radius:12px;background:#e8f0fe;display:flex;align-items:center;justify-content:center;color:#1a73e8;flex-shrink:0;">${icon}</div>
         <div class="mc-info">
           <div class="mc-name">${enrolledCourse}</div>
           <div class="mc-meta">${completed} of ${total} lessons completed · ⏱ ${(total-completed)*15} min remaining</div>
@@ -367,7 +368,7 @@ function renderCourses() {
   let filtered = allCourses.filter(c => {
     const matchSearch = !search || c.name.toLowerCase().includes(search) || (c.description||'').toLowerCase().includes(search) || (c.tags||[]).some(t => t.includes(search));
     const matchStandard = currentStandard === 'all' || (c.level || 'Any') === currentStandard;
-    const matchDept = currentDept === 'all' || (currentDept === 'free' ? c.is_free : c.department === currentDept);
+    const matchDept = currentDept === 'all' || (currentDept === 'free' ? c.is_free : currentDept === 'mastery' ? c.program_type === 'mastery' : c.department === currentDept);
     return matchSearch && matchStandard && matchDept;
   });
 
