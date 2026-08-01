@@ -8,7 +8,12 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
-  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
+  .hamburger-btn { display: none; }
+@media (max-width: 768px) {
+  .nav-right-desktop { display: none !important; }
+  .hamburger-btn { display: block !important; }
+}
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 10; }
   .nav-logo { text-decoration: none; }
   .nav-center { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; color: #202124; }
   .nav { position: relative; }
@@ -120,6 +125,13 @@
   @media (max-width: 600px) { .my-course-card { flex-direction: column; } .courses-grid { grid-template-columns: 1fr; } }
 
   /* ===== GLOBAL MOBILE RESPONSIVE ===== */
+  .hamburger { display: none !important; }
+  @media (max-width: 700px) {
+    .nav-desktop { display: none !important; }
+    .hamburger { display: block !important; }
+    .courses-grid { grid-template-columns: 1fr !important; }
+    .folder-courses-grid { grid-template-columns: 1fr !important; }
+  }
   @media (max-width: 768px) {
     .nav { padding: 0 14px !important; height: 56px !important; }
     .hero-banner { padding: 24px 20px !important; flex-direction: column !important; gap: 16px !important; text-align: center; }
@@ -244,24 +256,42 @@
 </div>
 
 <nav class="nav">
-  <div style="display:flex;align-items:center;gap:12px;">
+  <!-- Left: Logo + Back -->
+  <div style="display:flex;align-items:center;gap:8px;">
     <a href="/"><img src="/logo.svg" alt="YGE" style="height:36px;"></a>
-    <a class="nav-back" id="backBtn" href="/syllabus.html" style="display:flex;align-items:center;gap:5px;font-size:13px;color:#5f6368;text-decoration:none;border:1px solid #dadce0;border-radius:20px;padding:6px 14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;">
+    <a id="backBtn" href="/syllabus.html" style="display:flex;align-items:center;gap:5px;font-size:13px;color:#5f6368;text-decoration:none;border:1px solid #dadce0;border-radius:20px;padding:6px 14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Course
+      My Courses
     </a>
   </div>
-  <div style="display:flex;align-items:center;gap:8px;">
+
+  <!-- Right: Desktop -->
+  <div class="nav-right-desktop" style="display:flex;align-items:center;gap:8px;">
     <a id="navUser" href="/profile.html" style="font-size:13px;font-weight:500;color:#202124;background:#f1f3f4;border-radius:100px;padding:6px 14px;text-decoration:none;"></a>
-    <a id="notesNavBtn" href="/my-notes.html" style="display:flex;align-items:center;gap:5px;background:none;border:1px solid #dadce0;border-radius:20px;padding:7px 14px;font-size:13px;color:#5f6368;text-decoration:none;font-family:'Google Sans',Arial,sans-serif;font-weight:500;">Notes</a>
-    <button onclick="document.getElementById('requestModal').classList.add('open')" style="background:#1a73e8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">+ Request Course</button>
-    <button class="bell-btn" id="bellBtn" onclick="toggleNotif()" style="position:relative;background:none;border:none;cursor:pointer;padding:6px;border-radius:50%;">
+    <a id="notesNavBtn" href="/my-notes.html" style="display:flex;align-items:center;gap:5px;background:none;border:1px solid #dadce0;border-radius:20px;padding:7px 14px;font-size:13px;color:#5f6368;text-decoration:none;font-family:Google Sans,Arial,sans-serif;font-weight:500;">Notes</a>
+    <button onclick="document.getElementById('requestModal').style.display='flex'" style="background:#1a73e8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-family:Google Sans,Arial,sans-serif;font-weight:500;cursor:pointer;">+ Request</button>
+    <button id="bellBtn" onclick="toggleNotif()" style="position:relative;background:none;border:none;cursor:pointer;padding:6px;border-radius:50%;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
       <span id="bellDot" style="position:absolute;top:2px;right:2px;width:8px;height:8px;background:#c5221f;border-radius:50%;display:none;"></span>
     </button>
     <button onclick="logout()" style="background:none;border:1px solid #dadce0;border-radius:4px;padding:6px 14px;font-size:13px;color:#5f6368;cursor:pointer;">Logout</button>
   </div>
+
+  <!-- Right: Mobile Hamburger -->
+  <button class="hamburger-btn" onclick="toggleMenu()" style="display:none;background:none;border:1px solid #dadce0;border-radius:8px;padding:8px;cursor:pointer;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" style="display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid #e8eaed;padding:12px 20px;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <a id="navUserMobile" href="/profile.html" style="font-size:14px;font-weight:500;color:#202124;padding:10px 14px;background:#f1f3f4;border-radius:8px;text-decoration:none;"></a>
+    <a id="notesNavBtnMobile" href="/my-notes.html" style="font-size:14px;color:#5f6368;padding:10px 14px;border:1px solid #e8eaed;border-radius:8px;text-decoration:none;">My Notes</a>
+    <button onclick="document.getElementById('requestModal').style.display='flex';toggleMenu();" style="background:#1a73e8;color:#fff;border:none;border-radius:8px;padding:11px 14px;font-size:14px;cursor:pointer;text-align:left;font-family:Google Sans,Arial,sans-serif;font-weight:500;">+ Request a Course</button>
+    <button onclick="logout()" style="background:#fce8e6;color:#c5221f;border:none;border-radius:8px;padding:11px 14px;font-size:14px;cursor:pointer;text-align:left;">Logout</button>
+  </div>
+</div>
 
 <div class="hero">
   <h1>My Courses</h1>
@@ -326,7 +356,7 @@ if (email) {
 }
 let allCourses = [], currentFilter = 'all', currentStandard = 'all', currentDept = 'all', currentView = 'grid', enrolledCourse = '', completedCount = 0, totalLessons = 0;
 
-const deptIcons = {
+var deptIcons = {
   Technology: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
   School: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>',
   Business: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>',
@@ -348,8 +378,12 @@ async function init() {
     }
     const nb = document.getElementById('notesNavBtn');
     if (nb) nb.href = '/my-notes.html?email=' + encodeURIComponent(email);
+    const nbm = document.getElementById('notesNavBtnMobile');
+    if (nbm) nbm.href = '/my-notes.html?email=' + encodeURIComponent(email);
     const bb = document.getElementById('backBtn');
     if (bb) bb.href = '/syllabus.html?email=' + encodeURIComponent(email);
+    const num = document.getElementById('navUserMobile');
+    if (num) { num.textContent = name; num.href = '/profile.html?email=' + encodeURIComponent(email); }
     loadNotifCount(email);
   }
   await Promise.all([loadMyCourse(), loadAllCourses()]);
@@ -709,6 +743,13 @@ function toggleFolder(id) {
   const card = document.getElementById('folder-' + id);
   if (card) card.classList.toggle('open');
 }
+
+function toggleMenu() {
+  var m = document.getElementById('mobileMenu');
+  if (m) m.style.display = m.style.display === 'block' ? 'none' : 'block';
+}
+
+
 
 function toggleNotif() {
   var panel = document.getElementById('notifPanel');
