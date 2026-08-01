@@ -265,7 +265,7 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
     <a id="navUser" class="nav-user" href="/profile.html"></a>
     <a class="nav-btn" id="notesNavBtn" href="/my-notes.html">Notes</a>
     <a class="nav-btn" id="coursesNavBtn" href="/my-courses.html">My Courses</a>
-    <button class="nav-btn-primary" onclick="document.getElementById('requestModal').classList.add('open')">+ Request Course</button>
+    <a class="nav-btn-primary" id="reqCourseBtn" href="/request-course.html" style="text-decoration:none;">+ Request Course</a>
     <button class="bell-btn" id="bellBtn" onclick="toggleNotif()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
       <span class="bell-dot" id="bellDot"></span>
@@ -929,18 +929,7 @@ function loadNotifPanel() {
 
 // Request
 function submitRequest() {
-  var text=document.getElementById("requestText").value.trim();if(!text)return;
-  var btn=document.querySelector("#requestModal .btn-primary");
-  btn.disabled=true;btn.textContent="Sending...";
-  fetch(BASE+"/course_requests",{method:"POST",headers:Object.assign({},H,{"Prefer":"return=representation"}),body:JSON.stringify({student_email:studentEmail,student_name:studentName,requested_course:text,created_at:new Date().toISOString()})})
-  .then(function(){
-    document.getElementById("requestMsg").style.display="block";
-    document.getElementById("requestMsg").textContent="Request sent! AI will build this course within 24 hours.";
-    document.getElementById("requestText").value="";
-    btn.textContent="Sent!";
-    setTimeout(function(){document.getElementById("requestModal").classList.remove("open");},2000);
-  })
-  .catch(function(){btn.disabled=false;btn.textContent="Send Request";});
+  window.location.href = "/request-course.html?email=" + encodeURIComponent(studentEmail);
 }
 
 function logout(){localStorage.removeItem("yge_email");window.location.href="/login.html";}

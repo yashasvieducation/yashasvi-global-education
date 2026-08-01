@@ -167,6 +167,11 @@
     <div class="sidebar-item" onclick="switchPanel('courses')" id="tab-courses"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></span> Courses</div>
     <div class="sidebar-item" onclick="switchPanel('requests')" id="tab-requests"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></span> Course Requests</div>
     <div class="sidebar-item" onclick="switchPanel('monitoring')" id="tab-monitoring"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l11 6 11-6"/><path d="M1 12l11 6 11-6"/></svg></span> Monitoring</div>
+    <a href="/ai-agent-dashboard.html" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 20px;font-size:14px;color:#5f6368;text-decoration:none;border-top:1px solid #f1f3f4;margin-top:8px;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='none'">
+      <span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg></span>
+      AI Agent Dashboard
+      <span style="font-size:10px;background:#34a853;color:#fff;border-radius:4px;padding:1px 6px;margin-left:auto;">LIVE</span>
+    </a>
     <div class="sidebar-item" onclick="switchPanel('payments')" id="tab-payments"><span class="s-icon">💰</span> Payments</div>
     <div class="sidebar-item" onclick="switchPanel('institutions')" id="tab-institutions"><span class="s-icon">🏫</span> Institutions</div>
   </div>
@@ -649,17 +654,24 @@ async function loadRequests() {
       document.getElementById('requestsList').innerHTML = '<p style="color:#5f6368;">No course requests yet.</p>';
       return;
     }
-    document.getElementById('requestsList').innerHTML = data.map(r => `
-      <div class="request-card">
-        <div class="request-info">
-          <div class="r-course">📌 ${r.requested_course}</div>
-          <div class="r-meta">From: ${r.student_name || 'Unknown'} (${r.student_email}) · ${r.country || '—'} · ${new Date(r.created_at).toLocaleDateString('en-IN')}</div>
-        </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn btn-success btn-sm" onclick="launchFromRequest('${r.requested_course}', '${r.student_email}', '${r.id}')">🚀 Launch Course</button>
-          <span class="badge ${r.notified_admin ? 'badge-green' : 'badge-yellow'}">${r.notified_admin ? 'Notified' : 'Pending'}</span>
-        </div>
-      </div>`).join('');
+    document.getElementById('requestsList').innerHTML = data.map(r => {
+      var status = r.status || (r.notified_admin ? 'found' : 'pending');
+      var statusLabel = status === 'found' ? 'Fulfilled' : status === 'denied' ? 'Denied' : 'Pending';
+      var statusColor = status === 'found' ? '#137333' : status === 'denied' ? '#c5221f' : '#b06000';
+      var statusBg = status === 'found' ? '#e6f4ea' : status === 'denied' ? '#fce8e6' : '#fef7e0';
+      var reqText = (r.requested_course || '').substring(0, 80);
+      var date = r.created_at ? new Date(r.created_at).toLocaleDateString('en-IN') : '';
+      return '<div class="request-card">' +
+        '<div class="request-info">' +
+          '<div class="r-course">' + reqText + '</div>' +
+          '<div class="r-meta">From: ' + (r.student_name || 'Unknown') + ' (' + r.student_email + ') &middot; ' + date + '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">' +
+          '<span style="font-size:11px;font-weight:500;border-radius:100px;padding:3px 10px;background:' + statusBg + ';color:' + statusColor + ';">' + statusLabel + '</span>' +
+          (status !== 'found' ? '<button class="btn btn-success btn-sm" onclick="launchFromRequest('' + (r.requested_course||'').replace(/'/g,"\'").replace(/"/g,'&quot;') + '', '' + r.student_email + '', '' + r.id + '')">Launch Course</button>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
   } catch (e) { console.error(e); }
 }
 
@@ -680,10 +692,22 @@ async function launchFromRequest(courseName, studentEmail, requestId) {
     });
   }
 
-  // Mark request as notified
+  // Mark request as fulfilled - this unlocks student's request form
   await fetch(BASE + "/course_requests?id=eq." + requestId, {
     method: "PATCH", headers: HEADERS,
-    body: JSON.stringify({ notified_admin: true })
+    body: JSON.stringify({ notified_admin: true, status: 'found' })
+  });
+  
+  // Also notify via notifications table
+  await fetch(BASE + "/notifications", {
+    method: "POST", headers: HEADERS,
+    body: JSON.stringify({ 
+      student_email: studentEmail, 
+      title: 'Your requested course is now live!', 
+      message: courseName + ' has been added. You can now enroll and start learning!', 
+      type: 'new_course',
+      is_read: false
+    })
   });
 
   showToast('✅ Course launched and student notified!');
