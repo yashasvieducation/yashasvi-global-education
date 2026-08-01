@@ -3,32 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yashasvi Global Education - My Course</title>
+<title>My Course — Yashasvi Global Education</title>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden;max-width:100%;width:100%}
 body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-height:100vh}
+
+/* NAV */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:60px;border-bottom:1px solid #e8eaed;background:#fff;position:sticky;top:0;z-index:100}
-.nav-right{display:flex;align-items:center;gap:10px}
+.nav-right{display:flex;align-items:center;gap:8px}
 .nav-user{font-size:13px;font-weight:500;color:#202124;background:#f1f3f4;border-radius:100px;padding:6px 14px;text-decoration:none}
 .nav-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid #dadce0;border-radius:20px;padding:7px 14px;font-size:13px;color:#5f6368;cursor:pointer;font-family:'Google Sans',Arial,sans-serif;font-weight:500;text-decoration:none}
 .nav-btn:hover{border-color:#1a73e8;color:#1a73e8}
 .nav-btn-primary{background:#1a73e8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer}
-.nav-btn-primary:hover{background:#1765cc}
-.bell-btn{background:none;border:none;font-size:20px;cursor:pointer;padding:4px}
-.layout{display:grid;grid-template-columns:280px 1fr 300px;height:calc(100vh - 60px);overflow:hidden;width:100%}
+.bell-btn{position:relative;background:none;border:none;cursor:pointer;padding:6px;border-radius:50%}
+.bell-btn:hover{background:#f1f3f4}
+.bell-dot{position:absolute;top:2px;right:2px;width:8px;height:8px;background:#c5221f;border-radius:50%;display:none}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:280px 1fr 300px;height:calc(100vh - 60px);overflow:hidden}
+
+/* SIDEBAR */
 .sidebar{background:#fff;border-right:1px solid #e8eaed;overflow-y:auto;display:flex;flex-direction:column}
-.sidebar-tabs{display:flex;border-bottom:1px solid #e8eaed}
-.stab{flex:1;padding:10px 0;text-align:center;font-size:12px;font-weight:500;color:#5f6368;cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;justify-content:center;gap:5px}
+.sidebar-tabs{display:flex;border-bottom:1px solid #e8eaed;flex-shrink:0}
+.stab{flex:1;padding:10px 0;text-align:center;font-size:12px;font-weight:500;color:#5f6368;cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;justify-content:center;gap:4px}
 .stab.active{color:#1a73e8;border-bottom-color:#1a73e8}
-.stab-panel{display:none;padding:12px 0;flex:1}
+.stab-panel{display:none}
 .stab-panel.active{display:block}
+
+/* Course info */
 .course-info{padding:14px 16px;border-bottom:1px solid #e8eaed}
-.course-title-txt{font-family:'Google Sans',Arial,sans-serif;font-size:13px;font-weight:500;color:#202124;margin-bottom:10px}
+.course-title-txt{font-size:13px;font-weight:500;color:#202124;margin-bottom:8px}
 .prog-row{display:flex;justify-content:space-between;font-size:11px;color:#5f6368;margin-bottom:4px}
-.prog-bg{background:#f1f3f4;border-radius:100px;height:6px;margin-bottom:8px}
+.prog-bg{background:#f1f3f4;border-radius:100px;height:6px;margin-bottom:6px}
 .prog-fill{background:#1a73e8;height:6px;border-radius:100px;transition:width 0.4s}
-.time-left{font-size:12px;color:#5f6368}
+.time-left{font-size:12px;color:#5f6368;display:flex;align-items:center;gap:4px}
+
+/* Modules */
 .mod-header{display:flex;align-items:center;gap:8px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:500;color:#202124}
 .mod-header:hover{background:#f1f3f4}
 .mod-lessons{display:none}
@@ -40,81 +52,95 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .ldot{width:8px;height:8px;border-radius:50%;background:#dadce0;flex-shrink:0}
 .lesson-item.done .ldot{background:#34a853}
 .lesson-item.active .ldot{background:#1a73e8}
+
+/* Badges */
 .badge-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px}
 .badge-item{border:1px solid #e8eaed;border-radius:8px;padding:10px 8px;text-align:center}
 .badge-item.earned{border-color:#34a853;background:#e6f4ea}
 .badge-item.locked{opacity:0.4}
-.badge-emoji{font-size:22px;margin-bottom:4px}
+.badge-icon{width:36px;height:36px;border-radius:10px;margin:0 auto 6px;display:flex;align-items:center;justify-content:center}
 .badge-name{font-size:10px;color:#5f6368}
 .badge-item.earned .badge-name{color:#137333;font-weight:500}
+
+/* Bookmarks */
 .bm-wrap{padding:12px 16px}
 .bm-empty{font-size:13px;color:#80868b;text-align:center;padding:20px 0}
 .bm-item{padding:8px 0;border-bottom:1px solid #f1f3f4;cursor:pointer}
 .bm-lesson{font-size:13px;font-weight:500;color:#1a73e8}
 .bm-mod{font-size:11px;color:#5f6368}
+
+/* MAIN */
 .main{overflow-y:auto;padding:24px 28px;background:#f8f9fa}
 .breadcrumb{font-size:12px;color:#80868b;margin-bottom:6px}
 .lesson-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
-.lesson-title{font-family:'Google Sans',Arial,sans-serif;font-size:26px;font-weight:400;color:#202124}
+.lesson-title{font-family:'Google Sans',Arial,sans-serif;font-size:24px;font-weight:400;color:#202124}
 .lesson-actions{display:flex;gap:8px;flex-shrink:0}
 .bm-btn{background:#f8f9fa;border:1px solid #e8eaed;border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer;color:#5f6368;display:inline-flex;align-items:center;gap:5px;transition:all 0.15s}
 .bm-btn:hover,.bm-btn.bookmarked{border-color:#1a73e8;color:#1a73e8;background:#e8f0fe}
-.listen-btn{background:#f8f9fa;color:#5f6368;border:1px solid #e8eaed;border-radius:6px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:'Google Sans',Arial,sans-serif;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:all 0.15s}.listen-btn:hover{border-color:#1a73e8;color:#1a73e8;background:#f0f4ff}
+.listen-btn{background:#f8f9fa;color:#5f6368;border:1px solid #e8eaed;border-radius:6px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:'Google Sans',Arial,sans-serif;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:all 0.15s}
+.listen-btn:hover{border-color:#1a73e8;color:#1a73e8;background:#f0f4ff}
 .lesson-meta{font-size:13px;color:#5f6368;display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
-.lesson-body{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:28px;margin-bottom:16px;font-size:15px;line-height:1.85;color:#3c4043;user-select:none}
+.lesson-meta span{display:flex;align-items:center;gap:4px}
+
+/* Lesson body */
+.lesson-body{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:24px;margin-bottom:16px;font-size:15px;line-height:1.8;color:#3c4043;user-select:none}
+.lesson-body p{margin-bottom:12px}
+.lesson-body p:last-child{margin-bottom:0}
 .project-box{background:#e6f4ea;border-left:3px solid #34a853;padding:12px 16px;border-radius:0 6px 6px 0;margin-top:16px}
 .project-box strong{display:block;color:#137333;margin-bottom:4px;font-size:13px}
-.project-box p{font-size:14px;color:#137333;margin:0}
-/* Voice bar */
+
+/* Voice */
 .voice-bar{background:#e8f0fe;border-radius:8px;padding:12px 16px;margin-bottom:16px;display:none;align-items:center;gap:10px;flex-wrap:wrap}
 .voice-bar.show{display:flex}
-.v-btn{border:none;border-radius:4px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:'Google Sans',Arial,sans-serif;font-weight:500}
+.v-btn{border:none;border-radius:4px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:'Google Sans',Arial,sans-serif;font-weight:500;display:inline-flex;align-items:center;gap:6px}
 .v-play{background:#1a73e8;color:#fff}
-.v-stop{background:#fce8e6;color:#c5221f;display:none}
+.v-stop{background:#fce8e6;color:#c5221f}
 .v-speed{border:1px solid #dadce0;border-radius:4px;padding:6px 8px;font-size:13px;outline:none}
+
 /* Resources */
-.resources-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:20px;margin-bottom:16px}
-.res-title{font-size:13px;font-weight:500;color:#5f6368;margin-bottom:12px;display:flex;align-items:center;text-transform:uppercase;letter-spacing:0.5px}
+.section-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:18px;margin-bottom:16px}
+.section-hdr{font-size:12px;font-weight:500;color:#5f6368;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.res-link{border:1px solid #e8eaed;border-radius:8px;padding:12px 14px;text-decoration:none;color:#202124;display:flex;align-items:center;gap:12px;transition:all 0.15s;background:#fff}
+.res-link{border:1px solid #e8eaed;border-radius:8px;padding:12px;text-decoration:none;color:#202124;display:flex;align-items:center;gap:10px;transition:all 0.15s}
 .res-link:hover{border-color:#1a73e8;background:#fafbff}
-.res-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-/* Code Editor */
+.res-icon{width:36px;height:36px;border-radius:8px;background:#f1f3f4;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.res-name{font-size:13px;font-weight:500;color:#202124}
+.res-src{font-size:11px;color:#80868b;margin-top:2px}
+
+/* Code editor */
 .code-card{background:#1e1e1e;border-radius:8px;margin-bottom:16px;overflow:hidden}
 .code-header{background:#2d2d2d;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
-.code-title{color:#ccc;font-size:13px;font-family:monospace}
+.code-title{color:#ccc;font-size:13px}
 .code-run{background:#34a853;color:#fff;border:none;border-radius:4px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:500}
-.code-textarea{width:100%;background:#1e1e1e;color:#d4d4d4;border:none;padding:16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.6;resize:vertical;min-height:140px;outline:none}
-.code-output{background:#0d1117;color:#58a6ff;padding:12px 16px;font-family:monospace;font-size:12px;min-height:40px;border-top:1px solid #333;white-space:pre-wrap}
+.code-ta{width:100%;background:#1e1e1e;color:#d4d4d4;border:none;padding:16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.6;resize:vertical;min-height:140px;outline:none}
+.code-out{background:#0d1117;color:#58a6ff;padding:12px 16px;font-family:monospace;font-size:12px;min-height:40px;border-top:1px solid #333;white-space:pre-wrap}
+
 /* Notes */
-.notes-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:20px;margin-bottom:16px}
-.notes-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.notes-lbl{font-size:13px;font-weight:500;color:#5f6368;display:flex;align-items:center;text-transform:uppercase;letter-spacing:0.5px}
-.notes-save{background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:6px 14px;font-size:13px;cursor:pointer}
 .notes-ta{width:100%;border:1px solid #dadce0;border-radius:4px;padding:10px 12px;font-size:14px;font-family:'Roboto',Arial,sans-serif;resize:vertical;min-height:80px;outline:none}
 .notes-ta:focus{border-color:#1a73e8}
 .notes-saved{font-size:12px;color:#137333;display:none;margin-top:4px}
+
 /* MCQ */
-.mcq-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:22px;margin-bottom:16px}
-.mcq-title{font-size:13px;font-weight:500;color:#5f6368;margin-bottom:14px;display:flex;align-items:center;text-transform:uppercase;letter-spacing:0.5px}
 .mcq-q{font-size:14px;color:#202124;margin-bottom:10px;font-weight:500}
-.mcq-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.mcq-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .mcq-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1.5px solid #dadce0;border-radius:4px;cursor:pointer;font-size:14px;user-select:none}
 .mcq-opt:hover{border-color:#1a73e8;background:#f8f9ff}
 .mcq-opt.correct{border-color:#34a853;background:#e6f4ea;color:#137333}
 .mcq-opt.wrong{border-color:#c5221f;background:#fce8e6;color:#c5221f}
 .mcq-opt.show-correct{border-color:#34a853;background:#e6f4ea;color:#137333}
+
 /* Nav buttons */
 .lesson-nav{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:12px}
-.btn{border:none;border-radius:4px;padding:10px 20px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer}
-.btn-primary{background:#1a73e8;color:#fff}
-.btn-primary:hover{background:#1765cc}
+.btn{border:none;border-radius:6px;padding:10px 20px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
 .btn-secondary{background:#f1f3f4;color:#202124}
 .btn-complete{background:#34a853;color:#fff}
-/* Chat */
-.chat-panel{background:#fff;border-left:1px solid #e8eaed;display:flex;flex-direction:column;height:calc(100vh - 60px)}
-.chat-hdr{padding:14px 16px;border-bottom:1px solid #e8eaed}
-.chat-hdr h3{font-family:'Google Sans',Arial,sans-serif;font-size:14px;font-weight:500;margin-bottom:2px}
+.btn-primary{background:#1a73e8;color:#fff}
+
+/* CHAT */
+.chat-panel{background:#fff;border-left:1px solid #e8eaed;display:flex;flex-direction:column}
+.chat-hdr{padding:14px 16px;border-bottom:1px solid #e8eaed;flex-shrink:0}
+.chat-hdr h3{font-family:'Google Sans',Arial,sans-serif;font-size:14px;font-weight:500;margin-bottom:2px;display:flex;align-items:center;gap:8px}
 .chat-hdr p{font-size:11px;color:#5f6368}
 .chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
 .chat-msg{max-width:85%}
@@ -125,11 +151,17 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .chat-msg.ai .chat-bubble{background:#f1f3f4;color:#202124;border-radius:12px 12px 12px 2px}
 .chat-name{font-size:10px;color:#80868b;margin-bottom:2px}
 .chat-msg.user .chat-name{text-align:right}
-.typing{font-size:11px;color:#5f6368;padding:2px 12px;display:none}
-.chat-input-wrap{padding:10px 12px;border-top:1px solid #e8eaed;display:flex;gap:6px}
+.typing{font-size:11px;color:#5f6368;padding:4px 12px;display:none}
+.chat-input-wrap{padding:10px 12px;border-top:1px solid #e8eaed;display:flex;gap:6px;flex-shrink:0}
 .chat-input{flex:1;padding:8px 12px;border:1px solid #dadce0;border-radius:20px;font-size:13px;font-family:'Roboto',Arial,sans-serif;outline:none;resize:none}
 .chat-input:focus{border-color:#1a73e8}
-.chat-send{background:#1a73e8;color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:13px;flex-shrink:0;align-self:flex-end}
+.chat-send{background:#1a73e8;color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+
+/* Notification panel */
+.notif-panel{display:none;position:fixed;top:64px;right:16px;width:320px;background:#fff;border:1px solid #e8eaed;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);z-index:500;max-height:400px;overflow-y:auto}
+.notif-panel.open{display:block}
+.notif-panel-hdr{padding:14px 16px;border-bottom:1px solid #e8eaed;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff}
+
 /* Login */
 #loginWrap{max-width:480px;margin:80px auto;padding:0 24px}
 #loginWrap h2{font-family:'Google Sans',Arial,sans-serif;font-size:28px;font-weight:400;margin-bottom:8px}
@@ -138,10 +170,11 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .field input{width:100%;padding:12px 14px;border:1px solid #dadce0;border-radius:4px;font-size:15px;outline:none}
 .field input:focus{border-color:#1a73e8}
 .field{margin-bottom:16px}
-.login-btn{width:100%;background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:13px;font-size:15px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;margin-top:4px}
+.login-btn{width:100%;background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:13px;font-size:15px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer}
 .login-btn:hover{background:#1765cc}
 .login-btn:disabled{background:#dadce0;color:#80868b;cursor:not-allowed}
 #loginMsg{margin-top:12px;padding:10px;border-radius:4px;font-size:14px;display:none;background:#fce8e6;color:#c5221f}
+
 /* Request modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
 .modal.open{display:flex}
@@ -151,51 +184,78 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .modal-ta{width:100%;padding:12px 14px;border:1px solid #dadce0;border-radius:4px;font-size:14px;font-family:'Roboto',Arial,sans-serif;outline:none;resize:vertical;min-height:80px;margin-bottom:12px}
 .modal-ta:focus{border-color:#1a73e8}
 .modal-actions{display:flex;gap:10px}
+
+/* Copy toast */
 .copy-toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#c5221f;color:#fff;padding:8px 18px;border-radius:8px;font-size:13px;z-index:500;display:none}
+
+/* Loading */
 .loading{text-align:center;padding:40px 20px;color:#5f6368;font-size:14px}
-.spin{font-size:28px;animation:spin 1s linear infinite;display:block;margin-bottom:8px}
+.spin{display:inline-block;animation:spin 1s linear infinite}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
 /* Mobile */
 .mobile-top-bar{display:none;position:fixed;top:0;left:0;right:0;z-index:200;background:#fff;border-bottom:1px solid #e8eaed;padding:10px 20px;text-align:center}
 .mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8eaed;z-index:999;padding:8px 0 12px;box-shadow:0 -2px 20px rgba(0,0,0,0.06)}
-.bnav-items{display:flex;justify-content:space-around;align-items:center;gap:4px}
-.bnav-item{display:flex;flex-direction:row;align-items:center;gap:6px;text-decoration:none;color:#5f6368;font-size:10px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;padding:8px 10px;border-radius:100px;white-space:nowrap}
+.bnav-items{display:flex;justify-content:space-around;align-items:center}
+.bnav-item{display:flex;flex-direction:row;align-items:center;gap:6px;text-decoration:none;color:#5f6368;font-size:10px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;padding:8px 10px;border-radius:100px}
 .bnav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .bnav-item .bnav-label{display:none;font-size:13px}
 .bnav-item.active{background:#e8f0fe;color:#1a73e8;padding:8px 16px}
 .bnav-item.active .bnav-label{display:inline}
 .bnav-item.active svg{stroke:#1a73e8}
+
 @media(max-width:1100px){.layout{grid-template-columns:260px 1fr}.chat-panel{display:none}}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:16px}.mobile-top-bar{display:block}.mobile-bottom-nav{display:block}.nav{display:none!important}body{padding-top:60px;padding-bottom:80px}}
-
-  html, body { overflow-x: hidden; max-width: 100%; }
-
-@media (max-width: 768px) {
-  .layout { grid-template-columns: 1fr !important; height: auto !important; overflow: visible !important; }
-  .sidebar { display: none !important; }
-  .chat-panel { display: none !important; }
-  .main { padding: 16px !important; overflow: visible !important; height: auto !important; }
-  #notifPanel { width: calc(100vw - 32px) !important; right: 16px !important; left: 16px !important; }
-  .res-grid { grid-template-columns: 1fr !important; }
-  .code-card { margin: 0 0 16px !important; }
-  .lesson-nav { flex-wrap: wrap !important; gap: 8px !important; }
-  .lesson-nav button { flex: 1 !important; min-width: 80px !important; }
+@media(max-width:700px){
+  .layout{grid-template-columns:1fr;height:auto;overflow:visible}
+  .sidebar{display:none}
+  .main{padding:16px;overflow:visible;height:auto}
+  .nav{display:none!important}
+  .mobile-top-bar{display:block}
+  .mobile-bottom-nav{display:block}
+  body{padding-top:60px;padding-bottom:80px}
+  .res-grid{grid-template-columns:1fr}
+  .notif-panel{width:calc(100vw - 32px);right:16px;left:16px}
+  .lesson-nav{flex-wrap:wrap}
+  .lesson-nav .btn{flex:1;min-width:80px}
 }
 </style>
 </head>
 <body>
 
-<!-- Mobile Top Bar -->
 <div class="mobile-top-bar"><a href="/"><img src="/logo.svg" alt="YGE" style="height:34px"></a></div>
-
-<!-- Mobile Bottom Nav -->
 <div class="mobile-bottom-nav">
   <div class="bnav-items">
     <a class="bnav-item" href="/dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="bnav-label">Home</span></a>
-    <a class="bnav-item" href="/my-notes.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span class="bnav-label">Notes</span></a>
+    <a class="bnav-item" href="/my-notes.html" id="mNotesBtn"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="bnav-label">Notes</span></a>
     <a class="bnav-item active" href="/syllabus.html"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span class="bnav-label">Study</span></a>
-    <a class="bnav-item" id="myCoursesNavBtn" href="/my-courses.html"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span class="bnav-label">Courses</span></a>
-    <a class="bnav-item" href="/profile.html"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="bnav-label">Profile</span></a>
+    <a class="bnav-item" href="/my-courses.html" id="mCoursesBtn"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span class="bnav-label">Courses</span></a>
+    <a class="bnav-item" href="/profile.html" id="mProfileBtn"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="bnav-label">Profile</span></a>
+  </div>
+</div>
+
+<!-- Notification Panel -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-panel-hdr">
+    <span style="font-family:'Google Sans',Arial,sans-serif;font-size:15px;font-weight:500;">Notifications</span>
+    <button onclick="closeNotif()" style="background:none;border:none;color:#5f6368;cursor:pointer;font-size:18px;">&#10005;</button>
+  </div>
+  <div id="notifList" style="padding:8px 0;"><div style="padding:20px;text-align:center;color:#80868b;font-size:13px;">Loading...</div></div>
+</div>
+
+<!-- Copy Toast -->
+<div class="copy-toast" id="copyToast">Copying is not allowed</div>
+
+<!-- Request Modal -->
+<div class="modal" id="requestModal">
+  <div class="modal-box">
+    <h3>Request a new course</h3>
+    <p>Tell us what you want to learn — AI will build it within 24 hours!</p>
+    <textarea class="modal-ta" id="requestText" placeholder="e.g. I want to learn Cyber Security..."></textarea>
+    <div id="requestMsg" style="font-size:13px;color:#137333;display:none;margin-bottom:10px;"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="submitRequest()" style="flex:1;">Send Request</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('requestModal').classList.remove('open')">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -203,10 +263,13 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
   <a href="/"><img src="/logo.svg" alt="YGE" style="height:36px"></a>
   <div class="nav-right">
     <a id="navUser" class="nav-user" href="/profile.html"></a>
-    <a class="nav-btn" id="notesNavBtn" href="/my-notes.html">My Notes</a>
+    <a class="nav-btn" id="notesNavBtn" href="/my-notes.html">Notes</a>
     <a class="nav-btn" id="coursesNavBtn" href="/my-courses.html">My Courses</a>
-    <button class="nav-btn-primary" onclick="openRequest()">+ Request a Course</button>
-    <button class="bell-btn" id="bellBtn" onclick="toggleNotif()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="bell-badge" id="bellBadge" style="display:none;"></span></button>
+    <button class="nav-btn-primary" onclick="document.getElementById('requestModal').classList.add('open')">+ Request Course</button>
+    <button class="bell-btn" id="bellBtn" onclick="toggleNotif()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="bell-dot" id="bellDot"></span>
+    </button>
     <button onclick="logout()" style="background:none;border:1px solid #dadce0;border-radius:4px;padding:6px 14px;font-size:13px;color:#5f6368;cursor:pointer">Logout</button>
   </div>
 </nav>
@@ -214,31 +277,30 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 <!-- Login -->
 <div id="loginWrap">
   <h2>My Course</h2>
-  <p>Enter your email to access your course and AI teacher.</p>
+  <p>Enter your email to access your course.</p>
   <div class="field">
     <label>Student email</label>
-    <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="off">
+    <input type="email" id="loginEmail" placeholder="you@example.com">
   </div>
   <button class="login-btn" id="loginBtn" onclick="doLogin()">Access my course</button>
   <div id="loginMsg"></div>
 </div>
 
 <!-- Main Layout -->
-<div class="layout" id="mainLayout" style="display:none">
-
+<div class="layout" id="mainLayout" style="display:none;">
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-tabs">
       <div class="stab active" onclick="switchTab('course')" id="stab-course">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
         Course
       </div>
       <div class="stab" onclick="switchTab('badges')" id="stab-badges">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
         Badges
       </div>
       <div class="stab" onclick="switchTab('saved')" id="stab-saved">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
         Saved
       </div>
     </div>
@@ -247,27 +309,27 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
         <div class="course-title-txt" id="sidebarCourse">Loading...</div>
         <div class="prog-row"><span id="sidebarLessons">0 lessons</span><span id="sidebarPct">0%</span></div>
         <div class="prog-bg"><div class="prog-fill" id="sidebarProg" style="width:0%"></div></div>
-        <div class="time-left"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg> <span id="timeLeft">Calculating...</span></div>
+        <div class="time-left">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="timeLeft">Calculating...</span>
+        </div>
       </div>
-      <div id="syllabusNav"><div class="loading"><span class="spin">&#9203;</span>Loading...</div></div>
+      <div id="syllabusNav"><div class="loading"><span class="spin">&#9203;</span> Loading...</div></div>
     </div>
-    <div class="stab-panel" id="panel-badges">
-      <div class="badge-grid" id="badgeGrid"></div>
-    </div>
-    <div class="stab-panel" id="panel-saved">
-      <div class="bm-wrap"><div id="bmList"><div class="bm-empty">No saved lessons yet.</div></div></div>
-    </div>
+    <div class="stab-panel" id="panel-badges"><div class="badge-grid" id="badgeGrid"></div></div>
+    <div class="stab-panel" id="panel-saved"><div class="bm-wrap"><div id="bmList"><div class="bm-empty">No saved lessons yet.</div></div></div></div>
   </div>
 
   <!-- MAIN -->
-  <div class="main" id="mainContent">
-    <div class="loading"><span class="spin">&#9203;</span>Loading your course...</div>
-  </div>
+  <div class="main" id="mainContent"><div class="loading"><span class="spin">&#9203;</span> Loading your course...</div></div>
 
   <!-- CHAT -->
   <div class="chat-panel">
     <div class="chat-hdr">
-      <h3 style="display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="15" x2="8" y2="15"/><line x1="16" y1="15" x2="16" y2="15"/></svg>AI Teacher</h3>
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg>
+        AI Teacher
+      </h3>
       <p>Ask anything about this lesson</p>
     </div>
     <div class="chat-msgs" id="chatMsgs">
@@ -276,196 +338,180 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
     <div class="typing" id="typingIndicator">AI Teacher is typing...</div>
     <div class="chat-input-wrap">
       <textarea class="chat-input" id="chatInput" placeholder="Ask your AI teacher..." rows="1"></textarea>
-      <button class="chat-send" id="sendBtn" onclick="sendMessage()">&#10148;</button>
+      <button class="chat-send" id="sendBtn" onclick="sendMessage()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
     </div>
   </div>
 </div>
-
-<!-- Request Modal -->
-<div class="modal" id="requestModal">
-  <div class="modal-box">
-    <h3>Request a new course</h3>
-    <p>Tell us what you want to learn - our AI will build it within 24 hours!</p>
-    <textarea class="modal-ta" id="requestText" placeholder="e.g. I want to learn Cyber Security..."></textarea>
-    <div id="requestMsg" style="font-size:13px;color:#137333;display:none;margin-bottom:10px"></div>
-    <div class="modal-actions">
-      <button class="btn btn-primary" onclick="submitRequest()" style="flex:1">Send Request</button>
-      <button class="btn btn-secondary" onclick="closeRequest()">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- Notification Panel -->
-<div id="notifPanel" style="display:none;position:fixed;top:64px;right:16px;width:320px;background:#fff;border:1px solid #e8eaed;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);z-index:500;max-height:400px;overflow-y:auto;">
-  <div style="padding:14px 16px;border-bottom:1px solid #e8eaed;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;">
-    <span style="font-family:'Google Sans',Arial,sans-serif;font-size:15px;font-weight:500;">Notifications</span>
-    <button onclick="document.getElementById('notifPanel').style.display='none'" style="background:none;border:none;color:#5f6368;cursor:pointer;font-size:18px;">&#10005;</button>
-  </div>
-  <div id="notifPanelList" style="padding:8px 0;">
-    <div style="padding:20px;text-align:center;color:#80868b;font-size:13px;">Loading...</div>
-  </div>
-</div>
-
-<!-- Copy toast -->
-<div class="copy-toast" id="copyToast">Copying is not allowed on this page</div>
-
-<!-- Voice bar -->
-<div id="voiceBarEl" style="display:none"></div>
 
 <script>
-const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
-const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
-const H = {"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"};
-const EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
+var BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+var H = {"apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json"};
+var EDGE = "https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/ai-teacher";
 
-let studentEmail="", studentName="", currentCourse=null;
-let modules=[], curMod=0, curLesson=0;
-let doneLessons=new Set(), progressId=null;
-let bookmarks=new Set(), notes={}, mcqDone={}, chatHistory=[];
+var studentEmail = "", studentName = "";
+var currentCourse = null;
+var modules = [], curMod = 0, curLesson = 0;
+var doneLessons = new Set(), progressId = null;
+var bookmarks = new Set(), notes = {}, mcqDone = {}, chatHistory = [];
 
-const BADGES=[
-  {emoji:"&#127807;",name:"First Step",req:1},
-  {emoji:"&#9889;",name:"On a Roll",req:5},
-  {emoji:"&#128293;",name:"Unstoppable",req:10},
-  {emoji:"&#128218;",name:"Module Done",req:"module"},
-  {emoji:"&#127919;",name:"Halfway",req:50},
-  {emoji:"&#127942;",name:"Complete",req:100},
+var BADGES = [
+  {name:"First Step", req:1, color:"#34a853"},
+  {name:"On a Roll", req:5, color:"#1a73e8"},
+  {name:"Unstoppable", req:10, color:"#f57c00"},
+  {name:"Module Done", req:"module", color:"#7b1fa2"},
+  {name:"Halfway", req:50, color:"#c5221f"},
+  {name:"Complete", req:100, color:"#ff9800"}
 ];
 
-const VIDEO_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>';
-const DOC_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>';
-
-function getResources(dept, courseName) {
-  // Generate course-specific YouTube search URL
-  const ytSearch = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(courseName + ' tutorial');
-  const ytCrash = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(courseName + ' crash course');
-
-  const baseResources = {
+function getResources(dept, cname) {
+  var yt = "https://www.youtube.com/results?search_query=" + encodeURIComponent(cname + " tutorial");
+  var cc = "https://www.youtube.com/results?search_query=" + encodeURIComponent(cname + " crash course");
+  var docs = {
     Technology: [
-      {name: courseName + ' — YouTube Tutorial', source:'YouTube', url: ytSearch, type:'video'},
-      {name: courseName + ' — Crash Course', source:'YouTube', url: ytCrash, type:'video'},
-      {name:'MDN Web Docs', source:'mozilla.org', url:'https://developer.mozilla.org/', type:'doc'},
-      {name:'Official Documentation', source:'docs', url:'https://www.google.com/search?q=' + encodeURIComponent(courseName + ' official documentation'), type:'doc'},
+      {name: cname + " Tutorial", source: "YouTube", url: yt, type: "video"},
+      {name: cname + " Crash Course", source: "YouTube", url: cc, type: "video"},
+      {name: "MDN Web Docs", source: "mozilla.org", url: "https://developer.mozilla.org/", type: "doc"},
+      {name: "Official Docs", source: "Google", url: "https://www.google.com/search?q=" + encodeURIComponent(cname + " documentation"), type: "doc"}
     ],
     Business: [
-      {name: courseName + ' — YouTube Tutorial', source:'YouTube', url: ytSearch, type:'video'},
-      {name: courseName + ' — Business Guide', source:'YouTube', url: ytCrash, type:'video'},
-      {name:'Investopedia', source:'investopedia.com', url:'https://www.investopedia.com/', type:'doc'},
-      {name:'Harvard Business Review', source:'hbr.org', url:'https://hbr.org/', type:'doc'},
+      {name: cname + " Tutorial", source: "YouTube", url: yt, type: "video"},
+      {name: cname + " Guide", source: "YouTube", url: cc, type: "video"},
+      {name: "Investopedia", source: "investopedia.com", url: "https://www.investopedia.com/", type: "doc"},
+      {name: "Harvard Business Review", source: "hbr.org", url: "https://hbr.org/", type: "doc"}
     ],
     Design: [
-      {name: courseName + ' — Tutorial', source:'YouTube', url: ytSearch, type:'video'},
-      {name: courseName + ' — Crash Course', source:'YouTube', url: ytCrash, type:'video'},
-      {name:'Material Design Docs', source:'material.io', url:'https://m3.material.io/', type:'doc'},
-      {name:'Canva Design School', source:'canva.com', url:'https://www.canva.com/learn/design/', type:'doc'},
+      {name: cname + " Tutorial", source: "YouTube", url: yt, type: "video"},
+      {name: cname + " Crash Course", source: "YouTube", url: cc, type: "video"},
+      {name: "Material Design", source: "material.io", url: "https://m3.material.io/", type: "doc"},
+      {name: "Canva Design School", source: "canva.com", url: "https://www.canva.com/learn/design/", type: "doc"}
     ],
     School: [
-      {name: courseName + ' — Khan Academy', source:'YouTube', url: 'https://www.youtube.com/results?search_query=' + encodeURIComponent(courseName + ' khan academy'), type:'video'},
-      {name: courseName + ' — CrashCourse', source:'YouTube', url: 'https://www.youtube.com/results?search_query=' + encodeURIComponent(courseName + ' crashcourse'), type:'video'},
-      {name:'NCERT Books', source:'ncert.nic.in', url:'https://ncert.nic.in/textbook.php', type:'doc'},
-      {name: courseName + ' Study Material', source:'Google', url:'https://www.google.com/search?q=' + encodeURIComponent(courseName + ' study material pdf'), type:'doc'},
+      {name: cname + " — Khan Academy", source: "YouTube", url: "https://www.youtube.com/results?search_query=" + encodeURIComponent(cname + " khan academy"), type: "video"},
+      {name: cname + " — CrashCourse", source: "YouTube", url: "https://www.youtube.com/results?search_query=" + encodeURIComponent(cname + " crashcourse"), type: "video"},
+      {name: "NCERT Books", source: "ncert.nic.in", url: "https://ncert.nic.in/textbook.php", type: "doc"},
+      {name: cname + " Study Material", source: "Google", url: "https://www.google.com/search?q=" + encodeURIComponent(cname + " study material"), type: "doc"}
     ],
     Corporate: [
-      {name: courseName + ' — Tutorial', source:'YouTube', url: ytSearch, type:'video'},
-      {name: courseName + ' — Professional Guide', source:'YouTube', url: ytCrash, type:'video'},
-      {name:'Deloitte Insights', source:'deloitte.com', url:'https://www2.deloitte.com/insights', type:'doc'},
-      {name: courseName + ' Best Practices', source:'Google', url:'https://www.google.com/search?q=' + encodeURIComponent(courseName + ' best practices guide'), type:'doc'},
-    ],
+      {name: cname + " Tutorial", source: "YouTube", url: yt, type: "video"},
+      {name: cname + " Professional Guide", source: "YouTube", url: cc, type: "video"},
+      {name: "Deloitte Insights", source: "deloitte.com", url: "https://www2.deloitte.com/insights", type: "doc"},
+      {name: cname + " Best Practices", source: "Google", url: "https://www.google.com/search?q=" + encodeURIComponent(cname + " best practices"), type: "doc"}
+    ]
   };
-  return baseResources[dept] || baseResources.School;
+  return docs[dept] || docs.School;
 }
 
-const CODE_TEMPLATES = {
-  javascript:`// JavaScript Editor\nconst name = "Student";\nconsole.log("Hello, " + name + "!");\n\nconst result = 10 + 20;\nconsole.log("10 + 20 = " + result);`,
-  html:`<!-- HTML Editor -->\n<h1>Hello Student!</h1>\n<p>Welcome to Yashasvi Global Education.</p>\n<button onclick="alert('Great job!')">Click Me!</button>`,
-  python:`# Python Editor (coming soon)\n# Use JavaScript mode to run code now\nprint("Hello, Student!")`
+var CODE_TEMPLATES = {
+  javascript: "// JavaScript Editor\nvar name = 'Student';\nconsole.log('Hello, ' + name + '!');\nvar result = 10 + 20;\nconsole.log('10 + 20 = ' + result);",
+  html: "<!-- HTML Editor -->\n<h1>Hello Student!</h1>\n<p>Welcome to Yashasvi Global Education.</p>\n<button>Click Me!</button>",
+  python: "# Python Editor\n# Use JavaScript mode to run code\nprint('Hello, Student!')"
 };
 
 // Auto-login
-window.addEventListener('DOMContentLoaded', function() {
-  const p = new URLSearchParams(window.location.search);
-  const e = p.get('email') || localStorage.getItem('yge_email') || '';
+window.addEventListener("DOMContentLoaded", function() {
+  var p = new URLSearchParams(window.location.search);
+  var e = p.get("email") || localStorage.getItem("yge_email") || "";
   if (e) {
-    document.getElementById('loginEmail').value = e;
-    setTimeout(doLogin, 400);
+    document.getElementById("loginEmail").value = e;
+    setTimeout(doLogin, 300);
   }
-  document.getElementById('loginEmail').addEventListener('keydown', function(ev) {
-    if (ev.key === 'Enter') doLogin();
+  document.getElementById("loginEmail").addEventListener("keydown", function(ev) {
+    if (ev.key === "Enter") doLogin();
   });
-  document.getElementById('chatInput').addEventListener('keydown', function(ev) {
-    if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); sendMessage(); }
+  document.getElementById("chatInput").addEventListener("keydown", function(ev) {
+    if (ev.key === "Enter" && !ev.shiftKey) { ev.preventDefault(); sendMessage(); }
+  });
+  document.getElementById("requestModal").addEventListener("click", function(ev) {
+    if (ev.target === this) this.classList.remove("open");
+  });
+  document.addEventListener("click", function(ev) {
+    var panel = document.getElementById("notifPanel");
+    var btn = document.getElementById("bellBtn");
+    if (panel && btn && !panel.contains(ev.target) && !btn.contains(ev.target)) {
+      panel.classList.remove("open");
+    }
   });
 });
 
-async function doLogin() {
-  var email = document.getElementById('loginEmail').value.trim().toLowerCase();
-  if (!email) { showMsg('Please enter your email.'); return; }
-  var btn = document.getElementById('loginBtn');
-  btn.disabled = true; btn.textContent = 'Loading...';
-  try {
-    var res = await fetch(BASE + "/students?select=student_name,admission_status,selected_course,fee_paid&student_email=ilike." + encodeURIComponent(email), {method:"GET",headers:H});
-    var data = await res.json();
+function doLogin() {
+  var email = document.getElementById("loginEmail").value.trim().toLowerCase();
+  if (!email) { showMsg("Please enter your email."); return; }
+  var btn = document.getElementById("loginBtn");
+  btn.disabled = true; btn.textContent = "Loading...";
+  fetch(BASE + "/students?select=student_name,admission_status,selected_course,fee_paid&student_email=ilike." + encodeURIComponent(email), {method:"GET",headers:H})
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
     if (!Array.isArray(data) || data.length === 0) {
-      showMsg('No account found. Please check your email.');
-      btn.disabled = false; btn.textContent = 'Access my course'; return;
+      showMsg("No account found. Please check your email.");
+      btn.disabled = false; btn.textContent = "Access my course"; return;
     }
     var s = data[0];
-    var allowed = ['admitted','final_exam_passed','internship_passed','certified','quarterly_passed','fee_paid'];
+    var allowed = ["admitted","final_exam_passed","internship_passed","certified","quarterly_passed","fee_paid"];
     if (!allowed.includes(s.admission_status)) {
-      showMsg('Please complete your enrollment first. Status: ' + s.admission_status);
-      logError('access_blocked', 'Student blocked - status: ' + s.admission_status);
-      btn.disabled = false; btn.textContent = 'Access my course'; return;
+      showMsg("Please complete your enrollment first.");
+      btn.disabled = false; btn.textContent = "Access my course"; return;
     }
     studentEmail = email;
-    studentName = s.student_name || email.split('@')[0];
-    localStorage.setItem('yge_email', email);
-    var nu = document.getElementById('navUser');
+    studentName = s.student_name || email.split("@")[0];
+    localStorage.setItem("yge_email", email);
+    var nu = document.getElementById("navUser");
     nu.textContent = studentName;
-    nu.href = '/profile.html?email=' + encodeURIComponent(email);
-    document.getElementById('notesNavBtn').href = '/my-notes.html?email=' + encodeURIComponent(email);
-    document.getElementById('coursesNavBtn').href = '/my-courses.html?email=' + encodeURIComponent(email);
-    // Update mobile nav too
-    var mcBtn = document.getElementById('myCoursesNavBtn');
-    if (mcBtn) mcBtn.href = '/my-courses.html?email=' + encodeURIComponent(email);
-    document.getElementById('loginWrap').style.display = 'none';
-    document.getElementById('mainLayout').style.display = 'grid';
-    await loadCourse(s.selected_course);
-  } catch(err) {
-    showMsg('Error: ' + err.message);
-    btn.disabled = false; btn.textContent = 'Access my course';
-  }
+    nu.href = "/profile.html?email=" + encodeURIComponent(email);
+    document.getElementById("notesNavBtn").href = "/my-notes.html?email=" + encodeURIComponent(email);
+    document.getElementById("coursesNavBtn").href = "/my-courses.html?email=" + encodeURIComponent(email);
+    document.getElementById("mNotesBtn").href = "/my-notes.html?email=" + encodeURIComponent(email);
+    document.getElementById("mCoursesBtn").href = "/my-courses.html?email=" + encodeURIComponent(email);
+    document.getElementById("mProfileBtn").href = "/profile.html?email=" + encodeURIComponent(email);
+    document.getElementById("loginWrap").style.display = "none";
+    document.getElementById("mainLayout").style.display = "grid";
+    loadNotifCount();
+    loadCourse(s.selected_course);
+  })
+  .catch(function(err) {
+    showMsg("Error: " + err.message);
+    btn.disabled = false; btn.textContent = "Access my course";
+  });
 }
 
-async function loadCourse(courseName) {
+function loadCourse(courseName) {
   if (!courseName) {
-    document.getElementById('mainContent').innerHTML = '<div class="loading">No course enrolled. <a href="/my-courses.html?email='+studentEmail+'" style="color:#1a73e8;">Browse courses</a></div>';
+    document.getElementById("mainContent").innerHTML = "<div class='loading'>No course enrolled. <a href='/my-courses.html?email=" + encodeURIComponent(studentEmail) + "' style='color:#1a73e8'>Browse courses</a></div>";
     return;
   }
-  document.getElementById('mainContent').innerHTML = '<div class="loading"><span class="spin">&#9203;</span>Loading course...</div>';
-  try {
-    var cRes = await fetch(BASE + "/courses?select=id,name,department&name=ilike." + encodeURIComponent(courseName) + "&is_active=eq.true", {method:"GET",headers:H});
-    var courses = await cRes.json();
+  document.getElementById("mainContent").innerHTML = "<div class='loading'><span class='spin'>&#9203;</span> Loading course...</div>";
+  fetch(BASE + "/courses?select=id,name,department&name=ilike." + encodeURIComponent(courseName) + "&is_active=eq.true", {method:"GET",headers:H})
+  .then(function(r) { return r.json(); })
+  .then(function(courses) {
     if (!Array.isArray(courses) || courses.length === 0) {
-      document.getElementById('mainContent').innerHTML = '<div class="loading">Course not found. <a href="/my-courses.html?email='+studentEmail+'" style="color:#1a73e8;">Browse courses</a></div>';
+      document.getElementById("mainContent").innerHTML = "<div class='loading'>Course not found. <a href='/my-courses.html?email=" + encodeURIComponent(studentEmail) + "' style='color:#1a73e8'>Browse courses</a></div>";
       return;
     }
     currentCourse = courses[0];
-    document.getElementById('sidebarCourse').textContent = currentCourse.name;
-    var mRes = await fetch(BASE + "/course_modules?select=*&course_id=eq." + currentCourse.id + "&order=module_index.asc", {method:"GET",headers:H});
-    modules = await mRes.json();
-    if (!Array.isArray(modules) || modules.length === 0) {
-      document.getElementById('mainContent').innerHTML = '<div class="loading">Course content being generated. Please refresh in a moment!</div>';
+    document.getElementById("sidebarCourse").textContent = currentCourse.name;
+    return fetch(BASE + "/course_modules?select=*&course_id=eq." + currentCourse.id + "&order=module_index.asc", {method:"GET",headers:H});
+  })
+  .then(function(r) { if (r) return r.json(); })
+  .then(function(mods) {
+    if (!mods || !Array.isArray(mods) || mods.length === 0) {
+      document.getElementById("mainContent").innerHTML = "<div class='loading'>Course content being prepared. Please refresh soon!</div>";
       return;
     }
+    modules = mods;
     buildNav();
-    await loadProgress();
-  } catch(e) { console.error(e); }
+    loadProgress();
+  })
+  .catch(function(e) {
+    document.getElementById("mainContent").innerHTML = "<div class='loading'>Error loading course. <button onclick='location.reload()' style='color:#1a73e8;background:none;border:none;cursor:pointer'>Retry</button></div>";
+  });
 }
 
-async function loadProgress() {
-  try {
-    var res = await fetch(BASE + "/syllabus_progress?select=*&student_email=ilike." + encodeURIComponent(studentEmail), {method:"GET",headers:H});
-    var data = await res.json();
+function loadProgress() {
+  fetch(BASE + "/syllabus_progress?select=*&student_email=ilike." + encodeURIComponent(studentEmail), {method:"GET",headers:H})
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
     if (Array.isArray(data) && data.length > 0) {
       progressId = data[0].id;
       curMod = parseInt(data[0].module_index) || 0;
@@ -476,199 +522,202 @@ async function loadProgress() {
       updateProgress(); updateBadges(); buildNav();
       loadLesson(curMod, curLesson);
     } else {
-      var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0)},0);
-      var r2 = await fetch(BASE + "/syllabus_progress", {method:"POST",headers:Object.assign({},H,{"Prefer":"return=representation"}),body:JSON.stringify({student_email:studentEmail,department:currentCourse?currentCourse.name:'',module_index:0,lesson_index:0,completed_lessons:[],total_lessons:total})});
-      var d2 = await r2.json();
-      if (Array.isArray(d2) && d2.length > 0) progressId = d2[0].id;
-      updateProgress(); buildNav(); updateBadges();
-      loadLesson(0, 0);
+      var total = modules.reduce(function(s,m){ return s+(m.lessons?m.lessons.length:0); }, 0);
+      fetch(BASE + "/syllabus_progress", {method:"POST", headers:Object.assign({},H,{"Prefer":"return=representation"}), body:JSON.stringify({student_email:studentEmail, department:currentCourse?currentCourse.name:"", module_index:0, lesson_index:0, completed_lessons:[], total_lessons:total})})
+      .then(function(r) { return r.json(); })
+      .then(function(d2) {
+        if (Array.isArray(d2) && d2.length > 0) progressId = d2[0].id;
+        updateProgress(); updateBadges(); buildNav();
+        loadLesson(0, 0);
+      });
     }
-  } catch(e) { console.error(e); loadLesson(0, 0); }
+  })
+  .catch(function() { loadLesson(0, 0); });
 }
 
-async function saveProgress() {
+function saveProgress() {
   if (!progressId) return;
-  try {
-    await fetch(BASE + "/syllabus_progress?id=eq." + progressId, {method:"PATCH",headers:H,body:JSON.stringify({module_index:curMod,lesson_index:curLesson,completed_lessons:Array.from(doneLessons),bookmarks:Array.from(bookmarks),notes:notes,last_active:new Date().toISOString()})});
-  } catch(e) {}
+  fetch(BASE + "/syllabus_progress?id=eq." + progressId, {method:"PATCH", headers:H, body:JSON.stringify({module_index:curMod, lesson_index:curLesson, completed_lessons:Array.from(doneLessons), bookmarks:Array.from(bookmarks), notes:notes, last_active:new Date().toISOString()})});
 }
 
 function buildNav() {
-  var html = '';
+  var html = "";
   modules.forEach(function(mod, mi) {
     var ml = mod.lessons || [];
-    var mc = ml.filter(function(_,li){return doneLessons.has(mi+'-'+li)}).length;
+    var mc = ml.filter(function(_,li){ return doneLessons.has(mi+"-"+li); }).length;
     var mp = ml.length > 0 ? Math.round(mc/ml.length*100) : 0;
-    html += '<div class="mod '+(mi===curMod?'open':'')+'" id="mod-'+mi+'">';
-    html += '<div class="mod-header '+(mi===curMod?'active':'')+'" onclick="toggleMod('+mi+')">';
-    html += mc===ml.length&&ml.length>0 ? 
-  '<span style="color:#34a853"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34a853" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>' : 
-  '<span style="color:#5f6368"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></span>';
-    html += '<span style="flex:1;font-size:13px">'+mod.module_title+'</span>';
-    html += '<span style="font-size:11px;color:#80868b">'+mp+'%</span></div>';
-    html += '<div class="mod-lessons">';
-    ml.forEach(function(l,li) {
-      var key = mi+'-'+li;
-      var cls = doneLessons.has(key)?'done':'';
-      if (mi===curMod && li===curLesson) cls = 'active';
-      html += '<div class="lesson-item '+cls+'" onclick="loadLesson('+mi+','+li+')">';
-      html += '<span class="ldot"></span>';
-      html += '<span style="flex:1;font-size:12px">'+l.title+'</span>';
-      if (bookmarks.has(key)) html += '<span style="font-size:11px">&#128278;</span>';
-      html += '</div>';
+    var isDone = mc === ml.length && ml.length > 0;
+    html += "<div class='mod " + (mi===curMod?"open":"") + "' id='mod-" + mi + "'>";
+    html += "<div class='mod-header' onclick='toggleMod(" + mi + ")'>";
+    html += isDone
+      ? "<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='#34a853' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>"
+      : "<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='#5f6368' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M4 19.5A2.5 2.5 0 016.5 17H20'/><path d='M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z'/></svg>";
+    html += "<span style='flex:1;font-size:13px'>" + mod.module_title + "</span>";
+    html += "<span style='font-size:11px;color:#80868b'>" + mp + "%</span></div>";
+    html += "<div class='mod-lessons'>";
+    ml.forEach(function(l, li) {
+      var key = mi+"-"+li;
+      var cls = doneLessons.has(key) ? "done" : "";
+      if (mi===curMod && li===curLesson) cls = "active";
+      html += "<div class='lesson-item " + cls + "' onclick='loadLesson(" + mi + "," + li + ")'>";
+      html += "<span class='ldot'></span><span style='flex:1;font-size:12px'>" + l.title + "</span>";
+      if (bookmarks.has(key)) html += "<svg width='11' height='11' viewBox='0 0 24 24' fill='#1a73e8' stroke='none'><path d='M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z'/></svg>";
+      html += "</div>";
     });
-    html += '</div></div>';
+    html += "</div></div>";
   });
-  document.getElementById('syllabusNav').innerHTML = html;
+  document.getElementById("syllabusNav").innerHTML = html;
   updateTimeLeft();
 }
 
 function toggleMod(mi) {
-  document.querySelectorAll('.mod').forEach(function(m,i){
-    if(i===mi) m.classList.toggle('open'); else m.classList.remove('open');
+  document.querySelectorAll(".mod").forEach(function(m, i) {
+    if (i === mi) m.classList.toggle("open"); else m.classList.remove("open");
   });
 }
 
 function loadLesson(mi, li) {
-  // Safety: find valid module
-  if (!modules || modules.length === 0) {
-    document.getElementById('mainContent').innerHTML = '<div class="loading">Course content loading...</div>';
-    return;
-  }
-  // Clamp to valid range
-  mi = Math.max(0, Math.min(mi, modules.length - 1));
+  if (!modules || modules.length === 0) return;
+  mi = Math.max(0, Math.min(parseInt(mi)||0, modules.length-1));
   var mod = modules[mi];
-  if (!mod) { mi = 0; mod = modules[0]; }
-  var lessons = mod.lessons || [];
-  li = Math.max(0, Math.min(li, lessons.length - 1));
-  var lesson = lessons[li];
-  if (!lesson && lessons.length > 0) { li = 0; lesson = lessons[0]; }
+  if (!mod) return;
+  var lessonArr = mod.lessons || [];
+  li = Math.max(0, Math.min(parseInt(li)||0, lessonArr.length-1));
+  var lesson = lessonArr[li];
   if (!lesson) {
-    document.getElementById('mainContent').innerHTML = '<div class="loading">Lesson content not found. <a href="javascript:location.reload()" style="color:#1a73e8;">Refresh</a></div>';
-    return;
+    if (lessonArr.length > 0) { li = 0; lesson = lessonArr[0]; } else return;
   }
   curMod = mi; curLesson = li;
   mcqDone = {};
-  var key = mi+'-'+li;
+  var key = mi+"-"+li;
   var isBm = bookmarks.has(key);
-  var savedNote = notes[key] || '';
-  var dept = currentCourse ? currentCourse.department : 'School';
-  var courseName = currentCourse ? currentCourse.name : 'this topic';
-  var res = getResources(dept, courseName);
-  var isTech = ['Technology','School'].includes(dept);
+  var savedNote = notes[key] || "";
+  var dept = currentCourse ? currentCourse.department : "School";
+  var cname = currentCourse ? currentCourse.name : "this topic";
+  var res = getResources(dept, cname);
+  var isTech = dept === "Technology" || dept === "School";
 
-  var html = '';
-  html += '<div class="breadcrumb">'+mod.module_title+' &middot; Lesson '+(li+1)+' of '+(mod.lessons?mod.lessons.length:0)+'</div>';
-  html += '<div class="lesson-title-row">';
-  html += '<div class="lesson-title">'+lesson.title+'</div>';
-  html += '<div class="lesson-actions">';
-  html += '<button class="listen-btn" onclick="startVoice()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg> Listen</button>';
-  html += '<button class="bm-btn'+(isBm?' bookmarked':'')+'" id="bmBtn" onclick="toggleBm(\''+key+'\')">'+( isBm ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Saved' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save')+'</button>';
-  html += '</div></div>';
-  html += '<div class="lesson-meta">';
-  html += '<span style="display:flex;align-items:center;gap:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'+(lesson.duration||'15 min')+'</span>';
-  html += '<span style="display:flex;align-items:center;gap:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Core Lesson</span>';
-  if (doneLessons.has(key)) html += '<span style="display:flex;align-items:center;gap:4px;color:#137333"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34a853" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Completed</span>';
-  html += '</div>';
+  var svgClock = "<svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><polyline points='12 6 12 12 16 14'/></svg>";
+  var svgBook = "<svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 19.5A2.5 2.5 0 016.5 17H20'/><path d='M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z'/></svg>";
+  var svgCheck = "<svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='#34a853' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>";
+  var svgVolume = "<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'/><path d='M15.54 8.46a5 5 0 010 7.07'/></svg>";
+  var svgBm = isBm ? "<svg width='13' height='13' viewBox='0 0 24 24' fill='#1a73e8' stroke='none'><path d='M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z'/></svg>" : "<svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z'/></svg>";
+  var svgVideo = "<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='#5f6368' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='23 7 16 12 23 17 23 7'/><rect x='1' y='5' width='15' height='14' rx='2'/></svg>";
+  var svgDoc = "<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='#5f6368' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z'/><polyline points='14 2 14 8 20 8'/></svg>";
+  var svgArrow = "<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='#dadce0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><line x1='7' y1='17' x2='17' y2='7'/><polyline points='7 7 17 7 17 17'/></svg>";
+  var svgCode = "<svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='16 18 22 12 16 6'/><polyline points='8 6 2 12 8 18'/></svg>";
+  var svgNote = "<svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20h9'/><path d='M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z'/></svg>";
+  var svgMcq = "<svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 11 12 14 22 4'/><path d='M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11'/></svg>";
+
+  var h = "";
+  h += "<div class='breadcrumb'>" + mod.module_title + " &middot; Lesson " + (li+1) + " of " + lessonArr.length + "</div>";
+  h += "<div class='lesson-title-row'>";
+  h += "<div class='lesson-title'>" + lesson.title + "</div>";
+  h += "<div class='lesson-actions'>";
+  h += "<button class='listen-btn' onclick='startVoice()'>" + svgVolume + " Listen</button>";
+  h += "<button class='bm-btn" + (isBm?" bookmarked":"") + "' id='bmBtn' onclick='toggleBm(\"" + key + "\")'>" + svgBm + (isBm?" Saved":" Save") + "</button>";
+  h += "</div></div>";
+  h += "<div class='lesson-meta'>";
+  h += "<span>" + svgClock + " " + (lesson.duration||"15 min") + "</span>";
+  h += "<span>" + svgBook + " Core Lesson</span>";
+  if (doneLessons.has(key)) h += "<span style='color:#137333'>" + svgCheck + " Completed</span>";
+  h += "</div>";
 
   // Voice bar
-  html += '<div class="voice-bar" id="voiceBar">';
-  html += '<span style="font-size:14px;font-weight:500;color:#1a73e8;font-family:Google Sans,Arial,sans-serif">&#128266; AI Voice Teacher</span>';
-  html += '<button class="v-btn v-play" id="vPlayBtn" onclick="toggleVoice()">&#9654; Play</button>';
-  html += '<button class="v-btn v-stop" id="vStopBtn" onclick="stopVoice()">&#9209; Stop</button>';
-  html += '<select class="v-speed" id="vSpeed" onchange="updateSpeed()"><option value="0.8">Slow</option><option value="1" selected>Normal</option><option value="1.3">Fast</option></select>';
-  html += '<span id="vStatus" style="font-size:12px;color:#5f6368;flex:1">Press Play to hear this lesson</span>';
-  html += '<button onclick="document.getElementById(\'voiceBar\').classList.remove(\'show\');stopVoice();" style="background:none;border:none;color:#5f6368;cursor:pointer;font-size:16px">&#10005;</button>';
-  html += '</div>';
+  h += "<div class='voice-bar' id='voiceBar'>";
+  h += "<span style='font-size:13px;font-weight:500;color:#1a73e8;display:flex;align-items:center;gap:6px'>" + svgVolume + " AI Voice Teacher</span>";
+  h += "<button class='v-btn v-play' id='vPlayBtn' onclick='toggleVoice()'>Play</button>";
+  h += "<button class='v-btn v-stop' id='vStopBtn' onclick='stopVoice()' style='display:none'>Stop</button>";
+  h += "<select class='v-speed' id='vSpeed' onchange='updateSpeed()'><option value='0.8'>Slow</option><option value='1' selected>Normal</option><option value='1.3'>Fast</option></select>";
+  h += "<span id='vStatus' style='font-size:12px;color:#5f6368;flex:1'>Press Play to hear this lesson</span>";
+  h += "<button onclick=\"document.getElementById('voiceBar').classList.remove('show');stopVoice();\" style='background:none;border:none;color:#5f6368;cursor:pointer'>&#10005;</button>";
+  h += "</div>";
 
   // Lesson body
-  html += '<div class="lesson-body" id="lessonBody">';
+  h += "<div class='lesson-body' id='lessonBody'>";
   if (lesson.content) {
-    lesson.content.split('\n').filter(function(p){return p.trim()}).forEach(function(p){html+='<p>'+p+'</p>'});
+    lesson.content.split("\n").filter(function(p){return p.trim();}).forEach(function(p){h+="<p>"+p+"</p>";});
   } else {
-    html += '<p>Content loading...</p>';
+    h += "<p>Content loading...</p>";
   }
   if (lesson.project) {
-    html += '<div class="project-box"><strong>Practical Assignment</strong><p>'+lesson.project+'</p></div>';
+    h += "<div class='project-box'><strong>Practical Assignment</strong><p>" + lesson.project + "</p></div>";
   }
-  html += '</div>';
+  h += "</div>";
 
   // Resources
-  html += '<div class="resources-card">';
-  html += '<div class="res-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:middle"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Learning Resources</div>';
-  html += '<div class="res-grid">';
+  h += "<div class='section-card'>";
+  h += "<div class='section-hdr'>" + svgBook + " Learning Resources</div>";
+  h += "<div class='res-grid'>";
   res.forEach(function(r) {
-    var isVideo = r.type === 'video';
-    html += '<a class="res-link" href="'+r.url+'" target="_blank" rel="noopener">';
-    html += '<div class="res-icon" style="background:#f1f3f4;color:#5f6368;">'+(isVideo ? VIDEO_ICON : DOC_ICON)+'</div>';
-    html += '<div style="flex:1;min-width:0;">';
-    html += '<div style="font-size:13px;font-weight:500;color:#202124;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+r.name+'</div>';
-    html += '<div style="font-size:11px;color:#80868b;margin-top:2px;">'+r.source+(isVideo?' · Video':' · Document')+'</div>';
-    html += '</div>';
-    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dadce0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>';
-    html += '</a>';
+    h += "<a class='res-link' href='" + r.url + "' target='_blank' rel='noopener'>";
+    h += "<div class='res-icon'>" + (r.type==="video"?svgVideo:svgDoc) + "</div>";
+    h += "<div><div class='res-name'>" + r.name + "</div><div class='res-src'>" + r.source + (r.type==="video"?" &middot; Video":" &middot; Doc") + "</div></div>";
+    h += svgArrow + "</a>";
   });
-  html += '</div></div>';
+  h += "</div></div>";
 
-  // Code editor (tech only)
+  // Code editor (tech courses)
   if (isTech) {
-    html += '<div class="code-card">';
-    html += '<div class="code-header">';
-    html += '<span class="code-title">Code Editor</span>';
-    html += '<div style="display:flex;gap:8px">';
-    html += '<select id="langSel" onchange="changeLang()" style="background:#3d3d3d;color:#ccc;border:none;border-radius:4px;padding:4px 8px;font-size:12px"><option value="javascript">JavaScript</option><option value="html">HTML</option><option value="python">Python</option></select>';
-    html += '<button class="code-run" onclick="runCode()">&#9654; Run</button>';
-    html += '<button onclick="resetCode()" style="background:#555;color:#ccc;border:none;border-radius:4px;padding:6px 10px;font-size:12px;cursor:pointer">Reset</button>';
-    html += '</div></div>';
-    html += '<textarea class="code-textarea" id="codeEd" spellcheck="false">'+CODE_TEMPLATES.javascript+'</textarea>';
-    html += '<div class="code-output" id="codeOut">// Output will appear here...</div>';
-    html += '</div>';
+    h += "<div class='code-card'>";
+    h += "<div class='code-header'><span class='code-title'>" + svgCode + " Code Editor</span>";
+    h += "<div style='display:flex;gap:8px'>";
+    h += "<select id='langSel' onchange='changeLang()' style='background:#3d3d3d;color:#ccc;border:none;border-radius:4px;padding:4px 8px;font-size:12px'><option value='javascript'>JavaScript</option><option value='html'>HTML</option><option value='python'>Python</option></select>";
+    h += "<button class='code-run' onclick='runCode()'>&#9654; Run</button>";
+    h += "<button onclick='resetCode()' style='background:#555;color:#ccc;border:none;border-radius:4px;padding:6px 10px;font-size:12px;cursor:pointer'>Reset</button>";
+    h += "</div></div>";
+    h += "<textarea class='code-ta' id='codeEd' spellcheck='false'>" + CODE_TEMPLATES.javascript + "</textarea>";
+    h += "<div class='code-out' id='codeOut'>// Output will appear here...</div>";
+    h += "</div>";
   }
 
   // Notes
-  html += '<div class="notes-card">';
-  html += '<div class="notes-hdr"><span class="notes-lbl">&#128221; My Notes</span><button class="notes-save" onclick="saveNote(\''+key+'\')">Save</button></div>';
-  html += '<textarea class="notes-ta" id="notesArea" placeholder="Write your notes for this lesson...">'+savedNote+'</textarea>';
-  html += '<div class="notes-saved" id="notesSaved">Notes saved!</div>';
-  html += '</div>';
+  h += "<div class='section-card'>";
+  h += "<div class='section-hdr'>" + svgNote + " My Notes";
+  h += "<button onclick='saveNote(\"" + key + "\")' style='margin-left:auto;background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:5px 14px;font-size:13px;cursor:pointer;font-family:Google Sans,Arial,sans-serif;font-weight:500'>Save</button></div>";
+  h += "<textarea class='notes-ta' id='notesArea' placeholder='Write your notes for this lesson...'>" + savedNote + "</textarea>";
+  h += "<div class='notes-saved' id='notesSaved'>Notes saved!</div>";
+  h += "</div>";
 
   // MCQ
   if (lesson.mcq && lesson.mcq.length > 0) {
-    html += '<div class="mcq-card"><div class="mcq-title">&#128221; Quick Check</div>';
+    h += "<div class='section-card'><div class='section-hdr'>" + svgMcq + " Quick Check</div>";
     lesson.mcq.forEach(function(q, qi) {
-      html += '<div class="mcq-q">Q'+(qi+1)+'. '+q.question+'</div>';
-      html += '<div class="mcq-opts" id="mcq-'+qi+'" data-correct="'+q.correct+'">';
+      h += "<div class='mcq-q'>Q" + (qi+1) + ". " + q.question + "</div>";
+      h += "<div class='mcq-opts' id='mcq-" + qi + "' data-correct='" + q.correct + "'>";
       (q.options||[]).forEach(function(opt) {
-        html += '<div class="mcq-opt" onclick="answerMCQ('+qi+',\''+opt.replace(/'/g,"\\'")+'\')">' + opt + '</div>';
+        h += "<div class='mcq-opt' onclick='answerMCQ(" + qi + ",this)'>" + opt + "</div>";
       });
-      html += '</div>';
+      h += "</div>";
     });
-    html += '</div>';
+    h += "</div>";
   }
 
   // Nav
-  html += '<div class="lesson-nav">';
-  html += '<button class="btn btn-secondary" onclick="navigate(-1)"'+(mi===0&&li===0?' disabled':'')+'>Previous</button>';
-  html += '<button class="btn btn-complete" onclick="completeLesson()">Mark complete</button>';
-  html += '<button class="btn btn-primary" onclick="navigate(1)"'+(mi===modules.length-1&&li===(modules[mi]?modules[mi].lessons||[]:[] ).length-1?' disabled':'')+'>Next</button>';
-  html += '</div>';
+  var isFirst = mi===0 && li===0;
+  var lastMod = modules[modules.length-1];
+  var isLast = mi===modules.length-1 && li===(lastMod?(lastMod.lessons||[]).length-1:0);
+  h += "<div class='lesson-nav'>";
+  h += "<button class='btn btn-secondary' onclick='navigate(-1)'" + (isFirst?" disabled":"") + ">Previous</button>";
+  h += "<button class='btn btn-complete' onclick='completeLesson()'>Mark complete</button>";
+  h += "<button class='btn btn-primary' onclick='navigate(1)'" + (isLast?" disabled":"") + ">Next</button>";
+  h += "</div>";
 
-  document.getElementById('mainContent').innerHTML = html;
-  buildNav(); saveProgress();
-  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById("mainContent").innerHTML = h;
+  buildNav();
+  saveProgress();
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function answerMCQ(qi, selected) {
+function answerMCQ(qi, el) {
   if (mcqDone[qi]) return;
   mcqDone[qi] = true;
-  var group = document.getElementById('mcq-'+qi);
-  var correct = group.getAttribute('data-correct');
-  group.querySelectorAll('.mcq-opt').forEach(function(o) {
-    if (o.textContent.trim() === correct) o.classList.add('show-correct');
-  });
-  var opts = group.querySelectorAll('.mcq-opt');
-  opts.forEach(function(o) {
-    if (o.textContent.trim() === selected) o.classList.add(selected===correct?'correct':'wrong');
+  var group = document.getElementById("mcq-"+qi);
+  var correct = group.getAttribute("data-correct");
+  var selected = el.textContent.trim();
+  group.querySelectorAll(".mcq-opt").forEach(function(o) {
+    if (o.textContent.trim() === correct) o.classList.add("show-correct");
+    if (o === el) o.classList.add(selected===correct?"correct":"wrong");
   });
 }
 
@@ -684,313 +733,228 @@ function navigate(dir) {
   loadLesson(mi,li);
 }
 
-async function completeLesson() {
-  var key=curMod+'-'+curLesson;
+function completeLesson() {
+  var key=curMod+"-"+curLesson;
   doneLessons.add(key);
   updateProgress(); updateBadges(); buildNav();
-  await saveProgress();
-  setTimeout(function(){navigate(1)},400);
+  saveProgress();
+  setTimeout(function(){navigate(1);},300);
 }
 
-async function saveNote(key) {
-  var val = document.getElementById('notesArea') ? document.getElementById('notesArea').value : '';
-  notes[key] = val;
-  await saveProgress();
-  var msg = document.getElementById('notesSaved');
-  if (msg) { msg.style.display='block'; setTimeout(function(){msg.style.display='none'},2000); }
+function saveNote(key) {
+  var el = document.getElementById("notesArea");
+  if (!el) return;
+  notes[key] = el.value;
+  saveProgress();
+  var msg = document.getElementById("notesSaved");
+  if (msg) { msg.style.display="block"; setTimeout(function(){msg.style.display="none";},2000); }
 }
 
-async function toggleBm(key) {
+function toggleBm(key) {
   if (bookmarks.has(key)) bookmarks.delete(key); else bookmarks.add(key);
-  await saveProgress(); buildNav();
-  var btn = document.getElementById('bmBtn');
-  if (btn) { 
-    btn.className = 'bm-btn' + (bookmarks.has(key) ? ' bookmarked' : '');
-    btn.innerHTML = bookmarks.has(key) ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Saved' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg> Save';
+  saveProgress(); buildNav();
+  var btn = document.getElementById("bmBtn");
+  if (btn) {
+    var isBm = bookmarks.has(key);
+    btn.className = "bm-btn" + (isBm?" bookmarked":"");
+    btn.innerHTML = (isBm?"<svg width='13' height='13' viewBox='0 0 24 24' fill='#1a73e8' stroke='none'><path d='M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z'/></svg> Saved":"<svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z'/></svg> Save");
   }
   updateBookmarks();
 }
 
 function updateBookmarks() {
-  var el = document.getElementById('bmList'); if (!el) return;
-  if (bookmarks.size === 0) { el.innerHTML = '<div class="bm-empty">No saved lessons yet.</div>'; return; }
-  var html = '';
+  var el = document.getElementById("bmList"); if (!el) return;
+  if (bookmarks.size === 0) { el.innerHTML = "<div class='bm-empty'>No saved lessons yet.</div>"; return; }
+  var h = "";
   bookmarks.forEach(function(key) {
-    var parts = key.split('-');
-    var mi = parseInt(parts[0]), li = parseInt(parts[1]);
-    var lesson = modules[mi] ? (modules[mi].lessons||[])[li] : null;
+    var parts = key.split("-"), mi=parseInt(parts[0]), li=parseInt(parts[1]);
+    var lesson = modules[mi]?(modules[mi].lessons||[])[li]:null;
     if (!lesson) return;
-    html += '<div class="bm-item" onclick="loadLesson('+mi+','+li+')">';
-    html += '<div class="bm-lesson">'+lesson.title+'</div>';
-    html += '<div class="bm-mod">'+(modules[mi]?modules[mi].module_title:'')+'</div>';
-    html += '</div>';
+    h += "<div class='bm-item' onclick='loadLesson(" + mi + "," + li + ")'>";
+    h += "<div class='bm-lesson'>" + lesson.title + "</div>";
+    h += "<div class='bm-mod'>" + (modules[mi]?modules[mi].module_title:"") + "</div></div>";
   });
-  el.innerHTML = html || '<div class="bm-empty">No saved lessons yet.</div>';
+  el.innerHTML = h || "<div class='bm-empty'>No saved lessons yet.</div>";
 }
 
 function updateProgress() {
-  var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0)},0);
-  var pct = total > 0 ? Math.round((doneLessons.size/total)*100) : 0;
-  document.getElementById('sidebarPct').textContent = pct+'%';
-  document.getElementById('sidebarProg').style.width = pct+'%';
-  document.getElementById('sidebarLessons').textContent = doneLessons.size+' of '+total+' lessons';
+  var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0);},0);
+  var pct = total>0 ? Math.round((doneLessons.size/total)*100) : 0;
+  document.getElementById("sidebarPct").textContent = pct+"%";
+  document.getElementById("sidebarProg").style.width = pct+"%";
+  document.getElementById("sidebarLessons").textContent = doneLessons.size+" of "+total+" lessons";
 }
 
 function updateTimeLeft() {
-  var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0)},0);
+  var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0);},0);
   var rem = total - doneLessons.size;
-  var mins = rem * 15;
-  var h = Math.floor(mins/60), m = mins%60;
-  document.getElementById('timeLeft').textContent = rem===0 ? 'Course complete!' : (h>0?h+'h ':'')+m+'min remaining';
+  var mins = rem*15, h=Math.floor(mins/60), m=mins%60;
+  document.getElementById("timeLeft").textContent = rem===0?"Course complete!":(h>0?h+"h ":"")+m+"min remaining";
 }
 
 function updateBadges() {
-  var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0)},0);
+  var total = modules.reduce(function(s,m){return s+(m.lessons?m.lessons.length:0);},0);
   var done = doneLessons.size;
-  var pct = total > 0 ? Math.round((done/total)*100) : 0;
-  var html = '';
+  var pct = total>0?Math.round((done/total)*100):0;
+  var h = "";
   BADGES.forEach(function(b) {
     var earned = false;
-    if (typeof b.req === 'number' && b.req <= 10) earned = done >= b.req;
-    else if (b.req === 50) earned = pct >= 50;
-    else if (b.req === 100) earned = pct >= 100;
-    else if (b.req === 'module') earned = modules.some(function(m,mi){return (m.lessons||[]).every(function(_,li){return doneLessons.has(mi+'-'+li)})});
-    html += '<div class="badge-item '+(earned?'earned':'locked')+'">';
-    html += '<div class="badge-emoji">'+b.emoji+'</div>';
-    html += '<div class="badge-name">'+b.name+'</div></div>';
+    if (b.req==="module") earned = modules.some(function(m,mi){return (m.lessons||[]).every(function(_,li){return doneLessons.has(mi+"-"+li);});});
+    else if (b.req===50||b.req===100) earned = pct>=b.req;
+    else earned = done>=b.req;
+    h += "<div class='badge-item "+(earned?"earned":"locked")+"'>";
+    h += "<div class='badge-icon' style='background:"+(earned?b.color+"22":"#f1f3f4")+"'>";
+    h += "<svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='"+(earned?b.color:"#aaa")+"' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='8' r='6'/><path d='M15.477 12.89L17 22l-5-3-5 3 1.523-9.11'/></svg>";
+    h += "</div><div class='badge-name'>"+b.name+"</div></div>";
   });
-  var g = document.getElementById('badgeGrid'); if (g) g.innerHTML = html;
+  var g=document.getElementById("badgeGrid"); if(g) g.innerHTML=h;
 }
 
 function switchTab(name) {
-  document.querySelectorAll('.stab').forEach(function(t){t.classList.remove('active')});
-  document.querySelectorAll('.stab-panel').forEach(function(p){p.classList.remove('active')});
-  document.getElementById('stab-'+name).classList.add('active');
-  document.getElementById('panel-'+name).classList.add('active');
-  if (name==='saved') updateBookmarks();
-  if (name==='badges') updateBadges();
+  document.querySelectorAll(".stab").forEach(function(t){t.classList.remove("active");});
+  document.querySelectorAll(".stab-panel").forEach(function(p){p.classList.remove("active");});
+  document.getElementById("stab-"+name).classList.add("active");
+  document.getElementById("panel-"+name).classList.add("active");
+  if (name==="saved") updateBookmarks();
+  if (name==="badges") updateBadges();
 }
 
 // Voice
 var synth = window.speechSynthesis, utterance = null, speaking = false;
 function startVoice() {
-  var vb = document.getElementById('voiceBar');
-  if (vb) vb.classList.add('show');
+  var vb=document.getElementById("voiceBar");
+  if(vb) vb.classList.add("show");
   readLesson();
 }
 function readLesson() {
   stopVoice();
-  var body = document.getElementById('lessonBody');
-  var text = body ? body.innerText.replace(/\n+/g,' ').trim() : '';
-  if (!text) return;
-  utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = parseFloat(document.getElementById('vSpeed') ? document.getElementById('vSpeed').value : '1');
-  utterance.lang = 'en-IN';
-  var voices = synth.getVoices();
-  var v = voices.find(function(v){return v.lang.includes('en')&&v.name.includes('Google')}) || voices.find(function(v){return v.lang.includes('en-IN')}) || voices.find(function(v){return v.lang.includes('en')});
-  if (v) utterance.voice = v;
-  utterance.onstart = function() {
-    speaking = true;
-    var pb = document.getElementById('vPlayBtn'); if (pb) pb.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
-    var sb = document.getElementById('vStopBtn'); if (sb) sb.style.display = 'inline-block';
-    var vs = document.getElementById('vStatus'); if (vs) vs.textContent = 'Reading lesson...';
-  };
-  utterance.onend = function() {
-    speaking = false;
-    var pb = document.getElementById('vPlayBtn'); if (pb) pb.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Play';
-    var sb = document.getElementById('vStopBtn'); if (sb) sb.style.display = 'none';
-    var vs = document.getElementById('vStatus'); if (vs) vs.textContent = 'Lesson complete!';
-  };
+  var body=document.getElementById("lessonBody");
+  var text=body?body.innerText.replace(/\n+/g," ").trim():"";
+  if(!text)return;
+  utterance=new SpeechSynthesisUtterance(text);
+  utterance.rate=parseFloat((document.getElementById("vSpeed")||{}).value||"1");
+  utterance.lang="en-IN";
+  utterance.onstart=function(){speaking=true;var pb=document.getElementById("vPlayBtn");if(pb)pb.textContent="Pause";var sb=document.getElementById("vStopBtn");if(sb)sb.style.display="inline-flex";};
+  utterance.onend=function(){speaking=false;var pb=document.getElementById("vPlayBtn");if(pb)pb.textContent="Play";var sb=document.getElementById("vStopBtn");if(sb)sb.style.display="none";};
   synth.speak(utterance);
 }
-function toggleVoice() { if (speaking) pauseVoice(); else { if (synth.paused) { synth.resume(); speaking=true; var pb=document.getElementById('vPlayBtn');if(pb)pb.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause'; } else readLesson(); } }
-function pauseVoice() { synth.pause(); speaking=false; var pb=document.getElementById('vPlayBtn');if(pb)pb.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Resume'; }
-function stopVoice() { synth.cancel(); speaking=false; }
-function updateSpeed() { if (speaking) { stopVoice(); setTimeout(readLesson,200); } }
+function toggleVoice(){if(speaking){synth.pause();speaking=false;var pb=document.getElementById("vPlayBtn");if(pb)pb.textContent="Resume";}else{if(synth.paused){synth.resume();speaking=true;var pb=document.getElementById("vPlayBtn");if(pb)pb.textContent="Pause";}else readLesson();}}
+function stopVoice(){synth.cancel();speaking=false;}
+function updateSpeed(){if(speaking){stopVoice();setTimeout(readLesson,200);}}
 
-// Code Editor
-function changeLang() {
-  var lang = document.getElementById('langSel') ? document.getElementById('langSel').value : 'javascript';
-  var ed = document.getElementById('codeEd'); if (ed) ed.value = CODE_TEMPLATES[lang] || '';
-  var out = document.getElementById('codeOut'); if (out) out.textContent = '// Output will appear here...';
+// Code editor
+function changeLang(){var lang=(document.getElementById("langSel")||{}).value||"javascript";var ed=document.getElementById("codeEd");if(ed)ed.value=CODE_TEMPLATES[lang]||"";var out=document.getElementById("codeOut");if(out)out.textContent="// Output will appear here...";}
+function runCode(){
+  var lang=(document.getElementById("langSel")||{}).value||"javascript";
+  var code=(document.getElementById("codeEd")||{}).value||"";
+  var out=document.getElementById("codeOut");if(!out)return;
+  if(lang==="javascript"){try{var logs=[];var orig=console.log;console.log=function(){logs.push(Array.prototype.join.call(arguments," "));};eval(code);console.log=orig;out.textContent=logs.length>0?logs.join("\n"):"Code ran (no output)";out.style.color="#58a6ff";}catch(e){out.textContent="Error: "+e.message;out.style.color="#f85149";}}
+  else if(lang==="html"){var w=window.open("","_blank","width=600,height=400");w.document.write(code);w.document.close();out.textContent="HTML opened in new tab!";}
+  else{out.textContent="Python coming soon! Try JavaScript.";}
 }
-function runCode() {
-  var lang = document.getElementById('langSel') ? document.getElementById('langSel').value : 'javascript';
-  var code = document.getElementById('codeEd') ? document.getElementById('codeEd').value : '';
-  var out = document.getElementById('codeOut');
-  if (!out) return;
-  if (lang === 'javascript') {
-    try {
-      var logs = [];
-      var orig = console.log;
-      console.log = function() { logs.push(Array.prototype.join.call(arguments,' ')); };
-      eval(code);
-      console.log = orig;
-      out.textContent = logs.length > 0 ? logs.join('\n') : 'Code ran successfully (no output)';
-      out.style.color = '#58a6ff';
-    } catch(e) { out.textContent = 'Error: ' + e.message; out.style.color = '#f85149'; }
-  } else if (lang === 'html') {
-    var w = window.open('','_blank','width=600,height=400');
-    w.document.write(code); w.document.close();
-    out.textContent = 'HTML opened in new tab!';
-  } else {
-    out.textContent = 'Python coming soon! Try JavaScript mode.';
-  }
-}
-function resetCode() {
-  var lang = document.getElementById('langSel') ? document.getElementById('langSel').value : 'javascript';
-  var ed = document.getElementById('codeEd'); if (ed) ed.value = CODE_TEMPLATES[lang] || '';
-  var out = document.getElementById('codeOut'); if (out) { out.textContent = '// Output will appear here...'; out.style.color = '#58a6ff'; }
-}
+function resetCode(){var lang=(document.getElementById("langSel")||{}).value||"javascript";var ed=document.getElementById("codeEd");if(ed)ed.value=CODE_TEMPLATES[lang]||"";var out=document.getElementById("codeOut");if(out){out.textContent="// Output will appear here...";out.style.color="#58a6ff";}}
 
 // AI Chat
-async function sendMessage() {
-  var input = document.getElementById('chatInput');
-  var text = input.value.trim(); if (!text) return;
-  input.value = '';
-  addBubble('user', text, studentName);
-  document.getElementById('sendBtn').disabled = true;
-  document.getElementById('typingIndicator').style.display = 'block';
-  chatHistory.push({role:'user',content:text});
-  var lesson = modules[curMod] ? (modules[curMod].lessons||[])[curLesson] : null;
-  var sys = 'You are a personal AI teacher at Yashasvi Global Education. Student: '+studentName+'. Course: '+(currentCourse?currentCourse.name:'')+'. Current lesson: "'+(lesson?lesson.title:'')+'" Give SHORT answers - max 2-3 sentences. Be clear and encouraging.';
-  try {
-    var res = await fetch(EDGE,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify({messages:chatHistory.slice(-6),systemPrompt:sys})});
-    var data = await res.json();
-    var reply = data.reply || 'Sorry, try again.';
-    chatHistory.push({role:'assistant',content:reply});
-    addBubble('ai', reply, 'AI Teacher');
-  } catch(e) { addBubble('ai','Connection issue. Try again.','AI Teacher'); }
-  document.getElementById('sendBtn').disabled = false;
-  document.getElementById('typingIndicator').style.display = 'none';
-}
-function addBubble(role, text, name) {
-  var msgs = document.getElementById('chatMsgs');
-  var d = document.createElement('div'); d.className = 'chat-msg '+role;
-  d.innerHTML = '<div class="chat-name">'+name+'</div><div class="chat-bubble">'+text.replace(/\n/g,'<br>')+'</div>';
-  msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
-  document.getElementById('typingIndicator').style.display = 'none';
+function sendMessage() {
+  var input=document.getElementById("chatInput");
+  var text=input.value.trim();if(!text)return;
+  input.value="";
+  addBubble("user",text,studentName);
+  document.getElementById("sendBtn").disabled=true;
+  document.getElementById("typingIndicator").style.display="block";
+  chatHistory.push({role:"user",content:text});
+  var lesson=modules[curMod]?(modules[curMod].lessons||[])[curLesson]:null;
+  var sys="You are a personal AI teacher at Yashasvi Global Education. Student: "+studentName+". Course: "+(currentCourse?currentCourse.name:"")+". Lesson: \""+(lesson?lesson.title:"")+"\". Give SHORT answers — max 2-3 sentences. Be clear and encouraging.";
+  fetch(EDGE,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify({messages:chatHistory.slice(-6),systemPrompt:sys})})
+  .then(function(r){return r.json();})
+  .then(function(data){
+    var reply=data.reply||"Sorry, try again.";
+    chatHistory.push({role:"assistant",content:reply});
+    addBubble("ai",reply,"AI Teacher");
+  })
+  .catch(function(){addBubble("ai","Connection issue. Try again.","AI Teacher");})
+  .finally(function(){document.getElementById("sendBtn").disabled=false;document.getElementById("typingIndicator").style.display="none";});
 }
 
-// Request Course
-function openRequest() { document.getElementById('requestModal').classList.add('open'); }
-function closeRequest() { document.getElementById('requestModal').classList.remove('open'); }
-async function submitRequest() {
-  var text = document.getElementById('requestText').value.trim(); if (!text) return;
-  var email2 = studentEmail || localStorage.getItem('yge_email') || 'unknown@student.com';
-  var btn = document.querySelector('#requestModal .btn-primary');
-  btn.disabled = true; btn.textContent = 'Sending...';
-  try {
-    await fetch(BASE+"/course_requests",{method:"POST",headers:Object.assign({},H,{"Prefer":"return=representation"}),body:JSON.stringify({student_email:email2,student_name:studentName||email2.split('@')[0],requested_course:text,created_at:new Date().toISOString()})});
-    var msg = document.getElementById('requestMsg');
-    msg.textContent = 'Request sent! AI will build this course within 24 hours.';
-    msg.style.display = 'block';
-    document.getElementById('requestText').value = '';
-    btn.textContent = 'Sent!';
-    setTimeout(closeRequest, 2000);
-  } catch(e) { btn.disabled=false; btn.textContent='Send Request'; }
-}
-document.getElementById('requestModal').addEventListener('click', function(e) { if(e.target===this) closeRequest(); });
-
-// Logout
-function logout() {
-  localStorage.removeItem('yge_email');
-  window.location.href = '/login.html';
+function addBubble(role,text,name) {
+  var msgs=document.getElementById("chatMsgs");
+  var d=document.createElement("div");d.className="chat-msg "+role;
+  d.innerHTML="<div class='chat-name'>"+name+"</div><div class='chat-bubble'>"+text.replace(/\n/g,"<br>")+"</div>";
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+  document.getElementById("typingIndicator").style.display="none";
 }
 
-function showMsg(text) {
-  var m = document.getElementById('loginMsg');
-  m.textContent = text; m.style.display = 'block';
-}
-
-
-// Error Logging System
-async function logError(type, message) {
-  try {
-    await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1/error_logs", {
-      method: "POST",
-      headers: {
-        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        error_type: type,
-        student_email: studentEmail || localStorage.getItem('yge_email') || 'unknown',
-        page_url: window.location.href,
-        error_message: message
-      })
-    });
-  } catch(e) { console.error('Error log failed:', e); }
-}
-
-// Global error handler
-window.addEventListener('error', function(e) {
-  logError('js_error', e.message + ' at ' + e.filename + ':' + e.lineno);
-});
-window.addEventListener('unhandledrejection', function(e) {
-  logError('promise_error', e.reason ? e.reason.toString() : 'Unknown promise error');
-});
-
-// Copy protection - only on lesson body
-document.addEventListener('copy', function(e) {
-  var allowed = e.target.closest('.notes-ta') || e.target.closest('.chat-msgs') || e.target.closest('.modal-ta') || e.target.closest('.code-textarea');
-  if (!allowed) {
-    e.preventDefault();
-    var t = document.getElementById('copyToast');
-    if (t) { t.style.display='block'; setTimeout(function(){t.style.display='none'},2500); }
-  }
-});
-document.addEventListener('contextmenu', function(e) {
-  var allowed = e.target.closest('.notes-ta') || e.target.closest('.chat-msgs') || e.target.closest('.modal-ta') || e.target.closest('.code-textarea');
-  if (!allowed) e.preventDefault();
-});
-
-// ===== NOTIFICATION PANEL =====
+// Notification
 function toggleNotif() {
-  var panel = document.getElementById('notifPanel');
-  if (!panel) return;
-  var isOpen = panel.style.display === 'block';
-  panel.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) loadNotifPanel();
+  var panel=document.getElementById("notifPanel");
+  if(!panel)return;
+  panel.classList.toggle("open");
+  if(panel.classList.contains("open")) loadNotifPanel();
+}
+function closeNotif(){var p=document.getElementById("notifPanel");if(p)p.classList.remove("open");}
+
+function loadNotifCount() {
+  fetch(BASE+"/notifications?select=id&student_email=ilike."+encodeURIComponent(studentEmail)+"&is_read=eq.false",{method:"GET",headers:H})
+  .then(function(r){return r.json();})
+  .then(function(data){
+    var dot=document.getElementById("bellDot");
+    if(dot&&Array.isArray(data)&&data.length>0) dot.style.display="block";
+  }).catch(function(){});
 }
 
-async function loadNotifPanel() {
-  var list = document.getElementById('notifPanelList');
-  if (!list) return;
-  list.innerHTML = '<div style="padding:16px;text-align:center;color:#5f6368;font-size:13px;">Loading...</div>';
-  try {
-    var em = studentEmail || localStorage.getItem('yge_email') || '';
-    if (!em) { list.innerHTML = '<div style="padding:16px;text-align:center;color:#80868b;font-size:13px;">Please login</div>'; return; }
-    var res = await fetch(BASE + "/notifications?select=*&student_email=ilike." + encodeURIComponent(em) + "&order=created_at.desc&limit=10", {method:"GET",headers:H});
-    var data = await res.json();
-    if (!Array.isArray(data) || data.length === 0) {
-      list.innerHTML = '<div style="padding:24px;text-align:center;color:#80868b;font-size:13px;">No notifications yet</div>'; return;
-    }
-    list.innerHTML = data.map(function(n) {
-      var link = '/syllabus.html?email=' + encodeURIComponent(em);
-      if (n.type === 'new_course') link = '/my-courses.html?email=' + encodeURIComponent(em);
-      if (n.type === 'certificate') link = '/certification.html?email=' + encodeURIComponent(em);
-      if (n.type === 'exam_result') link = '/quarterly-exam.html?email=' + encodeURIComponent(em);
-      return '<div onclick="window.location.href='' + link + ''" style="padding:12px 16px;border-bottom:1px solid #f1f3f4;display:flex;gap:10px;cursor:pointer;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='#fff'">' +
-        '<div style="width:8px;height:8px;border-radius:50%;background:' + (n.is_read ? '#dadce0' : '#1a73e8') + ';flex-shrink:0;margin-top:5px;"></div>' +
-        '<div><div style="font-size:13px;font-weight:500;color:#202124;">' + (n.title||'') + '</div>' +
-        '<div style="font-size:12px;color:#5f6368;margin-top:2px;">' + (n.message||'').substring(0,60) + '</div>' +
-        '<div style="font-size:11px;color:#80868b;margin-top:2px;">' + (n.created_at ? new Date(n.created_at).toLocaleDateString('en-IN') : '') + '</div></div></div>';
-    }).join('');
-    await fetch(BASE + "/notifications?student_email=ilike." + encodeURIComponent(em), {method:"PATCH",headers:H,body:JSON.stringify({is_read:true})});
-    var badge = document.getElementById('bellBadge');
-    if (badge) badge.style.display = 'none';
-  } catch(e) { list.innerHTML = '<div style="padding:16px;color:#c5221f;font-size:13px;">Error loading</div>'; }
+function loadNotifPanel() {
+  var list=document.getElementById("notifList");
+  if(!list)return;
+  list.innerHTML="<div style='padding:16px;text-align:center;color:#5f6368;font-size:13px;'>Loading...</div>";
+  fetch(BASE+"/notifications?select=*&student_email=ilike."+encodeURIComponent(studentEmail)+"&order=created_at.desc&limit=10",{method:"GET",headers:H})
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(!Array.isArray(data)||data.length===0){list.innerHTML="<div style='padding:24px;text-align:center;color:#80868b;font-size:13px;'>No notifications yet</div>";return;}
+    list.innerHTML=data.map(function(n){
+      var link="/syllabus.html?email="+encodeURIComponent(studentEmail);
+      if(n.type==="new_course") link="/my-courses.html?email="+encodeURIComponent(studentEmail);
+      if(n.type==="certificate") link="/certification.html?email="+encodeURIComponent(studentEmail);
+      if(n.type==="exam_result") link="/quarterly-exam.html?email="+encodeURIComponent(studentEmail);
+      return "<div onclick=\"window.location.href='"+link+"'\" style='padding:12px 16px;border-bottom:1px solid #f1f3f4;display:flex;gap:10px;cursor:pointer;' onmouseover=\"this.style.background='#f8f9fa'\" onmouseout=\"this.style.background='#fff'\">"+
+        "<div style='width:8px;height:8px;border-radius:50%;background:"+(n.is_read?"#dadce0":"#1a73e8")+";flex-shrink:0;margin-top:5px;'></div>"+
+        "<div><div style='font-size:13px;font-weight:500;color:#202124;'>"+(n.title||"")+"</div>"+
+        "<div style='font-size:12px;color:#5f6368;margin-top:2px;'>"+(n.message||"").substring(0,60)+"</div>"+
+        "<div style='font-size:11px;color:#80868b;margin-top:2px;'>"+(n.created_at?new Date(n.created_at).toLocaleDateString("en-IN"):"")+"</div></div></div>";
+    }).join("");
+    fetch(BASE+"/notifications?student_email=ilike."+encodeURIComponent(studentEmail),{method:"PATCH",headers:H,body:JSON.stringify({is_read:true})});
+    var dot=document.getElementById("bellDot");if(dot)dot.style.display="none";
+  })
+  .catch(function(){list.innerHTML="<div style='padding:16px;color:#c5221f;font-size:13px;'>Error loading</div>";});
 }
 
-document.addEventListener('click', function(e) {
-  var panel = document.getElementById('notifPanel');
-  var btn = document.getElementById('bellBtn');
-  if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) panel.style.display = 'none';
+// Request
+function submitRequest() {
+  var text=document.getElementById("requestText").value.trim();if(!text)return;
+  var btn=document.querySelector("#requestModal .btn-primary");
+  btn.disabled=true;btn.textContent="Sending...";
+  fetch(BASE+"/course_requests",{method:"POST",headers:Object.assign({},H,{"Prefer":"return=representation"}),body:JSON.stringify({student_email:studentEmail,student_name:studentName,requested_course:text,created_at:new Date().toISOString()})})
+  .then(function(){
+    document.getElementById("requestMsg").style.display="block";
+    document.getElementById("requestMsg").textContent="Request sent! AI will build this course within 24 hours.";
+    document.getElementById("requestText").value="";
+    btn.textContent="Sent!";
+    setTimeout(function(){document.getElementById("requestModal").classList.remove("open");},2000);
+  })
+  .catch(function(){btn.disabled=false;btn.textContent="Send Request";});
+}
+
+function logout(){localStorage.removeItem("yge_email");window.location.href="/login.html";}
+function showMsg(text){var m=document.getElementById("loginMsg");m.textContent=text;m.style.display="block";}
+
+// Copy protection
+document.addEventListener("copy",function(e){
+  var ok=e.target.closest(".notes-ta")||e.target.closest(".chat-msgs")||e.target.closest(".modal-ta")||e.target.closest(".code-ta");
+  if(!ok){e.preventDefault();var t=document.getElementById("copyToast");if(t){t.style.display="block";setTimeout(function(){t.style.display="none";},2500);}}
 });
-// ===== END NOTIFICATION PANEL =====
+document.addEventListener("contextmenu",function(e){
+  var ok=e.target.closest(".notes-ta")||e.target.closest(".chat-msgs")||e.target.closest(".modal-ta")||e.target.closest(".code-ta");
+  if(!ok)e.preventDefault();
+});
 </script>
 </body>
 </html>
-<!-- force redeploy Fri Jul 31 15:17:54 UTC 2026 -->
