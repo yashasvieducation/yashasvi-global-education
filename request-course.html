@@ -234,6 +234,7 @@ window.addEventListener("DOMContentLoaded", function() {
       }
     }).catch(function(){});
     loadRecentRequests();
+    checkPendingRequest();
   }
 });
 
@@ -243,6 +244,42 @@ function selectDur(el, val) {
   document.getElementById("durationVal").value = val;
   document.querySelectorAll(".dur-chip").forEach(function(c){ c.classList.remove("active"); });
   el.classList.add("active");
+}
+
+async function checkPendingRequest() {
+  try {
+    // Check if student has a pending request
+    var res = await fetch(BASE + "/course_requests?select=id,requested_course,status,created_at&student_email=ilike." + encodeURIComponent(email) + "&status=eq.pending&order=created_at.desc&limit=1", {method:"GET",headers:H});
+    var data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      var req = data[0];
+      var reqName = (req.requested_course||"").replace(/\[.*?\]\s*/,"").substring(0,60);
+      // Show locked state with pending info
+      lockForm(true);
+      document.getElementById("aiResponse").className = "ai-response show";
+      document.getElementById("aiResponse").innerHTML =
+        '<div class="response-pending">' +
+        '<div class="response-header">' +
+        '<div class="response-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>' +
+        '<div><div class="response-title">Request in Progress</div><div class="response-subtitle">AI Agent &bull; Building your course</div></div></div>' +
+        '<div class="response-msg">You already have a pending course request. Once your course is ready and added to your dashboard, you can submit a new request.</div>' +
+        '<div style="background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:14px;">' +
+        '<div style="font-size:12px;color:#5f6368;margin-bottom:6px;">Your pending request:</div>' +
+        '<div style="font-size:14px;font-weight:500;color:#202124;">' + reqName + '</div>' +
+        '<div style="font-size:12px;color:#5f6368;margin-top:3px;">Submitted: ' + (req.created_at?new Date(req.created_at).toLocaleDateString("en-IN"):"") + '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:10px;">' +
+        '<a href="/dashboard.html?email=' + encodeURIComponent(email) + '" style="flex:1;display:block;text-align:center;background:#1a73e8;color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;text-decoration:none;">Check Dashboard</a>' +
+        '</div></div>';
+    }
+  } catch(e) {}
+}
+
+// Called when course is fulfilled - enable form
+function onCourseFulfilled() {
+  lockForm(false);
+  document.getElementById("aiResponse").className = "ai-response";
+  document.getElementById("aiResponse").innerHTML = "";
 }
 
 function updateChar() {
@@ -282,7 +319,7 @@ async function submitRequest() {
   if (isHarmful(desc)) {
     await logRequest(std, cat, desc, "denied");
     showDenied();
-    resetBtn(btn);
+    lockForm(false); resetBtn(btn);
     // Add reset button to denied response
     var deniedEl = document.getElementById("aiResponse");
     if (deniedEl) {
@@ -325,18 +362,21 @@ var prompt = "You are an AI course agent for Yashasvi Global Education. A studen
       var found = courses.filter(function(c){ return result.courses.some(function(rc){ return rc.toLowerCase().includes(c.name.toLowerCase().substring(0,10)) || c.name.toLowerCase().includes(rc.toLowerCase().substring(0,10)); }); });
       await logRequest(std, cat, desc, "found");
       showFound(result.message || "Great news! We found matching courses for you.", found.length > 0 ? found : courses.slice(0,2));
+      lockForm(false); resetBtn(btn);
     } else {
       await logRequest(std, cat, desc, "pending");
       await sendNotifAfter(std, cat, desc);
       showPending(result.message || "Your course request has been received! Our AI will build it within 24 hours and you will get a notification.");
+      var sb = document.getElementById("submitBtn");
+      if (sb) { sb.disabled = true; sb.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Request Submitted — Waiting'; }
     }
   } catch(e) {
     await logRequest(std, cat, desc, "pending");
     showPending("Your request has been received! Our AI will build this course within 24 hours and notify you.");
   }
 
-  lockForm(false);
-  resetBtn(btn);
+  // Don't unlock after pending - keep locked until course is ready
+  // For found/denied - unlock so student can try again
   loadRecentRequests();
 }
 
