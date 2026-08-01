@@ -244,9 +244,23 @@
 </div>
 
 <nav class="nav">
-  <a class="nav-back" id="backBtn" href="/syllabus.html">← Back to Course</a>
-  <a class="nav-logo" href="/"><img src="/logo.svg" alt="YGE" style="height:36px;"></a>
-  <span class="nav-user" id="navUser"></span>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <a href="/"><img src="/logo.svg" alt="YGE" style="height:36px;"></a>
+    <a class="nav-back" id="backBtn" href="/syllabus.html" style="display:flex;align-items:center;gap:5px;font-size:13px;color:#5f6368;text-decoration:none;border:1px solid #dadce0;border-radius:20px;padding:6px 14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Course
+    </a>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <a id="navUser" href="/profile.html" style="font-size:13px;font-weight:500;color:#202124;background:#f1f3f4;border-radius:100px;padding:6px 14px;text-decoration:none;"></a>
+    <a id="notesNavBtn" href="/my-notes.html" style="display:flex;align-items:center;gap:5px;background:none;border:1px solid #dadce0;border-radius:20px;padding:7px 14px;font-size:13px;color:#5f6368;text-decoration:none;font-family:'Google Sans',Arial,sans-serif;font-weight:500;">Notes</a>
+    <button onclick="document.getElementById('requestModal').classList.add('open')" style="background:#1a73e8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">+ Request Course</button>
+    <button class="bell-btn" id="bellBtn" onclick="toggleNotif()" style="position:relative;background:none;border:none;cursor:pointer;padding:6px;border-radius:50%;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span id="bellDot" style="position:absolute;top:2px;right:2px;width:8px;height:8px;background:#c5221f;border-radius:50%;display:none;"></span>
+    </button>
+    <button onclick="logout()" style="background:none;border:1px solid #dadce0;border-radius:4px;padding:6px 14px;font-size:13px;color:#5f6368;cursor:pointer;">Logout</button>
+  </div>
 </nav>
 
 <div class="hero">
@@ -323,7 +337,21 @@ const deptIcons = {
 
 async function init() {
   if (!email) return;
-  if (email) { const nu = document.getElementById('navUser'); if(nu) nu.textContent = email.split('@')[0]; }
+  if (email) {
+    const nu = document.getElementById('navUser');
+    if (nu) {
+      const sRes = await fetch(BASE + "/students?select=student_name&student_email=ilike." + encodeURIComponent(email), { headers: HEADERS });
+      const sData = await sRes.json();
+      const name = Array.isArray(sData) && sData[0] ? sData[0].student_name : email.split('@')[0];
+      nu.textContent = name;
+      nu.href = '/profile.html?email=' + encodeURIComponent(email);
+    }
+    const nb = document.getElementById('notesNavBtn');
+    if (nb) nb.href = '/my-notes.html?email=' + encodeURIComponent(email);
+    const bb = document.getElementById('backBtn');
+    if (bb) bb.href = '/syllabus.html?email=' + encodeURIComponent(email);
+    loadNotifCount(email);
+  }
   await Promise.all([loadMyCourse(), loadAllCourses()]);
 }
 
@@ -682,6 +710,75 @@ function toggleFolder(id) {
   if (card) card.classList.toggle('open');
 }
 
+function toggleNotif() {
+  var panel = document.getElementById('notifPanel');
+  if (!panel) return;
+  var isOpen = panel.style.display === 'block';
+  panel.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) loadNotifPanel();
+}
+function closeNotif() { var p=document.getElementById('notifPanel'); if(p) p.style.display='none'; }
+
+document.addEventListener('click', function(e) {
+  var panel = document.getElementById('notifPanel');
+  var btn = document.getElementById('bellBtn');
+  if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) panel.style.display = 'none';
+});
+
+document.getElementById('requestModal').addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none';
+});
+
+async function loadNotifCount(em) {
+  try {
+    var res = await fetch(BASE + "/notifications?select=id&student_email=ilike." + encodeURIComponent(em||email) + "&is_read=eq.false", { headers: HEADERS });
+    var data = await res.json();
+    var dot = document.getElementById('bellDot');
+    if (dot && Array.isArray(data) && data.length > 0) dot.style.display = 'block';
+  } catch(e) {}
+}
+
+async function loadNotifPanel() {
+  var list = document.getElementById('notifPanelList');
+  if (!list) return;
+  list.innerHTML = '<div style="padding:16px;text-align:center;color:#5f6368;font-size:13px;">Loading...</div>';
+  try {
+    var res = await fetch(BASE + "/notifications?select=*&student_email=ilike." + encodeURIComponent(email) + "&order=created_at.desc&limit=10", { headers: HEADERS });
+    var data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      list.innerHTML = '<div style="padding:24px;text-align:center;color:#80868b;font-size:13px;">No notifications yet</div>'; return;
+    }
+    list.innerHTML = data.map(function(n) {
+      var link = '/my-courses.html?email=' + encodeURIComponent(email);
+      if (n.type === 'new_course') link = '/my-courses.html?email=' + encodeURIComponent(email);
+      if (n.type === 'certificate') link = '/certification.html?email=' + encodeURIComponent(email);
+      if (n.type === 'exam_result') link = '/quarterly-exam.html?email=' + encodeURIComponent(email);
+      return '<div onclick="window.location.href='' + link + ''" style="padding:12px 16px;border-bottom:1px solid #f1f3f4;display:flex;gap:10px;cursor:pointer;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='#fff'">' +
+        '<div style="width:8px;height:8px;border-radius:50%;background:' + (n.is_read?'#dadce0':'#1a73e8') + ';flex-shrink:0;margin-top:5px;"></div>' +
+        '<div><div style="font-size:13px;font-weight:500;color:#202124;">' + (n.title||'') + '</div>' +
+        '<div style="font-size:12px;color:#5f6368;margin-top:2px;">' + (n.message||'').substring(0,60) + '</div>' +
+        '<div style="font-size:11px;color:#80868b;margin-top:2px;">' + (n.created_at?new Date(n.created_at).toLocaleDateString('en-IN'):'') + '</div></div></div>';
+    }).join('');
+    await fetch(BASE + "/notifications?student_email=ilike." + encodeURIComponent(email), { method: 'PATCH', headers: HEADERS, body: JSON.stringify({ is_read: true }) });
+    var dot = document.getElementById('bellDot'); if (dot) dot.style.display = 'none';
+  } catch(e) { list.innerHTML = '<div style="padding:16px;color:#c5221f;font-size:13px;">Error loading</div>'; }
+}
+
+async function submitCourseRequest() {
+  var text = document.getElementById('requestText').value.trim(); if (!text) return;
+  var btn = document.querySelector('#requestModal button');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    await fetch(BASE + "/course_requests", { method: 'POST', headers: Object.assign({}, HEADERS, {"Prefer":"return=representation"}), body: JSON.stringify({ student_email: email, requested_course: text, created_at: new Date().toISOString() }) });
+    var msg = document.getElementById('requestMsg');
+    msg.textContent = 'Request sent! AI will build this course within 24 hours.';
+    msg.style.display = 'block';
+    document.getElementById('requestText').value = '';
+    btn.textContent = 'Sent!';
+    setTimeout(function() { document.getElementById('requestModal').style.display='none'; }, 2000);
+  } catch(e) { btn.disabled=false; btn.textContent='Send Request'; }
+}
+
 function logout() {
   localStorage.removeItem('yge_email');
   window.location.href = '/login.html';
@@ -692,6 +789,29 @@ function logout() {
   <div class="course-modal" id="courseModalBox">
     <div style="display:flex;justify-content:flex-end;padding:16px 16px 0;"><button onclick="closeCoursePreview()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#5f6368;">&#10005;</button></div>
     <div id="courseModalContent"><div class="loading"><span class="spin" style="font-size:24px;animation:spin 1s linear infinite;display:inline-block">&#9203;</span> Loading...</div></div>
+  </div>
+</div>
+
+<!-- Notification Panel -->
+<div id="notifPanel" style="display:none;position:fixed;top:64px;right:16px;width:320px;background:#fff;border:1px solid #e8eaed;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);z-index:500;max-height:400px;overflow-y:auto;">
+  <div style="padding:14px 16px;border-bottom:1px solid #e8eaed;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;">
+    <span style="font-family:'Google Sans',Arial,sans-serif;font-size:15px;font-weight:500;">Notifications</span>
+    <button onclick="closeNotif()" style="background:none;border:none;color:#5f6368;cursor:pointer;font-size:18px;">&#10005;</button>
+  </div>
+  <div id="notifPanelList" style="padding:8px 0;"><div style="padding:20px;text-align:center;color:#80868b;font-size:13px;">Loading...</div></div>
+</div>
+
+<!-- Request Modal -->
+<div id="requestModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:400;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:12px;padding:28px;max-width:480px;width:100%;">
+    <h3 style="font-family:'Google Sans',Arial,sans-serif;font-size:20px;font-weight:400;margin-bottom:8px;">Request a new course</h3>
+    <p style="font-size:14px;color:#5f6368;margin-bottom:16px;">Tell us what you want to learn — AI will build it within 24 hours!</p>
+    <textarea id="requestText" placeholder="e.g. I want to learn Cyber Security..." style="width:100%;padding:12px;border:1px solid #dadce0;border-radius:4px;font-size:14px;font-family:'Roboto',Arial,sans-serif;resize:vertical;min-height:80px;outline:none;margin-bottom:12px;"></textarea>
+    <div id="requestMsg" style="font-size:13px;color:#137333;display:none;margin-bottom:10px;"></div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="submitCourseRequest()" style="flex:1;background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:12px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">Send Request</button>
+      <button onclick="document.getElementById('requestModal').style.display='none'" style="background:#f1f3f4;color:#202124;border:none;border-radius:4px;padding:12px 20px;font-size:14px;cursor:pointer;">Cancel</button>
+    </div>
   </div>
 </div>
 
