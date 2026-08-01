@@ -275,11 +275,20 @@ async function submitRequest() {
   document.getElementById("aiResponse").className = "ai-response show";
   document.getElementById("aiResponse").innerHTML = '<div class="ai-thinking"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><div style="font-family:\'Google Sans\',Arial,sans-serif;font-size:15px;font-weight:500;color:#202124;margin-bottom:4px;">AI Agent is analyzing your request...</div><div style="font-size:13px;color:#5f6368;">Checking our course library and evaluating your request</div></div>';
 
+  // Lock all fields
+  lockForm(true);
+
   // 1. Harmful check
   if (isHarmful(desc)) {
     await logRequest(std, cat, desc, "denied");
     showDenied();
     resetBtn(btn);
+    // Add reset button to denied response
+    var deniedEl = document.getElementById("aiResponse");
+    if (deniedEl) {
+      deniedEl.innerHTML += '<div style="margin-top:14px;"><button onclick="resetForm()" style="width:100%;background:#fff;color:#c5221f;border:1.5px solid #c5221f;border-radius:8px;padding:11px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">+ Try a Different Request</button></div>';
+    }
+    lockForm(false);
     return;
   }
 
@@ -326,8 +335,21 @@ var prompt = "You are an AI course agent for Yashasvi Global Education. A studen
     showPending("Your request has been received! Our AI will build this course within 24 hours and notify you.");
   }
 
+  lockForm(false);
   resetBtn(btn);
   loadRecentRequests();
+}
+
+function lockForm(lock) {
+  var fields = ["stdSelect","catSelect","descArea"];
+  fields.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.disabled = lock;
+  });
+  document.querySelectorAll(".dur-chip").forEach(function(c) {
+    c.style.pointerEvents = lock ? "none" : "auto";
+    c.style.opacity = lock ? "0.5" : "1";
+  });
 }
 
 async function logRequest(std, cat, desc, status) {
@@ -375,7 +397,9 @@ function showFound(msg, courses) {
     html += '<button class="cs-enroll-btn" onclick="enrollCourse(\'' + c.name.replace(/'/g,"\\'") + '\')">Enroll Now</button>';
     html += '</div>';
   });
-  html += '</div></div>';
+  html += '</div>';
+  html += '<div style="margin-top:14px;"><button onclick="resetForm()" style="width:100%;background:#fff;color:#34a853;border:1.5px solid #34a853;border-radius:8px;padding:11px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">+ Submit Another Request</button></div>';
+  html += '</div>';
   document.getElementById("aiResponse").innerHTML = html;
 }
 
@@ -385,9 +409,33 @@ function showPending(msg) {
   html += '<div class="response-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>';
   html += '<div><div class="response-title">Request Received!</div><div class="response-subtitle">AI Agent &bull; Building in 24 Hours</div></div></div>';
   html += '<div class="response-msg">' + msg + '</div>';
-  html += '<div style="background:rgba(26,115,232,0.08);border-radius:8px;padding:12px 16px;font-size:13px;color:#1a73e8;display:flex;align-items:center;gap:8px;">';
+
+  // Status tracker
+  html += '<div style="background:#fff;border-radius:10px;padding:16px;margin-bottom:14px;">';
+  html += '<div style="font-size:12px;font-weight:500;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Request Status</div>';
+  html += '<div style="display:flex;flex-direction:column;gap:10px;">';
+  // Step 1 - done
+  html += '<div style="display:flex;align-items:center;gap:10px;">';
+  html += '<div style="width:28px;height:28px;border-radius:50%;background:#34a853;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
+  html += '<div><div style="font-size:13px;font-weight:500;color:#137333;">Request received</div><div style="font-size:12px;color:#5f6368;">AI agent has logged your request</div></div></div>';
+  // Step 2 - active
+  html += '<div style="display:flex;align-items:center;gap:10px;">';
+  html += '<div style="width:28px;height:28px;border-radius:50%;background:#1a73e8;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>';
+  html += '<div><div style="font-size:13px;font-weight:500;color:#1a73e8;">Building course <span style="font-size:11px;background:#e8f0fe;color:#1a73e8;border-radius:100px;padding:2px 8px;margin-left:4px;">In Progress</span></div><div style="font-size:12px;color:#5f6368;">Our AI is creating your course content</div></div></div>';
+  // Step 3 - pending
+  html += '<div style="display:flex;align-items:center;gap:10px;opacity:0.4;">';
+  html += '<div style="width:28px;height:28px;border-radius:50%;background:#e8eaed;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>';
+  html += '<div><div style="font-size:13px;font-weight:500;color:#5f6368;">Dashboard notification</div><div style="font-size:12px;color:#80868b;">You will be notified when ready</div></div></div>';
+  html += '</div></div>';
+
+  // Notification info
+  html += '<div style="background:rgba(26,115,232,0.08);border-radius:8px;padding:12px 16px;font-size:13px;color:#1a73e8;display:flex;align-items:center;gap:8px;margin-bottom:14px;">';
   html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>';
-  html += 'You will receive a notification on your dashboard when the course is ready.</div></div>';
+  html += 'Check your dashboard bell icon for course ready notification within 24 hours.</div>';
+
+  // New request button
+  html += '<button onclick="resetForm()" style="width:100%;background:#fff;color:#1a73e8;border:1.5px solid #1a73e8;border-radius:8px;padding:11px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">+ Submit Another Request</button>';
+  html += '</div>';
   document.getElementById("aiResponse").innerHTML = html;
 }
 
@@ -399,6 +447,24 @@ function showDenied() {
   html += '<div class="response-msg">We are sorry, but we cannot create this course. Your request contains content that goes against our educational guidelines. We are committed to providing safe, positive, and constructive learning experiences for all students.</div>';
   html += '<div style="background:rgba(197,34,31,0.08);border-radius:8px;padding:12px 16px;font-size:13px;color:#c5221f;">Please submit a different request focused on educational and skill-building topics.</div></div>';
   document.getElementById("aiResponse").innerHTML = html;
+}
+
+function resetForm() {
+  // Reset all fields
+  document.getElementById("stdSelect").value = "";
+  document.getElementById("catSelect").value = "";
+  document.getElementById("descArea").value = "";
+  document.getElementById("charCount").textContent = "0";
+  selectedDuration = "any";
+  document.querySelectorAll(".dur-chip").forEach(function(c){ c.classList.remove("active"); });
+  document.querySelector('.dur-chip[data-val="any"]').classList.add("active");
+  // Unlock form
+  lockForm(false);
+  // Hide response
+  document.getElementById("aiResponse").className = "ai-response";
+  document.getElementById("aiResponse").innerHTML = "";
+  // Scroll to top of form
+  document.querySelector(".form-card").scrollIntoView({behavior:"smooth"});
 }
 
 function resetBtn(btn) {
