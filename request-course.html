@@ -15,86 +15,90 @@ html,body{overflow-x:hidden;font-family:'Roboto',Arial,sans-serif;background:#f8
 .nav-user{font-size:13px;font-weight:500;color:#202124;background:#f1f3f4;border-radius:100px;padding:6px 14px;text-decoration:none}
 .nav-btn{background:none;border:1px solid #dadce0;border-radius:20px;padding:6px 14px;font-size:13px;color:#5f6368;text-decoration:none;font-family:'Google Sans',Arial,sans-serif;font-weight:500}
 .nav-btn:hover{border-color:#1a73e8;color:#1a73e8}
-
 .wrap{max-width:680px;margin:0 auto;padding:32px 24px 80px}
-
-/* Header */
-.page-header{margin-bottom:32px}
+.page-header{margin-bottom:28px}
 .page-header h1{font-family:'Google Sans',Arial,sans-serif;font-size:28px;font-weight:400;color:#202124;margin-bottom:8px}
 .page-header p{font-size:15px;color:#5f6368;line-height:1.6}
-
-/* Form Card */
-.form-card{background:#fff;border-radius:16px;padding:28px;border:1px solid #e8eaed;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
-
+.form-card{background:#fff;border-radius:16px;padding:28px;border:1px solid #e8eaed}
 .field{margin-bottom:20px}
-.field-label{display:block;font-size:13px;font-weight:500;color:#5f6368;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
-.field-select{width:100%;padding:12px 16px;border:1.5px solid #e8eaed;border-radius:10px;font-size:15px;font-family:'Roboto',Arial,sans-serif;outline:none;background:#fff;color:#202124;cursor:pointer;transition:border 0.15s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235f6368' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+.field-label{display:block;font-size:12px;font-weight:500;color:#5f6368;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+.field-select{width:100%;padding:12px 16px;border:1.5px solid #e8eaed;border-radius:10px;font-size:15px;font-family:'Roboto',Arial,sans-serif;outline:none;background:#fff;color:#202124;cursor:pointer;transition:border 0.15s}
 .field-select:focus{border-color:#1a73e8}
+.field-select:disabled{background:#f8f9fa;color:#80868b;cursor:not-allowed}
 .field-textarea{width:100%;padding:14px 16px;border:1.5px solid #e8eaed;border-radius:10px;font-size:15px;font-family:'Roboto',Arial,sans-serif;outline:none;resize:vertical;min-height:120px;line-height:1.6;transition:border 0.15s;color:#202124}
 .field-textarea:focus{border-color:#1a73e8}
+.field-textarea:disabled{background:#f8f9fa;color:#80868b;cursor:not-allowed}
 .char-count{font-size:12px;color:#80868b;text-align:right;margin-top:4px}
 
+/* Duration chips */
+.dur-chips{display:flex;gap:10px;flex-wrap:wrap}
+.dur-chip{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:100px;border:1.5px solid #e8eaed;font-size:13px;color:#5f6368;cursor:pointer;background:#fff;font-family:'Google Sans',Arial,sans-serif;font-weight:500;transition:all 0.15s;user-select:none}
+.dur-chip:hover{border-color:#1a73e8;color:#1a73e8;background:#f0f4ff}
+.dur-chip.active{background:#1a73e8;color:#fff;border-color:#1a73e8}
+.dur-chip.disabled{opacity:0.5;pointer-events:none}
+
+/* Submit button */
 .submit-btn{width:100%;background:#1a73e8;color:#fff;border:none;border-radius:10px;padding:15px;font-size:16px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.2s}
 .submit-btn:hover{background:#1765cc}
 .submit-btn:disabled{background:#dadce0;color:#80868b;cursor:not-allowed}
 
 /* AI Response */
-.ai-response{display:none;margin-top:24px;border-radius:12px;overflow:hidden}
+.ai-response{display:none;margin-top:24px}
 .ai-response.show{display:block}
-
-.ai-thinking{background:#f8f9fa;border:1px solid #e8eaed;border-radius:12px;padding:24px;text-align:center}
-.ai-dots{display:flex;justify-content:center;gap:6px;margin-bottom:12px}
-.ai-dot{width:10px;height:10px;border-radius:50%;background:#1a73e8;animation:bounce 1.2s infinite}
-.ai-dot:nth-child(2){animation-delay:0.2s}
-.ai-dot:nth-child(3){animation-delay:0.4s}
+.ai-thinking{background:#f8f9fa;border:1px solid #e8eaed;border-radius:12px;padding:28px;text-align:center}
+.dots{display:flex;justify-content:center;gap:6px;margin-bottom:14px}
+.dot{width:10px;height:10px;border-radius:50%;background:#1a73e8;animation:bounce 1.2s infinite}
+.dot:nth-child(2){animation-delay:0.2s}
+.dot:nth-child(3){animation-delay:0.4s}
 @keyframes bounce{0%,80%,100%{transform:scale(0.6);opacity:0.5}40%{transform:scale(1);opacity:1}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
-.response-found{background:linear-gradient(135deg,#e6f4ea,#f0fdf4);border:1px solid #34a853;border-radius:12px;padding:24px}
-.response-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.response-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#34a853,#0d9e4f);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.response-title{font-family:'Google Sans',Arial,sans-serif;font-size:18px;font-weight:500;color:#137333}
-.response-subtitle{font-size:13px;color:#34a853}
-.response-msg{font-size:14px;color:#3c4043;line-height:1.6;margin-bottom:16px}
-.course-suggestions{display:flex;flex-direction:column;gap:10px}
-.course-suggest-card{background:#fff;border:1px solid #34a853;border-radius:10px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.cs-name{font-size:14px;font-weight:500;color:#202124}
-.cs-meta{font-size:12px;color:#5f6368;margin-top:2px}
-.cs-enroll-btn{background:#34a853;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.cs-enroll-btn:hover{background:#2d9142}
+.res-box{border-radius:12px;padding:24px}
+.res-box.found{background:#e6f4ea;border:1px solid #34a853}
+.res-box.pending{background:#e8f0fe;border:1px solid #1a73e8}
+.res-box.denied{background:#fce8e6;border:1px solid #c5221f}
+.res-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.res-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.res-title{font-family:'Google Sans',Arial,sans-serif;font-size:18px;font-weight:500}
+.res-subtitle{font-size:12px;margin-top:2px}
+.res-msg{font-size:14px;color:#3c4043;line-height:1.6;margin-bottom:16px}
 
-.response-pending{background:linear-gradient(135deg,#e8f0fe,#f0f4ff);border:1px solid #1a73e8;border-radius:12px;padding:24px}
-.response-pending .response-icon{background:linear-gradient(135deg,#4285f4,#1a73e8)}
-.response-pending .response-title{color:#1a73e8}
-.response-pending .response-subtitle{color:#4285f4}
+/* Status steps */
+.status-steps{background:#fff;border-radius:10px;padding:16px;margin-bottom:14px}
+.step{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.step:last-child{margin-bottom:0}
+.step-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-name{font-size:13px;font-weight:500}
+.step-desc{font-size:12px;color:#5f6368;margin-top:2px}
 
-.response-denied{background:linear-gradient(135deg,#fce8e6,#fff5f5);border:1px solid #c5221f;border-radius:12px;padding:24px}
-.response-denied .response-icon{background:linear-gradient(135deg,#ea4335,#c5221f)}
-.response-denied .response-title{color:#c5221f}
-.response-denied .response-subtitle{color:#ea4335}
+/* Course suggestions */
+.suggest-card{background:#fff;border:1px solid #34a853;border-radius:10px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.suggest-name{font-size:14px;font-weight:500;color:#202124}
+.suggest-meta{font-size:12px;color:#5f6368;margin-top:2px}
+.enroll-btn{background:#34a853;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;white-space:nowrap}
+
+/* Action button */
+.action-btn{display:block;width:100%;text-align:center;border-radius:8px;padding:12px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;text-decoration:none;border:none;margin-top:12px}
+.action-btn.blue{background:#fff;color:#1a73e8;border:1.5px solid #1a73e8}
+.action-btn.green{background:#fff;color:#34a853;border:1.5px solid #34a853}
+.action-btn.red{background:#fff;color:#c5221f;border:1.5px solid #c5221f}
 
 /* Tips */
 .tips-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:20px;margin-top:20px}
-.tips-title{font-size:13px;font-weight:500;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.tip-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#5f6368;padding:6px 0;line-height:1.5}
-.tip-dot{width:6px;height:6px;border-radius:50%;background:#1a73e8;flex-shrink:0;margin-top:6px}
+.tips-title{font-size:12px;font-weight:500;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.tip{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#5f6368;padding:5px 0;line-height:1.5}
+.tip-dot{width:5px;height:5px;border-radius:50%;background:#1a73e8;flex-shrink:0;margin-top:6px}
 
-/* Recent requests */
-.recent-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:20px;margin-top:20px}
-.recent-title{font-size:14px;font-weight:500;color:#202124;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+/* Recent */
+.recent-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:20px;margin-top:16px}
 .recent-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f1f3f4;gap:10px}
 .recent-item:last-child{border-bottom:none}
-.recent-name{font-size:13px;color:#202124}
-.recent-date{font-size:12px;color:#80868b}
-.recent-status{font-size:11px;font-weight:500;border-radius:100px;padding:3px 10px}
-.status-pending{background:#e8f0fe;color:#1a73e8}
-.status-done{background:#e6f4ea;color:#137333}
-.status-denied{background:#fce8e6;color:#c5221f}
+.badge{font-size:11px;font-weight:500;border-radius:100px;padding:3px 10px;white-space:nowrap}
+.badge.found{background:#e6f4ea;color:#137333}
+.badge.pending{background:#e8f0fe;color:#1a73e8}
+.badge.denied{background:#fce8e6;color:#c5221f}
 
-.dur-chip{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:100px;border:1.5px solid #e8eaed;font-size:13px;color:#5f6368;cursor:pointer;background:#fff;font-family:'Google Sans',Arial,sans-serif;font-weight:500;transition:all 0.15s;user-select:none}
-.dur-chip:hover{border-color:#1a73e8;color:#1a73e8;background:#f0f4ff}
-.dur-chip.active{background:#1a73e8;color:#fff;border-color:#1a73e8}
-.dur-chip.active svg{stroke:#fff}
-@media(max-width:700px){.wrap{padding:20px 16px 60px}.form-card{padding:20px}.dur-chip{font-size:12px;padding:7px 12px}}
+@media(max-width:600px){.wrap{padding:20px 16px 60px}.form-card{padding:18px}.dur-chip{font-size:12px;padding:7px 12px}}
 </style>
 </head>
 <body>
@@ -109,18 +113,18 @@ html,body{overflow-x:hidden;font-family:'Roboto',Arial,sans-serif;background:#f8
     <a id="navUser" href="/profile.html" class="nav-user"></a>
     <a id="dashBtn" href="/dashboard.html" class="nav-btn">Dashboard</a>
     <a id="coursesBtn" href="/my-courses.html" class="nav-btn">My Courses</a>
-    <button onclick="logout()" style="background:none;border:1px solid #dadce0;border-radius:4px;padding:6px 14px;font-size:13px;color:#5f6368;cursor:pointer;">Logout</button>
+    <button onclick="doLogout()" style="background:none;border:1px solid #dadce0;border-radius:4px;padding:6px 14px;font-size:13px;color:#5f6368;cursor:pointer;">Logout</button>
   </div>
 </nav>
 
 <div class="wrap">
   <div class="page-header">
     <h1>Request a Course</h1>
-    <p>Tell our AI what you want to learn. We will check if it is already available, or build it for you within 24 hours.</p>
+    <p>Tell our AI what you want to learn. We will check if it already exists, or build it for you within 24 hours.</p>
   </div>
 
-  <!-- Request Form -->
   <div class="form-card">
+    <!-- Standard -->
     <div class="field">
       <label class="field-label">Your Standard / Level</label>
       <select class="field-select" id="stdSelect">
@@ -136,6 +140,7 @@ html,body{overflow-x:hidden;font-family:'Roboto',Arial,sans-serif;background:#f8
       </select>
     </div>
 
+    <!-- Category -->
     <div class="field">
       <label class="field-label">Category</label>
       <select class="field-select" id="catSelect">
@@ -144,39 +149,40 @@ html,body{overflow-x:hidden;font-family:'Roboto',Arial,sans-serif;background:#f8
         <option value="Business">Business &amp; Entrepreneurship</option>
         <option value="Design">Design &amp; Creative</option>
         <option value="Language">Language Learning</option>
-        <option value="School">School Subjects (Math, Science, etc.)</option>
+        <option value="School">School Subjects</option>
         <option value="AI">Artificial Intelligence</option>
         <option value="Blockchain">Blockchain &amp; Web3</option>
         <option value="Other">Other</option>
       </select>
     </div>
 
+    <!-- Duration -->
     <div class="field">
       <label class="field-label">Course Duration</label>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;" id="durationChips">
-        <div class="dur-chip active" onclick="selectDur(this,'any')" data-val="any">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <div class="dur-chips" id="durChips">
+        <div class="dur-chip active" id="dur-any" onclick="selectDur('any')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           Any
         </div>
-        <div class="dur-chip" onclick="selectDur(this,'short')" data-val="short">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div class="dur-chip" id="dur-short" onclick="selectDur('short')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           Short Term (1–3 months)
         </div>
-        <div class="dur-chip" onclick="selectDur(this,'medium')" data-val="medium">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg>
+        <div class="dur-chip" id="dur-medium" onclick="selectDur('medium')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg>
           Medium Term (3–6 months)
         </div>
-        <div class="dur-chip" onclick="selectDur(this,'long')" data-val="long">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        <div class="dur-chip" id="dur-long" onclick="selectDur('long')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
           Long Term / Mastery (6–12 months)
         </div>
       </div>
-      <input type="hidden" id="durationVal" value="any">
     </div>
 
+    <!-- Description -->
     <div class="field">
       <label class="field-label">What do you want to learn?</label>
-      <textarea class="field-textarea" id="descArea" placeholder="Describe the course you want. Be specific! E.g. I want to learn Python for data science, including pandas, matplotlib and machine learning basics..." oninput="updateChar()"></textarea>
+      <textarea class="field-textarea" id="descArea" placeholder="Describe the course you want. Be specific! e.g. I want to learn Python for data science, including pandas, matplotlib and machine learning basics..." oninput="updateChar()"></textarea>
       <div class="char-count"><span id="charCount">0</span> / 500 characters</div>
     </div>
 
@@ -192,18 +198,18 @@ html,body{overflow-x:hidden;font-family:'Roboto',Arial,sans-serif;background:#f8
   <!-- Tips -->
   <div class="tips-card">
     <div class="tips-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       Tips for a great request
     </div>
-    <div class="tip-item"><span class="tip-dot"></span>Be specific — "Python for Data Science" is better than "Python"</div>
-    <div class="tip-item"><span class="tip-dot"></span>Mention your goal — "to get a job", "for my startup", "for school exam"</div>
-    <div class="tip-item"><span class="tip-dot"></span>Include skill level — "I am a complete beginner" or "I know basics"</div>
-    <div class="tip-item"><span class="tip-dot"></span>Describe topics you want covered — specific modules or skills</div>
+    <div class="tip"><span class="tip-dot"></span>Be specific — "Python for Data Science" is better than just "Python"</div>
+    <div class="tip"><span class="tip-dot"></span>Mention your goal — "to get a job", "for my startup", "for school exam"</div>
+    <div class="tip"><span class="tip-dot"></span>Include your level — "I am a complete beginner" or "I know the basics"</div>
+    <div class="tip"><span class="tip-dot"></span>Describe topics you want — specific modules or skills</div>
   </div>
 
   <!-- Recent Requests -->
-  <div class="recent-card" id="recentCard" style="display:none;">
-    <div class="recent-title">
+  <div id="recentCard" style="display:none;" class="recent-card">
+    <div style="font-size:14px;font-weight:500;color:#202124;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       Your Recent Requests
     </div>
@@ -219,6 +225,9 @@ var GROQ = "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";
 
 var email = new URLSearchParams(window.location.search).get("email") || localStorage.getItem("yge_email") || "";
 var studentName = "";
+var selectedDuration = "any";
+
+var HARMFUL = ["bomb","explosive","weapon","kill","murder","drug","hack","illegal","porn","adult","violence","terrorist","suicide","harm","nude","sex","malware","virus","ransomware","steal","fraud","cheat","pirat"];
 
 window.addEventListener("DOMContentLoaded", function() {
   if (email) {
@@ -230,69 +239,69 @@ window.addEventListener("DOMContentLoaded", function() {
     .then(function(d){
       if (Array.isArray(d) && d[0]) {
         studentName = d[0].student_name || email.split("@")[0];
-        var nu = document.getElementById("navUser"); if (nu) { nu.textContent = studentName; nu.href = "/profile.html?email=" + encodeURIComponent(email); }
+        var nu = document.getElementById("navUser");
+        if (nu) { nu.textContent = studentName; nu.href = "/profile.html?email=" + encodeURIComponent(email); }
       }
     }).catch(function(){});
-    loadRecentRequests();
-    checkPendingRequest();
+    checkPending();
+    loadRecent();
   }
 });
 
-var selectedDuration = "any";
-function selectDur(el, val) {
+function selectDur(val) {
   selectedDuration = val;
-  document.getElementById("durationVal").value = val;
-  document.querySelectorAll(".dur-chip").forEach(function(c){ c.classList.remove("active"); });
-  el.classList.add("active");
+  ["any","short","medium","long"].forEach(function(v) {
+    var el = document.getElementById("dur-" + v);
+    if (el) el.classList.toggle("active", v === val);
+  });
 }
 
-async function checkPendingRequest() {
+function updateChar() {
+  var v = document.getElementById("descArea").value;
+  document.getElementById("charCount").textContent = v.length;
+}
+
+function lockForm(lock) {
+  ["stdSelect","catSelect","descArea","submitBtn"].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.disabled = lock;
+  });
+  document.querySelectorAll(".dur-chip").forEach(function(c) {
+    c.classList.toggle("disabled", lock);
+  });
+}
+
+async function checkPending() {
   try {
-    // Check if student has a pending request
-    var res = await fetch(BASE + "/course_requests?select=id,requested_course,status,created_at&student_email=ilike." + encodeURIComponent(email) + "&status=eq.pending&order=created_at.desc&limit=1", {method:"GET",headers:H});
+    var res = await fetch(BASE + "/course_requests?select=id,requested_course,created_at&student_email=ilike." + encodeURIComponent(email) + "&status=eq.pending&order=created_at.desc&limit=1", {method:"GET",headers:H});
     var data = await res.json();
     if (Array.isArray(data) && data.length > 0) {
       var req = data[0];
-      var reqName = (req.requested_course||"").replace(/\[.*?\]\s*/,"").substring(0,60);
-      // Show locked state with pending info
+      var reqName = (req.requested_course || "").replace(/\[.*?\]\s*/g, "").substring(0, 60);
+      var date = req.created_at ? new Date(req.created_at).toLocaleDateString("en-IN") : "";
       lockForm(true);
-      document.getElementById("aiResponse").className = "ai-response show";
-      document.getElementById("aiResponse").innerHTML =
-        '<div class="response-pending">' +
-        '<div class="response-header">' +
-        '<div class="response-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>' +
-        '<div><div class="response-title">Request in Progress</div><div class="response-subtitle">AI Agent &bull; Building your course</div></div></div>' +
-        '<div class="response-msg">You already have a pending course request. Once your course is ready and added to your dashboard, you can submit a new request.</div>' +
-        '<div style="background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:14px;">' +
-        '<div style="font-size:12px;color:#5f6368;margin-bottom:6px;">Your pending request:</div>' +
-        '<div style="font-size:14px;font-weight:500;color:#202124;">' + reqName + '</div>' +
-        '<div style="font-size:12px;color:#5f6368;margin-top:3px;">Submitted: ' + (req.created_at?new Date(req.created_at).toLocaleDateString("en-IN"):"") + '</div>' +
-        '</div>' +
-        '<div style="display:flex;gap:10px;">' +
-        '<a href="/dashboard.html?email=' + encodeURIComponent(email) + '" style="flex:1;display:block;text-align:center;background:#1a73e8;color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;text-decoration:none;">Check Dashboard</a>' +
-        '</div></div>';
+      showPendingLocked(reqName, date);
     }
   } catch(e) {}
 }
 
-// Called when course is fulfilled - enable form
-function onCourseFulfilled() {
-  lockForm(false);
-  document.getElementById("aiResponse").className = "ai-response";
-  document.getElementById("aiResponse").innerHTML = "";
-}
-
-function updateChar() {
-  var val = document.getElementById("descArea").value;
-  document.getElementById("charCount").textContent = val.length;
-}
-
-// HARMFUL CONTENT CHECK
-var HARMFUL_KEYWORDS = ["bomb","explosive","weapon","kill","murder","drug","hack","illegal","porn","adult","violence","terrorist","suicide","harm","nude","sex","malware","virus","ransomware","steal","fraud"];
-
-function isHarmful(text) {
-  var lower = text.toLowerCase();
-  return HARMFUL_KEYWORDS.some(function(k){ return lower.includes(k); });
+function showPendingLocked(reqName, date) {
+  var html = '<div class="res-box pending">';
+  html += '<div class="res-header">';
+  html += '<div class="res-icon" style="background:linear-gradient(135deg,#4285f4,#1a73e8)">';
+  html += '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+  html += '</div><div><div class="res-title" style="color:#1a73e8;">Request in Progress</div><div class="res-subtitle" style="color:#4285f4;">AI Agent is building your course</div></div></div>';
+  html += '<div class="res-msg">Your previous request is being processed. You can submit a new request once your course is ready and visible on your dashboard.</div>';
+  html += '<div class="status-steps">';
+  html += '<div style="font-size:11px;font-weight:500;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Request Status</div>';
+  html += '<div class="step"><div class="step-circle" style="background:#34a853"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="step-name" style="color:#137333;">Request received</div><div class="step-desc">Submitted on ' + date + '</div></div></div>';
+  html += '<div class="step"><div class="step-circle" style="background:#1a73e8"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="step-name" style="color:#1a73e8;">Building course <span style="font-size:11px;background:#e8f0fe;color:#1a73e8;border-radius:100px;padding:2px 8px;margin-left:4px;">In Progress</span></div><div class="step-desc">' + reqName + '</div></div></div>';
+  html += '<div class="step" style="opacity:0.4"><div class="step-circle" style="background:#e8eaed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><div><div class="step-name" style="color:#5f6368;">Dashboard notification</div><div class="step-desc">Will notify when course is ready</div></div></div>';
+  html += '</div>';
+  html += '<a href="/dashboard.html?email=' + encodeURIComponent(email) + '" style="display:block;text-align:center;background:#1a73e8;color:#fff;border-radius:8px;padding:12px;font-size:14px;font-weight:500;text-decoration:none;font-family:Google Sans,Arial,sans-serif;">Check My Dashboard</a>';
+  html += '</div>';
+  document.getElementById("aiResponse").className = "ai-response show";
+  document.getElementById("aiResponse").innerHTML = html;
 }
 
 async function submitRequest() {
@@ -305,102 +314,81 @@ async function submitRequest() {
   if (!desc || desc.length < 20) { alert("Please describe what you want to learn (at least 20 characters)."); return; }
   if (!email) { alert("Please login first."); return; }
 
-  // Show thinking
+  lockForm(true);
   var btn = document.getElementById("submitBtn");
-  btn.disabled = true; btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0"/></svg> AI Agent is thinking...';
+  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0"/></svg> AI Agent is thinking...';
 
   document.getElementById("aiResponse").className = "ai-response show";
-  document.getElementById("aiResponse").innerHTML = '<div class="ai-thinking"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><div style="font-family:\'Google Sans\',Arial,sans-serif;font-size:15px;font-weight:500;color:#202124;margin-bottom:4px;">AI Agent is analyzing your request...</div><div style="font-size:13px;color:#5f6368;">Checking our course library and evaluating your request</div></div>';
+  document.getElementById("aiResponse").innerHTML = '<div class="ai-thinking"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><div style="font-family:Google Sans,Arial,sans-serif;font-size:15px;font-weight:500;color:#202124;margin-bottom:4px;">AI Agent is analyzing your request...</div><div style="font-size:13px;color:#5f6368;">Checking our course library</div></div>';
 
-  // Lock all fields
-  lockForm(true);
+  var durLabel = selectedDuration === "short" ? "Short Term (1-3 months)" : selectedDuration === "medium" ? "Medium Term (3-6 months)" : selectedDuration === "long" ? "Long Term/Mastery (6-12 months)" : "Any Duration";
 
-  // 1. Harmful check
-  if (isHarmful(desc)) {
-    await logRequest(std, cat, desc, "denied");
+  // Check harmful
+  var lower = desc.toLowerCase();
+  var harmful = HARMFUL.some(function(k){ return lower.indexOf(k) !== -1; });
+
+  if (harmful) {
+    await saveRequest(std, cat, durLabel, desc, "denied");
     showDenied();
-    lockForm(false); resetBtn(btn);
-    // Add reset button to denied response
-    var deniedEl = document.getElementById("aiResponse");
-    if (deniedEl) {
-      deniedEl.innerHTML += '<div style="margin-top:14px;"><button onclick="resetForm()" style="width:100%;background:#fff;color:#c5221f;border:1.5px solid #c5221f;border-radius:8px;padding:11px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">+ Try a Different Request</button></div>';
-    }
     lockForm(false);
+    resetBtn();
     return;
   }
 
   try {
-    // 2. Get all courses from DB
-    var cRes = await fetch(BASE + "/courses?select=id,name,department,level,difficulty,is_free,price_usdt,description&is_active=eq.true&order=name.asc", {method:"GET",headers:H});
+    var cRes = await fetch(BASE + "/courses?select=id,name,department,difficulty,is_free,price_usdt&is_active=eq.true&order=name.asc", {method:"GET",headers:H});
     var courses = await cRes.json();
-    var courseList = Array.isArray(courses) ? courses.map(function(c){return c.name;}).join(", ") : "";
+    var courseList = Array.isArray(courses) ? courses.slice(0, 50).map(function(c){return c.name;}).join(", ") : "";
 
-    // 3. Ask Groq AI
-    var durLabel = selectedDuration==="short"?"Short Term (1-3 months)":selectedDuration==="medium"?"Medium Term (3-6 months)":selectedDuration==="long"?"Long Term/Mastery (6-12 months)":"Any Duration";
-var prompt = "You are an AI course agent for Yashasvi Global Education. A student has made a course request.\n\nStudent: " + studentName + "\nStandard: " + std + "\nCategory: " + cat + "\nPreferred Duration: " + durLabel + "\nRequest: " + desc + "\n\nOur available courses: " + courseList + "\n\nYour task:\n1. Check if the request is HARMFUL (violence, weapons, illegal, adult content). If harmful, respond with only: {\"decision\":\"denied\"}\n2. If NOT harmful, check if we have a MATCHING course (same topic, even if name differs slightly). List up to 3 matching course names exactly as they appear in our list.\n3. If we have matching courses, respond: {\"decision\":\"found\",\"courses\":[\"exact course name 1\",\"exact course name 2\"],\"message\":\"We found these courses for you!\"}\n4. If we don't have matching courses, respond: {\"decision\":\"pending\",\"message\":\"A friendly message saying we will build this course within 24 hours\"}\n\nRespond ONLY with valid JSON. No extra text.";
+    var prompt = "You are an AI course agent for Yashasvi Global Education.\n\nStudent request:\n- Standard: " + std + "\n- Category: " + cat + "\n- Duration preference: " + durLabel + "\n- Request: " + desc + "\n\nAvailable courses in our library:\n" + courseList + "\n\nTasks:\n1. If the request contains harmful/illegal/adult content, respond: {\"decision\":\"denied\"}\n2. If we have matching courses, respond: {\"decision\":\"found\",\"courses\":[\"exact course name 1\",\"exact course name 2\"],\"message\":\"friendly message about found courses\"}\n3. If no match exists, respond: {\"decision\":\"pending\",\"message\":\"friendly message that course will be built in 24 hours\"}\n\nRespond ONLY with valid JSON. No extra text or markdown.";
 
     var gRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
-      headers: {"Authorization":"Bearer "+GROQ,"Content-Type":"application/json"},
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [{role:"user",content:prompt}],
-        max_tokens: 500,
-        temperature: 0.3
-      })
+      headers: {"Authorization":"Bearer " + GROQ,"Content-Type":"application/json"},
+      body: JSON.stringify({model:"llama-3.3-70b-versatile",messages:[{role:"user",content:prompt}],max_tokens:400,temperature:0.3})
     });
     var gData = await gRes.json();
-    var raw = gData.choices && gData.choices[0] ? gData.choices[0].message.content : "{}";
-    raw = raw.replace(/```json|```/g,"").trim();
+    var raw = gData.choices && gData.choices[0] ? gData.choices[0].message.content.replace(/```json|```/g,"").trim() : "{}";
     var result = JSON.parse(raw);
 
     if (result.decision === "denied") {
-      await logRequest(std, cat, desc, "denied");
+      await saveRequest(std, cat, durLabel, desc, "denied");
       showDenied();
+      lockForm(false);
+      resetBtn();
     } else if (result.decision === "found" && result.courses && result.courses.length > 0) {
-      // Get full course details
-      var found = courses.filter(function(c){ return result.courses.some(function(rc){ return rc.toLowerCase().includes(c.name.toLowerCase().substring(0,10)) || c.name.toLowerCase().includes(rc.toLowerCase().substring(0,10)); }); });
-      await logRequest(std, cat, desc, "found");
-      showFound(result.message || "Great news! We found matching courses for you.", found.length > 0 ? found : courses.slice(0,2));
-      lockForm(false); resetBtn(btn);
+      var found = Array.isArray(courses) ? courses.filter(function(c){
+        return result.courses.some(function(rc){ return c.name.toLowerCase().indexOf(rc.toLowerCase().substring(0,8)) !== -1 || rc.toLowerCase().indexOf(c.name.toLowerCase().substring(0,8)) !== -1; });
+      }) : [];
+      await saveRequest(std, cat, durLabel, desc, "found");
+      showFound(result.message || "We found matching courses for you!", found.length > 0 ? found : (Array.isArray(courses) ? courses.slice(0,2) : []));
+      lockForm(false);
+      resetBtn();
     } else {
-      await logRequest(std, cat, desc, "pending");
-      await sendNotifAfter(std, cat, desc);
-      showPending(result.message || "Your course request has been received! Our AI will build it within 24 hours and you will get a notification.");
-      var sb = document.getElementById("submitBtn");
-      if (sb) { sb.disabled = true; sb.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Request Submitted — Waiting'; }
+      await saveRequest(std, cat, durLabel, desc, "pending");
+      await saveNotification();
+      showPending(result.message || "Your course request has been received! Our AI will build it within 24 hours.");
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Request Submitted';
     }
   } catch(e) {
-    await logRequest(std, cat, desc, "pending");
-    showPending("Your request has been received! Our AI will build this course within 24 hours and notify you.");
+    await saveRequest(std, cat, durLabel, desc, "pending");
+    await saveNotification();
+    showPending("Your request has been received! Our AI will build this course within 24 hours and notify you on your dashboard.");
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Request Submitted';
   }
 
-  // Don't unlock after pending - keep locked until course is ready
-  // For found/denied - unlock so student can try again
-  loadRecentRequests();
+  loadRecent();
 }
 
-function lockForm(lock) {
-  var fields = ["stdSelect","catSelect","descArea","submitBtn"];
-  fields.forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.disabled = lock;
-  });
-  document.querySelectorAll(".dur-chip").forEach(function(c) {
-    c.style.pointerEvents = lock ? "none" : "auto";
-    c.style.opacity = lock ? "0.5" : "1";
-  });
-}
-
-async function logRequest(std, cat, desc, status) {
+async function saveRequest(std, cat, dur, desc, status) {
   try {
     await fetch(BASE + "/course_requests", {
       method: "POST",
-      headers: Object.assign({},H,{"Prefer":"return=representation"}),
+      headers: Object.assign({}, H, {"Prefer":"return=representation"}),
       body: JSON.stringify({
         student_email: email,
         student_name: studentName,
-        requested_course: "[" + std + " | " + cat + " | " + durLabel + "] " + desc,
+        requested_course: "[" + std + " | " + cat + " | " + dur + "] " + desc,
         status: status,
         created_at: new Date().toISOString()
       })
@@ -408,15 +396,15 @@ async function logRequest(std, cat, desc, status) {
   } catch(e) {}
 }
 
-async function sendNotifAfter(std, cat, desc) {
+async function saveNotification() {
   try {
     await fetch(BASE + "/notifications", {
       method: "POST",
-      headers: Object.assign({},H,{"Prefer":"return=representation"}),
+      headers: Object.assign({}, H, {"Prefer":"return=representation"}),
       body: JSON.stringify({
         student_email: email,
         title: "Course Request Received",
-        message: "Your request for a " + cat + " course has been received. We will build it within 24 hours!",
+        message: "Your course request has been received. We will build it within 24 hours!",
         type: "new_course",
         is_read: false
       })
@@ -425,121 +413,92 @@ async function sendNotifAfter(std, cat, desc) {
 }
 
 function showFound(msg, courses) {
-  var html = '<div class="response-found">';
-  html += '<div class="response-header">';
-  html += '<div class="response-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
-  html += '<div><div class="response-title">Great news! We found it!</div><div class="response-subtitle">AI Agent &bull; Course Available</div></div></div>';
-  html += '<div class="response-msg">' + msg + '</div>';
-  html += '<div class="course-suggestions">';
+  var html = '<div class="res-box found">';
+  html += '<div class="res-header"><div class="res-icon" style="background:linear-gradient(135deg,#34a853,#0d9e4f)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
+  html += '<div><div class="res-title" style="color:#137333;">Great news! Course found!</div><div class="res-subtitle" style="color:#34a853;">AI Agent matched your request</div></div></div>';
+  html += '<div class="res-msg">' + msg + '</div>';
   courses.forEach(function(c) {
-    html += '<div class="course-suggest-card">';
-    html += '<div><div class="cs-name">' + c.name + '</div><div class="cs-meta">' + (c.department||"") + ' &middot; ' + (c.difficulty||"Beginner") + ' &middot; ' + (c.is_free?"Free":"$"+(c.price_usdt||99)+" USDT") + '</div></div>';
-    html += '<button class="cs-enroll-btn" onclick="enrollCourse(\'' + c.name.replace(/'/g,"\\'") + '\')">Enroll Now</button>';
-    html += '</div>';
+    html += '<div class="suggest-card"><div><div class="suggest-name">' + c.name + '</div><div class="suggest-meta">' + (c.department||"") + ' &middot; ' + (c.difficulty||"Beginner") + ' &middot; ' + (c.is_free ? "Free" : "$" + (c.price_usdt||99) + " USDT") + '</div></div>';
+    html += '<button class="enroll-btn" onclick="enrollNow(\'' + c.name.replace(/'/g, "\\'") + '\')">Enroll Now</button></div>';
   });
-  html += '</div>';
-  html += '<div style="margin-top:14px;"><button onclick="resetForm()" style="width:100%;background:#fff;color:#34a853;border:1.5px solid #34a853;border-radius:8px;padding:11px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">+ Submit Another Request</button></div>';
+  html += '<button class="action-btn green" onclick="resetForm()">+ Request Another Course</button>';
   html += '</div>';
   document.getElementById("aiResponse").innerHTML = html;
 }
 
 function showPending(msg) {
-  var html = '<div class="response-pending">';
-  html += '<div class="response-header">';
-  html += '<div class="response-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>';
-  html += '<div><div class="response-title">Request Received!</div><div class="response-subtitle">AI Agent &bull; Building in 24 Hours</div></div></div>';
-  html += '<div class="response-msg">' + msg + '</div>';
-
-  // Status tracker
-  html += '<div style="background:#fff;border-radius:10px;padding:16px;margin-bottom:14px;">';
-  html += '<div style="font-size:12px;font-weight:500;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Request Status</div>';
-  html += '<div style="display:flex;flex-direction:column;gap:10px;">';
-  // Step 1 - done
-  html += '<div style="display:flex;align-items:center;gap:10px;">';
-  html += '<div style="width:28px;height:28px;border-radius:50%;background:#34a853;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
-  html += '<div><div style="font-size:13px;font-weight:500;color:#137333;">Request received</div><div style="font-size:12px;color:#5f6368;">AI agent has logged your request</div></div></div>';
-  // Step 2 - active
-  html += '<div style="display:flex;align-items:center;gap:10px;">';
-  html += '<div style="width:28px;height:28px;border-radius:50%;background:#1a73e8;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>';
-  html += '<div><div style="font-size:13px;font-weight:500;color:#1a73e8;">Building course <span style="font-size:11px;background:#e8f0fe;color:#1a73e8;border-radius:100px;padding:2px 8px;margin-left:4px;">In Progress</span></div><div style="font-size:12px;color:#5f6368;">Our AI is creating your course content</div></div></div>';
-  // Step 3 - pending
-  html += '<div style="display:flex;align-items:center;gap:10px;opacity:0.4;">';
-  html += '<div style="width:28px;height:28px;border-radius:50%;background:#e8eaed;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>';
-  html += '<div><div style="font-size:13px;font-weight:500;color:#5f6368;">Dashboard notification</div><div style="font-size:12px;color:#80868b;">You will be notified when ready</div></div></div>';
-  html += '</div></div>';
-
-  // Notification info
-  html += '<div style="background:rgba(26,115,232,0.08);border-radius:8px;padding:12px 16px;font-size:13px;color:#1a73e8;display:flex;align-items:center;gap:8px;margin-bottom:14px;">';
-  html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>';
-  html += 'Check your dashboard bell icon for course ready notification within 24 hours.</div>';
-
-  // New request button
-  html += '<button onclick="resetForm()" style="width:100%;background:#fff;color:#1a73e8;border:1.5px solid #1a73e8;border-radius:8px;padding:11px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">+ Submit Another Request</button>';
+  var html = '<div class="res-box pending">';
+  html += '<div class="res-header"><div class="res-icon" style="background:linear-gradient(135deg,#4285f4,#1a73e8)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>';
+  html += '<div><div class="res-title" style="color:#1a73e8;">Request Received!</div><div class="res-subtitle" style="color:#4285f4;">AI Agent &bull; Building in 24 Hours</div></div></div>';
+  html += '<div class="res-msg">' + msg + '</div>';
+  html += '<div class="status-steps">';
+  html += '<div style="font-size:11px;font-weight:500;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Request Status</div>';
+  html += '<div class="step"><div class="step-circle" style="background:#34a853"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="step-name" style="color:#137333;">Request received</div><div class="step-desc">AI agent has logged your request</div></div></div>';
+  html += '<div class="step"><div class="step-circle" style="background:#1a73e8"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="step-name" style="color:#1a73e8;">Building course <span style="font-size:11px;background:#e8f0fe;color:#1a73e8;border-radius:100px;padding:2px 8px;margin-left:4px;">In Progress</span></div><div class="step-desc">AI is creating your course content</div></div></div>';
+  html += '<div class="step" style="opacity:0.4"><div class="step-circle" style="background:#e8eaed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><div><div class="step-name" style="color:#5f6368;">Dashboard notification</div><div class="step-desc">You will be notified when ready</div></div></div>';
+  html += '</div>';
+  html += '<a href="/dashboard.html?email=' + encodeURIComponent(email) + '" style="display:block;text-align:center;background:#fff;color:#1a73e8;border:1.5px solid #1a73e8;border-radius:8px;padding:12px;font-size:14px;font-weight:500;text-decoration:none;font-family:Google Sans,Arial,sans-serif;">Check My Dashboard</a>';
   html += '</div>';
   document.getElementById("aiResponse").innerHTML = html;
 }
 
 function showDenied() {
-  var html = '<div class="response-denied">';
-  html += '<div class="response-header">';
-  html += '<div class="response-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>';
-  html += '<div><div class="response-title">Request Not Accepted</div><div class="response-subtitle">AI Agent &bull; Policy Violation</div></div></div>';
-  html += '<div class="response-msg">We are sorry, but we cannot create this course. Your request contains content that goes against our educational guidelines. We are committed to providing safe, positive, and constructive learning experiences for all students.</div>';
-  html += '<div style="background:rgba(197,34,31,0.08);border-radius:8px;padding:12px 16px;font-size:13px;color:#c5221f;">Please submit a different request focused on educational and skill-building topics.</div></div>';
+  var html = '<div class="res-box denied">';
+  html += '<div class="res-header"><div class="res-icon" style="background:linear-gradient(135deg,#ea4335,#c5221f)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>';
+  html += '<div><div class="res-title" style="color:#c5221f;">Request Not Accepted</div><div class="res-subtitle" style="color:#ea4335;">AI Agent &bull; Policy Violation</div></div></div>';
+  html += '<div class="res-msg">We are sorry, but we cannot create this course. Your request contains content that goes against our educational guidelines. We are committed to providing safe and constructive learning for all students.</div>';
+  html += '<div style="background:rgba(197,34,31,0.08);border-radius:8px;padding:12px;font-size:13px;color:#c5221f;margin-bottom:12px;">Please submit a request focused on educational and skill-building topics.</div>';
+  html += '<button class="action-btn red" onclick="resetForm()">+ Try a Different Request</button>';
+  html += '</div>';
   document.getElementById("aiResponse").innerHTML = html;
 }
 
+function resetBtn() {
+  var btn = document.getElementById("submitBtn");
+  if (btn) {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg> Send Course Request';
+  }
+}
+
 function resetForm() {
-  // Reset all fields
   document.getElementById("stdSelect").value = "";
   document.getElementById("catSelect").value = "";
   document.getElementById("descArea").value = "";
   document.getElementById("charCount").textContent = "0";
-  selectedDuration = "any";
-  document.querySelectorAll(".dur-chip").forEach(function(c){ c.classList.remove("active"); });
-  document.querySelector('.dur-chip[data-val="any"]').classList.add("active");
-  // Unlock form
+  selectDur("any");
   lockForm(false);
-  // Hide response
+  resetBtn();
   document.getElementById("aiResponse").className = "ai-response";
   document.getElementById("aiResponse").innerHTML = "";
-  // Scroll to top of form
-  document.querySelector(".form-card").scrollIntoView({behavior:"smooth"});
+  window.scrollTo({top:0, behavior:"smooth"});
 }
 
-function resetBtn(btn) {
-  var b = document.getElementById("submitBtn");
-  if (b) {
-    b.disabled = false;
-    b.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg> Send Course Request';
-  }
-}
-
-async function enrollCourse(name) {
+async function enrollNow(name) {
   try {
     await fetch(BASE + "/students?student_email=ilike." + encodeURIComponent(email), {method:"PATCH",headers:H,body:JSON.stringify({selected_course:name})});
     window.location.href = "/syllabus.html?email=" + encodeURIComponent(email);
   } catch(e) { alert("Error enrolling. Please try again."); }
 }
 
-async function loadRecentRequests() {
+async function loadRecent() {
   if (!email) return;
   try {
-    var res = await fetch(BASE + "/course_requests?select=*&student_email=ilike." + encodeURIComponent(email) + "&order=created_at.desc&limit=5", {method:"GET",headers:H});
+    var res = await fetch(BASE + "/course_requests?select=requested_course,status,created_at&student_email=ilike." + encodeURIComponent(email) + "&order=created_at.desc&limit=5", {method:"GET",headers:H});
     var data = await res.json();
     if (!Array.isArray(data) || data.length === 0) return;
     document.getElementById("recentCard").style.display = "block";
     document.getElementById("recentList").innerHTML = data.map(function(r) {
-      var status = r.status || "pending";
-      var statusLabel = status==="found"?"Available":status==="pending"?"Building...":status==="denied"?"Not Accepted":"Pending";
-      var statusClass = status==="found"?"status-done":status==="denied"?"status-denied":"status-pending";
-      var name = (r.requested_course||"").replace(/\[.*?\]\s*/,"").substring(0,50);
-      return '<div class="recent-item"><div><div class="recent-name">' + name + (name.length>=50?"...":"") + '</div><div class="recent-date">' + (r.created_at?new Date(r.created_at).toLocaleDateString("en-IN"):"") + '</div></div><span class="recent-status ' + statusClass + '">' + statusLabel + '</span></div>';
+      var st = r.status || "pending";
+      var label = st === "found" ? "Available" : st === "denied" ? "Denied" : "Building...";
+      var name = (r.requested_course||"").replace(/\[.*?\]\s*/g,"").substring(0,55);
+      var date = r.created_at ? new Date(r.created_at).toLocaleDateString("en-IN") : "";
+      return '<div class="recent-item"><div><div style="font-size:13px;color:#202124;">' + name + '</div><div style="font-size:12px;color:#80868b;">' + date + '</div></div><span class="badge ' + st + '">' + label + '</span></div>';
     }).join("");
   } catch(e) {}
 }
 
-function logout() { localStorage.removeItem("yge_email"); window.location.href = "/login.html"; }
+function doLogout() { localStorage.removeItem("yge_email"); window.location.href = "/login.html"; }
 </script>
 </body>
 </html>
