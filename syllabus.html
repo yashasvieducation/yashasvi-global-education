@@ -16,7 +16,7 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
 .nav-btn-primary{background:#1a73e8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer}
 .nav-btn-primary:hover{background:#1765cc}
 .bell-btn{background:none;border:none;font-size:20px;cursor:pointer;padding:4px}
-.layout{display:grid;grid-template-columns:280px 1fr 300px;height:calc(100vh - 60px);overflow:hidden}
+.layout{display:grid;grid-template-columns:280px 1fr 300px;height:calc(100vh - 60px);overflow:hidden;width:100%}
 .sidebar{background:#fff;border-right:1px solid #e8eaed;overflow-y:auto;display:flex;flex-direction:column}
 .sidebar-tabs{display:flex;border-bottom:1px solid #e8eaed}
 .stab{flex:1;padding:10px 0;text-align:center;font-size:12px;font-weight:500;color:#5f6368;cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;justify-content:center;gap:5px}
@@ -171,10 +171,15 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
   html, body { overflow-x: hidden; max-width: 100%; }
 
 @media (max-width: 768px) {
-  .layout { grid-template-columns: 1fr !important; }
+  .layout { grid-template-columns: 1fr !important; height: auto !important; overflow: visible !important; }
   .sidebar { display: none !important; }
   .chat-panel { display: none !important; }
-  #notifPanel { width: calc(100vw - 32px) !important; right: 16px !important; }
+  .main { padding: 16px !important; overflow: visible !important; height: auto !important; }
+  #notifPanel { width: calc(100vw - 32px) !important; right: 16px !important; left: 16px !important; }
+  .res-grid { grid-template-columns: 1fr !important; }
+  .code-card { margin: 0 0 16px !important; }
+  .lesson-nav { flex-wrap: wrap !important; gap: 8px !important; }
+  .lesson-nav button { flex: 1 !important; min-width: 80px !important; }
 }
 </style>
 </head>
