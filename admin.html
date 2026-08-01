@@ -668,11 +668,18 @@ async function loadRequests() {
         '</div>' +
         '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">' +
           '<span style="font-size:11px;font-weight:500;border-radius:100px;padding:3px 10px;background:' + statusBg + ';color:' + statusColor + ';">' + statusLabel + '</span>' +
-          (status !== 'found' ? '<button class="btn btn-success btn-sm" onclick="launchFromRequest('' + (r.requested_course||'').replace(/'/g,"\'").replace(/"/g,'&quot;') + '', '' + r.student_email + '', '' + r.id + '')">Launch Course</button>' : '') +
+          (status !== 'found' && status !== 'denied' ? '<button class="btn btn-success btn-sm" onclick="doLaunch(' + JSON.stringify(r.id) + ',' + JSON.stringify(r.student_email) + ')" >Launch Course</button>' : '') +
         '</div>' +
       '</div>';
     }).join('');
   } catch (e) { console.error(e); }
+}
+
+async function doLaunch(requestId, studentEmail) {
+  var res = await fetch(BASE + "/course_requests?select=requested_course&id=eq." + requestId, { method: "GET", headers: HEADERS });
+  var data = await res.json();
+  var courseName = Array.isArray(data) && data[0] ? data[0].requested_course : "New Course";
+  await launchFromRequest(courseName, studentEmail, requestId);
 }
 
 async function launchFromRequest(courseName, studentEmail, requestId) {
@@ -688,7 +695,7 @@ async function launchFromRequest(courseName, studentEmail, requestId) {
   if (courseId) {
     await fetch(BASE + "/notifications", {
       method: "POST", headers: HEADERS,
-      body: JSON.stringify({ student_email: studentEmail, title: '🎉 Your requested course is now live!', message: `"${courseName}" has been launched. Click to add it to your syllabus.`, type: 'course_launched', course_id: courseId })
+      body: JSON.stringify({ student_email: studentEmail, title: 'Your requested course is now live!', message: `"${courseName}" has been launched. Click to add it to your syllabus.`, type: 'course_launched', course_id: courseId })
     });
   }
 
