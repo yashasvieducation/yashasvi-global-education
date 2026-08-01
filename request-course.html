@@ -341,7 +341,7 @@ var prompt = "You are an AI course agent for Yashasvi Global Education. A studen
 }
 
 function lockForm(lock) {
-  var fields = ["stdSelect","catSelect","descArea"];
+  var fields = ["stdSelect","catSelect","descArea","submitBtn"];
   fields.forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.disabled = lock;
@@ -468,8 +468,11 @@ function resetForm() {
 }
 
 function resetBtn(btn) {
-  btn.disabled = false;
-  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg> Send Course Request';
+  var b = document.getElementById("submitBtn");
+  if (b) {
+    b.disabled = false;
+    b.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg> Send Course Request';
+  }
 }
 
 async function enrollCourse(name) {
