@@ -366,42 +366,110 @@ var BADGES = [
   {name:"Complete", req:100, color:"#ff9800"}
 ];
 
-function getResources(dept, cname) {
-  var yt = "https://www.youtube.com/results?search_query=" + encodeURIComponent(cname + " tutorial");
-  var cc = "https://www.youtube.com/results?search_query=" + encodeURIComponent(cname + " crash course");
-  var docs = {
-    Technology: [
-      {name: cname + " Tutorial", source: "YouTube", url: yt, type: "video"},
-      {name: cname + " Crash Course", source: "YouTube", url: cc, type: "video"},
-      {name: "MDN Web Docs", source: "mozilla.org", url: "https://developer.mozilla.org/", type: "doc"},
-      {name: "Official Docs", source: "Google", url: "https://www.google.com/search?q=" + encodeURIComponent(cname + " documentation"), type: "doc"}
+function getResources(dept, lessonTitle) {
+  // Only return verified, specific resources per lesson topic
+  // No generic search links - only actual known resources
+  var LESSON_RESOURCES = {
+    // Mathematics
+    "Number Systems": [
+      {name:"Number Systems - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/math/cc-eighth-grade-math/cc-8th-numbers-operations", type:"video"},
+      {name:"NCERT Class 10 Maths Chapter 1", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jemh101.pdf", type:"doc"}
     ],
-    Business: [
-      {name: cname + " Tutorial", source: "YouTube", url: yt, type: "video"},
-      {name: cname + " Guide", source: "YouTube", url: cc, type: "video"},
-      {name: "Investopedia", source: "investopedia.com", url: "https://www.investopedia.com/", type: "doc"},
-      {name: "Harvard Business Review", source: "hbr.org", url: "https://hbr.org/", type: "doc"}
+    "Polynomials": [
+      {name:"Polynomials - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratics-polynomials", type:"video"},
+      {name:"NCERT Class 10 Maths Chapter 2", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jemh102.pdf", type:"doc"}
     ],
-    Design: [
-      {name: cname + " Tutorial", source: "YouTube", url: yt, type: "video"},
-      {name: cname + " Crash Course", source: "YouTube", url: cc, type: "video"},
-      {name: "Material Design", source: "material.io", url: "https://m3.material.io/", type: "doc"},
-      {name: "Canva Design School", source: "canva.com", url: "https://www.canva.com/learn/design/", type: "doc"}
+    "Linear Equations": [
+      {name:"Linear Equations - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:solve-equations-inequalities", type:"video"},
+      {name:"NCERT Class 10 Maths Chapter 3", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jemh103.pdf", type:"doc"}
     ],
-    School: [
-      {name: cname + " — Khan Academy", source: "YouTube", url: "https://www.youtube.com/results?search_query=" + encodeURIComponent(cname + " khan academy"), type: "video"},
-      {name: cname + " — CrashCourse", source: "YouTube", url: "https://www.youtube.com/results?search_query=" + encodeURIComponent(cname + " crashcourse"), type: "video"},
-      {name: "NCERT Books", source: "ncert.nic.in", url: "https://ncert.nic.in/textbook.php", type: "doc"},
-      {name: cname + " Study Material", source: "Google", url: "https://www.google.com/search?q=" + encodeURIComponent(cname + " study material"), type: "doc"}
+    "Quadratic Equations": [
+      {name:"Quadratic Equations - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratics-polynomials", type:"video"},
+      {name:"NCERT Class 10 Maths Chapter 4", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jemh104.pdf", type:"doc"}
     ],
-    Corporate: [
-      {name: cname + " Tutorial", source: "YouTube", url: yt, type: "video"},
-      {name: cname + " Professional Guide", source: "YouTube", url: cc, type: "video"},
-      {name: "Deloitte Insights", source: "deloitte.com", url: "https://www2.deloitte.com/insights", type: "doc"},
-      {name: cname + " Best Practices", source: "Google", url: "https://www.google.com/search?q=" + encodeURIComponent(cname + " best practices"), type: "doc"}
+    "Arithmetic Progressions": [
+      {name:"Arithmetic Progressions - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:sequences", type:"video"},
+      {name:"NCERT Class 10 Maths Chapter 5", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jemh105.pdf", type:"doc"}
+    ],
+    "Introduction to Trigonometry": [
+      {name:"Trigonometry - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/math/trigonometry", type:"video"},
+      {name:"NCERT Class 10 Maths Chapter 8", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jemh108.pdf", type:"doc"}
+    ],
+    // Physics
+    "Light - Reflection": [
+      {name:"Light Reflection & Refraction - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/physics/geometric-optics", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 10", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc110.pdf", type:"doc"}
+    ],
+    "Light - Refraction": [
+      {name:"Refraction of Light - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/physics/geometric-optics", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 10", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc110.pdf", type:"doc"}
+    ],
+    "Human Eye": [
+      {name:"Human Eye - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/physics/geometric-optics", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 11", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc111.pdf", type:"doc"}
+    ],
+    "Electricity": [
+      {name:"Electricity - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/physics/circuits-topic", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 12", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc112.pdf", type:"doc"}
+    ],
+    "Magnetic Effects": [
+      {name:"Magnetic Effects - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/physics/magnetic-forces-and-magnetic-fields", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 13", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc113.pdf", type:"doc"}
+    ],
+    "Sources of Energy": [
+      {name:"Energy Sources - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/ms-physics/x3b47e8b20e6f5d5d:energy", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 14", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc114.pdf", type:"doc"}
+    ],
+    // Chemistry
+    "Chemical Reactions": [
+      {name:"Chemical Reactions - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/chemistry/chemical-reactions-stoichiome", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 1", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc101.pdf", type:"doc"}
+    ],
+    "Acids Bases Salts": [
+      {name:"Acids Bases & Salts - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/chemistry/acids-and-bases-topic", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 2", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc102.pdf", type:"doc"}
+    ],
+    "Metals and Non-metals": [
+      {name:"Metals and Nonmetals - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/chemistry", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 3", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc103.pdf", type:"doc"}
+    ],
+    "Carbon Compounds": [
+      {name:"Carbon and its Compounds - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/chemistry/organic-chemistry", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 4", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc104.pdf", type:"doc"}
+    ],
+    "Periodic Classification": [
+      {name:"Periodic Table - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/chemistry/periodic-table", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 5", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc105.pdf", type:"doc"}
+    ],
+    // Biology
+    "Life Processes": [
+      {name:"Life Processes - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/biology", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 6", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc106.pdf", type:"doc"}
+    ],
+    "Control and Coordination": [
+      {name:"Nervous System - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/biology/human-biology/neurology", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 7", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc107.pdf", type:"doc"}
+    ],
+    "Reproduction": [
+      {name:"Reproduction - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/biology/cellular-molecular-biology", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 8", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc108.pdf", type:"doc"}
+    ],
+    "Heredity and Evolution": [
+      {name:"Genetics & Heredity - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/biology/heredity", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 9", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc109.pdf", type:"doc"}
+    ],
+    "Our Environment": [
+      {name:"Ecology - Khan Academy", source:"khanacademy.org", url:"https://www.khanacademy.org/science/biology/ecology", type:"video"},
+      {name:"NCERT Class 10 Science Chapter 15", source:"ncert.nic.in", url:"https://ncert.nic.in/textbook/pdf/jesc115.pdf", type:"doc"}
     ]
   };
-  return docs[dept] || docs.School;
+
+  // Return lesson-specific resources if available
+  if (lessonTitle && LESSON_RESOURCES[lessonTitle]) {
+    return LESSON_RESOURCES[lessonTitle];
+  }
+  // Return empty array if no verified resources - better than wrong links
+  return [];
 }
 
 var CODE_TEMPLATES = {
@@ -596,7 +664,7 @@ function loadLesson(mi, li) {
   var savedNote = notes[key] || "";
   var dept = currentCourse ? currentCourse.department : "School";
   var cname = currentCourse ? currentCourse.name : "this topic";
-  var res = getResources(dept, cname);
+  var res = getResources(dept, lesson.title || (typeof lessonRaw === "string" ? lessonRaw : ""));
   var isTech = dept === "Technology" || dept === "School";
 
   var svgClock = "<svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><polyline points='12 6 12 12 16 14'/></svg>";
@@ -647,17 +715,19 @@ function loadLesson(mi, li) {
   }
   h += "</div>";
 
-  // Resources
-  h += "<div class='section-card'>";
-  h += "<div class='section-hdr'>" + svgBook + " Learning Resources</div>";
-  h += "<div class='res-grid'>";
-  res.forEach(function(r) {
-    h += "<a class='res-link' href='" + r.url + "' target='_blank' rel='noopener'>";
-    h += "<div class='res-icon'>" + (r.type==="video"?svgVideo:svgDoc) + "</div>";
-    h += "<div><div class='res-name'>" + r.name + "</div><div class='res-src'>" + r.source + (r.type==="video"?" &middot; Video":" &middot; Doc") + "</div></div>";
-    h += svgArrow + "</a>";
-  });
-  h += "</div></div>";
+  // Resources - only show if verified resources exist
+  if (res && res.length > 0) {
+    h += "<div class='section-card'>";
+    h += "<div class='section-hdr'>" + svgBook + " Learning Resources</div>";
+    h += "<div class='res-grid'>";
+    res.forEach(function(r) {
+      h += "<a class='res-link' href='" + r.url + "' target='_blank' rel='noopener'>";
+      h += "<div class='res-icon'>" + (r.type==="video"?svgVideo:svgDoc) + "</div>";
+      h += "<div><div class='res-name'>" + r.name + "</div><div class='res-src'>" + r.source + (r.type==="video"?" &middot; Video":" &middot; Doc") + "</div></div>";
+      h += svgArrow + "</a>";
+    });
+    h += "</div></div>";
+  }
 
   // Code editor (tech courses)
   if (isTech) {
