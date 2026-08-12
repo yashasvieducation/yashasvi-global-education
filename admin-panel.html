@@ -317,6 +317,13 @@
     <div class="panel" id="panel-requests">
       <div class="panel-title">Course Requests</div>
       <p style="font-size:14px; color:#5f6368; margin-bottom:20px;">Students who requested courses not yet available. Launch a course to notify them automatically.</p>
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button onclick="autoRejectExpired().then(loadRequests)" style="background:#fef7e0;color:#b06000;border:none;border-radius:4px;padding:7px 16px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:5px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Auto-reject Expired (24h)
+        </button>
+        <button onclick="loadRequests()" style="background:#f1f3f4;color:#5f6368;border:none;border-radius:4px;padding:7px 16px;font-size:13px;cursor:pointer;">Refresh</button>
+      </div>
       <div id="requestsList"><p style="color:#5f6368;">Loading…</p></div>
     </div>
 
@@ -668,14 +675,18 @@ async function loadRequests() {
       var statusBg = status === 'found' ? '#e6f4ea' : status === 'denied' ? '#fce8e6' : '#fef7e0';
       var reqText = (r.requested_course || '').substring(0, 80);
       var date = r.created_at ? new Date(r.created_at).toLocaleDateString('en-IN') : '';
-      return '<div class="request-card">' +
+      var hoursOld = r.created_at ? Math.floor((Date.now() - new Date(r.created_at)) / 3600000) : 0;
+      var expiredBadge = (status === 'pending' && hoursOld >= 24) ? ' <span style="font-size:11px;background:#fef7e0;color:#b06000;border-radius:100px;padding:2px 8px;">Expired 24h</span>' : '';
+      return '<div class="request-card" id="req-' + r.id + '">' +
         '<div class="request-info">' +
-          '<div class="r-course">' + reqText + '</div>' +
-          '<div class="r-meta">From: ' + (r.student_name || 'Unknown') + ' (' + r.student_email + ') &middot; ' + date + '</div>' +
+          '<div class="r-course">' + reqText + expiredBadge + '</div>' +
+          '<div class="r-meta">From: ' + (r.student_name || 'Unknown') + ' (' + r.student_email + ') &middot; ' + date + (hoursOld > 0 ? ' &middot; ' + hoursOld + 'h ago' : '') + '</div>' +
         '</div>' +
         '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">' +
           '<span style="font-size:11px;font-weight:500;border-radius:100px;padding:3px 10px;background:' + statusBg + ';color:' + statusColor + ';">' + statusLabel + '</span>' +
-          (status !== 'found' && status !== 'denied' ? '<button class="btn btn-success btn-sm" onclick="doLaunch(\'' + r.id + '\',\'' + r.student_email + '\')" >Launch Course</button>' : '') +
+          (status !== 'found' && status !== 'denied' ? '<button class="btn btn-success btn-sm" onclick="doLaunch(\'' + r.id + '\',\'' + r.student_email + '\')">Launch Course</button>' : '') +
+          (status === 'pending' ? '<button class="btn btn-sm" style="background:#fce8e6;color:#c5221f;border:none;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer;" onclick="rejectRequest(\'' + r.id + '\',\'' + r.student_email + '\')">Reject</button>' : '') +
+          '<button class="btn btn-sm" style="background:#f1f3f4;color:#5f6368;border:none;border-radius:4px;padding:5px 10px;font-size:12px;cursor:pointer;" onclick="deleteRequest(\'' + r.id + '\')">Delete</button>' +
         '</div>' +
       '</div>';
     }).join('');
