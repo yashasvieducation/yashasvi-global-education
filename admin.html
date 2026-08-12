@@ -396,6 +396,12 @@ function switchPanel(name) {
 }
 
 // Dashboard
+function statusBadge(status) {
+  if (status === 'certified' || status === 'admitted' || status === 'fee_paid') return 'badge-green';
+  if (status === 'form_submitted' || status === 'exam_completed' || status === 'quarterly_passed') return 'badge-yellow';
+  return 'badge-yellow';
+}
+
 async function loadDashboard() {
   try {
     const [sRes, cRes, rRes] = await Promise.all([
