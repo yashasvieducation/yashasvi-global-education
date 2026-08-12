@@ -681,6 +681,69 @@ async function loadRequests() {
   } catch (e) { console.error(e); }
 }
 
+async function rejectRequest(requestId, studentEmail) {
+  if (!confirm("Reject this request and notify the student?")) return;
+  try {
+    await fetch(BASE + "/course_requests?id=eq." + requestId, {
+      method: "PATCH", headers: HEADERS,
+      body: JSON.stringify({ status: "denied", notified_admin: true })
+    });
+    await fetch(BASE + "/notifications", {
+      method: "POST", headers: HEADERS,
+      body: JSON.stringify({
+        student_email: studentEmail,
+        title: "Course Request Update",
+        message: "We are sorry, we could not build your requested course at this time. Please try a different request!",
+        type: "new_course",
+        is_read: false
+      })
+    });
+    showToast("Request rejected. Student notified.");
+    loadRequests();
+  } catch(e) { showToast("Error rejecting request"); }
+}
+
+async function deleteRequest(requestId) {
+  if (!confirm("Delete this request permanently?")) return;
+  try {
+    await fetch(BASE + "/course_requests?id=eq." + requestId, {
+      method: "DELETE", headers: HEADERS
+    });
+    var el = document.getElementById("req-" + requestId);
+    if (el) el.remove();
+    showToast("Request deleted.");
+    loadRequests();
+  } catch(e) { showToast("Error deleting request"); }
+}
+
+async function autoRejectExpired() {
+  // Auto-reject requests older than 24hrs that are still pending
+  try {
+    var cutoff = new Date(Date.now() - 24*60*60*1000).toISOString();
+    var res = await fetch(BASE + "/course_requests?select=id,student_email&status=eq.pending&created_at=lt." + cutoff, { method: "GET", headers: HEADERS });
+    var data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) return;
+    for (var i = 0; i < data.length; i++) {
+      var r = data[i];
+      await fetch(BASE + "/course_requests?id=eq." + r.id, {
+        method: "PATCH", headers: HEADERS,
+        body: JSON.stringify({ status: "denied" })
+      });
+      await fetch(BASE + "/notifications", {
+        method: "POST", headers: HEADERS,
+        body: JSON.stringify({
+          student_email: r.student_email,
+          title: "Course Request Expired",
+          message: "Your course request could not be fulfilled within 24 hours. Please submit a new request!",
+          type: "new_course",
+          is_read: false
+        })
+      });
+    }
+    if (data.length > 0) { showToast(data.length + " expired requests auto-rejected."); loadRequests(); }
+  } catch(e) {}
+}
+
 async function doLaunch(requestId, studentEmail) {
   var res = await fetch(BASE + "/course_requests?select=requested_course&id=eq." + requestId, { method: "GET", headers: HEADERS });
   var data = await res.json();
