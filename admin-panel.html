@@ -763,9 +763,9 @@ async function launchFromRequest(courseName, studentEmail, requestId) {
 
   // Add course if not exists
   if (!courseExists) {
-    await fetch(BASE + "/courses", {
+    var courseRes = await fetch(BASE + "/courses", {
       method: "POST",
-      headers: Object.assign({}, HEADERS, {"Prefer": "return=representation"}),
+      headers: Object.assign({}, HEADERS, {"Prefer": "return=representation", "Authorization": "Bearer " + ANON_KEY}),
       body: JSON.stringify({
         name: shortName,
         department: "Technology",
@@ -781,6 +781,9 @@ async function launchFromRequest(courseName, studentEmail, requestId) {
         tags: ["student-requested"]
       })
     });
+    if (!courseRes.ok) {
+      console.log("Course insert failed:", courseRes.status, "- continuing with notification");
+    }
   }
 
   // Mark request as fulfilled — unlocks student form
@@ -807,6 +810,13 @@ async function launchFromRequest(courseName, studentEmail, requestId) {
   loadRequests();
 }
 
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(function(){ t.style.display = 'none'; }, 3000);
+}
 </script>
 
 
