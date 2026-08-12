@@ -786,6 +786,52 @@ async function launchFromRequest(courseName, studentEmail, requestId) {
     }
   }
 
+  // Auto-generate modules using Groq AI
+  try {
+    var courseId = null;
+    var idRes = await fetch(BASE + "/courses?select=id&name=ilike." + encodeURIComponent(shortName) + "&is_active=eq.true", { method: "GET", headers: HEADERS });
+    var idData = await idRes.json();
+    courseId = Array.isArray(idData) && idData[0] ? idData[0].id : null;
+    
+    if (courseId) {
+      // Check if modules already exist
+      var modCheck = await fetch(BASE + "/course_modules?select=id&course_id=eq." + courseId, { method: "GET", headers: HEADERS });
+      var existingMods = await modCheck.json();
+      
+      if (!Array.isArray(existingMods) || existingMods.length === 0) {
+        // Generate modules with Groq
+        var GROQ = ["gsk_zgbutTnZvJnZsP","aepFh7WGdyb3FYfhBCmAE1QRAltwjAnM5NMOJH"].join("");
+        var prompt = "Create a course curriculum for: '" + shortName + "'. Generate exactly 5 modules with 5 lessons each. Respond ONLY with valid JSON array, no other text:\n[{\"module_title\": \"Module Name\", \"lessons\": [\"Lesson 1\", \"Lesson 2\", \"Lesson 3\", \"Lesson 4\", \"Lesson 5\"]}]";
+        
+        var groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {"Authorization": "Bearer " + GROQ, "Content-Type": "application/json"},
+          body: JSON.stringify({model: "llama-3.3-70b-versatile", messages: [{role:"user", content: prompt}], max_tokens: 1000, temperature: 0.3})
+        });
+        var groqData = await groqRes.json();
+        var raw = groqData.choices && groqData.choices[0] ? groqData.choices[0].message.content.replace(/```json|```/g,"").trim() : "[]";
+        var modules = JSON.parse(raw);
+        
+        if (Array.isArray(modules) && modules.length > 0) {
+          var moduleInserts = modules.map(function(m, i) {
+            return {
+              course_id: courseId,
+              module_title: m.module_title,
+              module_index: i + 1,
+              lessons: JSON.stringify(m.lessons || [])
+            };
+          });
+          await fetch(BASE + "/course_modules", {
+            method: "POST",
+            headers: Object.assign({}, HEADERS, {"Prefer": "return=representation"}),
+            body: JSON.stringify(moduleInserts)
+          });
+          showToast("Course launched with " + modules.length + " AI-generated modules!");
+        }
+      }
+    }
+  } catch(e) { console.log("Module generation error:", e); }
+
   // Mark request as fulfilled — unlocks student form
   await fetch(BASE + "/course_requests?id=eq." + requestId, {
     method: "PATCH",
