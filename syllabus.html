@@ -328,16 +328,16 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
     <div class="chat-hdr">
       <h3>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg>
-        AI Teacher
+        Guruji
       </h3>
       <p>Ask anything about this lesson</p>
     </div>
     <div class="chat-msgs" id="chatMsgs">
-      <div class="chat-msg ai"><div class="chat-name">AI Teacher</div><div class="chat-bubble">Hello! I am your personal AI teacher. Ask me anything about your current lesson.</div></div>
+      <div class="chat-msg ai"><div class="chat-name">Guruji</div><div class="chat-bubble">Welcome! I am your Guruji, your AI teacher. Feel free to ask any questions about your lesson!</div></div>
     </div>
-    <div class="typing" id="typingIndicator">AI Teacher is typing...</div>
+    <div class="typing" id="typingIndicator">Guruji is typing...</div>
     <div class="chat-input-wrap">
-      <textarea class="chat-input" id="chatInput" placeholder="Ask your AI teacher..." rows="1"></textarea>
+      <textarea class="chat-input" id="chatInput" placeholder="Ask Guruji..." rows="1"></textarea>
       <button class="chat-send" id="sendBtn" onclick="sendMessage()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
@@ -864,7 +864,8 @@ function sendMessage() {
   document.getElementById("typingIndicator").style.display="block";
   chatHistory.push({role:"user",content:text});
   var lesson=modules[curMod]?(modules[curMod].lessons||[])[curLesson]:null;
-  var sys="You are a personal AI teacher at Yashasvi Global Education. Student: "+studentName+". Course: "+(currentCourse?currentCourse.name:"")+". Lesson: \""+(lesson?lesson.title:"")+"\". Give SHORT answers — max 2-3 sentences. Be clear and encouraging.";
+  var lessonTitle = lesson ? (typeof lesson === "string" ? lesson : (lesson.title || "")) : "";
+  var sys = "You are Guruji, a respectful AI teacher at Yashasvi Global Education. Student name: " + studentName + ". Course: " + (currentCourse ? currentCourse.name : "") + ". Current lesson: " + lessonTitle + ". RULES: If student says hi/hey/hello or any greeting, reply EXACTLY: For hi/hey - use 'Hi [name]! I am your Guruji, your AI teacher. Feel free to ask any questions about your lesson!' For hello - use 'Hello [name]! I am your Guruji, your AI teacher. Feel free to ask any questions about your lesson!' Replace [name] with the actual student name. For other questions: answer in 2-3 short sentences about the lesson. Always be respectful.";
 fetch(EDGE,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify({messages:chatHistory.slice(-6),systemPrompt:sys})})
   .then(function(r){
     if(!r.ok){ return r.json().then(function(e){ throw new Error(JSON.stringify(e)); }); }
@@ -873,11 +874,11 @@ fetch(EDGE,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"C
   .then(function(data){
    var reply = data.reply || (data.choices&&data.choices[0] ? data.choices[0].message.content : "Sorry, try again.");
     chatHistory.push({role:"assistant",content:reply});
-    addBubble("ai",reply,"AI Teacher");
+    addBubble("ai",reply,"Guruji");
   })
   .catch(function(err){
     var msg = err && err.message ? err.message : "Connection issue.";
-    addBubble("ai","Error: "+msg,"AI Teacher");
+    addBubble("ai","Error: "+msg,"Guruji");
   })
   .finally(function(){document.getElementById("sendBtn").disabled=false;document.getElementById("typingIndicator").style.display="none";});
 }
