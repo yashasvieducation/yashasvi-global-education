@@ -656,7 +656,7 @@ function loadLesson(mi, li) {
     if (lessonArr.length > 0) { li = 0; lessonRaw = lessonArr[0]; } else return;
   }
   // Support both string lessons and object lessons
-  var lesson = (typeof lessonRaw === "string") ? {title: lessonRaw, content: "", duration: "15 min", project: null, mcq: []} : lessonRaw;
+  var lesson = (typeof lessonRaw === "string") ? {title: lessonRaw, content: null, duration: "15 min", project: null, mcq: []} : lessonRaw;
   curMod = mi; curLesson = li;
   mcqDone = {};
   var key = mi+"-"+li;
@@ -708,7 +708,7 @@ function loadLesson(mi, li) {
   if (lesson.content) {
     lesson.content.split("\n").filter(function(p){return p.trim();}).forEach(function(p){h+="<p>"+p+"</p>";});
   } else {
-    h += "<p>Content loading...</p>";
+    h += "<div style='text-align:center;padding:24px 0;color:#5f6368;'><span class='spin' style='display:inline-block;animation:spin 1s linear infinite;font-size:20px;'>&#9203;</span><p style='margin-top:12px;font-size:14px;'>Guruji is preparing your lesson...</p></div>";
   }
   if (lesson.project) {
     h += "<div class='project-box'><strong>Practical Assignment</strong><p>" + lesson.project + "</p></div>";
@@ -767,6 +767,37 @@ function loadLesson(mi, li) {
   buildNav();
   saveProgress();
   window.scrollTo({top:0,behavior:"smooth"});
+  // Generate content if lesson has no content
+  if (!lesson.content) {
+    var modT = modules[mi] ? modules[mi].module_title : "";
+    var courseN = currentCourse ? currentCourse.name : "";
+    setTimeout(function(){ generateLessonContent(lesson.title, modT, courseN); }, 300);
+  }
+}
+
+function generateLessonContent(lessonTitle, modTitle, courseName) {
+  var lessonBody = document.getElementById("lessonBody");
+  if (!lessonBody) return;
+  // Check if already has real content
+  if (lessonBody.querySelector("p") && lessonBody.innerText.trim().length > 100) return;
+  
+  var prompt = "You are a teacher. Write a clear, simple lesson on: '" + lessonTitle + "' from the module '" + modTitle + "' in the course '" + courseName + "'. Write 3-4 short paragraphs explaining the concept in simple English suitable for 10th standard students. Include key points and a simple example. Do not use markdown, just plain text paragraphs.";
+  
+  fetch(EDGE, {
+    method: "POST",
+    headers: {"apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json"},
+    body: JSON.stringify({messages: [{role: "user", content: prompt}], systemPrompt: "You are an expert teacher. Write clear, accurate educational content."})
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var text = data.reply || "";
+    if (!text) return;
+    var html = text.split("\n").filter(function(p){ return p.trim(); }).map(function(p){ return "<p>" + p + "</p>"; }).join("");
+    if (lessonBody) lessonBody.innerHTML = html;
+  })
+  .catch(function() {
+    if (lessonBody) lessonBody.innerHTML = "<p>Unable to load content. Please check your connection and try again.</p>";
+  });
 }
 
 function answerMCQ(qi, el) {
