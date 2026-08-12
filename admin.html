@@ -683,41 +683,790 @@ async function doLaunch(requestId, studentEmail) {
 }
 
 async function launchFromRequest(courseName, studentEmail, requestId) {
-  // Add course
-  const res = await fetch(BASE + "/courses", {
-    method: "POST", headers: { ...HEADERS, "Prefer": "return=representation" },
-    body: JSON.stringify({ name: courseName, department: 'Other', level: 'beginner', fee_usdt: 10, is_free: false, is_active: true, tags: [courseName.toLowerCase()] })
-  });
-  const courseData = await res.json();
-  const courseId = Array.isArray(courseData) ? courseData[0]?.id : null;
+  var shortName = (courseName || "").replace(/\[[\s\S]*?\]\s*/g, "").substring(0, 60).trim();
+  if (!shortName) shortName = "New Course";
 
-  // Notify student
-  if (courseId) {
-    await fetch(BASE + "/notifications", {
-      method: "POST", headers: HEADERS,
-      body: JSON.stringify({ student_email: studentEmail, title: 'Your requested course is now live!', message: `"${courseName}" has been launched. Click to add it to your syllabus.`, type: 'course_launched', course_id: courseId })
+  // Check if course already exists
+  var checkRes = await fetch(BASE + "/courses?select=id&name=ilike." + encodeURIComponent(shortName) + "&is_active=eq.true", { method: "GET", headers: HEADERS });
+  var existing = await checkRes.json();
+  var courseExists = Array.isArray(existing) && existing.length > 0;
+
+  // Add course if not exists
+  if (!courseExists) {
+    await fetch(BASE + "/courses", {
+      method: "POST",
+      headers: Object.assign({}, HEADERS, {"Prefer": "return=representation"}),
+      body: JSON.stringify({
+        name: shortName,
+        department: "Technology",
+        level: "Any",
+        difficulty: "Beginner",
+        duration_hours: 36,
+        duration_months: 3,
+        is_free: false,
+        is_active: true,
+        program_type: "course",
+        price_usdt: 99,
+        description: "Student requested course: " + shortName,
+        tags: ["student-requested"]
+      })
     });
   }
 
-  // Mark request as fulfilled - this unlocks student's request form
+  // Mark request as fulfilled — unlocks student form
   await fetch(BASE + "/course_requests?id=eq." + requestId, {
-    method: "PATCH", headers: HEADERS,
-    body: JSON.stringify({ notified_admin: true, status: 'found' })
+    method: "PATCH",
+    headers: HEADERS,
+    body: JSON.stringify({ notified_admin: true, status: "found" })
   });
-  
-  // Also notify via notifications table
+
+  // Notify student with course name in message
   await fetch(BASE + "/notifications", {
-    method: "POST", headers: HEADERS,
-    body: JSON.stringify({ 
-      student_email: studentEmail, 
-      title: 'Your requested course is now live!', 
-      message: courseName + ' has been added. You can now enroll and start learning!', 
-      type: 'new_course',
+    method: "POST",
+    headers: HEADERS,
+    body: JSON.stringify({
+      student_email: studentEmail,
+      title: "Your requested course is now live!",
+      message: "Great news! '" + shortName + "' has been added to our platform. Go to My Courses, enroll and start learning now!",
+      type: "new_course",
       is_read: false
     })
   });
 
-  showToast('✅ Course launched and student notified!');
+  showToast("Course launched! Student notified.");
+  loadRequests();
+}<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yashasvi Global Education — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', Arial, sans-serif; background: #f8f9fa; color: #202124; min-height: 100vh; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; border-bottom: 1px solid #e8eaed; background: #fff; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'Google Sans', Arial, sans-serif; font-size: 18px; font-weight: 500; color: #202124; }
+  .nav-logo span { color: #c5221f; }
+  .nav-badge { background: #fce8e6; color: #c5221f; border-radius: 100px; padding: 4px 12px; font-size: 12px; font-weight: 500; }
+
+  /* Login */
+  #loginWrap { max-width: 400px; margin: 100px auto; padding: 0 24px; }
+  #loginWrap h2 { font-family: 'Google Sans', Arial, sans-serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+  #loginWrap p { font-size: 14px; color: #5f6368; margin-bottom: 24px; }
+
+  /* Layout */
+  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 64px); }
+  .sidebar { background: #fff; border-right: 1px solid #e8eaed; padding: 16px 0; }
+  .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 14px; color: #202124; cursor: pointer; transition: background 0.15s; border-radius: 0; }
+  .sidebar-item:hover { background: #f1f3f4; }
+  .sidebar-item.active { background: #fce8e6; color: #c5221f; font-weight: 500; }
+  .sidebar-item .s-icon { font-size: 18px; }
+  .main { padding: 24px; overflow-y: auto; }
+
+  /* Cards */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  @media (max-width: 900px) { .stats-grid { grid-template-columns: 1fr 1fr; } .layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
+  .stat-card { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 20px; }
+  .stat-num { font-family: 'Google Sans', Arial, sans-serif; font-size: 32px; font-weight: 400; color: #1a73e8; }
+  .stat-label { font-size: 13px; color: #5f6368; margin-top: 4px; }
+
+  /* Panels */
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .panel-title { font-family: 'Google Sans', Arial, sans-serif; font-size: 22px; font-weight: 400; margin-bottom: 20px; }
+
+  /* Table */
+  .table-wrap { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; overflow: hidden; margin-bottom: 24px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: #f8f9fa; padding: 12px 16px; text-align: left; font-size: 12px; color: #5f6368; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid #e8eaed; }
+  td { padding: 12px 16px; border-bottom: 1px solid #f1f3f4; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8f9fa; }
+
+  /* Badges */
+  .badge { display: inline-block; border-radius: 100px; padding: 3px 10px; font-size: 12px; font-weight: 500; }
+  .badge-green { background: #e6f4ea; color: #137333; }
+  .badge-blue { background: #e8f0fe; color: #1a73e8; }
+  .badge-red { background: #fce8e6; color: #c5221f; }
+  .badge-grey { background: #f1f3f4; color: #5f6368; }
+  .badge-yellow { background: #fef7e0; color: #b06000; }
+
+  /* Form */
+  .form-card { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+  .form-card h3 { font-family: 'Google Sans', Arial, sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 16px; }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: #5f6368; margin-bottom: 6px; }
+  .field input, .field textarea, .field select { width: 100%; padding: 10px 14px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; font-family: 'Roboto', Arial, sans-serif; outline: none; background: #fff; }
+  .field input:focus, .field textarea:focus, .field select:focus { border-color: #1a73e8; }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .btn { border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; font-family: 'Google Sans', Arial, sans-serif; font-weight: 500; cursor: pointer; }
+  .btn-primary { background: #1a73e8; color: #fff; }
+  .btn-primary:hover { background: #1765cc; }
+  .btn-success { background: #34a853; color: #fff; }
+  .btn-danger { background: #c5221f; color: #fff; }
+  .btn-outline { background: #fff; color: #1a73e8; border: 1.5px solid #1a73e8; }
+  .btn:disabled { background: #dadce0; color: #80868b; cursor: not-allowed; }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+  /* Notification request card */
+  .request-card { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .request-info .r-course { font-weight: 500; font-size: 15px; margin-bottom: 4px; }
+  .request-info .r-meta { font-size: 13px; color: #5f6368; }
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #202124; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 9999; display: none; }
+
+  /* Field hint */
+  .field input[type="password"] { letter-spacing: 2px; }
+  .password-wrap { position: relative; }
+  .password-wrap input { padding-right: 44px; }
+  .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 18px; color: #5f6368; padding: 4px; line-height: 1; }
+  .eye-btn:hover { color: #1a73e8; }
+
+  
+  /* ===== MOBILE RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .nav { padding: 0 16px; }
+    .hero-banner { padding: 24px 20px; flex-direction: column; text-align: center; gap: 16px; }
+    .hero-emoji { font-size: 48px; }
+    .hero-btns { justify-content: center; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .main-grid { grid-template-columns: 1fr; }
+    .quick-grid { grid-template-columns: 1fr 1fr; }
+    .layout { grid-template-columns: 1fr !important; }
+    .sidebar { display: none !important; }
+    .chat-panel { display: none !important; }
+    .plans-grid { grid-template-columns: 1fr !important; }
+    .type-grid { grid-template-columns: 1fr !important; }
+    .field-row { grid-template-columns: 1fr !important; }
+    .difficulty-grid { grid-template-columns: 1fr !important; }
+    .score-grid { grid-template-columns: 1fr !important; }
+    .exam-info-grid { grid-template-columns: 1fr !important; }
+    .grid-2 { grid-template-columns: 1fr !important; }
+    .badges-grid { grid-template-columns: 1fr 1fr 1fr !important; }
+    .form-row { grid-template-columns: 1fr !important; }
+    .cert-actions { flex-direction: column !important; }
+    .my-course-card { flex-direction: column !important; }
+    .hero h1 { font-size: 26px !important; }
+    .wrap, .form-wrap { padding: 0 16px 60px !important; }
+    .main { padding: 16px !important; }
+    .seat-flow { grid-template-columns: 1fr 1fr !important; }
+    .notes-grid { grid-template-columns: 1fr !important; }
+    .courses-grid { grid-template-columns: 1fr !important; }
+    .profile-header { flex-direction: column !important; text-align: center !important; }
+    table { font-size: 12px !important; }
+    th, td { padding: 8px !important; }
+    #certificate { transform: scale(0.5); transform-origin: top left; width: 200% !important; }
+    .nav-name { display: none; }
+    .unique-banner { flex-direction: column !important; }
+  }
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr 1fr !important; }
+    .quick-grid { grid-template-columns: 1fr !important; }
+    .hero-text h2 { font-size: 22px !important; }
+    .stat-num { font-size: 22px !important; }
+    .badge-grid { grid-template-columns: 1fr 1fr !important; }
+  }
+
+  
+  html, body { overflow-x: hidden; max-width: 100%; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo" style="text-decoration:none;"><img src="/logo.svg" alt="Yashasvi Global Education" style="height:36px; width:auto; display:block;"></div>
+  <span class="nav-badge" id="requestBadge" style="display:none;">0 new requests</span>
+</nav>
+
+<!-- Login -->
+<div id="loginWrap">
+  <h2>Admin Login</h2>
+  <p>This panel is restricted to administrators only.</p>
+  <div class="field">
+    <label>Admin Password</label>
+    <div class="password-wrap">
+      <input type="password" id="adminPassword" autocomplete="new-password" placeholder="Enter admin password">
+      <button type="button" class="eye-btn" onclick="togglePass('adminPassword', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    </div>
+  </div>
+  <button class="btn btn-primary" id="loginBtn" style="width:100%; padding:12px;" onclick="adminLogin()">Login →</button>
+  <div id="loginMsg" style="margin-top:12px; font-size:14px; color:#c5221f; display:none;"></div>
+</div>
+
+<!-- Admin Panel -->
+<div class="layout" id="adminPanel" style="display:none;">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-item active" onclick="switchPanel('dashboard')" id="tab-dashboard"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> Dashboard</div>
+    <div class="sidebar-item" onclick="switchPanel('students')" id="tab-students"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span> Students</div>
+    <div class="sidebar-item" onclick="switchPanel('courses')" id="tab-courses"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></span> Courses</div>
+    <div class="sidebar-item" onclick="switchPanel('requests')" id="tab-requests"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></span> Course Requests</div>
+    <div class="sidebar-item" onclick="switchPanel('monitoring')" id="tab-monitoring"><span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l11 6 11-6"/><path d="M1 12l11 6 11-6"/></svg></span> Monitoring</div>
+    <a href="/ai-agent-dashboard.html" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 20px;font-size:14px;color:#5f6368;text-decoration:none;border-top:1px solid #f1f3f4;margin-top:8px;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='none'">
+      <span class="s-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg></span>
+      AI Agent Dashboard
+      <span style="font-size:10px;background:#34a853;color:#fff;border-radius:4px;padding:1px 6px;margin-left:auto;">LIVE</span>
+    </a>
+    <div class="sidebar-item" onclick="switchPanel('payments')" id="tab-payments"><span class="s-icon">💰</span> Payments</div>
+    <div class="sidebar-item" onclick="switchPanel('institutions')" id="tab-institutions"><span class="s-icon">🏫</span> Institutions</div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Dashboard -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="panel-title">Dashboard</div>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="stat-num" id="stat-students">—</div><div class="stat-label">Total Students</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-admitted">—</div><div class="stat-label">Admitted</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-courses">—</div><div class="stat-label">Active Courses</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-requests">—</div><div class="stat-label">Course Requests</div></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Student</th><th>Email</th><th>Course</th><th>Status</th><th>Country</th><th>Joined</th></tr></thead>
+          <tbody id="recentStudents"><tr><td colspan="6" style="text-align:center; color:#5f6368; padding:24px;">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Students -->
+    <div class="panel" id="panel-students">
+      <div class="panel-title">All Students</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Course</th><th>Difficulty</th><th>Exam Score</th><th>Status</th><th>Fee</th></tr></thead>
+          <tbody id="allStudents"><tr><td colspan="7" style="text-align:center; color:#5f6368; padding:24px;">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Courses -->
+    <div class="panel" id="panel-courses">
+      <div class="panel-title">Manage Courses</div>
+
+      <div class="form-card">
+        <h3>➕ Add New Course</h3>
+        <div class="field-row">
+          <div class="field">
+            <label>Course Name *</label>
+            <input type="text" id="courseName" placeholder="e.g. Cyber Security Fundamentals">
+          </div>
+          <div class="field">
+            <label>Department</label>
+            <select id="courseDept">
+              <option value="Technology">Technology</option>
+              <option value="Business">Business</option>
+              <option value="Design">Design</option>
+              <option value="School">School</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea id="courseDesc" placeholder="Brief description of what students will learn…"></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Level</label>
+            <select id="courseLevel">
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Duration (weeks)</label>
+            <input type="number" id="courseDuration" value="8" min="1">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Fee (USDT)</label>
+            <input type="number" id="courseFee" value="10" min="0">
+          </div>
+          <div class="field">
+            <label>Tags (comma separated)</label>
+            <input type="text" id="courseTags" placeholder="e.g. security, hacking, networking">
+          </div>
+        </div>
+        <div class="field">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="courseIsFree" style="width:auto;"> Mark as Free course
+          </label>
+        </div>
+        <button class="btn btn-primary" onclick="addCourse()">Add Course</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Course Name</th><th>Department</th><th>Level</th><th>Fee</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="coursesList"><tr><td colspan="6" style="text-align:center; color:#5f6368; padding:24px;">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Monitoring Panel -->
+    <div class="panel" id="panel-monitoring" style="display:none;">
+      <div class="panel-title">📡 Platform Monitoring</div>
+      
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;" id="monStats">
+        <div class="stat-card"><div class="stat-num" id="mon-errors">—</div><div class="stat-label">Errors today</div></div>
+        <div class="stat-card"><div class="stat-num" id="mon-stuck">—</div><div class="stat-label">Students stuck</div></div>
+        <div class="stat-card"><div class="stat-num" id="mon-active">—</div><div class="stat-label">Active today</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#34a853">Live</div><div class="stat-label">Platform status</div></div>
+      </div>
+
+      <!-- Error Logs -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h3 style="font-family:'Google Sans',Arial,sans-serif;font-size:16px;font-weight:500;">Recent Errors</h3>
+        <button onclick="loadMonitoring()" style="background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:7px 16px;font-size:13px;cursor:pointer;">Refresh</button>
+      </div>
+      <div id="errorLogsTable" style="background:#fff;border:1px solid #e8eaed;border-radius:8px;overflow:hidden;">
+        <div style="padding:24px;text-align:center;color:#5f6368;">Loading...</div>
+      </div>
+
+      <!-- New Course Notifications -->
+      <div style="margin-top:24px;">
+        <h3 style="font-family:'Google Sans',Arial,sans-serif;font-size:16px;font-weight:500;margin-bottom:12px;">Send Course Notification to All Students</h3>
+        <div style="background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:20px;">
+          <div style="margin-bottom:12px;">
+            <label style="font-size:13px;color:#5f6368;display:block;margin-bottom:6px;">Course Name</label>
+            <input id="notifCourse" type="text" placeholder="e.g. AI & Machine Learning Fundamentals" style="width:100%;padding:10px 12px;border:1px solid #dadce0;border-radius:4px;font-size:14px;outline:none;">
+          </div>
+          <div style="margin-bottom:16px;">
+            <label style="font-size:13px;color:#5f6368;display:block;margin-bottom:6px;">Message</label>
+            <textarea id="notifMsg" placeholder="New course is now available! Enroll now..." style="width:100%;padding:10px 12px;border:1px solid #dadce0;border-radius:4px;font-size:14px;outline:none;resize:vertical;min-height:80px;font-family:'Roboto',Arial,sans-serif;"></textarea>
+          </div>
+          <button onclick="sendBulkNotification()" style="background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:10px 24px;font-size:14px;font-family:'Google Sans',Arial,sans-serif;font-weight:500;cursor:pointer;">Send to All Students</button>
+          <div id="notifResult" style="margin-top:10px;font-size:13px;display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Requests -->
+    <div class="panel" id="panel-requests">
+      <div class="panel-title">Course Requests</div>
+      <p style="font-size:14px; color:#5f6368; margin-bottom:20px;">Students who requested courses not yet available. Launch a course to notify them automatically.</p>
+      <div id="requestsList"><p style="color:#5f6368;">Loading…</p></div>
+    </div>
+
+    <!-- Institutions -->
+    <div class="panel" id="panel-institutions">
+      <div class="panel-title">Institutions</div>
+      <p style="font-size:14px; color:#5f6368; margin-bottom:20px;">Review and approve institution registration requests.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Type</th><th>Email</th><th>City</th><th>Plan</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="instList"><tr><td colspan="7" style="text-align:center; color:#5f6368; padding:24px;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Payments -->
+    <div class="panel" id="panel-payments">
+      <div class="panel-title">Payments</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Student Email</th><th>Amount</th><th>TX ID</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody id="paymentsList"><tr><td colspan="6" style="text-align:center; color:#5f6368; padding:24px;">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE = "https://fvjerthbdiaeomhjvcdg.supabase.co/rest/v1";
+const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2amVydGhiZGlhZW9taGp2Y2RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjkxNTAsImV4cCI6MjA5Nzk0NTE1MH0._y4A3ipIew0GhsCqlc2Ox6p0lvW7X0nCSWEwfHUxEzE";
+const HEADERS = { "apikey": ANON_KEY, "Authorization": "Bearer " + ANON_KEY, "Content-Type": "application/json" };
+const RESEND_KEY = "re_Jm8jbeFV_NZC4VkDZN5fuhbxWFJQTgfcn";
+const ADMIN_EMAIL = "yashasvieducation@gmail.com";
+const ADMIN_PASS = "yashasvi@admin2026";
+
+function togglePass(id, btn) {
+  const input = document.getElementById(id);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  } else {
+    input.type = 'password';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  }
+}
+
+function adminLogin() {
+  const pass = document.getElementById('adminPassword').value;
+  if (pass === ADMIN_PASS) {
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'grid';
+    loadDashboard();
+  } else {
+    document.getElementById('loginMsg').textContent = 'Incorrect password.';
+    document.getElementById('loginMsg').style.display = 'block';
+  }
+}
+
+document.getElementById('adminPassword').addEventListener('keydown', e => {
+  if (e.key === 'Enter') adminLogin();
+});
+
+function switchPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'students') loadStudents();
+  if (name === 'courses') loadCourses();
+  if (name === 'requests') loadRequests();
+  if (name === 'payments') loadPayments();
+  if (name === 'institutions') loadInstitutions();
+}
+
+// Dashboard
+async function loadDashboard() {
+  try {
+    const [sRes, cRes, rRes] = await Promise.all([
+      fetch(BASE + "/students?select=id,student_name,student_email,selected_course,admission_status,country,created_at&order=created_at.desc&limit=10", { headers: HEADERS }),
+      fetch(BASE + "/courses?select=id&is_active=eq.true", { headers: HEADERS }),
+      fetch(BASE + "/course_requests?select=id", { headers: HEADERS })
+    ]);
+    const students = await sRes.json();
+    const courses = await cRes.json();
+    const requests = await rRes.json();
+    const admitted = students.filter(s => s.admission_status === 'admitted' || s.admission_status === 'certified').length;
+
+    document.getElementById('stat-students').textContent = students.length;
+    document.getElementById('stat-admitted').textContent = admitted;
+    document.getElementById('stat-courses').textContent = Array.isArray(courses) ? courses.length : 0;
+    document.getElementById('stat-requests').textContent = Array.isArray(requests) ? requests.length : 0;
+
+    if (Array.isArray(requests) && requests.length > 0) {
+      document.getElementById('requestBadge').textContent = requests.length + ' new requests';
+      document.getElementById('requestBadge').style.display = 'block';
+    }
+
+    if (Array.isArray(students)) {
+      document.getElementById('recentStudents').innerHTML = students.map(s => `
+        <tr>
+          <td>${s.student_name || '—'}</td>
+          <td style="font-size:12px; color:#5f6368;">${s.student_email}</td>
+          <td>${s.selected_course || '—'}</td>
+          <td><span class="badge ${statusBadge(s.admission_status)}">${s.admission_status || 'pending'}</span></td>
+          <td>${s.country || '—'}</td>
+          <td style="font-size:12px; color:#5f6368;">${s.created_at ? new Date(s.created_at).toLocaleDateString('en-IN') : '—'}</td>
+        </tr>`).join('');
+    }
+  } catch (e) { console.error(e); }
+}
+
+// Students
+async function loadStudents() {
+  try {
+    const res = await fetch(BASE + "/students?select=*&order=created_at.desc", { headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+    document.getElementById('allStudents').innerHTML = data.map(s => `
+      <tr>
+        <td>${s.student_name || '—'}</td>
+        <td style="font-size:12px;">${s.student_email}</td>
+        <td style="font-size:12px;">${s.selected_course || 'Not selected'}</td>
+        <td><span class="badge badge-blue">${s.exam_difficulty || 'normal'}</span></td>
+        <td>${s.exam_score ? s.exam_score + '%' : '—'}</td>
+        <td><span class="badge ${statusBadge(s.admission_status)}">${s.admission_status || 'pending'}</span></td>
+        <td><span class="badge ${s.fee_paid ? 'badge-green' : 'badge-grey'}">${s.fee_paid ? 'Paid' : 'Unpaid'}</span></td>
+      </tr>`).join('');
+  } catch (e) { console.error(e); }
+}
+
+// Courses
+async function loadCourses() {
+  try {
+    const res = await fetch(BASE + "/courses?select=*&order=created_at.desc", { headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+    document.getElementById('coursesList').innerHTML = data.map(c => `
+      <tr>
+        <td><strong>${c.name}</strong><br><span style="font-size:12px; color:#5f6368;">${c.description ? c.description.substring(0,60) + '…' : ''}</span></td>
+        <td>${c.department || '—'}</td>
+        <td><span class="badge badge-blue">${c.level || 'beginner'}</span></td>
+        <td>${c.is_free ? '<span class="badge badge-green">Free</span>' : '$' + c.fee_usdt + ' USDT'}</td>
+        <td><span class="badge ${c.is_active ? 'badge-green' : 'badge-grey'}">${c.is_active ? 'Active' : 'Inactive'}</span></td>
+        <td>
+          <button class="btn btn-outline btn-sm" onclick="toggleCourse('${c.id}', ${!c.is_active})">${c.is_active ? 'Deactivate' : 'Activate'}</button>
+        </td>
+      </tr>`).join('');
+  } catch (e) { console.error(e); }
+}
+
+async function addCourse() {
+  const name = document.getElementById('courseName').value.trim();
+  if (!name) { showToast('Please enter a course name.'); return; }
+  const tags = document.getElementById('courseTags').value.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+  const btn = event.target;
+  btn.disabled = true; btn.textContent = 'Adding...';
+  try {
+    const res = await fetch(BASE + "/courses", {
+      method: "POST",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify({
+        name,
+        description: document.getElementById('courseDesc').value.trim(),
+        department: document.getElementById('courseDept').value,
+        level: document.getElementById('courseLevel').value,
+        duration_weeks: parseInt(document.getElementById('courseDuration').value),
+        fee_usdt: parseFloat(document.getElementById('courseFee').value),
+        is_free: document.getElementById('courseIsFree').checked,
+        tags,
+        is_active: false
+      })
+    });
+    const data = await res.json();
+    const courseId = Array.isArray(data) ? data[0]?.id : null;
+
+    if (courseId) {
+      showToast('✅ Course added! AI generating content...');
+      btn.textContent = 'Generating content...';
+
+      // Auto-generate content
+      const genRes = await fetch('https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/generate-course-content', {
+        method: 'POST',
+        headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          course_id: courseId,
+          course_name: name,
+          department: document.getElementById('courseDept').value,
+          level: document.getElementById('courseLevel').value,
+          description: document.getElementById('courseDesc').value.trim()
+        })
+      });
+      const genData = await genRes.json();
+      if (genData.success) {
+        showToast('🎉 Course live! ' + genData.modules_count + ' modules generated by AI.');
+      } else {
+        showToast('Course added but content generation failed. Try again.');
+      }
+    }
+
+    loadCourses();
+    ['courseName','courseDesc','courseTags'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('courseIsFree').checked = false;
+  } catch (e) { showToast('Error: ' + e.message); }
+  btn.disabled = false; btn.textContent = 'Add Course';
+}
+
+async function toggleCourse(id, active) {
+  await fetch(BASE + "/courses?id=eq." + id, {
+    method: "PATCH", headers: { ...HEADERS, "Prefer": "return=representation" },
+    body: JSON.stringify({ is_active: active })
+  });
+  loadCourses();
+}
+
+// Monitoring
+async function loadMonitoring() {
+  try {
+    // Load error logs
+    const errRes = await fetch(BASE + "/error_logs?select=*&order=created_at.desc&limit=50", { method: "GET", headers: HEADERS });
+    const errors = await errRes.json();
+    
+    // Today's errors
+    const today = new Date().toISOString().split('T')[0];
+    const todayErrors = errors.filter(e => e.created_at && e.created_at.startsWith(today));
+    const stuckErrors = errors.filter(e => e.error_type === 'access_blocked');
+    
+    document.getElementById('mon-errors').textContent = todayErrors.length;
+    document.getElementById('mon-stuck').textContent = stuckErrors.length;
+
+    // Active students today
+    const actRes = await fetch(BASE + "/syllabus_progress?select=student_email&last_active=gte." + today + "T00:00:00", { method: "GET", headers: HEADERS });
+    const active = await actRes.json();
+    document.getElementById('mon-active').textContent = Array.isArray(active) ? active.length : 0;
+    
+    // Error logs table
+    if (!Array.isArray(errors) || errors.length === 0) {
+      document.getElementById('errorLogsTable').innerHTML = '<div style="padding:24px;text-align:center;color:#5f6368;">No errors logged. Platform running smoothly!</div>';
+      return;
+    }
+    
+    const rows = errors.map(e => `
+      <tr style="border-bottom:1px solid #f1f3f4;">
+        <td style="padding:10px 14px;font-size:13px;color:${e.error_type==='access_blocked'?'#b06000':'#c5221f'}">${e.error_type||'unknown'}</td>
+        <td style="padding:10px 14px;font-size:13px;color:#5f6368">${e.student_email||'—'}</td>
+        <td style="padding:10px 14px;font-size:12px;color:#5f6368;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.error_message||'—'}</td>
+        <td style="padding:10px 14px;font-size:12px;color:#80868b">${e.created_at ? new Date(e.created_at).toLocaleString('en-IN') : '—'}</td>
+      </tr>`).join('');
+    
+    document.getElementById('errorLogsTable').innerHTML = `
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="background:#f8f9fa;border-bottom:1px solid #e8eaed;">
+          <th style="padding:10px 14px;font-size:12px;font-weight:500;color:#5f6368;text-align:left;">Error Type</th>
+          <th style="padding:10px 14px;font-size:12px;font-weight:500;color:#5f6368;text-align:left;">Student</th>
+          <th style="padding:10px 14px;font-size:12px;font-weight:500;color:#5f6368;text-align:left;">Message</th>
+          <th style="padding:10px 14px;font-size:12px;font-weight:500;color:#5f6368;text-align:left;">Time</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  } catch(e) {
+    document.getElementById('errorLogsTable').innerHTML = '<div style="padding:16px;color:#c5221f;">Error loading logs: ' + e.message + '</div>';
+  }
+}
+
+async function sendBulkNotification() {
+  const course = document.getElementById('notifCourse').value.trim();
+  const msg = document.getElementById('notifMsg').value.trim();
+  if (!course || !msg) { alert('Please fill course name and message.'); return; }
+  
+  const btn = event.target;
+  btn.disabled = true; btn.textContent = 'Sending...';
+  
+  try {
+    // Get all students
+    const res = await fetch(BASE + "/students?select=student_email,student_name&admission_status=in.(admitted,certified,fee_paid,final_exam_passed)", { method: "GET", headers: HEADERS });
+    const students = await res.json();
+    
+    if (!Array.isArray(students) || students.length === 0) {
+      document.getElementById('notifResult').textContent = 'No students found.';
+      document.getElementById('notifResult').style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Send to All Students';
+      return;
+    }
+    
+    // Insert notifications for all students
+    const notifications = students.map(s => ({
+      student_email: s.student_email,
+      title: 'New Course: ' + course,
+      message: msg,
+      type: 'new_course',
+      is_read: false
+    }));
+    
+    await fetch(BASE + "/notifications", {
+      method: "POST",
+      headers: { ...HEADERS, "Prefer": "return=representation" },
+      body: JSON.stringify(notifications)
+    });
+    
+    // Send email to admin
+    await fetch("https://fvjerthbdiaeomhjvcdg.supabase.co/functions/v1/send-verification-email", {
+      method: "POST",
+      headers: HEADERS,
+      body: JSON.stringify({
+        type: 'course_request',
+        to: 'yashasvieducation@gmail.com',
+        studentName: 'Admin',
+        requestedCourse: 'Bulk notification sent for: ' + course + ' to ' + students.length + ' students'
+      })
+    });
+    
+    const result = document.getElementById('notifResult');
+    result.style.color = '#137333';
+    result.textContent = 'Notification sent to ' + students.length + ' students!';
+    result.style.display = 'block';
+    document.getElementById('notifCourse').value = '';
+    document.getElementById('notifMsg').value = '';
+  } catch(e) {
+    document.getElementById('notifResult').style.color = '#c5221f';
+    document.getElementById('notifResult').textContent = 'Error: ' + e.message;
+    document.getElementById('notifResult').style.display = 'block';
+  }
+  btn.disabled = false; btn.textContent = 'Send to All Students';
+}
+
+// Course Requests
+async function loadRequests() {
+  try {
+    const res = await fetch(BASE + "/course_requests?select=*&order=created_at.desc", { headers: HEADERS });
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      document.getElementById('requestsList').innerHTML = '<p style="color:#5f6368;">No course requests yet.</p>';
+      return;
+    }
+    document.getElementById('requestsList').innerHTML = data.map(r => {
+      var status = r.status || (r.notified_admin ? 'found' : 'pending');
+      var statusLabel = status === 'found' ? 'Fulfilled' : status === 'denied' ? 'Denied' : 'Pending';
+      var statusColor = status === 'found' ? '#137333' : status === 'denied' ? '#c5221f' : '#b06000';
+      var statusBg = status === 'found' ? '#e6f4ea' : status === 'denied' ? '#fce8e6' : '#fef7e0';
+      var reqText = (r.requested_course || '').substring(0, 80);
+      var date = r.created_at ? new Date(r.created_at).toLocaleDateString('en-IN') : '';
+      return '<div class="request-card">' +
+        '<div class="request-info">' +
+          '<div class="r-course">' + reqText + '</div>' +
+          '<div class="r-meta">From: ' + (r.student_name || 'Unknown') + ' (' + r.student_email + ') &middot; ' + date + '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">' +
+          '<span style="font-size:11px;font-weight:500;border-radius:100px;padding:3px 10px;background:' + statusBg + ';color:' + statusColor + ';">' + statusLabel + '</span>' +
+          (status !== 'found' && status !== 'denied' ? '<button class="btn btn-success btn-sm" onclick="doLaunch(' + JSON.stringify(r.id) + ',' + JSON.stringify(r.student_email) + ')" >Launch Course</button>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+  } catch (e) { console.error(e); }
+}
+
+async function doLaunch(requestId, studentEmail) {
+  var res = await fetch(BASE + "/course_requests?select=requested_course&id=eq." + requestId, { method: "GET", headers: HEADERS });
+  var data = await res.json();
+  var courseName = Array.isArray(data) && data[0] ? data[0].requested_course : "New Course";
+  await launchFromRequest(courseName, studentEmail, requestId);
+}
+
+async function launchFromRequest(courseName, studentEmail, requestId) {
+  var shortName = (courseName || "").replace(/\[.*?\]\s*/g, "").substring(0, 80).trim();
+
+  // Check if course already in DB
+  var checkRes = await fetch(BASE + "/courses?select=id&is_active=eq.true&limit=1", { method: "GET", headers: HEADERS });
+
+  // Add course with correct schema
+  var addRes = await fetch(BASE + "/courses", {
+    method: "POST",
+    headers: Object.assign({}, HEADERS, { "Prefer": "return=representation" }),
+    body: JSON.stringify({
+      name: shortName,
+      department: "Technology",
+      level: "Any",
+      difficulty: "Beginner",
+      duration_hours: 36,
+      duration_months: 3,
+      is_free: false,
+      is_active: true,
+      program_type: "course",
+      price_usdt: 99,
+      description: shortName + " - Built from student request",
+      tags: ["student-requested"]
+    })
+  });
+  var addData = await addRes.json();
+  console.log("Course add response:", addData);
+
+  // Mark request as fulfilled — unlocks student form
+  await fetch(BASE + "/course_requests?id=eq." + requestId, {
+    method: "PATCH",
+    headers: HEADERS,
+    body: JSON.stringify({ notified_admin: true, status: "found" })
+  });
+
+  // Send notification to student with course name
+  await fetch(BASE + "/notifications", {
+    method: "POST",
+    headers: HEADERS,
+    body: JSON.stringify({
+      student_email: studentEmail,
+      title: "Your requested course is now live!",
+      message: "Great news! '" + shortName + "' has been added to Yashasvi Global Education. Visit My Courses to enroll and start learning now!",
+      type: "new_course",
+      is_read: false
+    })
+  });
+
+  showToast("Course launched! Student notified.");
   loadRequests();
 }
 
