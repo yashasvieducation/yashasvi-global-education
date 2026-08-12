@@ -560,7 +560,7 @@ function buildNav() {
       var cls = doneLessons.has(key) ? "done" : "";
       if (mi===curMod && li===curLesson) cls = "active";
       html += "<div class='lesson-item " + cls + "' onclick='loadLesson(" + mi + "," + li + ")'>";
-      html += "<span class='ldot'></span><span style='flex:1;font-size:12px'>" + l.title + "</span>";
+      html += "<span class='ldot'></span><span style='flex:1;font-size:12px'>" + (l.title || l) + "</span>";
       if (bookmarks.has(key)) html += "<svg width='11' height='11' viewBox='0 0 24 24' fill='#1a73e8' stroke='none'><path d='M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z'/></svg>";
       html += "</div>";
     });
@@ -583,10 +583,12 @@ function loadLesson(mi, li) {
   if (!mod) return;
   var lessonArr = mod.lessons || [];
   li = Math.max(0, Math.min(parseInt(li)||0, lessonArr.length-1));
-  var lesson = lessonArr[li];
-  if (!lesson) {
-    if (lessonArr.length > 0) { li = 0; lesson = lessonArr[0]; } else return;
+  var lessonRaw = lessonArr[li];
+  if (!lessonRaw) {
+    if (lessonArr.length > 0) { li = 0; lessonRaw = lessonArr[0]; } else return;
   }
+  // Support both string lessons and object lessons
+  var lesson = (typeof lessonRaw === "string") ? {title: lessonRaw, content: "", duration: "15 min", project: null, mcq: []} : lessonRaw;
   curMod = mi; curLesson = li;
   mcqDone = {};
   var key = mi+"-"+li;
@@ -771,7 +773,7 @@ function updateBookmarks() {
     var lesson = modules[mi]?(modules[mi].lessons||[])[li]:null;
     if (!lesson) return;
     h += "<div class='bm-item' onclick='loadLesson(" + mi + "," + li + ")'>";
-    h += "<div class='bm-lesson'>" + lesson.title + "</div>";
+    h += "<div class='bm-lesson'>" + (lesson.title || lesson) + "</div>";
     h += "<div class='bm-mod'>" + (modules[mi]?modules[mi].module_title:"") + "</div></div>";
   });
   el.innerHTML = h || "<div class='bm-empty'>No saved lessons yet.</div>";
