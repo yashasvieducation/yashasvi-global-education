@@ -330,10 +330,10 @@ body{font-family:'Roboto',Arial,sans-serif;background:#f8f9fa;color:#202124;min-
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg>
         Guruji
       </h3>
-      <p>Ask anything about this lesson</p>
+      <p>Ask Guruji anything &bull; Ask for resources &bull; Ask for links</p>
     </div>
     <div class="chat-msgs" id="chatMsgs">
-      <div class="chat-msg ai"><div class="chat-name">Guruji</div><div class="chat-bubble">Welcome! I am your Guruji, your AI teacher. Feel free to ask any questions about your lesson!</div></div>
+      <div class="chat-msg ai"><div class="chat-name">Guruji</div><div class="chat-bubble">Welcome! I am your Guruji, your AI teacher. Ask me anything about your lesson — or ask me to suggest learning resources and videos!</div></div>
     </div>
     <div class="typing" id="typingIndicator">Guruji is typing...</div>
     <div class="chat-input-wrap">
@@ -664,7 +664,7 @@ function loadLesson(mi, li) {
   var savedNote = notes[key] || "";
   var dept = currentCourse ? currentCourse.department : "School";
   var cname = currentCourse ? currentCourse.name : "this topic";
-  var res = getResources(dept, lesson.title || (typeof lessonRaw === "string" ? lessonRaw : ""));
+
   var isTech = dept === "Technology" || dept === "School";
 
   var svgClock = "<svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><polyline points='12 6 12 12 16 14'/></svg>";
@@ -715,19 +715,7 @@ function loadLesson(mi, li) {
   }
   h += "</div>";
 
-  // Resources - only show if verified resources exist
-  if (res && res.length > 0) {
-    h += "<div class='section-card'>";
-    h += "<div class='section-hdr'>" + svgBook + " Learning Resources</div>";
-    h += "<div class='res-grid'>";
-    res.forEach(function(r) {
-      h += "<a class='res-link' href='" + r.url + "' target='_blank' rel='noopener'>";
-      h += "<div class='res-icon'>" + (r.type==="video"?svgVideo:svgDoc) + "</div>";
-      h += "<div><div class='res-name'>" + r.name + "</div><div class='res-src'>" + r.source + (r.type==="video"?" &middot; Video":" &middot; Doc") + "</div></div>";
-      h += svgArrow + "</a>";
-    });
-    h += "</div></div>";
-  }
+
 
   // Code editor (tech courses)
   if (isTech) {
@@ -937,7 +925,7 @@ function sendMessage() {
   chatHistory.push({role:"user",content:text});
   var lesson=modules[curMod]?(modules[curMod].lessons||[])[curLesson]:null;
   var lessonTitle = lesson ? (typeof lesson === "string" ? lesson : (lesson.title || "")) : "";
-  var sys = "You are Guruji, a respectful AI teacher at Yashasvi Global Education. Student name: " + studentName + ". Course: " + (currentCourse ? currentCourse.name : "") + ". Current lesson: " + lessonTitle + ". RULES: If student says hi/hey/hello or any greeting, reply EXACTLY: For hi/hey - use 'Hi [name]! I am your Guruji, your AI teacher. Feel free to ask any questions about your lesson!' For hello - use 'Hello [name]! I am your Guruji, your AI teacher. Feel free to ask any questions about your lesson!' Replace [name] with the actual student name. For other questions: answer in 2-3 short sentences about the lesson. Always be respectful.";
+  var sys = "You are Guruji, a respectful AI teacher at Yashasvi Global Education. Student name: " + studentName + ". Course: " + (currentCourse ? currentCourse.name : "") + ". Module: " + modTitle + ". Current lesson: " + lessonTitle + ". RULES: 1. If student says hi/hey or any hi variation: reply EXACTLY 'Hi " + studentName + "! I am your Guruji, your AI teacher. Feel free to ask any questions about your lesson!' 2. If student says hello or any hello variation: reply EXACTLY 'Hello " + studentName + "! I am your Guruji, your AI teacher. Feel free to ask any questions about your lesson!' 3. If student asks for resources, videos, links, or study material: suggest 1-2 REAL verified links only from Khan Academy (khanacademy.org), NCERT (ncert.nic.in), or official documentation. Give the actual URL. If you are not 100% sure the link exists, say 'I recommend searching on Khan Academy or NCERT website for this topic' - never give fake links. 4. For all other questions: SHORT answer max 2-3 sentences directly about the current lesson topic. 5. Always be respectful and encouraging.";
 fetch(EDGE,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify({messages:chatHistory.slice(-6),systemPrompt:sys})})
   .then(function(r){
     if(!r.ok){ return r.json().then(function(e){ throw new Error(JSON.stringify(e)); }); }
